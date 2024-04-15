@@ -1,0 +1,53 @@
+<resources>
+    <string name="app_name" translatable="false">Kenko</string>
+
+    <string name="label_kenko" translatable="false">Kenko</string>
+    <string name="label_kenko_jp" translatable="false">ケンコウ</string>
+    <string name="label_kenko_meaning">○ healthy</string>
+    <string name="label_kenko_meaning_ALT">○ strong</string>
+
+    <string name="label_lets_go">Lets Go</string>
+
+    <string name="label_muscle_biceps">Biceps</string>
+    <string name="label_muscle_triceps">Triceps</string>
+    <string name="label_muscle_back">Back</string>
+    <string name="label_muscle_lats">Lats</string>
+    <string name="label_muscle_traps">Traps</string>
+    <string name="label_muscle_chest">Chest</string>
+    <string name="label_muscle_core">Core</string>
+    <string name="label_muscle_glutes">Glutes</string>
+    <string name="label_muscle_calves">Calves</string>
+    <string name="label_muscle_hamstrings">Hamstrings</string>
+    <string name="label_muscle_quads">Quads</string>
+    <string name="label_muscle_delts">Shoulders</string>
+
+    <string name="label_cant_find_session">Can\'t Find Session</string>
+    <string name="label_cant_find_exercise">Can\'t Find Exercise</string>
+    <string name="label_no_exercise_today">No exercises planned today</string>
+    <string name="label_nothing_today">Nothing today</string>
+    <string name="label_missed_day">Did you miss the day?</string>
+    <string name="label_create_session">Create Session</string>
+    <string name="label_add_exercise">New Exercise</string>
+    <string name="label_reps">Reps</string>
+    <string name="label_weight">Weight</string>
+
+    <string name="label_reference">Reference</string>
+    <string name="label_name">Name</string>
+    <string name="label_exercise_exists">Exercise Already Exists</string>
+    <string name="label_is_isometric">Is Isometric?</string>
+    <string name="label_is_isometric_DESC">An exercise involving static holds.</string>
+    <string name="label_new_exercise">New Exercise?</string>
+    <string name="label_save">Save</string>
+    <string name="label_set_number">Set %s</string>
+    <string name="label_sets">Sets</string>
+    <string name="label_performed_on">Performed On,</string>
+    <string name="label_add_set">Add Set</string>
+    <string name="label_add_set_for">Add Set for</string>
+    <string name="label_add">Add</string>
+    <string name="label_target">Target</string>
+
+    <string name="label_home">Home</string>
+    <string name="label_performance">Performance</string>
+    <string name="label_profile">Profile</string>
+    <string name="label_record">Record</string>
+</resources>
