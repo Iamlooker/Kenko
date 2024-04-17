@@ -4,6 +4,7 @@ import com.looker.kenko.data.local.dao.PlanDao
 import com.looker.kenko.data.model.Plan
 import com.looker.kenko.data.repository.PlanRepo
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 class OfflinePlanRepo @Inject constructor (
@@ -15,6 +16,10 @@ class OfflinePlanRepo @Inject constructor (
 
     override val current: Flow<Plan?>
         get() = dao.currentPlanStream(true)
+
+    override fun get(id: Long?): Flow<Plan?> {
+        return id?.let { dao.getStream(it) } ?: flowOf(null)
+    }
 
     override suspend fun upsert(plan: Plan) {
         dao.upsert(plan)

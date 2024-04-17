@@ -15,6 +15,9 @@ interface PlanDao {
     @Query("SELECT * FROM plan_table WHERE isActive = :isActive")
     fun currentPlanStream(isActive: Boolean): Flow<Plan?>
 
+    @Query("SELECT * FROM plan_table WHERE id = :id")
+    fun getStream(id: Long): Flow<Plan?>
+
     @Upsert
     suspend fun upsert(plan: Plan)
 

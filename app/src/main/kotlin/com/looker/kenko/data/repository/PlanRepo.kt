@@ -9,6 +9,8 @@ interface PlanRepo {
 
     val current: Flow<Plan?>
 
+    fun get(id: Long?): Flow<Plan?>
+
     suspend fun upsert(plan: Plan)
 
     suspend fun current(): Plan?
