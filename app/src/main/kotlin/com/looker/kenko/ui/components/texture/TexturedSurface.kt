@@ -4,6 +4,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
@@ -19,14 +20,16 @@ fun TexturedSurface(
     color: Color = MaterialTheme.colorScheme.surface,
     textureColor: Color = defaultTextureColor,
     shape: Shape = RectangleShape,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     Surface(
         color = color,
         shape = shape
     ) {
         Surface(
-            modifier = Modifier.dottedTexture(textureColor, isForeground = false).then(modifier),
+            modifier = Modifier
+                .dottedTexture(textureColor, isForeground = false)
+                .then(modifier),
             color = Color.Transparent,
             shape = shape,
             content = content
@@ -34,15 +37,21 @@ fun TexturedSurface(
     }
 }
 
+fun Modifier.dottedGradient(color: Color, drawRatio: Float = 0.3F): Modifier = drawWithCache {
+    onDrawBehind {
+        dottedTexture(color, drawDistanceRatio = drawRatio)
+    }
+}
+
 fun Modifier.dottedTexture(
     textureColor: Color,
-    isForeground: Boolean = true
+    isForeground: Boolean = true,
 ) = drawWithContent {
     if (isForeground) {
         drawContent()
-        dottedTexture(textureColor)
+        dottedTexture(textureColor, Float.POSITIVE_INFINITY)
     } else {
-        dottedTexture(textureColor)
+        dottedTexture(textureColor, Float.POSITIVE_INFINITY)
         drawContent()
     }
 }

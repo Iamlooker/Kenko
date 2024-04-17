@@ -32,15 +32,16 @@
     <string name="label_weight">Weight</string>
 
     <string name="label_reference">Reference</string>
+    <string name="label_reference_optional">optional *</string>
     <string name="label_name">Name</string>
     <string name="label_exercise_exists">Exercise Already Exists</string>
-    <string name="label_is_isometric">Is Isometric?</string>
-    <string name="label_is_isometric_DESC">An exercise involving static holds.</string>
+    <string name="label_is_isometric">Isometric</string>
+    <string name="label_is_isometric_DESC">Exercise requires static holds</string>
     <string name="label_new_exercise">New Exercise?</string>
     <string name="label_save">Save</string>
     <string name="label_set_number">Set %s</string>
     <string name="label_sets">Sets</string>
-    <string name="label_performed_on">Performed On,</string>
+    <string name="label_performed_on">Performed On</string>
     <string name="label_add_set">Add Set</string>
     <string name="label_add_set_for">Add Set for</string>
     <string name="label_add">Add</string>

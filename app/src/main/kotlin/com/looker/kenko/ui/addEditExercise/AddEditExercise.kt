@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.DriveFileRenameOutline
 import androidx.compose.material.icons.twotone.Save
@@ -33,13 +34,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
 import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.ui.components.kenkoTextFieldColor
+import com.looker.kenko.ui.components.texture.dottedGradient
 import com.looker.kenko.ui.theme.KenkoTheme
 
 @Composable
@@ -48,8 +52,9 @@ fun AddEditExercise(onDone: () -> Unit) {
 
     Column(
         modifier = Modifier
+            .dottedGradient(MaterialTheme.colorScheme.tertiaryContainer)
             .padding(horizontal = 16.dp)
-            .statusBarsPadding()
+            .statusBarsPadding(),
     ) {
         val isError by viewModel.exerciseAlreadyExistError.collectAsStateWithLifecycle()
         val isIsometric by viewModel.isIsometric.collectAsStateWithLifecycle()
@@ -65,6 +70,7 @@ fun AddEditExercise(onDone: () -> Unit) {
             exerciseName = viewModel.exerciseName,
             onNameChange = viewModel::setName,
             isError = isError,
+            isReadOnly = viewModel.isReadOnly,
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(8.dp))
@@ -76,13 +82,13 @@ fun AddEditExercise(onDone: () -> Unit) {
         Spacer(modifier = Modifier.height(8.dp))
         TargetMuscleSelection(target = target, onSet = viewModel::setTargetMuscle)
         Spacer(modifier = Modifier.height(12.dp))
+        IsIsometricButton(isIsometric = isIsometric, onChange = viewModel::setIsometric)
+        Spacer(modifier = Modifier.height(18.dp))
         ReferenceTextField(
             reference = viewModel.reference,
             onReferenceChange = viewModel::addReference,
             modifier = Modifier.fillMaxWidth()
         )
-        Spacer(modifier = Modifier.height(18.dp))
-        IsIsometricButton(isIsometric = isIsometric, onChange = viewModel::setIsometric)
         Spacer(modifier = Modifier.height(18.dp))
         Button(
             modifier = Modifier
@@ -109,14 +115,18 @@ fun AddEditExercise(onDone: () -> Unit) {
 private fun ReferenceTextField(
     reference: String,
     onReferenceChange: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     TextField(
         modifier = modifier,
         value = reference,
         onValueChange = onReferenceChange,
         colors = kenkoTextFieldColor(),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri),
         shape = MaterialTheme.shapes.large,
+        supportingText = {
+            Text(text = stringResource(R.string.label_reference_optional))
+        },
         label = {
             Text(text = stringResource(R.string.label_reference))
         },
@@ -130,14 +140,16 @@ private fun ReferenceTextField(
 private fun ExerciseTextField(
     exerciseName: String,
     isError: Boolean,
+    isReadOnly: Boolean,
     onNameChange: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     TextField(
         modifier = modifier,
         value = exerciseName,
         onValueChange = onNameChange,
         colors = kenkoTextFieldColor(),
+        readOnly = isReadOnly,
         shape = MaterialTheme.shapes.large,
         label = {
             Text(text = stringResource(R.string.label_name))
@@ -158,7 +170,7 @@ private fun ExerciseTextField(
 @Composable
 private fun TargetMuscleSelection(
     target: MuscleGroups,
-    onSet: (MuscleGroups) -> Unit
+    onSet: (MuscleGroups) -> Unit,
 ) {
     FlowRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -182,7 +194,7 @@ private fun IsIsometricButton(isIsometric: Boolean, onChange: (Boolean) -> Unit)
         Column(modifier = Modifier.weight(1F)) {
             Text(
                 text = stringResource(R.string.label_is_isometric),
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.bodyLarge,
             )
             Text(
                 text = stringResource(R.string.label_is_isometric_DESC),
@@ -194,7 +206,7 @@ private fun IsIsometricButton(isIsometric: Boolean, onChange: (Boolean) -> Unit)
     }
 }
 
-@Preview
+@PreviewLightDark
 @Composable
 private fun ReferenceTextFieldPreview() {
     KenkoTheme {
@@ -225,6 +237,7 @@ private fun NameTextFieldPreview() {
             exerciseName = "Bench Press",
             onNameChange = {},
             isError = false,
+            isReadOnly = true,
             modifier = Modifier.fillMaxWidth()
         )
     }
@@ -238,6 +251,7 @@ private fun ErrorNameTextFieldPreview() {
             exerciseName = "Bench Press",
             onNameChange = {},
             isError = true,
+            isReadOnly = true,
             modifier = Modifier.fillMaxWidth()
         )
     }

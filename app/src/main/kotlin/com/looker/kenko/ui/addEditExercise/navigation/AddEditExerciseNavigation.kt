@@ -25,6 +25,7 @@ fun NavGraphBuilder.addEditExercise(
             navArgument(name = ARG_EXERCISE_NAME) {
                 type = NavType.StringType
                 defaultValue = null
+                nullable = true
             }
         )
     ) {

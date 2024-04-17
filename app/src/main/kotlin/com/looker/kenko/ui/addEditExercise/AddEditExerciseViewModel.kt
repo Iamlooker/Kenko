@@ -1,14 +1,17 @@
 package com.looker.kenko.ui.addEditExercise
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.data.repository.ExerciseRepo
+import com.looker.kenko.ui.addEditExercise.navigation.ARG_EXERCISE_NAME
 import com.looker.kenko.utils.asStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -22,8 +25,11 @@ import javax.inject.Inject
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
 class AddEditExerciseViewModel @Inject constructor(
-    private val repo: ExerciseRepo
+    private val repo: ExerciseRepo,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
+
+    private val defaultExerciseName: String? = savedStateHandle[ARG_EXERCISE_NAME]
 
     private val _targetMuscle = MutableStateFlow(MuscleGroups.Chest)
     val targetMuscle: StateFlow<MuscleGroups> = _targetMuscle.asStateFlow()
@@ -31,7 +37,9 @@ class AddEditExerciseViewModel @Inject constructor(
     private val _isIsometric = MutableStateFlow(false)
     val isIsometric: StateFlow<Boolean> = _isIsometric.asStateFlow()
 
-    var exerciseName: String by mutableStateOf("")
+    val isReadOnly: Boolean = defaultExerciseName != null
+
+    var exerciseName: String by mutableStateOf(defaultExerciseName ?: "")
         private set
 
     var reference: String by mutableStateOf("")
@@ -39,7 +47,7 @@ class AddEditExerciseViewModel @Inject constructor(
 
     val exerciseAlreadyExistError: StateFlow<Boolean> =
         snapshotFlow { exerciseName }
-            .mapLatest { repo.isExerciseAvailable(it) }
+            .mapLatest { repo.isExerciseAvailable(it) && !isReadOnly }
             .asStateFlow(false)
 
     fun setName(value: String) {
@@ -72,6 +80,21 @@ class AddEditExerciseViewModel @Inject constructor(
                     isIsometric = isIsometric.value
                 )
             )
+        }
+    }
+
+    init {
+        viewModelScope.launch {
+            if (defaultExerciseName != null) {
+                val exercise = repo.get(defaultExerciseName)
+                exercise?.let {
+                    Log.e("tag", it.toString())
+                    setName(it.name)
+                    addReference(it.reference ?: "")
+                    setIsometric(it.isIsometric)
+                    setTargetMuscle(it.target)
+                }
+            }
         }
     }
 }

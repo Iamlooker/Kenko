@@ -94,7 +94,6 @@ private val darkScheme = darkColorScheme(
 
 @Composable
 fun KenkoTheme(
-//    darkTheme: Boolean = isSystemInDarkTheme(),
     darkTheme: Boolean = isSystemInDarkTheme(),
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit

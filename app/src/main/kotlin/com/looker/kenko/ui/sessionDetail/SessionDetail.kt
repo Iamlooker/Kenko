@@ -47,6 +47,7 @@ import com.looker.kenko.data.model.Set
 import com.looker.kenko.ui.addSet.AddSet
 import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.components.SetItem
+import com.looker.kenko.ui.components.texture.dottedGradient
 import com.looker.kenko.ui.sessions.formattedDate
 import com.looker.kenko.ui.theme.KenkoTheme
 import com.looker.kenko.utils.DateTimeFormat
@@ -77,7 +78,11 @@ private fun SessionDetail(
     onBackPress: () -> Unit,
     onSelectBottomSheet: (Exercise) -> Unit,
 ) {
-    Column(modifier = Modifier.statusBarsPadding()) {
+    Column(
+        modifier = Modifier
+            .dottedGradient(MaterialTheme.colorScheme.tertiaryContainer)
+            .statusBarsPadding()
+    ) {
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterStart) {
             BackButton(onClick = onBackPress)
         }
