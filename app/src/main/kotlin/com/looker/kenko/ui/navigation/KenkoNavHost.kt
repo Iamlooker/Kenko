@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.looker.kenko.ui.addEditExercise.navigation.addEditExercise
 import com.looker.kenko.ui.getStarted.navigation.GET_STARTED_ROUTE
 import com.looker.kenko.ui.getStarted.navigation.getStarted
 import com.looker.kenko.ui.plans.navigation.navigateToPlans
@@ -29,6 +30,8 @@ fun KenkoNavHost(
 
         sessions(navController::navigateToSessionDetail)
         sessionDetail(navController::popBackStack)
+
+        addEditExercise(navController::popBackStack)
 
         plans {  }
     }

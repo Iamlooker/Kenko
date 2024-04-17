@@ -1,4 +1,4 @@
-package com.looker.kenko.ui.addExercise
+package com.looker.kenko.ui.addEditExercise
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,7 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
-class AddExerciseViewModel @Inject constructor(
+class AddEditExerciseViewModel @Inject constructor(
     private val repo: ExerciseRepo
 ) : ViewModel() {
 

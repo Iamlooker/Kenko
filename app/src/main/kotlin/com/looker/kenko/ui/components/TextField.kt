@@ -1,9 +1,9 @@
 package com.looker.kenko.ui.components
 
+import android.util.Log
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
@@ -26,6 +26,7 @@ import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -61,8 +62,7 @@ fun rememberDraggableTextFieldState(
     )
 }
 
-
-@OptIn(ExperimentalFoundationApi::class)
+@Stable
 data class DragState(
     val textFieldState: TextFieldState,
     val supportingText: String? = null,
@@ -72,7 +72,6 @@ data class DragState(
     val onStopIncrement: () -> Unit,
 )
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DraggableTextField(
     dragState: DragState,
@@ -81,6 +80,8 @@ fun DraggableTextField(
     val offset = remember {
         Animatable(0F)
     }
+
+    Log.e("tag", "recompose")
 
     val density = LocalDensity.current
 

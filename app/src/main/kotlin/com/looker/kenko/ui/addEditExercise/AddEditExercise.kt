@@ -1,4 +1,4 @@
-package com.looker.kenko.ui.addExercise
+package com.looker.kenko.ui.addEditExercise
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -37,15 +37,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.looker.kenko.R
 import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.ui.components.kenkoTextFieldColor
 import com.looker.kenko.ui.theme.KenkoTheme
 
 @Composable
-fun AddExercise(onDone: () -> Unit) {
-    val viewModel: AddExerciseViewModel = hiltViewModel()
+fun AddEditExercise(onDone: () -> Unit) {
+    val viewModel: AddEditExerciseViewModel = hiltViewModel()
 
     Column(
         modifier = Modifier
