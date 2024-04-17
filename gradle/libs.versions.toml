@@ -1,0 +1,71 @@
+[versions]
+activity = "1.8.0"
+agp = "8.3.2"
+coil = "2.6.0"
+composeCompiler = "1.5.11"
+composeBom = "2024.04.00-alpha01"
+core = "1.12.0"
+coroutines = "1.8.0"
+dateTime = "0.5.0"
+espresso = "3.5.1"
+hilt = "2.51.1"
+hiltNavigation = "1.2.0"
+jUnit = "4.13.2"
+jUnitExt = "4.13.2"
+kotlin = "1.9.23"
+ksp = "1.9.23-1.0.20"
+lifecycle = "2.7.0"
+navigation = "2.7.7"
+room = "2.6.1"
+serialization = "1.6.3"
+shapes = "1.0.0-alpha05"
+
+[libraries]
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "core" }
+androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso" }
+androidx-graphics-shapes = { module = "androidx.graphics:graphics-shapes", version.ref = "shapes" }
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigation" }
+androidx-junit = { module = "androidx.test.ext:junit", version.ref = "jUnitExt" }
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
+androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+coil-svg = { group = "io.coil-kt", name = "coil-svg", version.ref = "coil" }
+compose-bom = { group = "dev.chrisbanes.compose", name = "compose-bom", version.ref = "composeBom" }
+compose-ui = { group = "androidx.compose.ui", name = "ui" }
+compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+compose-ui-material3 = { group = "androidx.compose.material3", name = "material3" }
+compose-ui-material-icon = { group = "androidx.compose.material", name = "material-icons-extended" }
+compose-test = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
+junit = { module = "junit:junit", version.ref = "jUnit" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "dateTime" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+
+[plugins]
+android-app = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+
+[bundles]
+coil = ["coil-compose", "coil-svg"]
+room = ["androidx-room-ktx", "androidx-room-runtime"]
+coroutines = ["kotlinx-coroutines-core", "kotlinx-coroutines-android"]
+lifecycle = ["androidx-lifecycle-runtime-compose", "androidx-lifecycle-runtime-ktx", "androidx-lifecycle-viewmodel-compose", "androidx-lifecycle-viewmodel-ktx"]
+compose = ["compose-ui", "compose-ui-graphics", "compose-ui-material3", "compose-ui-tooling-preview", "compose-ui-material-icon"]
+compose-debug = ["compose-ui-tooling", "compose-ui-test-manifest"]
