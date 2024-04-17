@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "e90fc4a670a68085c4b49015a69b06ca",
+    "identityHash": "1e8dafafc484e5254c66d1c687eebd72",
     "entities": [
       {
         "tableName": "Session",
@@ -70,7 +70,7 @@
       },
       {
         "tableName": "plan_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `exercisesPerDay` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `exercisesPerDay` TEXT NOT NULL, `isActive` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT)",
         "fields": [
           {
             "fieldPath": "name",
@@ -82,6 +82,12 @@
             "fieldPath": "exercisesPerDay",
             "columnName": "exercisesPerDay",
             "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isActive",
+            "columnName": "isActive",
+            "affinity": "INTEGER",
             "notNull": true
           },
           {
@@ -104,7 +110,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e90fc4a670a68085c4b49015a69b06ca')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1e8dafafc484e5254c66d1c687eebd72')"
     ]
   }
 }

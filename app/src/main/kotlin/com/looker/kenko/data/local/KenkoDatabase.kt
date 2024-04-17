@@ -13,7 +13,7 @@ import com.looker.kenko.data.model.Plan
 import com.looker.kenko.data.model.Session
 
 @Database(
-    version = 3,
+    version = 1,
     entities = [
         Session::class,
         Exercise::class,
@@ -34,7 +34,6 @@ abstract class KenkoDatabase : RoomDatabase() {
                 name = "kenko_database",
             )
                 .createFromAsset("kenko.db")
-                .fallbackToDestructiveMigration()
                 .build()
         }
     }
