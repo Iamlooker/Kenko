@@ -1,6 +1,5 @@
 package com.looker.kenko.ui.components
 
-import android.util.Log
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -80,8 +79,6 @@ fun DraggableTextField(
     val offset = remember {
         Animatable(0F)
     }
-
-    Log.e("tag", "recompose")
 
     val density = LocalDensity.current
 

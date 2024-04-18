@@ -1,6 +1,5 @@
 package com.looker.kenko.ui.addEditExercise
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -88,7 +87,6 @@ class AddEditExerciseViewModel @Inject constructor(
             if (defaultExerciseName != null) {
                 val exercise = repo.get(defaultExerciseName)
                 exercise?.let {
-                    Log.e("tag", it.toString())
                     setName(it.name)
                     addReference(it.reference ?: "")
                     setIsometric(it.isIsometric)
