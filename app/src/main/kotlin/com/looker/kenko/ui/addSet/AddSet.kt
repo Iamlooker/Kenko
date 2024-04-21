@@ -20,7 +20,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -32,16 +31,22 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.looker.kenko.R
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.Set
-import com.looker.kenko.ui.components.DraggableTextField
-import com.looker.kenko.ui.components.rememberDraggableTextFieldState
+import com.looker.kenko.ui.components.draggableTextField.DraggableTextField
+import com.looker.kenko.ui.components.draggableTextField.rememberDraggableTextFieldState
 import com.looker.kenko.ui.theme.KenkoTheme
+
+private val incrementButtonModifier = Modifier
+    .height(48.dp)
+    .zIndex(0f)
+
+private val zIndexModifier = Modifier.zIndex(1F)
 
 @Composable
 fun AddSet(exercise: Exercise?, onDone: (Set) -> Unit) {
-    val viewModel: AddSetViewModel = hiltViewModel()
-    LaunchedEffect(Unit) {
-        viewModel.exercise(exercise)
-    }
+    val viewModel: AddSetViewModel =
+        hiltViewModel<AddSetViewModel, AddSetViewModel.AddSetViewModelFactory> {
+            it.create(exercise?.name)
+        }
     Column(
         modifier = Modifier
             .padding(horizontal = 16.dp)
@@ -60,9 +65,7 @@ fun AddSet(exercise: Exercise?, onDone: (Set) -> Unit) {
             modifier = Modifier.align(CenterHorizontally)
         ) {
             TextButton(
-                modifier = Modifier
-                    .height(48.dp)
-                    .zIndex(0f),
+                modifier = incrementButtonModifier,
                 onClick = { viewModel.addRep(-1) }
             ) {
                 Text(text = "-1")
@@ -70,22 +73,17 @@ fun AddSet(exercise: Exercise?, onDone: (Set) -> Unit) {
             val reps = rememberDraggableTextFieldState(
                 supportingText = stringResource(R.string.label_reps).uppercase(),
                 textFieldState = viewModel.reps,
-                onHoldIncrement = viewModel::onHoldRepIncrement,
-                onStopIncrement = viewModel::onStopIncrement
+                events = viewModel.repsDragEvents,
             )
-            DraggableTextField(dragState = reps, modifier = Modifier.zIndex(1f))
+            DraggableTextField(dragState = reps, modifier = zIndexModifier)
             TextButton(
-                modifier = Modifier
-                    .height(48.dp)
-                    .zIndex(0f),
+                modifier = incrementButtonModifier,
                 onClick = { viewModel.addRep(1) }
             ) {
                 Text(text = "+1")
             }
             TextButton(
-                modifier = Modifier
-                    .height(48.dp)
-                    .zIndex(0f),
+                modifier = incrementButtonModifier,
                 onClick = { viewModel.addRep(5) }
             ) {
                 Text(text = "+5")
@@ -96,9 +94,7 @@ fun AddSet(exercise: Exercise?, onDone: (Set) -> Unit) {
             modifier = Modifier.align(CenterHorizontally)
         ) {
             TextButton(
-                modifier = Modifier
-                    .height(48.dp)
-                    .zIndex(0f),
+                modifier = incrementButtonModifier,
                 onClick = { viewModel.addWeight(-1.0) }
             ) {
                 Text(text = "-1.0")
@@ -106,22 +102,17 @@ fun AddSet(exercise: Exercise?, onDone: (Set) -> Unit) {
             val weights = rememberDraggableTextFieldState(
                 supportingText = stringResource(R.string.label_weight).uppercase(),
                 textFieldState = viewModel.weights,
-                onHoldIncrement = viewModel::onHoldWeightIncrement,
-                onStopIncrement = viewModel::onStopIncrement
+                events = viewModel.weightsDragEvents,
             )
-            DraggableTextField(dragState = weights, modifier = Modifier.zIndex(1f))
+            DraggableTextField(dragState = weights, modifier = zIndexModifier)
             TextButton(
-                modifier = Modifier
-                    .height(48.dp)
-                    .zIndex(0f),
+                modifier = incrementButtonModifier,
                 onClick = { viewModel.addWeight(1.0) }
             ) {
                 Text(text = "+1.0")
             }
             TextButton(
-                modifier = Modifier
-                    .height(48.dp)
-                    .zIndex(0f),
+                modifier = incrementButtonModifier,
                 onClick = { viewModel.addWeight(5.0) }
             ) {
                 Text(text = "+5.0")

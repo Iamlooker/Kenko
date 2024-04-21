@@ -1,30 +1,28 @@
 package com.looker.kenko.ui.addSet
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.Set
+import com.looker.kenko.data.repository.ExerciseRepo
+import com.looker.kenko.ui.components.draggableTextField.DragEvents
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.util.Timer
-import javax.inject.Inject
 import kotlin.concurrent.fixedRateTimer
 
-@OptIn(ExperimentalFoundationApi::class)
-@HiltViewModel
-class AddSetViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = AddSetViewModel.AddSetViewModelFactory::class)
+class AddSetViewModel @AssistedInject constructor(
+    private val exerciseRepo: ExerciseRepo,
+    @Assisted private val exerciseName: String?,
 ) : ViewModel() {
 
     private var timer: Timer? = null
-
-    private var exercise: Exercise? = null
-
-    fun exercise(exercise: Exercise?) {
-        this.exercise = exercise
-    }
 
     val reps: TextFieldState = TextFieldState("12")
     val weights: TextFieldState = TextFieldState("20.0")
@@ -39,40 +37,54 @@ class AddSetViewModel @Inject constructor(
         weights.setTextAndPlaceCursorAtEnd(updatedWeight.toString())
     }
 
-    fun onHoldRepIncrement(isRight: Boolean) {
-        onStopIncrement()
-        timer = fixedRateTimer(
-            name = "Rep Increment",
-            initialDelay = 100L,
-            period = 200L
-        ) {
-            addRep(if (isRight) 1 else -1)
+    val repsDragEvents: DragEvents = object : DragEvents {
+        override fun onHold(isRight: Boolean) {
+            onStop()
+            timer = fixedRateTimer(
+                name = "Rep Increment",
+                initialDelay = 100L,
+                period = 200L
+            ) {
+                addRep(if (isRight) 1 else -1)
+            }
+        }
+
+        override fun onStop() {
+            timer?.cancel()
+            timer = null
         }
     }
 
-    fun onHoldWeightIncrement(isRight: Boolean) {
-        onStopIncrement()
-        timer = fixedRateTimer(
-            name = "Weight Increment",
-            initialDelay = 100L,
-            period = 200L
-        ) {
-            addWeight(if (isRight) 1.0 else -1.0)
+    val weightsDragEvents: DragEvents = object : DragEvents {
+        override fun onHold(isRight: Boolean) {
+            onStop()
+            timer = fixedRateTimer(
+                name = "Weight Increment",
+                initialDelay = 100L,
+                period = 200L
+            ) {
+                addWeight(if (isRight) 1.0 else -1.0)
+            }
         }
-    }
 
-    fun onStopIncrement() {
-        timer?.cancel()
-        timer = null
+        override fun onStop() {
+            timer?.cancel()
+            timer = null
+        }
     }
 
     fun addSet(onDone: (Set) -> Unit) {
         viewModelScope.launch {
+            val exercise = async {
+                if (exerciseName != null) {
+                    exerciseRepo.get(exerciseName)
+                } else null
+            }
             onDone(
                 Set(
                     repsOrDuration = getRep() ?: return@launch,
                     weight = getWeight() ?: return@launch,
-                    exercise = exercise ?: return@launch
+                    exercise = exercise.await() ?: return@launch
                 )
             )
         }
@@ -84,5 +96,10 @@ class AddSetViewModel @Inject constructor(
 
     private fun getWeight(): Double? {
         return weights.text.toString().toDoubleOrNull()
+    }
+
+    @AssistedFactory
+    interface AddSetViewModelFactory {
+        fun create(name: String?): AddSetViewModel
     }
 }
