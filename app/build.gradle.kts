@@ -27,6 +27,9 @@ android {
     }
 
     buildTypes {
+        debug {
+            applicationIdSuffix = ".debug"
+        }
         release {
             isMinifyEnabled = true
             proguardFiles(
@@ -83,6 +86,9 @@ dependencies {
 
     implementation(libs.bundles.room)
     ksp(libs.androidx.room.compiler)
+
+    // Rebugger
+    implementation(libs.rebugger)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
