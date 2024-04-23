@@ -39,15 +39,14 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.looker.kenko.R
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.data.model.Session
 import com.looker.kenko.data.model.Set
+import com.looker.kenko.data.model.SetType
 import com.looker.kenko.ui.addSet.AddSet
 import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.components.SetItem
-import com.looker.kenko.ui.components.texture.dottedGradient
 import com.looker.kenko.ui.sessions.formattedDate
 import com.looker.kenko.ui.theme.KenkoTheme
 import com.looker.kenko.utils.DateTimeFormat
@@ -80,7 +79,6 @@ private fun SessionDetail(
 ) {
     Column(
         modifier = Modifier
-            .dottedGradient(MaterialTheme.colorScheme.tertiaryContainer)
             .statusBarsPadding()
     ) {
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterStart) {
@@ -171,17 +169,11 @@ private fun Header(
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
         Text(
-            text = stringResource(R.string.label_performed_on).uppercase(),
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.outline
-        )
-        Text(
             text = performedOn,
-            style = MaterialTheme.typography.displayMedium,
-            color = MaterialTheme.colorScheme.tertiary
+            style = MaterialTheme.typography.displayLarge,
+            color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.7F)
         )
     }
 }
@@ -264,15 +256,15 @@ private fun SessionDetailPreview() {
     KenkoTheme {
         val data = remember {
             val sets = listOf(
-                Set(12, 55.0, Exercise("Bench", MuscleGroups.Chest)),
-                Set(12, 55.0, Exercise("Bench", MuscleGroups.Chest)),
-                Set(12, 55.0, Exercise("Bench", MuscleGroups.Chest)),
-                Set(12, 55.0, Exercise("Incline Bench", MuscleGroups.Chest)),
-                Set(12, 55.0, Exercise("Incline Bench", MuscleGroups.Chest)),
-                Set(12, 55.0, Exercise("Incline Bench", MuscleGroups.Chest)),
-                Set(12, 55.0, Exercise("Pec-Dec", MuscleGroups.Chest)),
-                Set(12, 55.0, Exercise("Pec-Dec", MuscleGroups.Chest)),
-                Set(12, 55.0, Exercise("Pec-Dec", MuscleGroups.Chest)),
+                Set(12, 55.0, SetType.Standard, Exercise("Bench", MuscleGroups.Chest)),
+                Set(12, 55.0, SetType.Standard, Exercise("Bench", MuscleGroups.Chest)),
+                Set(12, 55.0, SetType.Standard, Exercise("Bench", MuscleGroups.Chest)),
+                Set(12, 55.0, SetType.Standard, Exercise("Incline Bench", MuscleGroups.Chest)),
+                Set(12, 55.0, SetType.Standard, Exercise("Incline Bench", MuscleGroups.Chest)),
+                Set(12, 55.0, SetType.Standard, Exercise("Incline Bench", MuscleGroups.Chest)),
+                Set(12, 55.0, SetType.Standard, Exercise("Pec-Dec", MuscleGroups.Chest)),
+                Set(12, 55.0, SetType.Standard, Exercise("Pec-Dec", MuscleGroups.Chest)),
+                Set(12, 55.0, SetType.Standard, Exercise("Pec-Dec", MuscleGroups.Chest)),
             ).groupBy { it.exercise }
             SessionDetailState.Success(
                 SessionUiData(
