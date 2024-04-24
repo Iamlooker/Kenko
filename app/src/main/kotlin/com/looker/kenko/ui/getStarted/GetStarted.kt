@@ -26,14 +26,12 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.looker.kenko.R
-import com.looker.kenko.ui.components.texture.dottedGradient
 
 @Composable
 fun GetStarted(onNext: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .dottedGradient(MaterialTheme.colorScheme.tertiaryContainer)
     ) {
         Star(
             modifier = Modifier

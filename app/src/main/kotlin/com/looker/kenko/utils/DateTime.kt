@@ -10,9 +10,6 @@ import java.util.Date
 import java.util.Locale
 import kotlin.time.Duration.Companion.days
 
-/**
- * Formatted to Tue, 24-Jan-2024
- */
 fun formatDate(
     date: LocalDate,
     dateTimeFormat: DateTimeFormat = DateTimeFormat.Short,

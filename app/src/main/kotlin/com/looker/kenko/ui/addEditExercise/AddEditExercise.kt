@@ -43,7 +43,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
 import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.ui.components.kenkoTextFieldColor
-import com.looker.kenko.ui.components.texture.dottedGradient
 import com.looker.kenko.ui.theme.KenkoTheme
 
 @Composable
@@ -52,7 +51,6 @@ fun AddEditExercise(onDone: () -> Unit) {
 
     Column(
         modifier = Modifier
-            .dottedGradient(MaterialTheme.colorScheme.tertiaryContainer)
             .padding(horizontal = 16.dp)
             .statusBarsPadding(),
     ) {

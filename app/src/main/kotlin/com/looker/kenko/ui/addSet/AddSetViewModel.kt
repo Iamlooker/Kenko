@@ -5,6 +5,7 @@ import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.looker.kenko.data.model.Set
+import com.looker.kenko.data.model.SetType
 import com.looker.kenko.data.repository.ExerciseRepo
 import com.looker.kenko.ui.components.draggableTextField.DragEvents
 import dagger.assisted.Assisted
@@ -84,7 +85,8 @@ class AddSetViewModel @AssistedInject constructor(
                 Set(
                     repsOrDuration = getRep() ?: return@launch,
                     weight = getWeight() ?: return@launch,
-                    exercise = exercise.await() ?: return@launch
+                    exercise = exercise.await() ?: return@launch,
+                    type = SetType.Standard
                 )
             )
         }

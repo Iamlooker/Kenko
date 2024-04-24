@@ -26,3 +26,6 @@ data class Session(
         )
     }
 }
+
+val Session.currentRating: Double
+    get() = sets.sumOf { it.rating }
