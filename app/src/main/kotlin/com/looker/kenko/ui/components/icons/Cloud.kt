@@ -15,7 +15,7 @@ val Cloud: ImageVector
         }
         _cloud = icon(
             name = "Cloud",
-            size = 118F to 100F
+            viewPort = 118F to 100F
         ) {
             path(
                 fill = SolidColor(Color.Black), stroke = null, strokeLineWidth = 0.0f,

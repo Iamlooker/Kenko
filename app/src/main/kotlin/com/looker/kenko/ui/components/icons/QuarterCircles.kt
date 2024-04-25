@@ -15,7 +15,7 @@ val QuarterCircles: ImageVector
         }
         _quarterCircles = icon(
             name = "QuarterCircles",
-            size = 246F to 311F,
+            viewPort = 246F to 311F,
         ) {
             path(
                 fill = SolidColor(Color.Black), stroke = null, strokeLineWidth = 0.0f,

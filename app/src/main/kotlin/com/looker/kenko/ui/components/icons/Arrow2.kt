@@ -15,7 +15,7 @@ val Arrow2: ImageVector
         }
         _arrow2 = icon(
             name = "Arrow2",
-            size = 60F to 60F,
+            viewPort = 60F to 60F,
         ) {
             path(
                 fill = SolidColor(Color.Black), stroke = null, strokeLineWidth = 0.0f,

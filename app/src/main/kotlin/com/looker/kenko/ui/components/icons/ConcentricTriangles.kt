@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.StrokeCap.Companion.Butt
 import androidx.compose.ui.graphics.StrokeJoin.Companion.Miter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
+import androidx.compose.ui.unit.dp
 
 val ConcentricTriangles: ImageVector
     get() {
@@ -15,7 +16,8 @@ val ConcentricTriangles: ImageVector
         }
         _concentricTriangles = icon(
             name = "ConcentricTriangles",
-            size = 107.0f to 144.0f,
+            viewPort = 107F to 144F,
+            size = (85.6).dp to (115.2).dp,
         ) {
             path(
                 fill = SolidColor(Color.Black), stroke = null, strokeLineWidth = 0.0f,

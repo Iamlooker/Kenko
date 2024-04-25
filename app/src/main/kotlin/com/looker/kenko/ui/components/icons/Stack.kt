@@ -15,7 +15,7 @@ val Stack: ImageVector
         }
         _stack = icon(
             name = "Stack",
-            size = 65F to 100F,
+            viewPort = 65F to 100F,
         ) {
             path(
                 fill = SolidColor(Color.Black), stroke = null, strokeLineWidth = 0.0f,

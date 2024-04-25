@@ -15,7 +15,7 @@ val Dawn: ImageVector
         }
         _dawn = icon(
             name = "Dawn",
-            size = 92F to 92F,
+            viewPort = 92F to 92F,
         ) {
             path(
                 fill = SolidColor(Color.Black), stroke = SolidColor(Color.Black),

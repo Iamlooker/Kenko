@@ -16,7 +16,7 @@ val Arrow4: ImageVector
         }
         _arrow4 = icon(
             name = "Arrow4",
-            size = 62.0f to 62.0f
+            viewPort = 62.0f to 62.0f
         ) {
             group {
                 path(
