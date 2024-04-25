@@ -1,17 +1,21 @@
 package com.looker.kenko.ui.sessionDetail
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,6 +26,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
@@ -47,10 +52,12 @@ import com.looker.kenko.data.model.SetType
 import com.looker.kenko.ui.addSet.AddSet
 import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.components.SetItem
-import com.looker.kenko.ui.sessions.formattedDate
+import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 import com.looker.kenko.utils.DateTimeFormat
+import com.looker.kenko.utils.formatDate
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
 
 @Composable
 fun SessionDetails(onBackPress: () -> Unit) {
@@ -77,23 +84,31 @@ private fun SessionDetail(
     onBackPress: () -> Unit,
     onSelectBottomSheet: (Exercise) -> Unit,
 ) {
-    Column(
-        modifier = Modifier
-            .statusBarsPadding()
-    ) {
-        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterStart) {
-            BackButton(onClick = onBackPress)
-        }
-        when (state) {
-            is SessionDetailState.Error -> {
+    when (state) {
+        is SessionDetailState.Error -> {
+            Column(Modifier.statusBarsPadding()) {
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    BackButton(onClick = onBackPress)
+                }
                 SessionError(
                     title = stringResource(state.title),
                     message = stringResource(state.errorMessage),
                     modifier = Modifier.fillMaxSize()
                 )
             }
+        }
 
-            SessionDetailState.Loading -> {
+        SessionDetailState.Loading -> {
+            Column(Modifier.statusBarsPadding()) {
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    BackButton(onClick = onBackPress)
+                }
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
@@ -101,16 +116,17 @@ private fun SessionDetail(
                     CircularProgressIndicator()
                 }
             }
+        }
 
-            is SessionDetailState.Success -> {
-                val data = state.data
-                SessionList(
-                    session = data.session,
-                    exerciseSets = data.sets,
-                    isEditable = data.isToday,
-                    onSelectBottomSheet = onSelectBottomSheet,
-                )
-            }
+        is SessionDetailState.Success -> {
+            val data = state.data
+            SessionList(
+                session = data.session,
+                exerciseSets = data.sets,
+                isEditable = data.isToday,
+                onBackPress = onBackPress,
+                onSelectBottomSheet = onSelectBottomSheet,
+            )
         }
     }
 }
@@ -121,20 +137,20 @@ private fun SessionList(
     session: Session,
     exerciseSets: Map<Exercise, List<Set>>?,
     isEditable: Boolean,
+    onBackPress: () -> Unit,
     onSelectBottomSheet: (Exercise) -> Unit,
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(
-            top = 16.dp,
             bottom = WindowInsets.navigationBars.asPaddingValues(LocalDensity.current)
                 .calculateBottomPadding() + 12.dp
         )
     ) {
         item {
             Header(
-                performedOn = session.formattedDate(format = DateTimeFormat.Long),
-                modifier = Modifier.padding(horizontal = 16.dp)
+                performedOn = session.date,
+                onBackPress = onBackPress,
             )
         }
         exerciseSets?.forEach { (exercise, sets) ->
@@ -164,17 +180,65 @@ private fun SessionList(
 
 @Composable
 private fun Header(
-    performedOn: String,
+    performedOn: LocalDate,
+    onBackPress: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier,
+    val dayOfWeek = remember {
+        formatDate(performedOn, DateTimeFormat.Day)
+    }
+    val date = remember {
+        formatDate(performedOn, DateTimeFormat.Short)
+    }
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(300.dp)
+            .background(MaterialTheme.colorScheme.inverseSurface)
+            .statusBarsPadding()
     ) {
-        Text(
-            text = performedOn,
-            style = MaterialTheme.typography.displayLarge,
-            color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.7F)
+        Icon(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .offset(x = -(16).dp),
+            imageVector = KenkoIcons.ConcentricTriangles,
+            tint = MaterialTheme.colorScheme.outline,
+            contentDescription = null
         )
+        Icon(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .offset(x = (16).dp),
+            imageVector = KenkoIcons.Stack,
+            tint = MaterialTheme.colorScheme.outline,
+            contentDescription = null
+        )
+        Box(modifier = Modifier.matchParentSize()) {
+            BackButton(
+                modifier = Modifier.align(Alignment.TopStart),
+                onClick = onBackPress,
+                colors = IconButtonDefaults.iconButtonColors(
+                    contentColor = MaterialTheme.colorScheme.inverseOnSurface
+                )
+            )
+            Column(
+                modifier = Modifier.matchParentSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Spacer(modifier = Modifier.weight(1F))
+                Text(
+                    text = dayOfWeek,
+                    style = MaterialTheme.typography.displayLarge,
+                    color = MaterialTheme.colorScheme.inversePrimary,
+                )
+                Text(
+                    text = date,
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = MaterialTheme.colorScheme.inverseOnSurface,
+                )
+                Spacer(modifier = Modifier.weight(1F))
+            }
+        }
     }
 }
 

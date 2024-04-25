@@ -134,6 +134,13 @@ fun SessionCard(
 }
 
 @Composable
+fun LocalDate.format(
+    format: DateTimeFormat = DateTimeFormat.Short,
+): String = remember(this) {
+    formatDate(this, dateTimeFormat = format)
+}
+
+@Composable
 fun Session.formattedDate(format: DateTimeFormat = DateTimeFormat.Short): String =
     remember(date) {
         formatDate(date, dateTimeFormat = format)

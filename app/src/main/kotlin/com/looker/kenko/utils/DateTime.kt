@@ -25,5 +25,6 @@ val LocalDate.isToday: Boolean
     get() = daysUntil(Clock.System.todayIn(TimeZone.currentSystemDefault())) == 0
 
 enum class DateTimeFormat(val format: String) {
-    Short("E, dd-MMM-yyyy"), Long("EEEE, dd-MMM-yyyy")
+    Short("dd-MMM"), Long("EEEE, dd-MMM-yyyy"),
+    Day("EEEE")
 }

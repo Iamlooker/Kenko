@@ -1,6 +1,7 @@
 package com.looker.kenko.ui.sessionDetail
 
 import androidx.annotation.StringRes
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -45,11 +46,12 @@ class SessionDetailViewModel @Inject constructor(
 
     private val exercisesStream: Flow<List<Exercise>?> = repo.exercisesToday
 
-    var isSheetExpanded: Boolean by mutableStateOf(false)
-        private set
-
     var currentExercise: Exercise? by mutableStateOf(null)
         private set
+
+    val isSheetExpanded: Boolean by derivedStateOf {
+        currentExercise != null
+    }
 
     val state: StateFlow<SessionDetailState> =
         combine(
@@ -82,7 +84,6 @@ class SessionDetailViewModel @Inject constructor(
 
     fun showBottomSheet(exercise: Exercise) {
         currentExercise = exercise
-        isSheetExpanded = true
     }
 
     fun addSet(set: Set) {
@@ -98,7 +99,7 @@ class SessionDetailViewModel @Inject constructor(
     }
 
     fun hideSheet() {
-        isSheetExpanded = false
+        currentExercise = null
     }
 }
 

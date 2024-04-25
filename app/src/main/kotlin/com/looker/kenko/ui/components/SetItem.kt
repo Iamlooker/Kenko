@@ -27,7 +27,7 @@ fun SetItem(
     title: String,
     rep: Int,
     weight: Double,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = Modifier
@@ -61,7 +61,7 @@ fun SetItem(
 fun PerformedItem(
     title: String,
     performance: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
@@ -69,7 +69,10 @@ fun PerformedItem(
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.outline
         )
-        Text(text = performance, style = MaterialTheme.typography.labelLarge)
+        Text(
+            text = performance,
+            style = MaterialTheme.typography.labelLarge
+        )
     }
 }
 
@@ -77,6 +80,6 @@ fun PerformedItem(
 @Composable
 private fun SetItemPreview() {
     KenkoTheme {
-        SetItem("Set 1", 14, 45.0)
+        SetItem("01", 14, 45.0)
     }
 }
