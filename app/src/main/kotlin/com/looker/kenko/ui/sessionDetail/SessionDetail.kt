@@ -45,10 +45,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.data.model.Exercise
-import com.looker.kenko.data.model.MuscleGroups
+import com.looker.kenko.data.model.Samples
 import com.looker.kenko.data.model.Session
 import com.looker.kenko.data.model.Set
-import com.looker.kenko.data.model.SetType
 import com.looker.kenko.ui.addSet.AddSet
 import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.components.SetItem
@@ -69,10 +68,10 @@ fun SessionDetails(onBackPress: () -> Unit) {
         onBackPress = onBackPress,
         onSelectBottomSheet = { viewModel.showBottomSheet(it) },
     )
-    if (viewModel.isSheetExpanded) {
+    val exercise by viewModel.current.collectAsStateWithLifecycle()
+    if (exercise != null) {
         AddSetSheet(
-            exercise = viewModel.currentExercise,
-            onAddSet = viewModel::addSet,
+            exercise = exercise!!,
             onDismiss = viewModel::hideSheet
         )
     }
@@ -295,8 +294,7 @@ private fun SessionError(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AddSetSheet(
-    exercise: Exercise?,
-    onAddSet: (Set) -> Unit,
+    exercise: Exercise,
     onDismiss: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
@@ -305,7 +303,6 @@ private fun AddSetSheet(
         AddSet(
             exercise = exercise,
             onDone = {
-                onAddSet(it)
                 scope.launch { state.hide() }.invokeOnCompletion {
                     if (!state.isVisible) onDismiss()
                 }
@@ -319,21 +316,10 @@ private fun AddSetSheet(
 private fun SessionDetailPreview() {
     KenkoTheme {
         val data = remember {
-            val sets = listOf(
-                Set(12, 55.0, SetType.Standard, Exercise("Bench", MuscleGroups.Chest)),
-                Set(12, 55.0, SetType.Standard, Exercise("Bench", MuscleGroups.Chest)),
-                Set(12, 55.0, SetType.Standard, Exercise("Bench", MuscleGroups.Chest)),
-                Set(12, 55.0, SetType.Standard, Exercise("Incline Bench", MuscleGroups.Chest)),
-                Set(12, 55.0, SetType.Standard, Exercise("Incline Bench", MuscleGroups.Chest)),
-                Set(12, 55.0, SetType.Standard, Exercise("Incline Bench", MuscleGroups.Chest)),
-                Set(12, 55.0, SetType.Standard, Exercise("Pec-Dec", MuscleGroups.Chest)),
-                Set(12, 55.0, SetType.Standard, Exercise("Pec-Dec", MuscleGroups.Chest)),
-                Set(12, 55.0, SetType.Standard, Exercise("Pec-Dec", MuscleGroups.Chest)),
-            ).groupBy { it.exercise }
             SessionDetailState.Success(
                 SessionUiData(
                     session = Session.SAMPLE,
-                    sets = sets,
+                    sets = Set.Samples.groupBy { it.exercise },
                     isToday = true
                 )
             )

@@ -24,6 +24,6 @@ object KenkoIcons {
 
     val Stack: ImageVector = com.looker.kenko.ui.components.icons.Stack
 
-    val QuaterCircles: ImageVector = com.looker.kenko.ui.components.icons.QuarterCircles
+    val QuarterCircles: ImageVector = com.looker.kenko.ui.components.icons.QuarterCircles
 
 }

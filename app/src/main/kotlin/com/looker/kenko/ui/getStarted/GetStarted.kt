@@ -56,7 +56,7 @@ fun GetStarted(onNext: () -> Unit) {
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
                     .offset(y = 48.dp),
-                imageVector = KenkoIcons.QuaterCircles,
+                imageVector = KenkoIcons.QuarterCircles,
                 tint = MaterialTheme.colorScheme.outlineVariant,
                 contentDescription = null,
             )

@@ -20,6 +20,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -30,7 +31,6 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.looker.kenko.R
 import com.looker.kenko.data.model.Exercise
-import com.looker.kenko.data.model.Set
 import com.looker.kenko.ui.components.draggableTextField.DraggableTextField
 import com.looker.kenko.ui.components.draggableTextField.rememberDraggableTextFieldState
 import com.looker.kenko.ui.theme.KenkoTheme
@@ -42,10 +42,13 @@ private val incrementButtonModifier = Modifier
 private val zIndexModifier = Modifier.zIndex(1F)
 
 @Composable
-fun AddSet(exercise: Exercise?, onDone: (Set) -> Unit) {
+fun AddSet(exercise: Exercise, onDone: () -> Unit) {
+    LaunchedEffect(exercise) {
+
+    }
     val viewModel: AddSetViewModel =
-        hiltViewModel<AddSetViewModel, AddSetViewModel.AddSetViewModelFactory> {
-            it.create(exercise?.name)
+        hiltViewModel<AddSetViewModel, AddSetViewModel.AddSetViewModelFactory>(key = exercise.name) {
+            it.create(exercise.name)
         }
     Column(
         modifier = Modifier
@@ -55,8 +58,11 @@ fun AddSet(exercise: Exercise?, onDone: (Set) -> Unit) {
         Spacer(modifier = Modifier.height(32.dp))
         AddSetHeader(
             modifier = Modifier.fillMaxWidth(),
-            exerciseName = exercise?.name ?: "",
-            onClick = { viewModel.addSet(onDone) },
+            exerciseName = exercise.name,
+            onClick = {
+                viewModel.addSet()
+                onDone()
+            },
         )
 
         Spacer(modifier = Modifier.height(24.dp))

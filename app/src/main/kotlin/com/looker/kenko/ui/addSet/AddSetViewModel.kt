@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.looker.kenko.data.model.Set
 import com.looker.kenko.data.model.SetType
+import com.looker.kenko.data.model.localDate
 import com.looker.kenko.data.repository.ExerciseRepo
+import com.looker.kenko.data.repository.SessionRepo
 import com.looker.kenko.ui.components.draggableTextField.DragEvents
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -19,8 +21,9 @@ import kotlin.concurrent.fixedRateTimer
 
 @HiltViewModel(assistedFactory = AddSetViewModel.AddSetViewModelFactory::class)
 class AddSetViewModel @AssistedInject constructor(
+    private val sessionRepo: SessionRepo,
     private val exerciseRepo: ExerciseRepo,
-    @Assisted private val exerciseName: String?,
+    @Assisted private val exerciseName: String,
 ) : ViewModel() {
 
     private var timer: Timer? = null
@@ -74,21 +77,20 @@ class AddSetViewModel @AssistedInject constructor(
         }
     }
 
-    fun addSet(onDone: (Set) -> Unit) {
+    fun addSet() {
         viewModelScope.launch {
             val exercise = async {
-                if (exerciseName != null) {
-                    exerciseRepo.get(exerciseName)
-                } else null
+                exerciseRepo.get(exerciseName)
             }
-            onDone(
-                Set(
-                    repsOrDuration = getRep() ?: return@launch,
-                    weight = getWeight() ?: return@launch,
-                    exercise = exercise.await() ?: return@launch,
-                    type = SetType.Standard
-                )
+            val reps = getRep() ?: return@launch
+            val weights = getWeight() ?: return@launch
+            val set = Set(
+                repsOrDuration = reps,
+                weight = weights,
+                exercise = exercise.await() ?: return@launch,
+                type = SetType.Standard
             )
+            sessionRepo.addSet(localDate, set)
         }
     }
 
@@ -102,6 +104,6 @@ class AddSetViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface AddSetViewModelFactory {
-        fun create(name: String?): AddSetViewModel
+        fun create(name: String): AddSetViewModel
     }
 }

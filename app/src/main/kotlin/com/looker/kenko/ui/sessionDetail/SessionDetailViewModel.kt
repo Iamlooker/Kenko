@@ -1,10 +1,6 @@
 package com.looker.kenko.ui.sessionDetail
 
 import androidx.annotation.StringRes
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,16 +9,16 @@ import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.Session
 import com.looker.kenko.data.model.Set
 import com.looker.kenko.data.model.localDate
+import com.looker.kenko.data.repository.PlanRepo
 import com.looker.kenko.data.repository.SessionRepo
 import com.looker.kenko.ui.sessionDetail.navigation.ARG_SESSION_ID
 import com.looker.kenko.utils.asStateFlow
 import com.looker.kenko.utils.isToday
-import com.looker.kenko.utils.updateAsMutable
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
@@ -30,7 +26,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SessionDetailViewModel @Inject constructor(
-    private val repo: SessionRepo,
+    repo: SessionRepo,
+    planRepo: PlanRepo,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -44,14 +41,10 @@ class SessionDetailViewModel @Inject constructor(
 
     private val sessionStream: Flow<Session?> = repo.getStream(sessionDate)
 
-    private val exercisesStream: Flow<List<Exercise>?> = repo.exercisesToday
+    private val exercisesStream: Flow<List<Exercise>?> = planRepo.exercises(sessionDate)
 
-    var currentExercise: Exercise? by mutableStateOf(null)
-        private set
-
-    val isSheetExpanded: Boolean by derivedStateOf {
-        currentExercise != null
-    }
+    private val _currentExercise: MutableStateFlow<Exercise?> = MutableStateFlow(null)
+    val current: StateFlow<Exercise?> = _currentExercise
 
     val state: StateFlow<SessionDetailState> =
         combine(
@@ -62,15 +55,16 @@ class SessionDetailViewModel @Inject constructor(
                 return@combine SessionDetailState.Error.InvalidSession
             }
 
+            val currentSession = session ?: Session.create(emptyList())
+
             if (exercises == null) {
                 return@combine SessionDetailState.Error.EmptyPlan
             }
 
-            val currentSession = session ?: Session.create(emptyList())
-
             val setsExerciseMap = exercises.associateWith { exercise ->
                 currentSession.sets.filter { exercise == it.exercise }
             }
+
             SessionDetailState.Success(
                 SessionUiData(
                     session = currentSession,
@@ -83,23 +77,15 @@ class SessionDetailViewModel @Inject constructor(
 
 
     fun showBottomSheet(exercise: Exercise) {
-        currentExercise = exercise
-    }
-
-    fun addSet(set: Set) {
         viewModelScope.launch {
-            if (sessionDate.isToday) {
-                if (sessionStream.first() == null) {
-                    repo.createEmpty()
-                }
-                val currentSession = requireNotNull(sessionStream.first())
-                repo.updateSet(currentSession.sets.updateAsMutable { add(set) })
-            }
+            _currentExercise.emit(exercise)
         }
     }
 
     fun hideSheet() {
-        currentExercise = null
+        viewModelScope.launch {
+            _currentExercise.emit(null)
+        }
     }
 }
 

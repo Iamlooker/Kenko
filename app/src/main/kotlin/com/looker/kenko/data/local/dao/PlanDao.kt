@@ -3,8 +3,10 @@ package com.looker.kenko.data.local.dao
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
+import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.Plan
 import kotlinx.coroutines.flow.Flow
+import kotlinx.datetime.DayOfWeek
 
 @Dao
 interface PlanDao {

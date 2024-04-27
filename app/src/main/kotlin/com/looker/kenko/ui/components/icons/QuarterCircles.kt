@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.StrokeCap.Companion.Butt
 import androidx.compose.ui.graphics.StrokeJoin.Companion.Miter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
+import androidx.compose.ui.unit.dp
 
 val QuarterCircles: ImageVector
     get() {
@@ -16,6 +17,7 @@ val QuarterCircles: ImageVector
         _quarterCircles = icon(
             name = "QuarterCircles",
             viewPort = 246F to 311F,
+            size = 180.dp to 228.dp,
         ) {
             path(
                 fill = SolidColor(Color.Black), stroke = null, strokeLineWidth = 0.0f,
