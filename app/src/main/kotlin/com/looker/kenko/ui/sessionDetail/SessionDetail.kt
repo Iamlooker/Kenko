@@ -1,6 +1,5 @@
 package com.looker.kenko.ui.sessionDetail
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,8 +17,10 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Add
 import androidx.compose.material3.CircularProgressIndicator
@@ -130,7 +131,6 @@ private fun SessionDetail(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun SessionList(
     session: Session,
@@ -139,21 +139,30 @@ private fun SessionList(
     onBackPress: () -> Unit,
     onSelectBottomSheet: (Exercise) -> Unit,
 ) {
-    LazyColumn(
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(360.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(
             bottom = WindowInsets.navigationBars.asPaddingValues(LocalDensity.current)
                 .calculateBottomPadding() + 12.dp
         )
     ) {
-        item {
+        item(
+            span = {
+                GridItemSpan(maxLineSpan)
+            }
+        ) {
             Header(
                 performedOn = session.date,
                 onBackPress = onBackPress,
             )
         }
         exerciseSets?.forEach { (exercise, sets) ->
-            stickyHeader {
+            item(
+                span = {
+                    GridItemSpan(maxLineSpan)
+                }
+            ) {
                 StickyHeader(name = exercise.name) {
                     if (isEditable) {
                         FilledTonalIconButton(onClick = { onSelectBottomSheet(exercise) }) {
