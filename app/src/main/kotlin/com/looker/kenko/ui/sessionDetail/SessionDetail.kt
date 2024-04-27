@@ -1,6 +1,7 @@
 package com.looker.kenko.ui.sessionDetail
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,6 +22,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Add
 import androidx.compose.material3.CircularProgressIndicator
@@ -34,6 +36,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -54,6 +58,7 @@ import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.components.SetItem
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
+import com.looker.kenko.ui.theme.rememberSystemUiController
 import com.looker.kenko.utils.DateTimeFormat
 import com.looker.kenko.utils.formatDate
 import kotlinx.coroutines.launch
@@ -139,18 +144,32 @@ private fun SessionList(
     onBackPress: () -> Unit,
     onSelectBottomSheet: (Exercise) -> Unit,
 ) {
+    val systemUiController = rememberSystemUiController()
+    val gridState = rememberLazyGridState()
+    val isFirstItemVisible by remember {
+        derivedStateOf {
+            gridState.firstVisibleItemIndex == 0
+        }
+    }
+    val isDarkTheme = isSystemInDarkTheme()
+    DisposableEffect(systemUiController, isFirstItemVisible, isDarkTheme) {
+        systemUiController.isLightStatusBar(!isFirstItemVisible.xor(isDarkTheme))
+        onDispose {
+            systemUiController.isLightSystemBar(!isDarkTheme)
+        }
+    }
     LazyVerticalGrid(
+        state = gridState,
         columns = GridCells.Adaptive(360.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly,
         contentPadding = PaddingValues(
             bottom = WindowInsets.navigationBars.asPaddingValues(LocalDensity.current)
                 .calculateBottomPadding() + 12.dp
         )
     ) {
         item(
-            span = {
-                GridItemSpan(maxLineSpan)
-            }
+            span = { GridItemSpan(maxLineSpan) }
         ) {
             Header(
                 performedOn = session.date,
@@ -159,9 +178,7 @@ private fun SessionList(
         }
         exerciseSets?.forEach { (exercise, sets) ->
             item(
-                span = {
-                    GridItemSpan(maxLineSpan)
-                }
+                span = { GridItemSpan(maxLineSpan) },
             ) {
                 StickyHeader(name = exercise.name) {
                     if (isEditable) {
@@ -202,7 +219,7 @@ private fun Header(
         modifier = modifier
             .fillMaxWidth()
             .height(300.dp)
-            .background(MaterialTheme.colorScheme.inverseSurface)
+            .background(MaterialTheme.colorScheme.primary)
             .statusBarsPadding()
     ) {
         Icon(
@@ -221,31 +238,29 @@ private fun Header(
             tint = MaterialTheme.colorScheme.outline,
             contentDescription = null
         )
-        Box(modifier = Modifier.matchParentSize()) {
-            BackButton(
-                modifier = Modifier.align(Alignment.TopStart),
-                onClick = onBackPress,
-                colors = IconButtonDefaults.iconButtonColors(
-                    contentColor = MaterialTheme.colorScheme.inverseOnSurface
-                )
+        BackButton(
+            modifier = Modifier.align(Alignment.TopStart),
+            onClick = onBackPress,
+            colors = IconButtonDefaults.iconButtonColors(
+                contentColor = MaterialTheme.colorScheme.inverseOnSurface
             )
-            Column(
-                modifier = Modifier.matchParentSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Spacer(modifier = Modifier.weight(1F))
-                Text(
-                    text = dayOfWeek,
-                    style = MaterialTheme.typography.displayLarge,
-                    color = MaterialTheme.colorScheme.inversePrimary,
-                )
-                Text(
-                    text = date,
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = MaterialTheme.colorScheme.inverseOnSurface,
-                )
-                Spacer(modifier = Modifier.weight(1F))
-            }
+        )
+        Column(
+            modifier = Modifier.matchParentSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Spacer(modifier = Modifier.weight(1F))
+            Text(
+                text = dayOfWeek,
+                style = MaterialTheme.typography.displayLarge,
+                color = MaterialTheme.colorScheme.inversePrimary,
+            )
+            Text(
+                text = date,
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.inverseOnSurface,
+            )
+            Spacer(modifier = Modifier.weight(1F))
         }
     }
 }
