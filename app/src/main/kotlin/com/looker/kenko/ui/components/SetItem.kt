@@ -58,7 +58,7 @@ fun SetItem(
 }
 
 @Composable
-fun PerformedItem(
+private fun PerformedItem(
     title: String,
     performance: String,
     modifier: Modifier = Modifier,
