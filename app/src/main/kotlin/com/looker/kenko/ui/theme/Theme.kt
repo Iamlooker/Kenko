@@ -120,7 +120,7 @@ private fun SetupInsets(
 ) {
     val controller = rememberSystemUiController()
     SideEffect {
-        controller.colors(insetColor.toArgb())
-        controller.isLightSystemBar(!isDarkTheme)
+        controller?.colors(insetColor.toArgb())
+        controller?.isLightSystemBar(!isDarkTheme)
     }
 }

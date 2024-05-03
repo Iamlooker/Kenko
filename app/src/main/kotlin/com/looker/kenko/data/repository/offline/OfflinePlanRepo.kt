@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.datetime.LocalDate
 import javax.inject.Inject
 
-class OfflinePlanRepo @Inject constructor (
+class OfflinePlanRepo @Inject constructor(
     private val dao: PlanDao,
 ) : PlanRepo {
 
@@ -26,6 +26,10 @@ class OfflinePlanRepo @Inject constructor (
 
     override fun exercises(date: LocalDate): Flow<List<Exercise>?> {
         return current.map { it?.exercisesPerDay?.get(date.dayOfWeek) }
+    }
+
+    override suspend fun switchPlan(plan: Plan) {
+        dao.switchPlan(plan.id!!)
     }
 
     override suspend fun upsert(plan: Plan) {

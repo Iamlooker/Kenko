@@ -27,11 +27,14 @@
     <string name="label_nothing_today">Nothing today</string>
     <string name="label_missed_day">Did you miss the day?</string>
     <string name="label_create_session">Create Session</string>
-    <string name="label_add_exercise">New Exercise</string>
+    <string name="label_add_new_exercise">New Exercise</string>
+    <string name="label_add_exercise">Select Exercise</string>
     <string name="label_reps">.reps</string>
     <string name="label_weight">.weight</string>
 
     <string name="label_reference">Reference</string>
+    <string name="label_exercise">Exercise</string>
+    <string name="label_search_exercise">Search Exercise</string>
     <string name="label_reference_optional">optional *</string>
     <string name="label_name">Name</string>
     <string name="label_exercise_exists">Exercise Already Exists</string>
@@ -51,4 +54,12 @@
     <string name="label_performance">Performance</string>
     <string name="label_profile">Profile</string>
     <string name="label_record">Record</string>
+
+    <string name="label_monday">.mon</string>
+    <string name="label_tuesday">.tue</string>
+    <string name="label_wednesday">.wed</string>
+    <string name="label_thursday">.thu</string>
+    <string name="label_friday">.fri</string>
+    <string name="label_saturday">.sat</string>
+    <string name="label_sunday">.sun</string>
 </resources>

@@ -84,7 +84,7 @@ fun Profile() {
                     containerColor = MaterialTheme.colorScheme.surfaceContainerHighest
                 ),
                 shape = MaterialTheme.shapes.large,
-                onClick = { /*TODO*/ }
+                onClick = {}
             ) {
                 Icon(imageVector = Icons.Rounded.Person, contentDescription = null)
             }

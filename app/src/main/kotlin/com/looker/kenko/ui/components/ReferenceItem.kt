@@ -4,9 +4,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowOutward
-import androidx.compose.material.icons.twotone.TipsAndUpdates
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -19,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.looker.kenko.R
+import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 
 @Composable
@@ -29,14 +27,14 @@ fun ReferenceItem(
     Surface(
         modifier = modifier,
         shape = MaterialTheme.shapes.extraLarge,
-        tonalElevation = 2.dp,
+        color = MaterialTheme.colorScheme.surfaceContainer,
         onClick = onClick
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(imageVector = Icons.TwoTone.TipsAndUpdates, contentDescription = null)
+            Icon(imageVector = KenkoIcons.TipsAndUpdates, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = stringResource(R.string.label_reference),
@@ -44,7 +42,7 @@ fun ReferenceItem(
             )
             Spacer(modifier = Modifier.weight(1F))
             FilledTonalIconButton(onClick = onClick) {
-                Icon(imageVector = Icons.Rounded.ArrowOutward, contentDescription = null)
+                Icon(imageVector = KenkoIcons.ArrowOutward, contentDescription = null)
             }
         }
     }

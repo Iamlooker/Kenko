@@ -6,8 +6,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.looker.kenko.ui.addEditExercise.navigation.addEditExercise
+import com.looker.kenko.ui.addEditExercise.navigation.navigateToAddEditExercise
 import com.looker.kenko.ui.getStarted.navigation.GET_STARTED_ROUTE
 import com.looker.kenko.ui.getStarted.navigation.getStarted
+import com.looker.kenko.ui.planEdit.navigation.navigateToPlanEdit
+import com.looker.kenko.ui.planEdit.navigation.planEdit
+import com.looker.kenko.ui.plans.navigation.navigateToPlans
 import com.looker.kenko.ui.plans.navigation.plans
 import com.looker.kenko.ui.sessionDetail.navigation.navigateToSessionDetail
 import com.looker.kenko.ui.sessionDetail.navigation.sessionDetail
@@ -36,10 +40,13 @@ fun KenkoNavHost(
                 }
             )
         }
+
+        planEdit(navController::popBackStack, navController::navigateToAddEditExercise)
+
         sessionDetail(navController::popBackStack)
 
         addEditExercise(navController::popBackStack)
 
-        plans { }
+        plans(navController::navigateToPlanEdit)
     }
 }

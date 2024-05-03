@@ -20,7 +20,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -43,9 +42,6 @@ private val zIndexModifier = Modifier.zIndex(1F)
 
 @Composable
 fun AddSet(exercise: Exercise, onDone: () -> Unit) {
-    LaunchedEffect(exercise) {
-
-    }
     val viewModel: AddSetViewModel =
         hiltViewModel<AddSetViewModel, AddSetViewModel.AddSetViewModelFactory>(key = exercise.name) {
             it.create(exercise.name)
@@ -55,7 +51,7 @@ fun AddSet(exercise: Exercise, onDone: () -> Unit) {
             .padding(horizontal = 16.dp)
             .wrapContentHeight()
     ) {
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(16.dp))
         AddSetHeader(
             modifier = Modifier.fillMaxWidth(),
             exerciseName = exercise.name,

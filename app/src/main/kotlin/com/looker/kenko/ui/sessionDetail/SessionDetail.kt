@@ -56,6 +56,8 @@ import com.looker.kenko.data.model.Set
 import com.looker.kenko.ui.addSet.AddSet
 import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.components.SetItem
+import com.looker.kenko.ui.helper.plus
+import com.looker.kenko.ui.planEdit.components.dayName
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 import com.looker.kenko.ui.theme.rememberSystemUiController
@@ -153,9 +155,9 @@ private fun SessionList(
     }
     val isDarkTheme = isSystemInDarkTheme()
     DisposableEffect(systemUiController, isFirstItemVisible, isDarkTheme) {
-        systemUiController.isLightStatusBar(!isFirstItemVisible.xor(isDarkTheme))
+        systemUiController?.isLightStatusBar(!isFirstItemVisible.xor(isDarkTheme))
         onDispose {
-            systemUiController.isLightSystemBar(!isDarkTheme)
+            systemUiController?.isLightSystemBar(!isDarkTheme)
         }
     }
     LazyVerticalGrid(
@@ -163,10 +165,8 @@ private fun SessionList(
         columns = GridCells.Adaptive(360.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
-        contentPadding = PaddingValues(
-            bottom = WindowInsets.navigationBars.asPaddingValues(LocalDensity.current)
-                .calculateBottomPadding() + 12.dp
-        )
+        contentPadding = WindowInsets.navigationBars.asPaddingValues(LocalDensity.current)
+                + PaddingValues(bottom = 12.dp)
     ) {
         item(
             span = { GridItemSpan(maxLineSpan) }
@@ -209,9 +209,6 @@ private fun Header(
     onBackPress: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val dayOfWeek = remember {
-        formatDate(performedOn, DateTimeFormat.Day)
-    }
     val date = remember {
         formatDate(performedOn, DateTimeFormat.Short)
     }
@@ -251,7 +248,7 @@ private fun Header(
         ) {
             Spacer(modifier = Modifier.weight(1F))
             Text(
-                text = dayOfWeek,
+                text = dayName(performedOn.dayOfWeek),
                 style = MaterialTheme.typography.displayLarge,
                 color = MaterialTheme.colorScheme.inversePrimary,
             )
@@ -351,7 +348,7 @@ private fun SessionDetailPreview() {
         Surface(modifier = Modifier.fillMaxSize()) {
             SessionDetail(
                 state = data,
-                onBackPress = { /*TODO*/ },
+                onBackPress = {},
                 onSelectBottomSheet = {},
             )
         }
@@ -368,7 +365,7 @@ private fun SessionErrorPreview() {
         Surface(modifier = Modifier.fillMaxSize()) {
             SessionDetail(
                 state = data,
-                onBackPress = { /*TODO*/ },
+                onBackPress = {},
                 onSelectBottomSheet = {},
             )
         }

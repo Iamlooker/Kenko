@@ -12,7 +12,7 @@ const val ADD_EDIT_EXERCISE_ROUTE = "add_edit_exercise"
 
 const val ARG_EXERCISE_NAME = "exercise_name"
 
-fun NavController.navigateToAddEditExercise(exerciseName: String?, navOptions: NavOptions? = null) {
+fun NavController.navigateToAddEditExercise(exerciseName: String? = null, navOptions: NavOptions? = null) {
     navigate("$ADD_EDIT_EXERCISE_ROUTE/?name=${exerciseName}", navOptions)
 }
 

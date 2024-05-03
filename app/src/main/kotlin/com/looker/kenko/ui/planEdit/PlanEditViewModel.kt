@@ -1,21 +1,23 @@
 package com.looker.kenko.ui.planEdit
 
-import androidx.compose.foundation.text.input.TextFieldState
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.Plan
 import com.looker.kenko.data.repository.PlanRepo
+import com.looker.kenko.ui.planEdit.navigation.ARG_PLAN_ID
 import com.looker.kenko.utils.asStateFlow
 import com.looker.kenko.utils.updateAsMutable
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DayOfWeek
@@ -23,54 +25,65 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlanEditViewModel @Inject constructor(
-    private val repo: PlanRepo,
+    repo: PlanRepo,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    private val planId: Long? = savedStateHandle["id"]
+    private val planId: Long? = savedStateHandle.get<Long?>(ARG_PLAN_ID)?.takeIf { it != -1L }
 
     private val planStream: Flow<Plan?> = repo.get(planId)
 
-    private val planName: TextFieldState = TextFieldState()
-    private val _isActive: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    private val _dayAndExercises: MutableStateFlow<Map<DayOfWeek, List<Exercise>>> =
-        MutableStateFlow(emptyMap())
+    private val _dayAndExercises =
+        MutableStateFlow<Map<DayOfWeek, List<Exercise>>>(emptyMap())
 
-    val currentPlan: StateFlow<Plan> = combine(
-        _isActive,
+    private val _dayOfWeek: MutableStateFlow<DayOfWeek> = MutableStateFlow(DayOfWeek.THURSDAY)
+    val dayOfWeek: StateFlow<DayOfWeek> = _dayOfWeek.asStateFlow()
+
+    private val _isSheetVisible: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isSheetVisible: StateFlow<Boolean> = _isSheetVisible.asStateFlow()
+
+    val exercisesList = combine(
+        dayOfWeek,
         _dayAndExercises
-    ) { isActive, dayAndExercise ->
-        Plan(
-            name = planName.text.toString(),
-            exercisesPerDay = dayAndExercise,
-            isActive = isActive
-        )
-    }.asStateFlow(Plan("", emptyMap(), false))
+    ) { day, exerciseMap ->
+        exerciseMap[day] ?: emptyList()
+    }.asStateFlow(emptyList())
 
-    fun addDay(dayOfWeek: DayOfWeek) {
+    fun setCurrentDay(dayOfWeek: DayOfWeek) {
         viewModelScope.launch {
-            _dayAndExercises.update {
-                it.updateAsMutable {
-                    put(dayOfWeek, emptyList())
-                }
-            }
+            _dayOfWeek.emit(dayOfWeek)
         }
     }
 
-    fun setActive(value: Boolean) {
+    fun openSheet() {
         viewModelScope.launch {
-            _isActive.emit(value)
+            _isSheetVisible.emit(true)
         }
     }
 
-    fun addExercise(dayOfWeek: DayOfWeek, exercise: Exercise) {
+    fun closeSheet() {
+        viewModelScope.launch {
+            _isSheetVisible.emit(false)
+        }
+    }
+
+    fun addExercise(exercise: Exercise) {
+        modifyExercise(dayOfWeek.value) { add(exercise) }
+    }
+
+    fun removeExercise(exercise: Exercise) {
+        modifyExercise(dayOfWeek.value) { remove(exercise) }
+    }
+
+    private fun modifyExercise(
+        dayOfWeek: DayOfWeek,
+        block: MutableList<Exercise>.() -> Unit,
+    ) {
         viewModelScope.launch {
             _dayAndExercises.update {
-                val newList = it[dayOfWeek]
-                    ?.updateAsMutable { add(exercise) }
-                    ?: listOf(exercise)
                 it.updateAsMutable {
-                    set(dayOfWeek, newList)
+                    val exerciseMap = getOrPut(dayOfWeek) { emptyList() }
+                    set(dayOfWeek, exerciseMap.updateAsMutable(block))
                 }
             }
         }
@@ -78,13 +91,15 @@ class PlanEditViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val plan = planStream.filterNotNull().first()
-            setActive(plan.isActive)
+            Log.e("tag", planId.toString())
+            val plan = planStream.filterNotNull().firstOrNull() ?: return@launch
             plan.exercisesPerDay.forEach { (day, exercises) ->
                 launch {
                     exercises.forEach { exercise ->
                         launch {
-                            addExercise(day, exercise)
+                            modifyExercise(day) {
+                                add(exercise)
+                            }
                         }
                     }
                 }

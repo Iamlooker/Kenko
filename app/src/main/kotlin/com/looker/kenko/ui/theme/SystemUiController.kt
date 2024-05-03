@@ -3,22 +3,25 @@ package com.looker.kenko.ui.theme
 import android.app.Activity
 import android.view.View
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 @Composable
-fun rememberSystemUiController(): SystemUiController {
+fun rememberSystemUiController(): SystemUiController? {
     val view = LocalView.current
     return remember {
         if (!view.isInEditMode) {
             SystemUiController(view)
         } else {
-            error("Cannot set inset colors in edit mode")
+//            error("Cannot set inset colors in edit mode")
+            null
         }
     }
 }
 
+@Stable
 class SystemUiController(
     view: View,
 ) {

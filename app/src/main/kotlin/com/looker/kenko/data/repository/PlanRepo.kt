@@ -15,6 +15,8 @@ interface PlanRepo {
 
     fun exercises(date: LocalDate): Flow<List<Exercise>?>
 
+    suspend fun switchPlan(plan: Plan)
+
     suspend fun upsert(plan: Plan)
 
     suspend fun current(): Plan?
