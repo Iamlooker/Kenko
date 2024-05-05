@@ -15,8 +15,9 @@ fun NavController.navigateToProfile(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.profile(
     onNavigateToExercisesList: () -> Unit,
     onNavigateToAddExercise: () -> Unit,
+    onNavigateToPlans: () -> Unit,
 ) {
     composable(PROFILE_ROUTE) {
-        Profile(onNavigateToExercisesList, onNavigateToAddExercise)
+        Profile(onNavigateToExercisesList, onNavigateToAddExercise, onNavigateToPlans)
     }
 }

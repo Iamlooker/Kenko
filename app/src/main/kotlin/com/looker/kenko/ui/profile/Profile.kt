@@ -52,6 +52,7 @@ import com.looker.kenko.ui.theme.start
 fun Profile(
     onNavigateToExercisesList: () -> Unit,
     onNavigateToAddExercise: () -> Unit,
+    onNavigateToPlans: () -> Unit,
 ) {
     val viewModel: ProfileViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -69,7 +70,7 @@ fun Profile(
             Spacer(modifier = Modifier.height(24.dp))
             if (state.isPlanAvailable) {
                 CurrentPlanCard(
-                    onEditClick = { /*TODO*/ },
+                    onEditClick = onNavigateToPlans,
                     name = state.planName,
                     content = {
                         Text(
