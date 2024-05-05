@@ -1,23 +1,46 @@
 package com.looker.kenko.ui.theme
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.sharp.ArrowForward
-import androidx.compose.material.icons.rounded.ArrowOutward
-import androidx.compose.material.icons.sharp.Add
-import androidx.compose.material.icons.twotone.TipsAndUpdates
 import androidx.compose.ui.graphics.vector.ImageVector
 
+/**
+ * Material Symbols Settings
+ *
+ * Weight: 300
+ * Grade: 0
+ * Optical Size: 24px
+ * Style: Rounded
+ * Fill: False
+ */
 object KenkoIcons {
 
-    val ArrowForward: ImageVector = Icons.AutoMirrored.Sharp.ArrowForward
+    val ArrowBack: ImageVector = com.looker.kenko.ui.components.icons.symbols.ArrowBack
 
-    val ArrowOutward: ImageVector = Icons.Rounded.ArrowOutward
+    val ArrowForward: ImageVector = com.looker.kenko.ui.components.icons.symbols.ArrowForward
 
-    val TipsAndUpdates: ImageVector = Icons.TwoTone.TipsAndUpdates
+    val ArrowOutward: ImageVector = com.looker.kenko.ui.components.icons.symbols.ArrowOutward
 
-    val Add: ImageVector = Icons.Sharp.Add
+    val Lightbulb: ImageVector = com.looker.kenko.ui.components.icons.symbols.Lightbulb
 
+    val Add: ImageVector = com.looker.kenko.ui.components.icons.symbols.Add
+
+    val Done: ImageVector = com.looker.kenko.ui.components.icons.symbols.Done
+
+    val Remove: ImageVector = com.looker.kenko.ui.components.icons.symbols.Remove
+
+    val Save: ImageVector = com.looker.kenko.ui.components.icons.symbols.Save
+
+    val Rename: ImageVector = com.looker.kenko.ui.components.icons.symbols.Edit
+
+    val Plan: ImageVector = com.looker.kenko.ui.components.icons.symbols.Tactic
+
+    val Home: ImageVector = com.looker.kenko.ui.components.icons.symbols.Home
+
+    val Performance: ImageVector = com.looker.kenko.ui.components.icons.symbols.Performance
+
+    // Brutalist Icons
     val Cloud: ImageVector = com.looker.kenko.ui.components.icons.Cloud
+
+    val Colony: ImageVector = com.looker.kenko.ui.components.icons.Colony
 
     val Arrow1: ImageVector = com.looker.kenko.ui.components.icons.Arrow1
 
@@ -32,6 +55,8 @@ object KenkoIcons {
     val ConcentricTriangles: ImageVector = com.looker.kenko.ui.components.icons.ConcentricTriangles
 
     val Stack: ImageVector = com.looker.kenko.ui.components.icons.Stack
+
+    val Reveal: ImageVector = com.looker.kenko.ui.components.icons.Reveal
 
     val QuarterCircles: ImageVector = com.looker.kenko.ui.components.icons.QuarterCircles
 

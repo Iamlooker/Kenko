@@ -1,6 +1,9 @@
 package com.looker.kenko.ui.planEdit
 
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -33,6 +36,9 @@ class PlanEditViewModel @Inject constructor(
 
     private val planStream: Flow<Plan?> = repo.get(planId)
 
+    var planName: String by mutableStateOf("")
+        private set
+
     private val _dayAndExercises =
         MutableStateFlow<Map<DayOfWeek, List<Exercise>>>(emptyMap())
 
@@ -48,6 +54,10 @@ class PlanEditViewModel @Inject constructor(
     ) { day, exerciseMap ->
         exerciseMap[day] ?: emptyList()
     }.asStateFlow(emptyList())
+
+    fun setName(value: String) {
+        planName = value
+    }
 
     fun setCurrentDay(dayOfWeek: DayOfWeek) {
         viewModelScope.launch {

@@ -6,13 +6,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 
 val defaultTextureColor: Color
     @Composable
-    get() = MaterialTheme.colorScheme.outlineVariant.copy(0.4F)
+    get() = MaterialTheme.colorScheme.surfaceContainer
 
 @Composable
 fun TexturedSurface(
@@ -37,9 +38,13 @@ fun TexturedSurface(
     }
 }
 
-fun Modifier.dottedGradient(color: Color, drawRatio: Float = 0.3F): Modifier = drawWithCache {
+fun Modifier.dottedGradient(
+    color: Color,
+    drawRatio: Float = 0.3F,
+    start: GradientStart = GradientStart.TopLeft,
+): Modifier = drawWithCache {
     onDrawBehind {
-        dottedTexture(color, drawDistanceRatio = drawRatio)
+        dottedTexture(color, drawDistanceRatio = drawRatio, start = start)
     }
 }
 

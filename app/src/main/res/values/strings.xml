@@ -52,7 +52,7 @@
 
     <string name="label_home">Home</string>
     <string name="label_performance">Performance</string>
-    <string name="label_profile">Profile</string>
+    <string name="label_profile">You</string>
     <string name="label_record">Record</string>
 
     <string name="label_monday">.mon</string>
@@ -62,4 +62,30 @@
     <string name="label_friday">.fri</string>
     <string name="label_saturday">.sat</string>
     <string name="label_sunday">.sun</string>
+    <string name="label_plan">Plan</string>
+    <string name="label_settings_greeting">hey there</string>
+
+    <string name="label_lifts">Lifts</string>
+
+    <string name="label_plan_description">
+        <ul>%1$s exercises</ul>\n
+        <ul>%2$s days</ul>\n
+        <ul>%3$s rest days</ul>
+    </string>
+
+    <string-array name="label_health_quotes">
+        <item>you can do it</item>
+        <item>health is in your hands</item>
+        <item>health is wealth</item>
+        <item>workout is my therapy too</item>
+        <item>workout is my therapy too</item>
+    </string-array>
+
+    <string-array name="label_lifting_quotes">
+        <item>yeah buddy… light weight</item>
+        <item>light weight</item>
+        <item>ain\'t nothing to it but to do it</item>
+        <item>it\'s not about being light</item>
+        <item>i mean it\'s terrific, right\?</item>
+    </string-array>
 </resources>

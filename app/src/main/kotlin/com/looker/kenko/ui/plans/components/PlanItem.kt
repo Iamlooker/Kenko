@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedIconToggleButton
@@ -30,6 +28,7 @@ import com.looker.kenko.data.model.MuscleGroups.UpperBack
 import com.looker.kenko.data.model.Plan
 import com.looker.kenko.data.model.sampleExercises
 import com.looker.kenko.ui.planEdit.components.kenkoDayName
+import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 import kotlinx.datetime.DayOfWeek
 
@@ -61,7 +60,7 @@ fun PlanItem(
                     checked = plan.isActive,
                     onCheckedChange = onActiveChange
                 ) {
-                    Icon(imageVector = Icons.Filled.Check, contentDescription = null)
+                    Icon(imageVector = KenkoIcons.Done, contentDescription = null)
                 }
             }
             plan.exercisesPerDay.forEach { (dayOfWeek, exercises) ->

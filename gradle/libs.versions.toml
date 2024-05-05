@@ -2,9 +2,9 @@
 activity = "1.9.0"
 agp = "8.4.0"
 coil = "2.6.0"
-composeCompiler = "1.5.12"
-composeBom = "2024.04.00-alpha02"
-core = "1.13.0"
+composeCompiler = "1.5.13"
+composeBom = "2024.05.00-alpha01"
+core = "1.13.1"
 coroutines = "1.8.0"
 dateTime = "0.5.0"
 espresso = "3.5.1"
@@ -19,7 +19,7 @@ navigation = "2.7.7"
 rebugger = "1.0.0-rc03"
 room = "2.6.1"
 serialization = "1.6.3"
-shapes = "1.0.0-alpha05"
+shapes = "1.0.0-beta01"
 
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity" }
@@ -69,5 +69,5 @@ coil = ["coil-compose", "coil-svg"]
 room = ["androidx-room-ktx", "androidx-room-runtime"]
 coroutines = ["kotlinx-coroutines-core", "kotlinx-coroutines-android"]
 lifecycle = ["androidx-lifecycle-runtime-compose", "androidx-lifecycle-runtime-ktx", "androidx-lifecycle-viewmodel-compose", "androidx-lifecycle-viewmodel-ktx"]
-compose = ["compose-ui", "compose-ui-graphics", "compose-ui-material3", "compose-ui-tooling-preview", "compose-ui-material-icon"]
+compose = ["compose-ui", "compose-ui-graphics", "compose-ui-material3", "compose-ui-tooling-preview"]
 compose-debug = ["compose-ui-tooling", "compose-ui-test-manifest"]

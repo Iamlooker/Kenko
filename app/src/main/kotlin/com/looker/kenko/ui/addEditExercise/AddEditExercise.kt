@@ -15,10 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.twotone.DriveFileRenameOutline
-import androidx.compose.material.icons.twotone.Save
-import androidx.compose.material.icons.twotone.TipsAndUpdates
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
@@ -43,6 +39,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
 import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.ui.components.kenkoTextFieldColor
+import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 
 @Composable
@@ -100,7 +97,7 @@ fun AddEditExercise(onDone: () -> Unit) {
             contentPadding = PaddingValues(vertical = 32.dp, horizontal = 48.dp)
         ) {
             Icon(
-                imageVector = Icons.TwoTone.Save,
+                imageVector = KenkoIcons.Save,
                 contentDescription = ""
             )
             Spacer(modifier = Modifier.width(16.dp))
@@ -129,7 +126,7 @@ private fun ReferenceTextField(
             Text(text = stringResource(R.string.label_reference))
         },
         leadingIcon = {
-            Icon(imageVector = Icons.TwoTone.TipsAndUpdates, contentDescription = null)
+            Icon(imageVector = KenkoIcons.Lightbulb, contentDescription = null)
         }
     )
 }
@@ -154,7 +151,7 @@ private fun ExerciseTextField(
         },
         isError = isError,
         leadingIcon = {
-            Icon(imageVector = Icons.TwoTone.DriveFileRenameOutline, contentDescription = null)
+            Icon(imageVector = KenkoIcons.Rename, contentDescription = null)
         },
         supportingText = {
             if (isError) {

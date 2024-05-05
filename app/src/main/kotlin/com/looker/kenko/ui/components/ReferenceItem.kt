@@ -34,7 +34,7 @@ fun ReferenceItem(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(imageVector = KenkoIcons.TipsAndUpdates, contentDescription = null)
+            Icon(imageVector = KenkoIcons.Lightbulb, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = stringResource(R.string.label_reference),

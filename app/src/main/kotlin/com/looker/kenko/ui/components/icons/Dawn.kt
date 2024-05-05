@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.StrokeCap.Companion.Butt
 import androidx.compose.ui.graphics.StrokeJoin.Companion.Miter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
+import androidx.compose.ui.unit.dp
 
 val Dawn: ImageVector
     get() {
@@ -16,6 +17,7 @@ val Dawn: ImageVector
         _dawn = icon(
             name = "Dawn",
             viewPort = 92F to 92F,
+            size = 164.dp to 164.dp,
         ) {
             path(
                 fill = SolidColor(Color.Black), stroke = SolidColor(Color.Black),

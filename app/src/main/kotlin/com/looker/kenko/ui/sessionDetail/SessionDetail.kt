@@ -23,8 +23,6 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.twotone.Add
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalIconButton
@@ -183,7 +181,7 @@ private fun SessionList(
                 StickyHeader(name = exercise.name) {
                     if (isEditable) {
                         FilledTonalIconButton(onClick = { onSelectBottomSheet(exercise) }) {
-                            Icon(imageVector = Icons.TwoTone.Add, contentDescription = null)
+                            Icon(imageVector = KenkoIcons.Add, contentDescription = null)
                         }
                     }
                 }

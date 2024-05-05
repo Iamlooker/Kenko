@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Remove
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FilledTonalIconButton
@@ -22,6 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,15 +28,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.looker.kenko.R
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.data.model.sampleExercises
 import com.looker.kenko.ui.addExercise.AddExercise
 import com.looker.kenko.ui.components.BackButton
+import com.looker.kenko.ui.components.kenkoTextFieldColor
 import com.looker.kenko.ui.planEdit.components.AddExerciseButton
 import com.looker.kenko.ui.planEdit.components.DayItem
 import com.looker.kenko.ui.planEdit.components.DaySelector
@@ -76,6 +78,16 @@ fun PlanEdit(
             contentPadding = innerPadding,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            item {
+                TextField(
+                    value = viewModel.planName,
+                    onValueChange = viewModel::setName,
+                    colors = kenkoTextFieldColor(),
+                    label = {
+                        Text(text = stringResource(R.string.label_name))
+                    },
+                )
+            }
             stickyHeader {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     BackButton(
@@ -135,7 +147,7 @@ private fun ExerciseItemActions(
                 containerColor = MaterialTheme.colorScheme.errorContainer
             )
         ) {
-            Icon(imageVector = Icons.Rounded.Remove, contentDescription = null)
+            Icon(imageVector = KenkoIcons.Remove, contentDescription = null)
         }
         Spacer(modifier = Modifier.width(12.dp))
         Text(text = text)

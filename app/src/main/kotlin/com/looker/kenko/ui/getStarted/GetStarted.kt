@@ -32,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.looker.kenko.R
+import com.looker.kenko.ui.components.HealthQuotes
 import com.looker.kenko.ui.helper.vertical
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
@@ -44,19 +45,12 @@ fun GetStarted(onNext: () -> Unit) {
         ) {
             Icon(
                 modifier = Modifier
-                    .align(Alignment.TopCenter)
+                    .align(Alignment.TopEnd)
+                    .offset(x = 50.dp, y = 40.dp)
                     .statusBarsPadding()
                     .padding(top = 16.dp),
                 imageVector = KenkoIcons.Dawn,
-                tint = MaterialTheme.colorScheme.primary,
-                contentDescription = null,
-            )
-            Icon(
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .offset(y = 48.dp),
-                imageVector = KenkoIcons.QuarterCircles,
-                tint = MaterialTheme.colorScheme.outlineVariant,
+                tint = MaterialTheme.colorScheme.secondary,
                 contentDescription = null,
             )
             HeroTitle(modifier = Modifier.align(Alignment.CenterStart))
@@ -66,15 +60,9 @@ fun GetStarted(onNext: () -> Unit) {
                     .navigationBarsPadding(),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                ButtonGroup(
-                    onClick = onNext
-                )
+                ButtonGroup(onClick = onNext)
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "health is in your hands",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                HealthQuotes()
                 Spacer(modifier = Modifier.height(4.dp))
             }
         }
@@ -175,7 +163,7 @@ private fun HeroTitle(modifier: Modifier = Modifier) {
                 modifier = Modifier.vertical(),
                 text = stringResource(R.string.label_kenko),
                 style = MaterialTheme.typography.displayLarge,
-                color = MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorScheme.tertiary,
             )
             AsyncImage(
                 modifier = Modifier
@@ -190,7 +178,7 @@ private fun HeroTitle(modifier: Modifier = Modifier) {
             Text(
                 text = stringResource(R.string.label_kenko_jp),
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.secondary,
+                color = MaterialTheme.colorScheme.primary,
             )
             Text(
                 text = stringResource(R.string.label_kenko_meaning),
