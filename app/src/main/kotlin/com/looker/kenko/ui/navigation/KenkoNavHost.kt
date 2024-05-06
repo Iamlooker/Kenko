@@ -8,6 +8,8 @@ import androidx.navigation.navOptions
 import com.looker.kenko.ui.KenkoAppState
 import com.looker.kenko.ui.addEditExercise.navigation.addEditExercise
 import com.looker.kenko.ui.addEditExercise.navigation.navigateToAddEditExercise
+import com.looker.kenko.ui.exercises.navigation.exercises
+import com.looker.kenko.ui.exercises.navigation.navigateToExercises
 import com.looker.kenko.ui.getStarted.navigation.GET_STARTED_ROUTE
 import com.looker.kenko.ui.getStarted.navigation.getStarted
 import com.looker.kenko.ui.performance.navigation.performance
@@ -68,7 +70,7 @@ fun KenkoNavHost(
                 )
             },
             onNavigateToExercisesList = {
-                navController.navigateToAddEditExercise(
+                navController.navigateToExercises(
                     navOptions = navOptions {
                         launchSingleTop = true
                     }
@@ -82,6 +84,8 @@ fun KenkoNavHost(
                 )
             },
         )
+
+        exercises(navController::navigateToAddEditExercise)
 
         planEdit(navController::popBackStack) {
             navController.navigateToAddEditExercise(

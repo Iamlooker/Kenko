@@ -59,10 +59,6 @@ class SelectExerciseViewModel @Inject constructor(
     fun setSearch(value: String) {
         searchQuery = value
     }
-
-    fun onDone(onDone: (Exercise) -> Unit) {
-
-    }
 }
 
 sealed interface SearchResult {
