@@ -42,7 +42,7 @@ class SelectExerciseViewModel @Inject constructor(
         val filteredExercises = exercises
             .filter {
                 it.target == target
-                        && (query.isBlank() || query in it.name)
+                        && (query.isBlank() || it.name.contains(query, ignoreCase = true))
             }
         if (filteredExercises.isNotEmpty()) {
             SearchResult.Success(filteredExercises)
