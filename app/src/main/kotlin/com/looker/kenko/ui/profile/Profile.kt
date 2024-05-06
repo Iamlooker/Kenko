@@ -85,6 +85,8 @@ fun Profile(
                         )
                     }
                 )
+            } else {
+                EmptyPlanCard(onNavigateToPlans)
             }
             Spacer(modifier = Modifier.height(12.dp))
             ExerciseCard(
@@ -170,6 +172,33 @@ private fun CurrentPlanCard(
                 modifier = Modifier.offset(x = 70.dp)
             )
         }
+    }
+}
+
+@Composable
+private fun EmptyPlanCard(
+    onNavigateToPlans: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(MaterialTheme.shapes.extraLarge)
+            .border(
+                width = 2.dp,
+                color = MaterialTheme.colorScheme.primary,
+                shape = MaterialTheme.shapes.extraLarge
+            )
+            .clickable(onClick = onNavigateToPlans)
+            .padding(vertical = 24.dp),
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = stringResource(R.string.label_select_plan),
+            style = MaterialTheme.typography.headlineLarge
+        )
+        Icon(imageVector = KenkoIcons.ArrowOutwardLarge, contentDescription = null)
     }
 }
 
@@ -280,6 +309,14 @@ private fun PlanCard() {
                 Text(text = Typography.bullet + "02 rests")
             }
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun EmptyPlanCardPreview() {
+    KenkoTheme {
+        EmptyPlanCard({})
     }
 }
 
