@@ -2,8 +2,6 @@ package com.looker.kenko.ui.addExercise
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
@@ -83,7 +82,7 @@ private fun SearchResult(
     Column(
         modifier = Modifier
             .height(240.dp)
-            .scrollable(rememberScrollState(), Orientation.Vertical)
+            .verticalScroll(rememberScrollState())
     ) {
         searchResult.exercises.forEach { exercise ->
             ExerciseItem(

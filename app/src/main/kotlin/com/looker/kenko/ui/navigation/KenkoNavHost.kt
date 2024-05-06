@@ -9,6 +9,7 @@ import com.looker.kenko.ui.addEditExercise.navigation.addEditExercise
 import com.looker.kenko.ui.addEditExercise.navigation.navigateToAddEditExercise
 import com.looker.kenko.ui.getStarted.navigation.GET_STARTED_ROUTE
 import com.looker.kenko.ui.getStarted.navigation.getStarted
+import com.looker.kenko.ui.performance.navigation.performance
 import com.looker.kenko.ui.planEdit.navigation.navigateToPlanEdit
 import com.looker.kenko.ui.planEdit.navigation.planEdit
 import com.looker.kenko.ui.plans.navigation.navigateToPlans
@@ -48,6 +49,8 @@ fun KenkoNavHost(
         sessionDetail(navController::popBackStack)
 
         addEditExercise(navController::popBackStack)
+
+        performance()
 
     }
 }

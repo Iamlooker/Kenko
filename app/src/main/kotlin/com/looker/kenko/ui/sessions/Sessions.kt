@@ -42,6 +42,7 @@ fun Sessions(
     onSessionClick: (LocalDate?) -> Unit,
 ) {
     Scaffold(
+        modifier = Modifier.padding(bottom = 80.dp),
         floatingActionButton = {
             Button(
                 colors = ButtonDefaults.buttonColors(

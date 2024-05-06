@@ -26,7 +26,7 @@ class KenkoAppState(
     val currentDestination: NavDestination?
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination
 
-    val currentTopLevelDesination: TopLevelDestinations?
+    val currentTopLevelDestination: TopLevelDestinations?
         @Composable get() = when (currentDestination?.route) {
             TopLevelDestinations.Home.route -> TopLevelDestinations.Home
             TopLevelDestinations.Profile.route -> TopLevelDestinations.Profile
@@ -35,7 +35,7 @@ class KenkoAppState(
         }
 
     val isTopLevelDestination: Boolean
-        @Composable get() = currentTopLevelDesination != null
+        @Composable get() = currentTopLevelDestination != null
 
     val topLevelDestinations: List<TopLevelDestinations> = TopLevelDestinations.entries
 

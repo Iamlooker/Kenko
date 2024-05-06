@@ -4,10 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -55,11 +57,15 @@ fun Kenko() {
             modifier = Modifier.fillMaxSize(),
             containerColor = MaterialTheme.colorScheme.surface,
             bottomBar = {
-                if (appState.isTopLevelDestination) {
+                AnimatedVisibility(
+                    visible = appState.isTopLevelDestination,
+                    enter = slideInVertically { it },
+                    exit = slideOutVertically{ it },
+                ) {
                     NavigationBar {
                         appState.topLevelDestinations.forEach { destination ->
                             NavigationRailItem(
-                                selected = destination == appState.currentTopLevelDesination,
+                                selected = destination == appState.currentTopLevelDestination,
                                 onClick = { appState.navigateToTopLevelDestination(destination) },
                                 icon = {
                                     Icon(
@@ -75,10 +81,10 @@ fun Kenko() {
                     }
                 }
             },
-            contentWindowInsets = if (appState.isTopLevelDestination) WindowInsets.systemBars
-            else WindowInsets(0)
+            contentWindowInsets = WindowInsets(0)
         ) {
-            KenkoNavHost(appState, modifier = Modifier.padding(it))
+            it
+            KenkoNavHost(appState)
         }
     }
 }
