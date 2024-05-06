@@ -1,5 +1,6 @@
 package com.looker.kenko.ui.selectExercise
 
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -61,12 +62,16 @@ class SelectExerciseViewModel @Inject constructor(
     }
 }
 
+@Stable
 sealed interface SearchResult {
 
+    @Stable
     data object Loading : SearchResult
 
+    @Stable
     data class Success(val exercises: List<Exercise>) : SearchResult
 
+    @Stable
     data object NotFound : SearchResult
 
 }

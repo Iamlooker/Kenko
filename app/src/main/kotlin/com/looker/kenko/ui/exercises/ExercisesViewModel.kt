@@ -1,6 +1,7 @@
 package com.looker.kenko.ui.exercises
 
 import androidx.annotation.StringRes
+import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.looker.kenko.R
@@ -56,6 +57,7 @@ val MuscleGroups?.string: Int
     @StringRes
     get() = this?.stringRes ?: R.string.all
 
+@Stable
 class ExercisesUiState(
     val exercises: List<Exercise> = emptyList(),
     val selected: MuscleGroups? = null,

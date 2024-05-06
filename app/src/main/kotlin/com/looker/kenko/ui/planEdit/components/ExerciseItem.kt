@@ -42,6 +42,7 @@ fun ExerciseItem(
     Surface(
         modifier = modifier,
         color = Color.Transparent,
+        shape = MaterialTheme.shapes.large,
     ) {
         Row(
             modifier = Modifier

@@ -12,9 +12,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
@@ -79,12 +79,8 @@ private fun SearchResult(
     searchResult: SearchResult.Success,
     onClick: (Exercise) -> Unit,
 ) {
-    Column(
-        modifier = Modifier
-            .height(240.dp)
-            .verticalScroll(rememberScrollState())
-    ) {
-        searchResult.exercises.forEach { exercise ->
+    LazyColumn(Modifier.height(240.dp)) {
+        items(searchResult.exercises) { exercise ->
             ExerciseItem(
                 exercise = exercise,
                 modifier = Modifier.clickable { onClick(exercise) },
