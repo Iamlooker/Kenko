@@ -38,6 +38,8 @@ object KenkoIcons {
     val Performance: ImageVector = com.looker.kenko.ui.components.icons.symbols.Performance
 
     // Brutalist Icons
+    val ArrowOutwardLarge: ImageVector = com.looker.kenko.ui.components.icons.ArrowOutwardLarge
+
     val Cloud: ImageVector = com.looker.kenko.ui.components.icons.Cloud
 
     val Colony: ImageVector = com.looker.kenko.ui.components.icons.Colony
