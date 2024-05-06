@@ -62,6 +62,7 @@
     <string name="label_friday">.fri</string>
     <string name="label_saturday">.sat</string>
     <string name="label_sunday">.sun</string>
+    <string name="label_today">.today</string>
     <string name="label_plan">Plan</string>
     <string name="label_settings_greeting">hey there</string>
 
@@ -72,8 +73,11 @@
         <ul>%2$s days</ul>\n
         <ul>%3$s rest days</ul>
     </string>
+
     <string name="label_coming_soon">Coming Soon</string>
     <string name="label_select_plan">Select\nPlan</string>
+    <string name="label_continue">Continue</string>
+    <string name="label_start">Start</string>
 
     <string-array name="label_health_quotes">
         <item>you can do it</item>
