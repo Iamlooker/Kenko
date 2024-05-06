@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.navOptions
 import com.looker.kenko.ui.KenkoAppState
 import com.looker.kenko.ui.addEditExercise.navigation.addEditExercise
 import com.looker.kenko.ui.addEditExercise.navigation.navigateToAddEditExercise
@@ -32,19 +33,63 @@ fun KenkoNavHost(
         navController = navController as NavHostController,
         startDestination = startDestination,
     ) {
-        getStarted(navController::navigateToSessions)
+        getStarted {
+            navController.navigateToSessions(
+                navOptions = navOptions {
+                    launchSingleTop = true
+                }
+            )
+        }
 
-        sessions(navController::navigateToSessionDetail)
+        sessions {
+            navController.navigateToSessionDetail(
+                date = it,
+                navOptions = navOptions {
+                    launchSingleTop = true
+                }
+            )
+        }
 
-        plans(navController::navigateToPlanEdit)
+        plans {
+            navController.navigateToPlanEdit(
+                id = it,
+                navOptions = navOptions {
+                    launchSingleTop = true
+                }
+            )
+        }
 
         profile(
-            onNavigateToAddExercise = navController::navigateToAddEditExercise,
-            onNavigateToPlans = navController::navigateToPlans,
-            onNavigateToExercisesList = navController::navigateToAddEditExercise,
+            onNavigateToAddExercise = {
+                navController.navigateToAddEditExercise(
+                    navOptions = navOptions {
+                        launchSingleTop = true
+                    }
+                )
+            },
+            onNavigateToExercisesList = {
+                navController.navigateToAddEditExercise(
+                    navOptions = navOptions {
+                        launchSingleTop = true
+                    }
+                )
+            },
+            onNavigateToPlans = {
+                navController.navigateToPlans(
+                    navOptions = navOptions {
+                        launchSingleTop = true
+                    }
+                )
+            },
         )
 
-        planEdit(navController::popBackStack, navController::navigateToAddEditExercise)
+        planEdit(navController::popBackStack) {
+            navController.navigateToAddEditExercise(
+                navOptions = navOptions {
+                    launchSingleTop = true
+                }
+            )
+        }
 
         sessionDetail(navController::popBackStack)
 
