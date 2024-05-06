@@ -1,6 +1,5 @@
 package com.looker.kenko.ui.planEdit
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -28,7 +27,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlanEditViewModel @Inject constructor(
-    repo: PlanRepo,
+    private val repo: PlanRepo,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -85,6 +84,19 @@ class PlanEditViewModel @Inject constructor(
         modifyExercise(dayOfWeek.value) { remove(exercise) }
     }
 
+    fun savePlan() {
+        viewModelScope.launch {
+            repo.upsert(
+                Plan(
+                    exercisesPerDay = _dayAndExercises.value,
+                    id = planId,
+                    name = planName,
+                    isActive = true,
+                )
+            )
+        }
+    }
+
     private fun modifyExercise(
         dayOfWeek: DayOfWeek,
         block: MutableList<Exercise>.() -> Unit,
@@ -101,8 +113,8 @@ class PlanEditViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            Log.e("tag", planId.toString())
             val plan = planStream.filterNotNull().firstOrNull() ?: return@launch
+            setName(plan.name)
             plan.exercisesPerDay.forEach { (day, exercises) ->
                 launch {
                     exercises.forEach { exercise ->

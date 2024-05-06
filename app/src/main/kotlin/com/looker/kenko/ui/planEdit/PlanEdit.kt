@@ -1,6 +1,7 @@
 package com.looker.kenko.ui.planEdit
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,9 +9,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FilledTonalIconButton
@@ -18,6 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -78,22 +82,43 @@ fun PlanEdit(
             contentPadding = innerPadding,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            item {
-                TextField(
-                    value = viewModel.planName,
-                    onValueChange = viewModel::setName,
-                    colors = kenkoTextFieldColor(),
-                    label = {
-                        Text(text = stringResource(R.string.label_name))
-                    },
-                )
-            }
             stickyHeader {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    BackButton(
-                        onClick = onBackPress,
-                        modifier = Modifier.align(Alignment.Start)
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(end = 16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        BackButton(onClick = onBackPress)
+                        OutlinedButton(
+                            onClick = {
+                                viewModel.savePlan()
+                                onBackPress()
+                            },
+                            colors = ButtonDefaults.outlinedButtonColors(
+                                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                            )
+                        ) {
+                            Text(text = stringResource(R.string.label_save))
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(12.dp))
+                    TextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        value = viewModel.planName,
+                        shape = MaterialTheme.shapes.medium,
+                        onValueChange = viewModel::setName,
+                        colors = kenkoTextFieldColor(),
+                        label = {
+                            Text(text = stringResource(R.string.label_name))
+                        },
                     )
+                    Spacer(modifier = Modifier.height(12.dp))
                     DaySelector(
                         modifier = Modifier
                             .fillMaxWidth()
