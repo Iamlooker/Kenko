@@ -34,6 +34,7 @@ class OfflinePlanRepo @Inject constructor(
 
     override suspend fun upsert(plan: Plan) {
         dao.upsert(plan)
+        if (plan.isActive && plan.id != null) dao.switchPlan(plan.id)
     }
 
     override suspend fun current(): Plan? {

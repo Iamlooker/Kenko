@@ -104,8 +104,12 @@ class PlanEditViewModel @Inject constructor(
         viewModelScope.launch {
             _dayAndExercises.update {
                 it.updateAsMutable {
-                    val exerciseMap = getOrPut(dayOfWeek) { emptyList() }
-                    set(dayOfWeek, exerciseMap.updateAsMutable(block))
+                    val exerciseMap = getOrPut(dayOfWeek) { emptyList() }.updateAsMutable(block)
+                    if (exerciseMap.isNotEmpty()) {
+                        set(dayOfWeek, exerciseMap)
+                    } else {
+                        remove(dayOfWeek)
+                    }
                 }
             }
         }
