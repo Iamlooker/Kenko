@@ -19,6 +19,8 @@ object KenkoIcons {
 
     val ArrowOutward: ImageVector = com.looker.kenko.ui.components.icons.symbols.ArrowOutward
 
+    val Circle: ImageVector = com.looker.kenko.ui.components.icons.symbols.Circle
+
     val Lightbulb: ImageVector = com.looker.kenko.ui.components.icons.symbols.Lightbulb
 
     val Add: ImageVector = com.looker.kenko.ui.components.icons.symbols.Add

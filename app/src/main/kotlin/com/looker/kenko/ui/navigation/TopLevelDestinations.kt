@@ -16,5 +16,5 @@ enum class TopLevelDestinations(
 ) {
     Performance(R.string.label_performance, KenkoIcons.Performance, PERFORMANCE_ROUTE),
     Home(R.string.label_home, KenkoIcons.Home, SESSIONS_ROUTE),
-    Profile(R.string.label_profile, KenkoIcons.Remove, PROFILE_ROUTE),
+    Profile(R.string.label_profile, KenkoIcons.Circle, PROFILE_ROUTE),
 }
