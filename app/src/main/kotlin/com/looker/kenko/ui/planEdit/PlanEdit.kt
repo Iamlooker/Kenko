@@ -40,7 +40,7 @@ import com.looker.kenko.R
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.data.model.sampleExercises
-import com.looker.kenko.ui.addExercise.AddExercise
+import com.looker.kenko.ui.selectExercise.SelectExercise
 import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.components.kenkoTextFieldColor
 import com.looker.kenko.ui.helper.normalizeInt
@@ -186,7 +186,7 @@ private fun AddExerciseSheet(
     val scope = rememberCoroutineScope()
     val state = rememberModalBottomSheetState()
     ModalBottomSheet(sheetState = state, onDismissRequest = onDismiss) {
-        AddExercise(
+        SelectExercise(
             onDone = { exercise ->
                 scope.launch {
                     onDone(exercise)

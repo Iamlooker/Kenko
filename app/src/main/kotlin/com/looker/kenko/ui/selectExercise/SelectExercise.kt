@@ -1,4 +1,4 @@
-package com.looker.kenko.ui.addExercise
+package com.looker.kenko.ui.selectExercise
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -39,8 +39,8 @@ import com.looker.kenko.ui.planEdit.components.ExerciseItem
 import com.looker.kenko.ui.theme.KenkoTheme
 
 @Composable
-fun AddExercise(onDone: (Exercise) -> Unit, onRequestNewExercise: () -> Unit) {
-    val viewModel: AddExerciseViewModel = hiltViewModel()
+fun SelectExercise(onDone: (Exercise) -> Unit, onRequestNewExercise: () -> Unit) {
+    val viewModel: SelectExerciseViewModel = hiltViewModel()
 
     Column(
         modifier = Modifier
