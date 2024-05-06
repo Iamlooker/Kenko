@@ -24,7 +24,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,6 +39,7 @@ import com.looker.kenko.data.model.sampleExercises
 import com.looker.kenko.ui.addExercise.AddExercise
 import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.components.kenkoTextFieldColor
+import com.looker.kenko.ui.helper.normalizeInt
 import com.looker.kenko.ui.planEdit.components.AddExerciseButton
 import com.looker.kenko.ui.planEdit.components.DayItem
 import com.looker.kenko.ui.planEdit.components.DaySelector
@@ -135,9 +135,6 @@ private fun ExerciseItemActions(
     index: Int,
     onRemove: () -> Unit,
 ) {
-    val text = remember {
-        (index + 1).toString().padStart(2, '0')
-    }
     Row(
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -150,7 +147,7 @@ private fun ExerciseItemActions(
             Icon(imageVector = KenkoIcons.Remove, contentDescription = null)
         }
         Spacer(modifier = Modifier.width(12.dp))
-        Text(text = text)
+        Text(text = normalizeInt(index + 1))
     }
 }
 

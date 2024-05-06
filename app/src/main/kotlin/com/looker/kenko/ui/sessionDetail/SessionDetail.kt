@@ -54,6 +54,7 @@ import com.looker.kenko.data.model.Set
 import com.looker.kenko.ui.addSet.AddSet
 import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.components.SetItem
+import com.looker.kenko.ui.helper.normalizeInt
 import com.looker.kenko.ui.helper.plus
 import com.looker.kenko.ui.planEdit.components.dayName
 import com.looker.kenko.ui.theme.KenkoIcons
@@ -187,12 +188,9 @@ private fun SessionList(
                 }
             }
             itemsIndexed(items = sets) { index, set ->
-                val setTitle = remember(index) {
-                    (index + 1).toString().padStart(2, '0')
-                }
                 SetItem(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    title = setTitle,
+                    title = normalizeInt(index + 1),
                     rep = set.repsOrDuration,
                     weight = set.weight
                 )

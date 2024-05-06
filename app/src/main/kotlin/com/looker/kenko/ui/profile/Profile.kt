@@ -33,7 +33,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,6 +43,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
 import com.looker.kenko.ui.components.HealthQuotes
+import com.looker.kenko.ui.helper.normalizeInt
 import com.looker.kenko.ui.helper.plus
 import com.looker.kenko.ui.helper.vertical
 import com.looker.kenko.ui.theme.KenkoIcons
@@ -75,18 +75,12 @@ fun Profile(
                     onEditClick = onNavigateToPlans,
                     name = state.planName,
                     content = {
-                        val workDays = remember(state.workDays) {
-                            state.workDays.toString().padStart(2, '0')
-                        }
-                        val restDays = remember(state.restDays) {
-                            state.restDays.toString().padStart(2, '0')
-                        }
                         Text(
                             text = stringResource(
                                 R.string.label_plan_description,
                                 state.numberOfExercisesPerPlan,
-                                workDays,
-                                restDays
+                                normalizeInt(state.workDays),
+                                normalizeInt(state.restDays)
                             )
                         )
                     }
