@@ -57,13 +57,13 @@ class SessionDetailViewModel @Inject constructor(
 
             val currentSession = session ?: Session.create(emptyList())
 
-            if (exercises == null) {
+            if (exercises == null && session == null) {
                 return@combine SessionDetailState.Error.EmptyPlan
             }
 
-            val setsExerciseMap = exercises.associateWith { exercise ->
+            val setsExerciseMap = exercises?.associateWith { exercise ->
                 currentSession.sets.filter { exercise == it.exercise }
-            }
+            } ?: currentSession.sets.groupBy { it.exercise }
 
             SessionDetailState.Success(
                 SessionUiData(
