@@ -162,7 +162,6 @@ private fun SessionList(
     LazyVerticalGrid(
         state = gridState,
         columns = GridCells.Adaptive(360.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
         contentPadding = WindowInsets.navigationBars.asPaddingValues(LocalDensity.current)
                 + PaddingValues(bottom = 12.dp)
@@ -189,7 +188,7 @@ private fun SessionList(
             }
             itemsIndexed(items = sets) { index, set ->
                 SetItem(
-                    modifier = Modifier.padding(horizontal = 16.dp),
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
                     title = normalizeInt(index + 1),
                     rep = set.repsOrDuration,
                     weight = set.weight

@@ -1,6 +1,7 @@
 package com.looker.kenko.ui.exercises
 
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.annotation.StringRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -42,7 +44,6 @@ import com.looker.kenko.ui.planEdit.components.AddExerciseButton
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Exercises(onNavigateToExercise: (String?) -> Unit) {
     val viewModel: ExercisesViewModel = hiltViewModel()
@@ -54,22 +55,35 @@ fun Exercises(onNavigateToExercise: (String?) -> Unit) {
             AddExerciseButton(onClick = { onNavigateToExercise(null) })
         },
         floatingActionButtonPosition = FabPosition.Center,
+        topBar = {
+            MuscleGroupFilterChips(
+                target = state.selected,
+                onSelect = viewModel::setTarget
+            )
+        },
     ) { innerPadding ->
         LazyColumn(
             contentPadding = innerPadding + PaddingValues(bottom = 96.dp)
         ) {
-            stickyHeader {
-                MuscleGroupFilterChips(
-                    target = state.selected,
-                    onSelect = viewModel::setTarget
-                )
-            }
             items(state.exercises, key = { it.name }) { exercise ->
+                val hasReference = remember {
+                    exercise.reference != null
+                }
                 ExerciseItem(
                     modifier = Modifier.padding(horizontal = 12.dp),
                     exercise = exercise,
                     onClick = { onNavigateToExercise(exercise.name) },
-                    onReferenceClick = { uriHandler.openUri(exercise.reference!!) }
+                    referenceButton = {
+                        if (hasReference) {
+                            FilledTonalIconButton(
+                                modifier = Modifier.size(56.dp),
+                                shape = MaterialTheme.shapes.extraLarge,
+                                onClick = { uriHandler.openUri(exercise.reference!!) }
+                            ) {
+                                Icon(imageVector = KenkoIcons.Lightbulb, contentDescription = null)
+                            }
+                        }
+                    }
                 )
             }
         }
@@ -85,7 +99,10 @@ private fun MuscleGroupFilterChips(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .horizontalScroll(rememberScrollState()),
+            .horizontalScroll(rememberScrollState())
+            .background(MaterialTheme.colorScheme.surfaceContainer)
+            .padding(top = 16.dp, bottom = 12.dp)
+            .statusBarsPadding(),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         val targets = remember { listOf(null) + MuscleGroups.entries }
@@ -105,53 +122,37 @@ private fun MuscleGroupFilterChips(
 private fun ExerciseItem(
     exercise: Exercise,
     onClick: () -> Unit,
-    onReferenceClick: () -> Unit,
+    referenceButton: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    @StringRes
+    val targetName: Int = remember { exercise.target.stringRes }
     Surface(
         modifier = modifier,
         onClick = onClick,
         shape = MaterialTheme.shapes.large,
     ) {
-        Box(modifier = Modifier.fillMaxWidth()) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(12.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                Column {
-                    Text(
-                        text = exercise.name,
-                        style = MaterialTheme.typography.headlineSmall,
-                    )
-                    Text(
-                        text = stringResource(exercise.target.stringRes),
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.outline,
-                    )
-                }
-                Box(modifier = Modifier.size(56.dp)) {
-                    if (exercise.reference != null) {
-                        FilledTonalIconButton(
-                            modifier = Modifier.size(56.dp),
-                            shape = MaterialTheme.shapes.extraLarge,
-                            onClick = onReferenceClick
-                        ) {
-                            Icon(imageVector = KenkoIcons.Lightbulb, contentDescription = null)
-                        }
-                    }
-                }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Column {
+                Text(
+                    text = exercise.name,
+                    style = MaterialTheme.typography.headlineSmall,
+                )
+                Text(
+                    text = stringResource(targetName),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.outline,
+                )
             }
-//            Text(
-//                modifier = Modifier
-//                    .align(Alignment.BottomCenter)
-//                    .offset(y = 18.dp),
-//                text = exercise.name,
-//                style = MaterialTheme.typography.displaySmall,
-//                color = MaterialTheme.colorScheme.outlineVariant
-//            )
+            Box(modifier = Modifier.size(56.dp)) {
+                referenceButton()
+            }
         }
     }
 }
@@ -163,7 +164,7 @@ private fun ExerciseItemPreview() {
         ExerciseItem(
             exercise = MuscleGroups.Chest.sampleExercises.first(),
             onClick = {},
-            onReferenceClick = {}
+            referenceButton = {}
         )
     }
 }
