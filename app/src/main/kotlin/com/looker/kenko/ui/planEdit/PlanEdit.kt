@@ -23,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -44,6 +45,7 @@ import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.data.model.sampleExercises
 import com.looker.kenko.ui.components.BackButton
+import com.looker.kenko.ui.components.ErrorSnackbar
 import com.looker.kenko.ui.components.kenkoTextFieldColor
 import com.looker.kenko.ui.helper.normalizeInt
 import com.looker.kenko.ui.planEdit.components.AddExerciseButton
@@ -77,6 +79,11 @@ fun PlanEdit(
                 }
             )
         },
+        snackbarHost = {
+            SnackbarHost(hostState = viewModel.snackbarState) {
+                ErrorSnackbar(data = it)
+            }
+        },
         floatingActionButtonPosition = FabPosition.Center,
     ) { innerPadding ->
         Box(modifier = Modifier.fillMaxSize()) {
@@ -102,10 +109,7 @@ fun PlanEdit(
                     ) {
                         BackButton(onClick = onBackPress)
                         OutlinedButton(
-                            onClick = {
-                                viewModel.savePlan()
-                                onBackPress()
-                            },
+                            onClick = { viewModel.savePlan(onBackPress) },
                             colors = ButtonDefaults.outlinedButtonColors(
                                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
                                 contentColor = MaterialTheme.colorScheme.onSecondaryContainer,

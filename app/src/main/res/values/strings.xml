@@ -68,6 +68,8 @@
 
     <string name="label_lifts">Lifts</string>
 
+    <string name="label_plans_title">Plans</string>
+
     <string name="label_plan_description">
         <ul>%1$s exercises</ul>\n
         <ul>%2$s days</ul>\n

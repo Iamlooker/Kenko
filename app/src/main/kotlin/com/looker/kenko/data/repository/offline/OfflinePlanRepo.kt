@@ -33,8 +33,13 @@ class OfflinePlanRepo @Inject constructor(
     }
 
     override suspend fun upsert(plan: Plan) {
-        dao.upsert(plan)
-        if (plan.isActive && plan.id != null) dao.switchPlan(plan.id)
+        val isPlanActivable = plan.isActive && plan.id != null
+        if (isPlanActivable) {
+            dao.upsert(plan)
+            dao.switchPlan(plan.id!!)
+        } else {
+            dao.upsert(plan.copy(isActive = false))
+        }
     }
 
     override suspend fun current(): Plan? {

@@ -1,5 +1,6 @@
 package com.looker.kenko.ui.planEdit
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -37,6 +38,8 @@ class PlanEditViewModel @Inject constructor(
 
     var planName: String by mutableStateOf("")
         private set
+
+    val snackbarState = SnackbarHostState()
 
     private val _dayAndExercises =
         MutableStateFlow<Map<DayOfWeek, List<Exercise>>>(emptyMap())
@@ -84,8 +87,16 @@ class PlanEditViewModel @Inject constructor(
         modifyExercise(dayOfWeek.value) { remove(exercise) }
     }
 
-    fun savePlan() {
+    fun savePlan(onDone: () -> Unit) {
         viewModelScope.launch {
+            if (_dayAndExercises.value.isEmpty()) {
+                snackbarState.showSnackbar("Empty Plan")
+                return@launch
+            }
+            if (planName.isBlank()) {
+                snackbarState.showSnackbar("Plan Name Empty")
+                return@launch
+            }
             repo.upsert(
                 Plan(
                     exercisesPerDay = _dayAndExercises.value,
@@ -94,6 +105,7 @@ class PlanEditViewModel @Inject constructor(
                     isActive = true,
                 )
             )
+            onDone()
         }
     }
 
