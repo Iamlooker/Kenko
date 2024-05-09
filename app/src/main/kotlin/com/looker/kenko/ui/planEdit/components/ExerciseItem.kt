@@ -32,16 +32,19 @@ import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.data.model.sampleExercises
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
+import kotlinx.serialization.json.JsonNull.content
 
 @Composable
 fun ExerciseItem(
     exercise: Exercise,
     modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
     content: @Composable () -> Unit,
 ) {
     Surface(
         modifier = modifier,
         color = Color.Transparent,
+        onClick = onClick,
         shape = MaterialTheme.shapes.large,
     ) {
         Row(

@@ -83,7 +83,7 @@ private fun SearchResult(
         items(searchResult.exercises) { exercise ->
             ExerciseItem(
                 exercise = exercise,
-                modifier = Modifier.clickable { onClick(exercise) },
+                onClick = { onClick(exercise) },
             ) {
                 Spacer(modifier = Modifier)
             }

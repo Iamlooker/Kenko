@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -48,10 +49,12 @@ import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.components.ErrorSnackbar
 import com.looker.kenko.ui.components.kenkoTextFieldColor
 import com.looker.kenko.ui.helper.normalizeInt
+import com.looker.kenko.ui.helper.vertical
 import com.looker.kenko.ui.planEdit.components.AddExerciseButton
 import com.looker.kenko.ui.planEdit.components.DayItem
 import com.looker.kenko.ui.planEdit.components.DaySelector
 import com.looker.kenko.ui.planEdit.components.ExerciseItem
+import com.looker.kenko.ui.planEdit.components.dayName
 import com.looker.kenko.ui.selectExercise.SelectExercise
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
@@ -92,6 +95,15 @@ fun PlanEdit(
                 imageVector = KenkoIcons.Wireframe,
                 tint = MaterialTheme.colorScheme.outline,
                 contentDescription = null
+            )
+            Text(
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .offset(x = (-10).dp, y = 30.dp)
+                    .vertical(false),
+                text = dayName(dayOfWeek = currentDayOfWeek),
+                style = MaterialTheme.typography.displayLarge,
+                color = MaterialTheme.colorScheme.surfaceContainer,
             )
         }
         LazyColumn(
