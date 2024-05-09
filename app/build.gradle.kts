@@ -84,6 +84,8 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     ksp(libs.hilt.compiler)
 
+    implementation(libs.androidx.datastore)
+
     implementation(libs.bundles.room)
     ksp(libs.androidx.room.compiler)
 
