@@ -1,7 +1,6 @@
 package com.looker.kenko.ui.sessionDetail
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,20 +21,16 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -59,7 +54,6 @@ import com.looker.kenko.ui.helper.plus
 import com.looker.kenko.ui.planEdit.components.dayName
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
-import com.looker.kenko.ui.theme.rememberSystemUiController
 import com.looker.kenko.utils.DateTimeFormat
 import com.looker.kenko.utils.formatDate
 import kotlinx.coroutines.launch
@@ -145,22 +139,7 @@ private fun SessionList(
     onBackPress: () -> Unit,
     onSelectBottomSheet: (Exercise) -> Unit,
 ) {
-    val systemUiController = rememberSystemUiController()
-    val gridState = rememberLazyGridState()
-    val isFirstItemVisible by remember {
-        derivedStateOf {
-            gridState.firstVisibleItemIndex == 0
-        }
-    }
-    val isDarkTheme = isSystemInDarkTheme()
-    DisposableEffect(systemUiController, isFirstItemVisible, isDarkTheme) {
-        systemUiController?.isLightStatusBar(!isFirstItemVisible.xor(isDarkTheme))
-        onDispose {
-            systemUiController?.isLightSystemBar(!isDarkTheme)
-        }
-    }
     LazyVerticalGrid(
-        state = gridState,
         columns = GridCells.Adaptive(360.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
         contentPadding = WindowInsets.navigationBars.asPaddingValues(LocalDensity.current)
@@ -210,32 +189,22 @@ private fun Header(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(300.dp)
-            .background(MaterialTheme.colorScheme.primary)
+            .height(180.dp)
+            .background(MaterialTheme.colorScheme.surfaceContainer)
             .statusBarsPadding()
+            .padding(top = 6.dp)
     ) {
-        Icon(
-            modifier = Modifier
-                .align(Alignment.BottomStart)
-                .offset(x = -(16).dp),
-            imageVector = KenkoIcons.ConcentricTriangles,
-            tint = MaterialTheme.colorScheme.outline,
-            contentDescription = null
-        )
         Icon(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .offset(x = (16).dp),
             imageVector = KenkoIcons.Stack,
-            tint = MaterialTheme.colorScheme.outline,
+            tint = MaterialTheme.colorScheme.outlineVariant,
             contentDescription = null
         )
         BackButton(
             modifier = Modifier.align(Alignment.TopStart),
             onClick = onBackPress,
-            colors = IconButtonDefaults.iconButtonColors(
-                contentColor = MaterialTheme.colorScheme.inverseOnSurface
-            )
         )
         Column(
             modifier = Modifier.matchParentSize(),
@@ -244,13 +213,13 @@ private fun Header(
             Spacer(modifier = Modifier.weight(1F))
             Text(
                 text = dayName(performedOn.dayOfWeek),
-                style = MaterialTheme.typography.displayLarge,
-                color = MaterialTheme.colorScheme.inversePrimary,
+                style = MaterialTheme.typography.headlineLarge,
+                color = MaterialTheme.colorScheme.onSurface,
             )
             Text(
                 text = date,
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.inverseOnSurface,
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.outline,
             )
             Spacer(modifier = Modifier.weight(1F))
         }
