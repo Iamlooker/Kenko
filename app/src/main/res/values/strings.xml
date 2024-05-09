@@ -79,6 +79,7 @@
     <string name="label_continue">Continue</string>
     <string name="label_start">Start</string>
     <string name="all">All</string>
+    <string name="no_exercises_yet">No exercises yet</string>
 
     <string-array name="label_health_quotes">
         <item>you can do it</item>

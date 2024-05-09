@@ -27,10 +27,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -40,7 +43,6 @@ import com.looker.kenko.R
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.data.model.sampleExercises
-import com.looker.kenko.ui.selectExercise.SelectExercise
 import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.components.kenkoTextFieldColor
 import com.looker.kenko.ui.helper.normalizeInt
@@ -48,11 +50,11 @@ import com.looker.kenko.ui.planEdit.components.AddExerciseButton
 import com.looker.kenko.ui.planEdit.components.DayItem
 import com.looker.kenko.ui.planEdit.components.DaySelector
 import com.looker.kenko.ui.planEdit.components.ExerciseItem
+import com.looker.kenko.ui.selectExercise.SelectExercise
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 import kotlinx.coroutines.launch
 
-// TODO: Add Name field and save button
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PlanEdit(
@@ -61,12 +63,19 @@ fun PlanEdit(
 ) {
     val viewModel: PlanEditViewModel = hiltViewModel()
 
+    val focusManager = LocalFocusManager.current
     val currentDayOfWeek by viewModel.dayOfWeek.collectAsStateWithLifecycle()
     val isSheetVisible by viewModel.isSheetVisible.collectAsStateWithLifecycle()
     val currentExercises by viewModel.exercisesList.collectAsStateWithLifecycle()
+    val isCurrentDayBlank by remember { derivedStateOf { currentExercises.isEmpty() } }
     Scaffold(
         floatingActionButton = {
-            AddExerciseButton(viewModel::openSheet)
+            AddExerciseButton(
+                onClick = {
+                    focusManager.clearFocus()
+                    viewModel.openSheet()
+                }
+            )
         },
         floatingActionButtonPosition = FabPosition.Center,
     ) { innerPadding ->
@@ -127,20 +136,39 @@ fun PlanEdit(
                             DayItem(
                                 dayOfWeek = it,
                                 isSelected = it == currentDayOfWeek,
-                                onClick = { viewModel.setCurrentDay(it) },
+                                onClick = {
+                                    focusManager.clearFocus()
+                                    viewModel.setCurrentDay(it)
+                                },
                             )
                         }
                     )
                 }
             }
-            itemsIndexed(currentExercises) { index, exercise ->
-                ExerciseItem(exercise = exercise) {
-                    ExerciseItemActions(
-                        index = index,
-                        onRemove = {
-                            viewModel.removeExercise(exercise)
-                        },
-                    )
+            if (isCurrentDayBlank) {
+                item {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = stringResource(R.string.no_exercises_yet),
+                            style = MaterialTheme.typography.titleLarge,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+                }
+            } else {
+                itemsIndexed(currentExercises) { index, exercise ->
+                    ExerciseItem(exercise = exercise) {
+                        ExerciseItemActions(
+                            index = index,
+                            onRemove = {
+                                focusManager.clearFocus()
+                                viewModel.removeExercise(exercise)
+                            },
+                        )
+                    }
                 }
             }
         }
