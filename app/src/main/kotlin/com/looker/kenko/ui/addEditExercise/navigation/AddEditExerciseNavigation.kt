@@ -6,27 +6,38 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.ui.addEditExercise.AddEditExercise
 
 const val ADD_EDIT_EXERCISE_ROUTE = "add_edit_exercise"
 
 const val ARG_EXERCISE_NAME = "exercise_name"
+const val ARG_TARGET_NAME = "target_name"
 
-fun NavController.navigateToAddEditExercise(exerciseName: String? = null, navOptions: NavOptions? = null) {
-    navigate("$ADD_EDIT_EXERCISE_ROUTE/?name=${exerciseName}", navOptions)
+fun NavController.navigateToAddEditExercise(
+    exerciseName: String? = null,
+    target: MuscleGroups? = null,
+    navOptions: NavOptions? = null,
+) {
+    navigate("$ADD_EDIT_EXERCISE_ROUTE/${exerciseName}/${target?.name}", navOptions)
 }
 
 fun NavGraphBuilder.addEditExercise(
     onBackPress: () -> Unit,
 ) {
     composable(
-        route = "$ADD_EDIT_EXERCISE_ROUTE/?name={$ARG_EXERCISE_NAME}",
+        route = "$ADD_EDIT_EXERCISE_ROUTE/{$ARG_EXERCISE_NAME}/{$ARG_TARGET_NAME}",
         arguments = listOf(
             navArgument(name = ARG_EXERCISE_NAME) {
                 type = NavType.StringType
                 defaultValue = null
                 nullable = true
-            }
+            },
+            navArgument(name = ARG_TARGET_NAME) {
+                type = NavType.StringType
+                defaultValue = null
+                nullable = true
+            },
         )
     ) {
         AddEditExercise(onBackPress)

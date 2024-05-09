@@ -11,6 +11,7 @@ import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.data.repository.ExerciseRepo
 import com.looker.kenko.ui.addEditExercise.navigation.ARG_EXERCISE_NAME
+import com.looker.kenko.ui.addEditExercise.navigation.ARG_TARGET_NAME
 import com.looker.kenko.utils.asStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -29,6 +30,8 @@ class AddEditExerciseViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val defaultExerciseName: String? = savedStateHandle[ARG_EXERCISE_NAME]
+
+    private val defaultTargetName: String? = savedStateHandle[ARG_TARGET_NAME]
 
     private val _targetMuscle = MutableStateFlow(MuscleGroups.Chest)
     val targetMuscle: StateFlow<MuscleGroups> = _targetMuscle.asStateFlow()
@@ -92,6 +95,8 @@ class AddEditExerciseViewModel @Inject constructor(
                     setIsometric(it.isIsometric)
                     setTargetMuscle(it.target)
                 }
+            } else if (defaultTargetName != null) {
+                setTargetMuscle(MuscleGroups.valueOf(defaultTargetName))
             }
         }
     }

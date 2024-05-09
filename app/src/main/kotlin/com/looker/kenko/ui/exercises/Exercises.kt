@@ -45,14 +45,14 @@ import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 
 @Composable
-fun Exercises(onNavigateToExercise: (String?) -> Unit) {
+fun Exercises(onNavigateToExercise: (name: String?, target: MuscleGroups?) -> Unit) {
     val viewModel: ExercisesViewModel = hiltViewModel()
     val state by viewModel.exercises.collectAsStateWithLifecycle()
     val uriHandler = LocalUriHandler.current
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
         floatingActionButton = {
-            AddExerciseButton(onClick = { onNavigateToExercise(null) })
+            AddExerciseButton(onClick = { onNavigateToExercise(null, state.selected) })
         },
         floatingActionButtonPosition = FabPosition.Center,
         topBar = {
@@ -72,7 +72,7 @@ fun Exercises(onNavigateToExercise: (String?) -> Unit) {
                 ExerciseItem(
                     modifier = Modifier.padding(horizontal = 12.dp),
                     exercise = exercise,
-                    onClick = { onNavigateToExercise(exercise.name) },
+                    onClick = { onNavigateToExercise(exercise.name, null) },
                     referenceButton = {
                         if (hasReference) {
                             FilledTonalIconButton(
