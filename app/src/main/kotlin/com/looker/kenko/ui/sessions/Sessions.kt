@@ -34,6 +34,7 @@ import com.looker.kenko.R
 import com.looker.kenko.data.model.Session
 import com.looker.kenko.ui.components.texture.GradientStart
 import com.looker.kenko.ui.components.texture.dottedGradient
+import com.looker.kenko.ui.helper.plus
 import com.looker.kenko.ui.planEdit.components.dayName
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
@@ -51,13 +52,8 @@ fun Sessions(
         modifier = Modifier.padding(bottom = 80.dp),
         floatingActionButton = {
             Button(
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.inverseSurface,
-                    contentColor = MaterialTheme.colorScheme.inverseOnSurface,
-                ),
-                shape = MaterialTheme.shapes.extraLarge,
                 onClick = { onSessionClick(null) },
-                contentPadding = PaddingValues(vertical = 32.dp, horizontal = 48.dp)
+                contentPadding = PaddingValues(vertical = 24.dp, horizontal = 40.dp)
             ) {
                 val isActive by viewModel.isCurrentSessionActive.collectAsState()
                 val text = remember(isActive) {
@@ -78,7 +74,7 @@ fun Sessions(
         val sessions by viewModel.sessionsStream.collectAsState()
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = padding,
+            contentPadding = padding + PaddingValues(bottom = 80.dp),
             verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
             items(
