@@ -8,7 +8,7 @@ const val GET_STARTED_ROUTE = "get_started"
 
 // We never navigate "TO" Get Started Screen
 
-fun NavGraphBuilder.getStarted(onNext: () -> Unit) {
+fun NavGraphBuilder.getStarted(onNext: (Boolean) -> Unit) {
     composable(
         route = GET_STARTED_ROUTE,
     ) {

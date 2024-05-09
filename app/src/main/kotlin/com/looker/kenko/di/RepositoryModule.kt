@@ -1,8 +1,10 @@
 package com.looker.kenko.di
 
+import com.looker.kenko.data.local.datastore.DatastoreSettingsRepo
 import com.looker.kenko.data.repository.ExerciseRepo
 import com.looker.kenko.data.repository.PlanRepo
 import com.looker.kenko.data.repository.SessionRepo
+import com.looker.kenko.data.repository.SettingsRepo
 import com.looker.kenko.data.repository.offline.OfflineExerciseRepo
 import com.looker.kenko.data.repository.offline.OfflinePlanRepo
 import com.looker.kenko.data.repository.offline.OfflineSessionRepo
@@ -29,5 +31,10 @@ abstract class RepositoryModule {
     abstract fun bindExerciseRepo(
         repo: OfflineExerciseRepo,
     ): ExerciseRepo
+
+    @Binds
+    abstract fun bindSettingsRepo(
+        repo: DatastoreSettingsRepo,
+    ): SettingsRepo
 
 }

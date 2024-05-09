@@ -9,7 +9,6 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -19,30 +18,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.lifecycleScope
-import com.looker.kenko.data.model.MuscleGroups
-import com.looker.kenko.data.model.sampleExercises
-import com.looker.kenko.data.repository.ExerciseRepo
 import com.looker.kenko.ui.navigation.KenkoNavHost
 import com.looker.kenko.ui.theme.KenkoTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-    @Inject
-    lateinit var repo: ExerciseRepo
-
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-        lifecycleScope.launch {
-            MuscleGroups.entries.flatMap { it.sampleExercises }.forEach {
-                repo.upsert(it)
-            }
-        }
         setContent {
             Kenko()
         }
@@ -60,7 +44,7 @@ fun Kenko() {
                 AnimatedVisibility(
                     visible = appState.isTopLevelDestination,
                     enter = slideInVertically { it },
-                    exit = slideOutVertically{ it },
+                    exit = slideOutVertically { it },
                 ) {
                     NavigationBar {
                         appState.topLevelDestinations.forEach { destination ->
@@ -83,7 +67,6 @@ fun Kenko() {
             },
             contentWindowInsets = WindowInsets(0)
         ) {
-            it
             KenkoNavHost(appState)
         }
     }
