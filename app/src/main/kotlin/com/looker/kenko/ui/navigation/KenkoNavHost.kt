@@ -28,6 +28,13 @@ private val singleTopNavOptions = navOptions {
     launchSingleTop = true
 }
 
+private val splashNavOptions = navOptions {
+    launchSingleTop = true
+    popUpTo(GET_STARTED_ROUTE) {
+        inclusive = true
+    }
+}
+
 @Composable
 fun KenkoNavHost(
     appState: KenkoAppState,
@@ -42,9 +49,9 @@ fun KenkoNavHost(
     ) {
         getStarted { isOnboardingDone ->
             if (isOnboardingDone) {
-                navController.navigateToSessions(navOptions = singleTopNavOptions)
+                navController.navigateToSessions(navOptions = splashNavOptions)
             } else {
-                navController.navigateToProfile(navOptions = singleTopNavOptions)
+                navController.navigateToProfile(navOptions = splashNavOptions)
             }
         }
 
