@@ -33,6 +33,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -214,41 +215,43 @@ private fun ExerciseCard(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        val cardShape = MaterialTheme.shapes.extraLarge
+        val surfaceShape = remember(cardShape) {
+            cardShape.end(16.dp, 16.dp)
+        }
         Surface(
-            modifier = Modifier
-                .weight(1F),
-            shape = MaterialTheme.shapes.extraLarge.end(16.dp, 16.dp),
+            modifier = Modifier.weight(1.5F),
+            shape = surfaceShape,
             border = BorderStroke(
                 width = 2.dp,
                 color = MaterialTheme.colorScheme.primary
             ),
             onClick = onExercisesClick
         ) {
-            Row {
-                Column(Modifier.padding(24.dp)) {
-                    Text(
-                        text = stringResource(R.string.label_exercise),
-                        style = MaterialTheme.typography.titleMedium,
-                    )
-                    Text(
-                        text = numberOfExercises.toString(),
-                        style = MaterialTheme.typography.headlineLarge
-                    )
-                }
+            Column(Modifier.padding(24.dp)) {
+                Text(
+                    text = stringResource(R.string.label_exercise),
+                    style = MaterialTheme.typography.titleMedium,
+                )
+                Text(
+                    text = numberOfExercises.toString(),
+                    style = MaterialTheme.typography.headlineLarge
+                )
             }
         }
-        val buttonCorner = MaterialTheme.shapes.extraLarge
-            .start(16.dp, 16.dp)
+        val buttonShape = remember(cardShape) {
+            cardShape.start(16.dp, 16.dp)
+        }
         Box(
             modifier = Modifier
                 .weight(1F)
                 .fillMaxHeight()
-                .clip(buttonCorner)
+                .clip(buttonShape)
                 .clickable(onClick = onAddClick)
                 .border(
                     width = 2.dp,
                     color = MaterialTheme.colorScheme.secondary,
-                    shape = buttonCorner
+                    shape = buttonShape
                 )
                 .background(MaterialTheme.colorScheme.secondaryContainer),
             contentAlignment = Alignment.Center

@@ -3,6 +3,7 @@ package com.looker.kenko.ui.getStarted
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
@@ -51,7 +53,10 @@ fun GetStarted(onNext: () -> Unit) {
             LaunchedEffect(true) {
                 iconVisibility.animateTo(
                     targetValue = 1F,
-                    animationSpec = spring(stiffness = Spring.StiffnessVeryLow)
+                    animationSpec = spring(
+                        stiffness = Spring.StiffnessVeryLow,
+                        dampingRatio = Spring.DampingRatioMediumBouncy
+                    )
                 )
             }
             Icon(
@@ -90,6 +95,16 @@ private fun ButtonGroup(
     Layout(
         modifier = modifier,
         content = {
+            val iconVisibility = remember { Animatable(0F) }
+            LaunchedEffect(true) {
+                iconVisibility.animateTo(
+                    targetValue = 1F,
+                    animationSpec = spring(
+                        stiffness = Spring.StiffnessVeryLow,
+                        dampingRatio = Spring.DampingRatioMediumBouncy
+                    )
+                )
+            }
             Icon(
                 modifier = Modifier.layoutId(ButtonID.Cloud),
                 imageVector = KenkoIcons.Cloud,
@@ -118,10 +133,18 @@ private fun ButtonGroup(
             Button(
                 modifier = Modifier.layoutId(ButtonID.Button),
                 onClick = onClick,
-                contentPadding = PaddingValues(vertical = 32.dp, horizontal = 48.dp)
+                contentPadding = PaddingValues(vertical = 24.dp, horizontal = 40.dp)
             ) {
                 Icon(
+                    modifier = Modifier
+                        .graphicsLayer {
+                            translationX = -50F + (iconVisibility.value * 50F)
+                            rotationZ = -45F + (iconVisibility.value * 45F)
+                        }
+                        .background(MaterialTheme.colorScheme.inversePrimary, CircleShape)
+                        .padding(8.dp),
                     imageVector = KenkoIcons.ArrowForward,
+                    tint = MaterialTheme.colorScheme.primary,
                     contentDescription = ""
                 )
                 Spacer(modifier = Modifier.width(8.dp))
