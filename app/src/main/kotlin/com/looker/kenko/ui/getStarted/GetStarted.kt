@@ -3,7 +3,9 @@ package com.looker.kenko.ui.getStarted
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,20 +22,25 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Button
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.layoutId
@@ -45,10 +52,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.looker.kenko.R
 import com.looker.kenko.ui.components.HealthQuotes
+import com.looker.kenko.ui.components.icons.icon
 import com.looker.kenko.ui.helper.vertical
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun GetStarted(onNext: (Boolean) -> Unit) {
@@ -68,10 +77,10 @@ fun GetStarted(onNext: (Boolean) -> Unit) {
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
-            val iconVisibility = remember { Animatable(0F) }
+            val iconVisibility = remember { Animatable(-50F) }
             LaunchedEffect(true) {
                 iconVisibility.animateTo(
-                    targetValue = 1F,
+                    targetValue = 0F,
                     animationSpec = spring(
                         stiffness = Spring.StiffnessVeryLow,
                         dampingRatio = Spring.DampingRatioMediumBouncy
@@ -83,8 +92,8 @@ fun GetStarted(onNext: (Boolean) -> Unit) {
                     .align(Alignment.TopEnd)
                     .offset(x = 50.dp, y = 56.dp)
                     .graphicsLayer {
-                        translationX = -100F + (iconVisibility.value * 100F)
-                        rotationZ = 45F * iconVisibility.value
+                        translationX = iconVisibility.value * 2
+                        rotationZ = iconVisibility.value
                     },
                 imageVector = KenkoIcons.Dawn,
                 tint = MaterialTheme.colorScheme.secondary,
@@ -101,7 +110,20 @@ fun GetStarted(onNext: (Boolean) -> Unit) {
                     visible = !isOnboardingDone,
                     enter = fadeIn()
                 ) {
-                    ButtonGroup(onClick = { updatedOnNext(isOnboardingDone) })
+                    CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.secondary) {
+                        ButtonGroup(
+                            buttonIcon = {
+                                ButtonIcon(
+                                    modifier = Modifier
+                                        .graphicsLayer {
+                                            translationX = iconVisibility.value
+                                            rotationZ = iconVisibility.value
+                                        }
+                                )
+                            },
+                            onClick = { updatedOnNext(isOnboardingDone) }
+                        )
+                    }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 HealthQuotes()
@@ -114,21 +136,12 @@ fun GetStarted(onNext: (Boolean) -> Unit) {
 @Composable
 private fun ButtonGroup(
     onClick: () -> Unit,
+    buttonIcon: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Layout(
         modifier = modifier,
         content = {
-            val iconVisibility = remember { Animatable(0F) }
-            LaunchedEffect(true) {
-                iconVisibility.animateTo(
-                    targetValue = 1F,
-                    animationSpec = spring(
-                        stiffness = Spring.StiffnessVeryLow,
-                        dampingRatio = Spring.DampingRatioMediumBouncy
-                    )
-                )
-            }
             Icon(
                 modifier = Modifier.layoutId(ButtonID.Cloud),
                 imageVector = KenkoIcons.Cloud,
@@ -154,23 +167,12 @@ private fun ButtonGroup(
                 imageVector = KenkoIcons.Arrow4,
                 contentDescription = null
             )
-            Button(
+            FilledTonalButton(
                 modifier = Modifier.layoutId(ButtonID.Button),
                 onClick = onClick,
                 contentPadding = PaddingValues(vertical = 24.dp, horizontal = 40.dp)
             ) {
-                Icon(
-                    modifier = Modifier
-                        .graphicsLayer {
-                            translationX = -50F + (iconVisibility.value * 50F)
-                            rotationZ = -45F + (iconVisibility.value * 45F)
-                        }
-                        .background(MaterialTheme.colorScheme.inversePrimary, CircleShape)
-                        .padding(8.dp),
-                    imageVector = KenkoIcons.ArrowForward,
-                    tint = MaterialTheme.colorScheme.primary,
-                    contentDescription = ""
-                )
+                buttonIcon()
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = stringResource(R.string.label_lets_go))
             }
@@ -258,10 +260,25 @@ enum class ButtonID {
     Cloud, Arrow1, Arrow2, Arrow3, Arrow4, Button
 }
 
+@Composable
+private fun ButtonIcon(
+    modifier: Modifier = Modifier,
+    icon: ImageVector = KenkoIcons.ArrowForward,
+) {
+    Icon(
+        modifier = modifier
+            .background(LocalContentColor.current, CircleShape)
+            .padding(8.dp),
+        imageVector = icon,
+        tint = MaterialTheme.colorScheme.onSecondary,
+        contentDescription = ""
+    )
+}
+
 @Preview
 @Composable
 private fun HeroPreview() {
     KenkoTheme {
-        ButtonGroup(onClick = {})
+        ButtonGroup(onClick = {}, buttonIcon = { ButtonIcon() })
     }
 }
