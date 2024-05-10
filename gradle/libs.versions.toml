@@ -3,7 +3,10 @@ activity = "1.9.0"
 agp = "8.4.0"
 coil = "2.6.0"
 composeCompiler = "1.5.13"
-composeBom = "2024.05.00-alpha01"
+composeUi = "1.7.0-alpha08"
+composeRuntime = "1.7.0-alpha08"
+composeFoundation = "1.7.0-alpha07"
+composeMaterial = "1.3.0-alpha05"
 core = "1.13.1"
 coroutines = "1.8.0"
 datastore = "1.1.1"
@@ -40,16 +43,15 @@ androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = 
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 androidx-room-testing = { group = "androidx.room", name = "room-testing", version.ref = "room" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
-coil-svg = { group = "io.coil-kt", name = "coil-svg", version.ref = "coil" }
-compose-bom = { group = "dev.chrisbanes.compose", name = "compose-bom", version.ref = "composeBom" }
-compose-ui = { group = "androidx.compose.ui", name = "ui" }
-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-compose-ui-material3 = { group = "androidx.compose.material3", name = "material3" }
-compose-ui-material-icon = { group = "androidx.compose.material", name = "material-icons-extended" }
-compose-test = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "composeFoundation" }
+compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "composeRuntime" }
+compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "composeUi" }
+compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics", version.ref = "composeUi" }
+compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "composeUi" }
+compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "composeUi" }
+compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "composeUi" }
+compose-ui-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "composeMaterial" }
+compose-ui-test = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "composeUi" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 junit = { group = "junit", name = "junit", version.ref = "jUnit" }
@@ -67,9 +69,9 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 
 [bundles]
-coil = ["coil-compose", "coil-svg"]
+coil = ["coil-compose"]
 room = ["androidx-room-ktx", "androidx-room-runtime"]
 coroutines = ["kotlinx-coroutines-core", "kotlinx-coroutines-android"]
 lifecycle = ["androidx-lifecycle-runtime-compose", "androidx-lifecycle-runtime-ktx", "androidx-lifecycle-viewmodel-compose", "androidx-lifecycle-viewmodel-ktx"]
-compose = ["compose-ui", "compose-ui-graphics", "compose-ui-material3", "compose-ui-tooling-preview"]
+compose = ["compose-foundation", "compose-ui", "compose-ui-graphics", "compose-ui-material3", "compose-ui-tooling-preview", "compose-runtime"]
 compose-debug = ["compose-ui-tooling", "compose-ui-test-manifest"]

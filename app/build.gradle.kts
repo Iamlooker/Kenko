@@ -74,7 +74,6 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.bundles.coroutines)
 
-    implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
     debugImplementation(libs.bundles.compose.debug)
 
@@ -100,8 +99,7 @@ dependencies {
     testImplementation(libs.androidx.room.testing)
 
     // Compose Tests
-    androidTestImplementation(platform(libs.compose.bom))
-    androidTestImplementation(libs.compose.test)
+    androidTestImplementation(libs.compose.ui.test)
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>() {

@@ -32,7 +32,6 @@ import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.data.model.sampleExercises
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
-import kotlinx.serialization.json.JsonNull.content
 
 @Composable
 fun ExerciseItem(
