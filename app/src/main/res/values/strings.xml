@@ -83,6 +83,9 @@
     <string name="all">All</string>
     <string name="no_exercises_yet">No exercises yet</string>
 
+    <string name="label_plus_int">+%s</string>
+    <string name="label_minus_int">-%s</string>
+
     <string-array name="label_health_quotes">
         <item>you can do it</item>
         <item>health is in your hands</item>

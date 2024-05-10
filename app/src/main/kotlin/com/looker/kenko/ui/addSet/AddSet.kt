@@ -69,10 +69,10 @@ fun AddSet(exercise: Exercise, onDone: () -> Unit) {
                 modifier = incrementButtonModifier,
                 onClick = { viewModel.addRep(-1) }
             ) {
-                Text(text = "-1")
+                Text(text = stringResource(R.string.label_minus_int, 1))
             }
             val reps = rememberDraggableTextFieldState(
-                supportingText = stringResource(R.string.label_reps).uppercase(),
+                supportingText = stringResource(R.string.label_reps),
                 textFieldState = viewModel.reps,
                 events = viewModel.repsDragEvents,
             )
@@ -81,13 +81,13 @@ fun AddSet(exercise: Exercise, onDone: () -> Unit) {
                 modifier = incrementButtonModifier,
                 onClick = { viewModel.addRep(1) }
             ) {
-                Text(text = "+1")
+                Text(text = stringResource(R.string.label_plus_int, 1))
             }
             TextButton(
                 modifier = incrementButtonModifier,
                 onClick = { viewModel.addRep(5) }
             ) {
-                Text(text = "+5")
+                Text(text = stringResource(R.string.label_plus_int, 5))
             }
         }
         Spacer(modifier = Modifier.height(24.dp))
@@ -98,10 +98,10 @@ fun AddSet(exercise: Exercise, onDone: () -> Unit) {
                 modifier = incrementButtonModifier,
                 onClick = { viewModel.addWeight(-1.0) }
             ) {
-                Text(text = "-1.0")
+                Text(text = stringResource(R.string.label_minus_int, 1.0))
             }
             val weights = rememberDraggableTextFieldState(
-                supportingText = stringResource(R.string.label_weight).uppercase(),
+                supportingText = stringResource(R.string.label_weight),
                 textFieldState = viewModel.weights,
                 events = viewModel.weightsDragEvents,
             )
@@ -110,13 +110,13 @@ fun AddSet(exercise: Exercise, onDone: () -> Unit) {
                 modifier = incrementButtonModifier,
                 onClick = { viewModel.addWeight(1.0) }
             ) {
-                Text(text = "+1.0")
+                Text(text = stringResource(R.string.label_plus_int, 1.0))
             }
             TextButton(
                 modifier = incrementButtonModifier,
                 onClick = { viewModel.addWeight(5.0) }
             ) {
-                Text(text = "+5.0")
+                Text(text = stringResource(R.string.label_plus_int, 5.0))
             }
         }
         Spacer(modifier = Modifier.height(36.dp))
