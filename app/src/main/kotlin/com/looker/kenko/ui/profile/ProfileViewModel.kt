@@ -3,6 +3,7 @@ package com.looker.kenko.ui.profile
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.looker.kenko.BuildConfig
 import com.looker.kenko.data.model.Plan
 import com.looker.kenko.data.repository.ExerciseRepo
 import com.looker.kenko.data.repository.PlanRepo
@@ -52,7 +53,7 @@ class ProfileViewModel @Inject constructor(
 
     fun completeOnboarding() {
         viewModelScope.launch {
-            settingsRepo.setOnboardingDone()
+            if (!BuildConfig.DEBUG) settingsRepo.setOnboardingDone()
         }
     }
 
