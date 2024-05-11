@@ -1,5 +1,6 @@
 package com.looker.kenko.ui.theme.colorSchemes
 
+import androidx.annotation.StringRes
 import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Immutable
 
@@ -11,4 +12,5 @@ data class ColorSchemes(
     val mediumContrastDark: ColorScheme? = null,
     val highContrastLight: ColorScheme? = null,
     val highContrastDark: ColorScheme? = null,
+    @StringRes val nameRes: Int,
 )

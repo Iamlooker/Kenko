@@ -83,6 +83,18 @@
     <string name="all">All</string>
     <string name="no_exercises_yet">No exercises yet</string>
 
+    <!--Themes-->
+    <string name="label_theme_system">System</string>
+    <string name="label_theme_light">Light</string>
+    <string name="label_theme_dark">Dark</string>
+
+    <!--Color Schemes-->
+    <string name="label_color_scheme_default">Default</string>
+    <string name="label_color_scheme_dynamic">Dynamic</string>
+    <string name="label_color_scheme_serene">Serene</string>
+    <string name="label_color_scheme_zestful">Zestful</string>
+    <string name="label_color_scheme_twilight">Twilight</string>
+
     <string name="label_plus_int">+%s</string>
     <string name="label_minus_int">-%s</string>
 

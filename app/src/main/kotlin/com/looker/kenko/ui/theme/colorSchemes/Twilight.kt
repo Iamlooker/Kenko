@@ -3,6 +3,7 @@ package com.looker.kenko.ui.theme.colorSchemes
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
+import com.looker.kenko.R
 
 // Purple & Orange
 
@@ -457,4 +458,5 @@ val twilightColorSchemes = ColorSchemes(
     mediumContrastDark = twilightMediumContrastDarkColorScheme,
     highContrastLight = twilightHighContrastLightColorScheme,
     highContrastDark = twilightHighContrastDarkColorScheme,
+    nameRes = R.string.label_color_scheme_twilight,
 )

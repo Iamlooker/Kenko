@@ -3,6 +3,7 @@ package com.looker.kenko.ui.theme.colorSchemes
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
+import com.looker.kenko.R
 
 // Blue & Pink
 
@@ -457,4 +458,5 @@ val sereneColorSchemes = ColorSchemes(
     mediumContrastDark = sereneMediumContrastDarkColorScheme,
     highContrastLight = sereneHighContrastLightColorScheme,
     highContrastDark = sereneHighContrastDarkColorScheme,
+    nameRes = R.string.label_color_scheme_serene,
 )
