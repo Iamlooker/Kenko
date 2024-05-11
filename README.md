@@ -1,12 +1,15 @@
 <div align="center">
 
-<img width="" src="app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp" alt="Snappr" align="center">
+<img width="" src="metadata/en-US/images/featureGraphic.png" alt="Snappr" align="center">
 
-# Kenko
+
+### 
+###
+###
+Kenko is a workout journal which will provide you with appropriate progressive overloading and well thought-out plans
+##
 
 <div align="left">
-
-Kenko is a workout journal which will provide you with appropriate progressive overloading and well thought-out plans
 
 ## Screenshots
 
