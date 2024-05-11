@@ -6,7 +6,7 @@
 ### 
 ###
 ###
-Kenko is a workout journal which will provide you with appropriate progressive overloading and well thought-out plans
+Kenko is a workout journal which will provide you with appropriate progressive-overload and well thought-out plans
 ##
 
 <div align="left">
