@@ -186,26 +186,28 @@ private fun ColorPaletteItem(
         if (it) 32.dp else 16.dp
     }
     val background by transition.animateColor(label = "") {
-        if (it) MaterialTheme.colorScheme.secondaryContainer
+        if (it) MaterialTheme.colorScheme.primaryContainer
         else MaterialTheme.colorScheme.surfaceContainerHigh
     }
+    val contentColor by transition.animateColor(label = "") {
+        if (it) MaterialTheme.colorScheme.onPrimaryContainer
+        else MaterialTheme.colorScheme.onSurface
+    }
     Column(
+        modifier = Modifier
+            .graphicsLayer {
+                clip = true
+                shape = RoundedCornerShape(corner, corner, 16.dp, 16.dp)
+            }
+            .drawBehind { drawRect(background) }
+            .then(modifier),
         horizontalAlignment = CenterHorizontally,
     ) {
         KenkoTheme(
             theme = theme,
             colorSchemes = colorSchemes
         ) {
-            Box(
-                modifier = Modifier
-                    .size(80.dp)
-                    .graphicsLayer {
-                        clip = true
-                        shape = RoundedCornerShape(corner)
-                    }
-                    .drawBehind { drawRect(background) }
-                    .then(modifier)
-            ) {
+            Box(Modifier.size(80.dp)) {
                 ColorPaletteSample()
                 Crossfade(targetState = isSelected, label = "") {
                     if (it) {
@@ -225,8 +227,10 @@ private fun ColorPaletteItem(
             }
         }
         Text(
+            modifier = Modifier.padding(vertical = 2.dp),
             text = stringResource(colorSchemes.nameRes),
-            style = MaterialTheme.typography.labelMedium
+            style = MaterialTheme.typography.labelMedium,
+            color = contentColor,
         )
     }
 }

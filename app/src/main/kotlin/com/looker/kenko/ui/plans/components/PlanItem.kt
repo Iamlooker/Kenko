@@ -41,7 +41,7 @@ fun PlanItem(
 ) {
     Surface(
         onClick = onClick,
-        color = if (plan.isActive) MaterialTheme.colorScheme.secondaryContainer
+        color = if (plan.isActive) MaterialTheme.colorScheme.surfaceContainerHigh
         else MaterialTheme.colorScheme.surface
     ) {
         Column(
