@@ -12,6 +12,7 @@ Kenko is a workout journal which will provide you with appropriate progressive o
 <div align="left">
 
 ## Screenshots
+<img src="metadata/en-US/images/phoneScreenshots/1.png" width="25%" /><img src="metadata/en-US/images/phoneScreenshots/2.png" width="25%" /><img src="metadata/en-US/images/phoneScreenshots/3.png" width="25%" /><img src="metadata/en-US/images/phoneScreenshots/4.png" width="25%" />
 
 ## TODO
 - [ ] Add Rating System
