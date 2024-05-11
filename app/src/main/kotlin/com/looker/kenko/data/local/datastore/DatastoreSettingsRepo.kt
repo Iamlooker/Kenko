@@ -24,6 +24,10 @@ class DatastoreSettingsRepo @Inject constructor(
             .catch { if (it is IOException) error("Error reading datastore") }
             .map(::mapSettings)
 
+    override fun <T> get(block: Settings.() -> T): Flow<T> {
+        return stream.map { it.block() }
+    }
+
     override suspend fun setOnboardingDone() {
         ONBOARDING_DONE.update(true)
     }

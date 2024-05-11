@@ -7,12 +7,12 @@ import androidx.compose.ui.unit.dp
 
 fun CornerBasedShape.end(
     bottomEnd: Dp = 0.dp,
-    topEnd: Dp = 0.dp,
+    topEnd: Dp = bottomEnd,
 ): CornerBasedShape =
     copy(bottomEnd = CornerSize(bottomEnd), topEnd = CornerSize(topEnd))
 
 fun CornerBasedShape.start(
     bottomStart: Dp = 0.dp,
-    topStart: Dp = 0.dp,
+    topStart: Dp = bottomStart,
 ): CornerBasedShape =
     copy(bottomStart = CornerSize(bottomStart), topStart = CornerSize(topStart))

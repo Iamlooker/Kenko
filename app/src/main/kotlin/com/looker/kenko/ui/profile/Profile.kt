@@ -21,9 +21,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -59,6 +62,7 @@ fun Profile(
     onNavigateToExercisesList: () -> Unit,
     onNavigateToAddExercise: () -> Unit,
     onNavigateToPlans: () -> Unit,
+    onNavigateToSettings: () -> Unit,
 ) {
     val viewModel: ProfileViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -77,7 +81,7 @@ fun Profile(
                 .padding(it + PaddingValues(start = 16.dp, end = 16.dp, bottom = 80.dp))
                 .verticalScroll(rememberScrollState())
         ) {
-            Header()
+            Header(onNavigateToSettings = onNavigateToSettings)
             Spacer(modifier = Modifier.height(24.dp))
             if (state.isPlanAvailable) {
                 CurrentPlanCard(
@@ -113,11 +117,23 @@ fun Profile(
 }
 
 @Composable
-private fun Header() {
-    Text(
-        text = stringResource(R.string.label_settings_greeting),
-        style = MaterialTheme.typography.headlineMedium
-    )
+private fun Header(
+    onNavigateToSettings: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = stringResource(R.string.label_settings_greeting),
+            style = MaterialTheme.typography.headlineMedium
+        )
+        IconButton(onClick = onNavigateToSettings) {
+            Icon(imageVector = KenkoIcons.Settings, contentDescription = null)
+        }
+    }
 }
 
 @Composable
@@ -132,7 +148,7 @@ private fun CurrentPlanCard(
             .clip(MaterialTheme.shapes.extraLarge)
             .border(
                 width = 2.dp,
-                color = MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorScheme.onSurface,
                 shape = MaterialTheme.shapes.extraLarge
             ),
     ) {
@@ -153,7 +169,7 @@ private fun CurrentPlanCard(
                 Icon(imageVector = KenkoIcons.Rename, contentDescription = null)
             }
         }
-        HorizontalDivider(thickness = 2.dp, color = MaterialTheme.colorScheme.primary)
+        HorizontalDivider(thickness = 2.dp, color = MaterialTheme.colorScheme.onSurface)
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -232,7 +248,7 @@ private fun ExerciseCard(
             shape = surfaceShape,
             border = BorderStroke(
                 width = 2.dp,
-                color = MaterialTheme.colorScheme.primary
+                color = MaterialTheme.colorScheme.onSurface
             ),
             onClick = onExercisesClick
         ) {
@@ -276,7 +292,7 @@ private fun LiftsCard(setsPerformed: Int) {
         shape = MaterialTheme.shapes.extraLarge,
         border = BorderStroke(
             width = 2.dp,
-            color = MaterialTheme.colorScheme.primary
+            color = MaterialTheme.colorScheme.onSurface
         ),
     ) {
         Row(

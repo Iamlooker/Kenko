@@ -15,5 +15,5 @@ fun Modifier.dottedGradient(
     drawRatio: Float = 0.3F,
     start: GradientStart = GradientStart.TopLeft,
 ): Modifier = drawWithCache {
-        dottedTexture(color, drawDistanceRatio = drawRatio, start = start)
+    dottedTexture(color, drawDistanceRatio = drawRatio, start = start)
 }

@@ -6,6 +6,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.geometry.center
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import kotlin.random.Random
 
 private const val DOT_SIZE = 3F
@@ -21,7 +22,7 @@ fun CacheDrawScope.dottedTexture(
     val startPosition = when (start) {
         GradientStart.BottomLeft -> Offset.Zero.copy(y = size.height)
         GradientStart.BottomRight -> Offset(size.width, size.height)
-        is GradientStart.Custom -> start.offset
+        is GradientStart.Custom -> start.offset(this)
         GradientStart.TopLeft -> Offset.Zero
         GradientStart.TopRight -> Offset.Zero.copy(x = size.width)
     }
@@ -73,5 +74,5 @@ sealed interface GradientStart {
 
     data object BottomRight : GradientStart
 
-    data class Custom(val offset: Offset) : GradientStart
+    data class Custom(val offset: CacheDrawScope.() -> Offset) : GradientStart
 }

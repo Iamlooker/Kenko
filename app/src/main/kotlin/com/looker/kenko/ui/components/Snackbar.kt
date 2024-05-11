@@ -47,13 +47,9 @@ private fun SnackbarPreview() {
 
                 }
 
-            override fun dismiss() {
-                TODO("Not yet implemented")
-            }
+            override fun dismiss() {}
 
-            override fun performAction() {
-                TODO("Not yet implemented")
-            }
+            override fun performAction() {}
         })
     }
 }

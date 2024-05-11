@@ -23,6 +23,8 @@ import com.looker.kenko.ui.sessionDetail.navigation.navigateToSessionDetail
 import com.looker.kenko.ui.sessionDetail.navigation.sessionDetail
 import com.looker.kenko.ui.sessions.navigation.navigateToSessions
 import com.looker.kenko.ui.sessions.navigation.sessions
+import com.looker.kenko.ui.settings.navigation.navigateToSettings
+import com.looker.kenko.ui.settings.navigation.settings
 
 private val singleTopNavOptions = navOptions {
     launchSingleTop = true
@@ -69,6 +71,8 @@ fun KenkoNavHost(
             )
         }
 
+        settings(navController::popBackStack)
+
         profile(
             onNavigateToAddExercise = {
                 navController.navigateToAddEditExercise(navOptions = singleTopNavOptions)
@@ -78,6 +82,9 @@ fun KenkoNavHost(
             },
             onNavigateToPlans = {
                 navController.navigateToPlans(navOptions = singleTopNavOptions)
+            },
+            onNavigateToSettings = {
+                navController.navigateToSettings(navOptions = singleTopNavOptions)
             },
         )
 

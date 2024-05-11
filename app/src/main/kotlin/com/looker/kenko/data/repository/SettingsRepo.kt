@@ -9,6 +9,8 @@ interface SettingsRepo {
 
     val stream: Flow<Settings>
 
+    fun <T> get(block: Settings.() -> T): Flow<T>
+
     suspend fun setOnboardingDone()
 
     suspend fun setColorPalette(colorPalette: ColorPalettes)

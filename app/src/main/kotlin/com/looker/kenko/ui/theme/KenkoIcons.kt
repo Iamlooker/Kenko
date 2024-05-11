@@ -1,5 +1,6 @@
 package com.looker.kenko.ui.theme
 
+import android.provider.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 
 /**
@@ -38,6 +39,8 @@ object KenkoIcons {
     val Home: ImageVector = com.looker.kenko.ui.components.icons.symbols.Home
 
     val Performance: ImageVector = com.looker.kenko.ui.components.icons.symbols.Performance
+
+    val Settings: ImageVector = com.looker.kenko.ui.components.icons.symbols.Settings
 
     // Brutalist Icons
     val ArrowOutwardLarge: ImageVector = com.looker.kenko.ui.components.icons.ArrowOutwardLarge
