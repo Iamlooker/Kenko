@@ -7,5 +7,5 @@ You can create completely personal workout plans, and none of your data will be 
 Kenko allows customization of theme with really simple but brutal design
 
 TODO:
-<li>Provide progression</li>
-<li>Performance Stats</li>
+* Provide progression
+* Performance Stats
