@@ -1,1 +1,11 @@
 Kenko is a workout journal which will provide you with appropriate progressive-overload and well thought-out plans
+
+The app allows you to log your workouts with extraordinary simplicity
+
+You can create completely personal workout plans, and none of your data will be sent to anybody
+
+Kenko allows customization of theme with really simple but brutal design
+
+TODO:
+<li>Provide progression</li>
+<li>Performance Stats</li>
