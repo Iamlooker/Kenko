@@ -6,6 +6,7 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,7 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.Layout
@@ -45,7 +46,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
 import com.looker.kenko.R
 import com.looker.kenko.ui.components.HealthQuotes
 import com.looker.kenko.ui.helper.vertical
@@ -210,6 +210,7 @@ private fun ButtonGroup(
 
 @Composable
 private fun HeroTitle(modifier: Modifier = Modifier) {
+    val iconAnimation = remember { Animatable(1.2F) }
     Row(modifier, horizontalArrangement = Arrangement.spacedBy((-12).dp)) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -217,17 +218,30 @@ private fun HeroTitle(modifier: Modifier = Modifier) {
         ) {
             Text(
                 modifier = Modifier.vertical(),
-                text = stringResource(R.string.label_kenko),
+                text = stringResource(R.string.label_kenko).uppercase(),
                 style = MaterialTheme.typography.displayLarge,
                 color = MaterialTheme.colorScheme.tertiary,
             )
-            AsyncImage(
+            LaunchedEffect(true) {
+                delay(300)
+                iconAnimation.animateTo(
+                    targetValue = 1F,
+                    animationSpec = spring(
+                        stiffness = Spring.StiffnessVeryLow,
+                        dampingRatio = Spring.DampingRatioHighBouncy
+                    )
+                )
+            }
+            Box(
                 modifier = Modifier
                     .width(48.dp)
                     .aspectRatio(9F / 16F)
-                    .clip(CircleShape),
-                model = "https://source.unsplash.com/kFCdfLbu6zA/563x1000",
-                contentDescription = null,
+                    .graphicsLayer {
+                        this.transformOrigin = TransformOrigin(0.5F, 0F)
+                        scaleY = iconAnimation.value
+                        shape = CircleShape
+                    }
+                    .border(2.dp, MaterialTheme.colorScheme.outline, CircleShape),
             )
         }
         Column {
