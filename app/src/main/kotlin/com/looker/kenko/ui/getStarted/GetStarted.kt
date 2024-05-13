@@ -275,10 +275,10 @@ private fun ButtonIcon(
 ) {
     Icon(
         modifier = modifier
-            .background(LocalContentColor.current, CircleShape)
+            .background(MaterialTheme.colorScheme.onSecondaryContainer, CircleShape)
             .padding(8.dp),
         imageVector = icon,
-        tint = MaterialTheme.colorScheme.onSecondary,
+        tint = MaterialTheme.colorScheme.secondaryContainer,
         contentDescription = ""
     )
 }

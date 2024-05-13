@@ -21,8 +21,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -280,7 +278,11 @@ private fun ExerciseCard(
                 .background(MaterialTheme.colorScheme.secondaryContainer),
             contentAlignment = Alignment.Center
         ) {
-            Icon(imageVector = KenkoIcons.Add, contentDescription = null)
+            Icon(
+                imageVector = KenkoIcons.Add,
+                tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                contentDescription = stringResource(R.string.label_add),
+            )
         }
     }
 }
