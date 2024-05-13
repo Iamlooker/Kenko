@@ -27,6 +27,10 @@ android {
         }
     }
 
+    dependenciesInfo {
+        includeInApk = false
+    }
+
     buildTypes {
         debug {
             applicationIdSuffix = ".debug"
