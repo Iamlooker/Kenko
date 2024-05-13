@@ -23,6 +23,7 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,6 +40,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.data.model.sampleExercises
+import com.looker.kenko.ui.components.ErrorSnackbar
 import com.looker.kenko.ui.helper.plus
 import com.looker.kenko.ui.planEdit.components.AddExerciseButton
 import com.looker.kenko.ui.theme.KenkoIcons
@@ -48,13 +50,17 @@ import com.looker.kenko.ui.theme.KenkoTheme
 fun Exercises(onNavigateToExercise: (name: String?, target: MuscleGroups?) -> Unit) {
     val viewModel: ExercisesViewModel = hiltViewModel()
     val state by viewModel.exercises.collectAsStateWithLifecycle()
-    val uriHandler = LocalUriHandler.current
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
         floatingActionButton = {
             AddExerciseButton(onClick = { onNavigateToExercise(null, state.selected) })
         },
         floatingActionButtonPosition = FabPosition.Center,
+        snackbarHost = {
+            SnackbarHost(hostState = viewModel.snackbarState) {
+                ErrorSnackbar(data = it)
+            }
+        },
         topBar = {
             MuscleGroupFilterChips(
                 target = state.selected,
@@ -63,7 +69,7 @@ fun Exercises(onNavigateToExercise: (name: String?, target: MuscleGroups?) -> Un
         },
     ) { innerPadding ->
         LazyColumn(
-            contentPadding = innerPadding + PaddingValues(bottom = 96.dp)
+            contentPadding = innerPadding + PaddingValues(bottom = 80.dp)
         ) {
             items(state.exercises, key = { it.name }) { exercise ->
                 val hasReference = remember {
@@ -78,7 +84,7 @@ fun Exercises(onNavigateToExercise: (name: String?, target: MuscleGroups?) -> Un
                             FilledTonalIconButton(
                                 modifier = Modifier.size(56.dp),
                                 shape = MaterialTheme.shapes.extraLarge,
-                                onClick = { uriHandler.openUri(exercise.reference!!) }
+                                onClick = { viewModel.onReferenceClick(exercise.reference!!) }
                             ) {
                                 Icon(imageVector = KenkoIcons.Lightbulb, contentDescription = null)
                             }
@@ -105,9 +111,8 @@ private fun MuscleGroupFilterChips(
             .statusBarsPadding(),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        val targets = remember { listOf(null) + MuscleGroups.entries }
         Spacer(modifier = Modifier.width(12.dp))
-        targets.forEach { muscle ->
+        Targets.forEach { muscle ->
             FilterChip(
                 selected = target == muscle,
                 onClick = { onSelect(muscle) },

@@ -101,6 +101,11 @@
     <string name="label_minus_int">-%s</string>
     <string name="label_settings">Settings</string>
 
+    <string name="error_invalid_reference">Invalid Reference</string>
+    <string name="error_invalid_url">Invalid URL</string>
+    <string name="error_plan_name_empty">Enter a plan name</string>
+    <string name="error_plan_empty">Plan is empty</string>
+
     <string-array name="label_health_quotes">
         <item>you can do it</item>
         <item>health is in your hands</item>

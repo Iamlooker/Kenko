@@ -82,8 +82,8 @@ fun ExerciseItem(
 fun AddExerciseButton(onClick: () -> Unit) {
     OutlinedButton(
         onClick = onClick,
-        contentPadding = PaddingValues(vertical = 32.dp, horizontal = 48.dp),
-        border = BorderStroke(2.dp, color = MaterialTheme.colorScheme.onSurface),
+        contentPadding = PaddingValues(vertical = 24.dp, horizontal = 40.dp),
+        border = BorderStroke(2.dp, color = MaterialTheme.colorScheme.onSecondaryContainer),
         colors = ButtonDefaults.outlinedButtonColors(
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
             contentColor = MaterialTheme.colorScheme.onSecondaryContainer,

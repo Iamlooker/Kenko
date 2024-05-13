@@ -1,10 +1,13 @@
 package com.looker.kenko.ui.exercises
 
 import androidx.annotation.StringRes
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Stable
+import androidx.compose.ui.platform.UriHandler
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.looker.kenko.R
+import com.looker.kenko.data.StringHandler
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.data.repository.ExerciseRepo
@@ -13,23 +16,25 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+val Targets = listOf(null) + MuscleGroups.entries
+
 @HiltViewModel
 class ExercisesViewModel @Inject constructor(
     repo: ExerciseRepo,
+    private val uriHandler: UriHandler,
+    private val stringHandler: StringHandler,
 ) : ViewModel() {
 
-    val targets: List<MuscleGroups?> = listOf(null) + MuscleGroups.entries
-
     // null -> all
-    private val _selectedTarget: MutableStateFlow<MuscleGroups?> = MutableStateFlow(null)
-    val selectedTarget: StateFlow<MuscleGroups?> = _selectedTarget.asStateFlow()
+    private val selectedTarget: MutableStateFlow<MuscleGroups?> = MutableStateFlow(null)
 
     private val exercisesStream: Flow<List<Exercise>> = repo.stream
+
+    val snackbarState = SnackbarHostState()
 
     val exercises: StateFlow<ExercisesUiState> = combine(
         exercisesStream,
@@ -48,7 +53,19 @@ class ExercisesViewModel @Inject constructor(
 
     fun setTarget(value: MuscleGroups?) {
         viewModelScope.launch {
-            _selectedTarget.emit(value)
+            selectedTarget.emit(value)
+        }
+    }
+
+    fun onReferenceClick(reference: String) {
+        viewModelScope.launch {
+            try {
+                uriHandler.openUri(reference)
+            } catch (e: IllegalStateException) {
+                snackbarState.showSnackbar(
+                    e.message ?: stringHandler.getString(R.string.error_invalid_url)
+                )
+            }
         }
     }
 }

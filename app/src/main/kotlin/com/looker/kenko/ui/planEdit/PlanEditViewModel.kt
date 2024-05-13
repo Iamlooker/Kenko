@@ -7,6 +7,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.looker.kenko.R
+import com.looker.kenko.data.StringHandler
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.Plan
 import com.looker.kenko.data.repository.PlanRepo
@@ -29,6 +31,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PlanEditViewModel @Inject constructor(
     private val repo: PlanRepo,
+    private val stringHandler: StringHandler,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -90,11 +93,11 @@ class PlanEditViewModel @Inject constructor(
     fun savePlan(onDone: () -> Unit) {
         viewModelScope.launch {
             if (_dayAndExercises.value.isEmpty()) {
-                snackbarState.showSnackbar("Empty Plan")
+                snackbarState.showSnackbar(stringHandler.getString(R.string.error_plan_empty))
                 return@launch
             }
             if (planName.isBlank()) {
-                snackbarState.showSnackbar("Plan Name Empty")
+                snackbarState.showSnackbar(stringHandler.getString(R.string.error_plan_name_empty))
                 return@launch
             }
             repo.upsert(
