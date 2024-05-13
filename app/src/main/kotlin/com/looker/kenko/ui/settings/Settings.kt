@@ -60,6 +60,7 @@ import com.looker.kenko.data.model.settings.Theme
 import com.looker.kenko.ui.components.AnimatedWave
 import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.components.HealthQuotes
+import com.looker.kenko.ui.components.KenkoBorderWidth
 import com.looker.kenko.ui.components.texture.GradientStart
 import com.looker.kenko.ui.components.texture.gradient
 import com.looker.kenko.ui.theme.KenkoIcons
@@ -99,7 +100,7 @@ fun Settings(onBackPress: () -> Unit) {
                 .padding(it)
                 .verticalScroll(rememberScrollState()),
         ) {
-            HorizontalDivider(thickness = 2.dp)
+            HorizontalDivider(thickness = KenkoBorderWidth)
             Spacer(modifier = Modifier.height(16.dp))
             CategoryHeader(title = stringResource(R.string.label_theme))
             Spacer(modifier = Modifier.height(4.dp))

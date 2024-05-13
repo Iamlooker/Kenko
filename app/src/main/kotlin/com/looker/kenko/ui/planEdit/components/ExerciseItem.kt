@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.looker.kenko.R
 import com.looker.kenko.data.model.Exercise
@@ -79,11 +80,11 @@ fun ExerciseItem(
 }
 
 @Composable
-fun AddExerciseButton(onClick: () -> Unit) {
+fun SelectExerciseButton(onClick: () -> Unit) {
     OutlinedButton(
         onClick = onClick,
         contentPadding = PaddingValues(vertical = 24.dp, horizontal = 40.dp),
-        border = BorderStroke(2.dp, color = MaterialTheme.colorScheme.onSecondaryContainer),
+        border = BorderStroke(2.dp, color = MaterialTheme.colorScheme.outline),
         colors = ButtonDefaults.outlinedButtonColors(
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
             contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
@@ -105,11 +106,11 @@ private fun ExerciseItemPreview() {
     }
 }
 
-@Preview(showBackground = true)
+@PreviewLightDark
 @Composable
 private fun ExerciseButtonPreview() {
     KenkoTheme {
-        AddExerciseButton {
+        SelectExerciseButton {
 
         }
     }

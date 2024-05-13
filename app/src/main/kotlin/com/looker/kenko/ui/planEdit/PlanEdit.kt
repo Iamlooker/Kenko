@@ -50,7 +50,7 @@ import com.looker.kenko.ui.components.ErrorSnackbar
 import com.looker.kenko.ui.components.kenkoTextFieldColor
 import com.looker.kenko.ui.helper.normalizeInt
 import com.looker.kenko.ui.helper.vertical
-import com.looker.kenko.ui.planEdit.components.AddExerciseButton
+import com.looker.kenko.ui.planEdit.components.SelectExerciseButton
 import com.looker.kenko.ui.planEdit.components.DayItem
 import com.looker.kenko.ui.planEdit.components.DaySelector
 import com.looker.kenko.ui.planEdit.components.ExerciseItem
@@ -75,7 +75,7 @@ fun PlanEdit(
     val isCurrentDayBlank by remember { derivedStateOf { currentExercises.isEmpty() } }
     Scaffold(
         floatingActionButton = {
-            AddExerciseButton(
+            SelectExerciseButton(
                 onClick = {
                     focusManager.clearFocus()
                     viewModel.openSheet()

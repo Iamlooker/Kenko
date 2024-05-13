@@ -13,10 +13,13 @@ fun NavController.navigateToExercises(navOptions: NavOptions? = null) {
     navigate(EXERCISES_ROUTE, navOptions = navOptions)
 }
 
-fun NavGraphBuilder.exercises(onExerciseClick: (name: String?, target: MuscleGroups?) -> Unit) {
+fun NavGraphBuilder.exercises(
+    onExerciseClick: (name: String?, target: MuscleGroups?) -> Unit,
+    onBackPress: () -> Unit,
+) {
     composable(
         route = EXERCISES_ROUTE
     ) {
-        Exercises(onNavigateToExercise = onExerciseClick)
+        Exercises(onNavigateToExercise = onExerciseClick, onBackPress = onBackPress)
     }
 }

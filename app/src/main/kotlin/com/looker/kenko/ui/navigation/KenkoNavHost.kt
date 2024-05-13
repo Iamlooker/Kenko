@@ -88,13 +88,16 @@ fun KenkoNavHost(
             },
         )
 
-        exercises { exerciseName, target ->
-            navController.navigateToAddEditExercise(
-                exerciseName = exerciseName,
-                target = target,
-                navOptions = singleTopNavOptions
-            )
-        }
+        exercises(
+            onExerciseClick = { exerciseName, target ->
+                navController.navigateToAddEditExercise(
+                    exerciseName = exerciseName,
+                    target = target,
+                    navOptions = singleTopNavOptions
+                )
+            },
+            onBackPress = navController::popBackStack
+        )
 
         planEdit(navController::popBackStack) {
             navController.navigateToAddEditExercise(navOptions = singleTopNavOptions)

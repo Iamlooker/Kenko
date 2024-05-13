@@ -1,6 +1,5 @@
 package com.looker.kenko.ui.profile
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -46,6 +45,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
 import com.looker.kenko.ui.components.HealthQuotes
+import com.looker.kenko.ui.components.KenkoBorderWidth
+import com.looker.kenko.ui.components.OnSurfaceVariantBorder
+import com.looker.kenko.ui.components.PrimaryBorder
+import com.looker.kenko.ui.components.SecondaryBorder
 import com.looker.kenko.ui.helper.normalizeInt
 import com.looker.kenko.ui.helper.plus
 import com.looker.kenko.ui.helper.vertical
@@ -145,10 +148,10 @@ private fun CurrentPlanCard(
         modifier = modifier
             .clip(MaterialTheme.shapes.extraLarge)
             .border(
-                width = 2.dp,
-                color = MaterialTheme.colorScheme.onSurface,
+                border = OnSurfaceVariantBorder,
                 shape = MaterialTheme.shapes.extraLarge
-            ),
+            )
+            .clickable(onClick = onEditClick),
     ) {
         Row(
             modifier = Modifier
@@ -167,7 +170,10 @@ private fun CurrentPlanCard(
                 Icon(imageVector = KenkoIcons.Rename, contentDescription = null)
             }
         }
-        HorizontalDivider(thickness = 2.dp, color = MaterialTheme.colorScheme.onSurface)
+        HorizontalDivider(
+            thickness = KenkoBorderWidth,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -208,8 +214,7 @@ private fun EmptyPlanCard(
             .fillMaxWidth()
             .clip(MaterialTheme.shapes.extraLarge)
             .border(
-                width = 2.dp,
-                color = MaterialTheme.colorScheme.primary,
+                border = PrimaryBorder,
                 shape = MaterialTheme.shapes.extraLarge
             )
             .clickable(onClick = onNavigateToPlans)
@@ -244,10 +249,7 @@ private fun ExerciseCard(
         Surface(
             modifier = Modifier.weight(1.5F),
             shape = surfaceShape,
-            border = BorderStroke(
-                width = 2.dp,
-                color = MaterialTheme.colorScheme.onSurface
-            ),
+            border = OnSurfaceVariantBorder,
             onClick = onExercisesClick
         ) {
             Column(Modifier.padding(24.dp)) {
@@ -271,8 +273,7 @@ private fun ExerciseCard(
                 .clip(buttonShape)
                 .clickable(onClick = onAddClick)
                 .border(
-                    width = 2.dp,
-                    color = MaterialTheme.colorScheme.secondary,
+                    border = SecondaryBorder,
                     shape = buttonShape
                 )
                 .background(MaterialTheme.colorScheme.secondaryContainer),
@@ -292,10 +293,7 @@ private fun LiftsCard(setsPerformed: Int) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.extraLarge,
-        border = BorderStroke(
-            width = 2.dp,
-            color = MaterialTheme.colorScheme.onSurface
-        ),
+        border = OnSurfaceVariantBorder,
     ) {
         Row(
             modifier = Modifier
