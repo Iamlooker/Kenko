@@ -18,6 +18,9 @@ fun NavGraphBuilder.sessions(onSessionClick: (LocalDate?) -> Unit) {
     composable(
         route = SESSIONS_ROUTE
     ) {
-        Sessions(onSessionClick = onSessionClick, viewModel = hiltViewModel())
+        Sessions(
+            onSessionClick = onSessionClick,
+            viewModel = hiltViewModel(),
+        )
     }
 }
