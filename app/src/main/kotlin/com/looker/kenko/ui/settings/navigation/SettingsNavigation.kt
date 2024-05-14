@@ -1,5 +1,6 @@
 package com.looker.kenko.ui.settings.navigation
 
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -12,8 +13,13 @@ fun NavController.navigateToSettings(navOptions: NavOptions? = null) {
     navigate(SETTINGS_ROUTE, navOptions)
 }
 
-fun NavGraphBuilder.settings(onBackPress: () -> Unit) {
+fun NavGraphBuilder.settings(
+    onBackPress: () -> Unit,
+) {
     composable(SETTINGS_ROUTE) {
-        Settings(onBackPress)
+        Settings(
+            onBackPress = onBackPress,
+            viewModel = hiltViewModel(),
+        )
     }
 }

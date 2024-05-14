@@ -52,7 +52,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
 import com.looker.kenko.data.model.settings.ColorPalettes
@@ -71,13 +70,31 @@ import com.looker.kenko.ui.theme.dynamicColorSchemes
 import com.looker.kenko.ui.theme.end
 import com.looker.kenko.ui.theme.start
 
+@Composable
+fun Settings(
+    viewModel: SettingsViewModel,
+    onBackPress: () -> Unit,
+) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    Settings(
+        state = state,
+        onSelectTheme = viewModel::updateTheme,
+        onSelectColorPalette = viewModel::updateColorPalette,
+        onBackPress = onBackPress,
+    )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Settings(onBackPress: () -> Unit) {
-    val viewModel: SettingsViewModel = hiltViewModel()
-    val state by viewModel.state.collectAsStateWithLifecycle()
+private fun Settings(
+    state: SettingsUiData,
+    onSelectTheme: (Theme) -> Unit,
+    onSelectColorPalette: (ColorPalettes) -> Unit,
+    onBackPress: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Scaffold(
-        modifier = Modifier
+        modifier = modifier
             .gradient(
                 0F to MaterialTheme.colorScheme.secondaryContainer.copy(0.2F),
                 1F to MaterialTheme.colorScheme.background,
@@ -107,7 +124,7 @@ fun Settings(onBackPress: () -> Unit) {
             ThemeButton(
                 modifier = Modifier.align(CenterHorizontally),
                 selectedTheme = state.selectedTheme,
-                onClick = viewModel::updateTheme,
+                onClick = onSelectTheme,
             )
             Spacer(modifier = Modifier.height(16.dp))
             CategoryHeader(title = stringResource(R.string.label_color_palettes))
@@ -115,7 +132,7 @@ fun Settings(onBackPress: () -> Unit) {
             ColorPaletteSelection(
                 selectedColorPalette = state.selectedColorPalette,
                 selectedTheme = state.selectedTheme,
-                onClickPalette = viewModel::updateColorPalette
+                onClickPalette = onSelectColorPalette
             )
             Spacer(modifier = Modifier.weight(1F))
             HealthQuotes(Modifier.align(CenterHorizontally))
@@ -364,5 +381,18 @@ private fun ColorSelectionPreview() {
 private fun ThemePreview() {
     KenkoTheme {
         ThemeButton(selectedTheme = Theme.System, onClick = {})
+    }
+}
+
+@Preview
+@Composable
+private fun SettingsPreview() {
+    KenkoTheme {
+        Settings(
+            state = SettingsUiData(Theme.System, ColorPalettes.Default),
+            onSelectTheme = {},
+            onSelectColorPalette = {},
+            onBackPress = {},
+        )
     }
 }
