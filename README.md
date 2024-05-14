@@ -18,6 +18,7 @@ Kenko is a workout journal which will provide you with appropriate progressive-o
 - [ ] Add Rating System
 - [ ] Provide Targeted Overload 
 - [ ] Add Import/Export
+- [ ] Add Support for Isometric exercises
 
 ## CONTRIBUTIONS
 
