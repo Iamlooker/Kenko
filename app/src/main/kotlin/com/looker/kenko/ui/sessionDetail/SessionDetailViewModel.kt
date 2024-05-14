@@ -1,6 +1,7 @@
 package com.looker.kenko.ui.sessionDetail
 
 import androidx.annotation.StringRes
+import androidx.compose.runtime.Stable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -89,6 +90,7 @@ class SessionDetailViewModel @Inject constructor(
     }
 }
 
+@Stable
 data class SessionUiData(
     val session: Session,
     val sets: Map<Exercise, List<Set>>?,
