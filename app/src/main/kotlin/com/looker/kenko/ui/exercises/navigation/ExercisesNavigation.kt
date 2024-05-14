@@ -1,5 +1,6 @@
 package com.looker.kenko.ui.exercises.navigation
 
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -14,12 +15,18 @@ fun NavController.navigateToExercises(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.exercises(
-    onExerciseClick: (name: String?, target: MuscleGroups?) -> Unit,
+    onExerciseClick: (name: String) -> Unit,
+    onCreateClick: (target: MuscleGroups?) -> Unit,
     onBackPress: () -> Unit,
 ) {
     composable(
         route = EXERCISES_ROUTE
     ) {
-        Exercises(onNavigateToExercise = onExerciseClick, onBackPress = onBackPress)
+        Exercises(
+            onExerciseClick = onExerciseClick,
+            onCreateClick = onCreateClick,
+            onBackPress = onBackPress,
+            viewModel = hiltViewModel(),
+        )
     }
 }

@@ -1,8 +1,6 @@
 package com.looker.kenko.ui.exercises
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,6 +26,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -39,7 +38,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
 import com.looker.kenko.data.model.Exercise
@@ -55,16 +53,39 @@ import com.looker.kenko.ui.theme.KenkoTheme
 
 @Composable
 fun Exercises(
-    onNavigateToExercise: (name: String?, target: MuscleGroups?) -> Unit,
+    viewModel: ExercisesViewModel,
+    onExerciseClick: (name: String) -> Unit,
+    onCreateClick: (target: MuscleGroups?) -> Unit,
     onBackPress: () -> Unit,
 ) {
-    val viewModel: ExercisesViewModel = hiltViewModel()
     val state by viewModel.exercises.collectAsStateWithLifecycle()
+    Exercises(
+        state = state,
+        snackbarState = viewModel.snackbarState,
+        onBackPress = onBackPress,
+        onExerciseClick = onExerciseClick,
+        onCreateClick = onCreateClick,
+        onSelectTarget = viewModel::setTarget,
+        onReferenceClick = viewModel::onReferenceClick,
+    )
+}
+
+@Composable
+private fun Exercises(
+    state: ExercisesUiState,
+    snackbarState: SnackbarHostState,
+    onExerciseClick: (name: String) -> Unit,
+    onCreateClick: (target: MuscleGroups?) -> Unit,
+    onSelectTarget: (MuscleGroups?) -> Unit,
+    onBackPress: () -> Unit,
+    onReferenceClick: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Scaffold(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         floatingActionButton = {
             OutlinedButton(
-                onClick = { onNavigateToExercise(null, state.selected) },
+                onClick = { onCreateClick(state.selected) },
                 contentPadding = PaddingValues(vertical = 20.dp, horizontal = 32.dp),
                 border = OutlineBorder,
                 colors = ButtonDefaults.outlinedButtonColors(
@@ -79,46 +100,59 @@ fun Exercises(
         },
         floatingActionButtonPosition = FabPosition.Center,
         snackbarHost = {
-            SnackbarHost(hostState = viewModel.snackbarState) {
+            SnackbarHost(hostState = snackbarState) {
                 ErrorSnackbar(data = it)
             }
         },
         topBar = {
             Header(
                 target = state.selected,
-                onSelect = viewModel::setTarget,
-                onBackPress = onBackPress
+                onSelect = onSelectTarget,
+                onBackPress = onBackPress,
             )
         },
     ) { innerPadding ->
-        LazyColumn(
-            contentPadding = innerPadding + PaddingValues(bottom = 80.dp)
-        ) {
-            items(state.exercises, key = { it.name }) { exercise ->
-                val hasReference = remember {
-                    exercise.reference != null
-                }
-                ExerciseItem(
-                    modifier = Modifier
-                        .padding(horizontal = 12.dp)
-                        .animateItem(),
-                    exercise = exercise,
-                    onClick = { onNavigateToExercise(exercise.name, null) },
-                    referenceButton = {
-                        if (hasReference) {
-                            FilledTonalIconButton(
-                                modifier = Modifier.size(56.dp),
-                                shape = MaterialTheme.shapes.extraLarge,
-                                onClick = { viewModel.onReferenceClick(exercise.reference!!) }
-                            ) {
-                                Icon(imageVector = KenkoIcons.Lightbulb, contentDescription = null)
-                            }
+        ExercisesList(
+            exercises = state.exercises,
+            contentPadding = innerPadding + PaddingValues(bottom = 80.dp),
+            onExerciseClick = onExerciseClick,
+            onReferenceClick = onReferenceClick
+        )
+    }
+}
+
+@Composable
+private fun ExercisesList(
+    exercises: List<Exercise>,
+    contentPadding: PaddingValues,
+    onExerciseClick: (String) -> Unit,
+    onReferenceClick: (String) -> Unit,
+) {
+    LazyColumn(
+        contentPadding = contentPadding,
+    ) {
+        items(exercises, key = { it.name }) { exercise ->
+            ExerciseItem(
+                modifier = Modifier
+                    .padding(horizontal = 12.dp)
+                    .animateItem(),
+                exercise = exercise,
+                onClick = { onExerciseClick(exercise.name) },
+                referenceButton = {
+                    if (exercise.reference != null) {
+                        FilledTonalIconButton(
+                            modifier = Modifier.size(56.dp),
+                            shape = MaterialTheme.shapes.extraLarge,
+                            onClick = { onReferenceClick(exercise.reference) }
+                        ) {
+                            Icon(imageVector = KenkoIcons.Lightbulb, contentDescription = null)
                         }
                     }
-                )
-            }
+                }
+            )
         }
     }
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -211,12 +245,16 @@ private fun ExerciseItem(
 
 @Preview
 @Composable
-private fun ExerciseItemPreview() {
+private fun ExercisesPreview() {
     KenkoTheme {
-        ExerciseItem(
-            exercise = MuscleGroups.Chest.sampleExercises.first(),
-            onClick = {},
-            referenceButton = {}
+        Exercises(
+            state = ExercisesUiState(MuscleGroups.entries.flatMap { it.sampleExercises }),
+            snackbarState = SnackbarHostState(),
+            onExerciseClick = {},
+            onCreateClick = {},
+            onSelectTarget = {},
+            onBackPress = {},
+            onReferenceClick = {}
         )
     }
 }
