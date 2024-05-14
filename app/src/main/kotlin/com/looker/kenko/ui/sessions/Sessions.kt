@@ -187,3 +187,12 @@ private fun SessionCardPreview() {
         )
     }
 }
+
+@Preview
+@Composable
+private fun SessionsPreview() {
+    KenkoTheme {
+        Sessions(state = SessionsUiData(listOf(Session.SAMPLE), false), onSessionClick = {})
+    }
+}
+
