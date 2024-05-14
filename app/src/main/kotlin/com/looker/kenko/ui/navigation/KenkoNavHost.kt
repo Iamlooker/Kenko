@@ -74,16 +74,16 @@ fun KenkoNavHost(
         settings(navController::popBackStack)
 
         profile(
-            onNavigateToAddExercise = {
+            onAddExerciseClick = {
                 navController.navigateToAddEditExercise(navOptions = singleTopNavOptions)
             },
-            onNavigateToExercisesList = {
+            onExercisesClick = {
                 navController.navigateToExercises(navOptions = singleTopNavOptions)
             },
-            onNavigateToPlans = {
+            onPlanClick = {
                 navController.navigateToPlans(navOptions = singleTopNavOptions)
             },
-            onNavigateToSettings = {
+            onSettingsClick = {
                 navController.navigateToSettings(navOptions = singleTopNavOptions)
             },
         )
