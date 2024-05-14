@@ -1,6 +1,6 @@
 <div align="center">
 
-<img width="" src="metadata/en-US/images/featureGraphic.png" alt="Snappr" align="center">
+<img width="" src="metadata/en-US/images/featureGraphic.png" alt="Kenko" align="center">
 
 
 ### 
