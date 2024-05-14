@@ -1,5 +1,6 @@
 package com.looker.kenko.ui.profile.navigation
 
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -13,17 +14,18 @@ fun NavController.navigateToProfile(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.profile(
-    onNavigateToExercisesList: () -> Unit,
-    onNavigateToAddExercise: () -> Unit,
-    onNavigateToPlans: () -> Unit,
-    onNavigateToSettings: () -> Unit,
+    onExercisesClick: () -> Unit,
+    onAddExerciseClick: () -> Unit,
+    onPlanClick: () -> Unit,
+    onSettingsClick: () -> Unit,
 ) {
     composable(PROFILE_ROUTE) {
         Profile(
-            onNavigateToExercisesList = onNavigateToExercisesList,
-            onNavigateToAddExercise = onNavigateToAddExercise,
-            onNavigateToPlans = onNavigateToPlans,
-            onNavigateToSettings = onNavigateToSettings,
+            onExercisesClick = onExercisesClick,
+            onAddExerciseClick = onAddExerciseClick,
+            onPlanClick = onPlanClick,
+            onSettingsClick = onSettingsClick,
+            viewModel = hiltViewModel(),
         )
     }
 }

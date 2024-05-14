@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -27,7 +26,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,7 +39,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
 import com.looker.kenko.ui.components.HealthQuotes
@@ -50,7 +47,6 @@ import com.looker.kenko.ui.components.OnSurfaceVariantBorder
 import com.looker.kenko.ui.components.PrimaryBorder
 import com.looker.kenko.ui.components.SecondaryBorder
 import com.looker.kenko.ui.helper.normalizeInt
-import com.looker.kenko.ui.helper.plus
 import com.looker.kenko.ui.helper.vertical
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
@@ -60,12 +56,12 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun Profile(
-    onNavigateToExercisesList: () -> Unit,
-    onNavigateToAddExercise: () -> Unit,
-    onNavigateToPlans: () -> Unit,
-    onNavigateToSettings: () -> Unit,
+    viewModel: ProfileViewModel,
+    onExercisesClick: () -> Unit,
+    onAddExerciseClick: () -> Unit,
+    onPlanClick: () -> Unit,
+    onSettingsClick: () -> Unit,
 ) {
-    val viewModel: ProfileViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
@@ -73,20 +69,36 @@ fun Profile(
         viewModel.completeOnboarding()
     }
 
-    Scaffold(
-        containerColor = MaterialTheme.colorScheme.surface
-    ) {
+    Profile(
+        state = state,
+        onSettingsClick = onSettingsClick,
+        onPlanClick = onPlanClick,
+        onAddExerciseClick = onAddExerciseClick,
+        onExercisesClick = onExercisesClick,
+    )
+}
+
+@Composable
+private fun Profile(
+    state: ProfileUiState,
+    onSettingsClick: () -> Unit,
+    onPlanClick: () -> Unit,
+    onAddExerciseClick: () -> Unit,
+    onExercisesClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Surface {
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
-                .padding(it + PaddingValues(start = 16.dp, end = 16.dp, bottom = 80.dp))
+                .padding(start = 16.dp, end = 16.dp, bottom = 80.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            Header(onNavigateToSettings = onNavigateToSettings)
+            Header(onSettingsClick = onSettingsClick)
             Spacer(modifier = Modifier.height(24.dp))
             if (state.isPlanAvailable) {
                 CurrentPlanCard(
-                    onEditClick = onNavigateToPlans,
+                    onPlanClick = onPlanClick,
                     name = state.planName,
                     content = {
                         Text(
@@ -100,13 +112,13 @@ fun Profile(
                     }
                 )
             } else {
-                EmptyPlanCard(onNavigateToPlans)
+                EmptyPlanCard(onPlanClick)
             }
             Spacer(modifier = Modifier.height(12.dp))
             ExerciseCard(
                 numberOfExercises = state.numberOfExercises,
-                onAddClick = onNavigateToAddExercise,
-                onExercisesClick = onNavigateToExercisesList
+                onAddClick = onAddExerciseClick,
+                onExercisesClick = onExercisesClick
             )
             Spacer(modifier = Modifier.height(12.dp))
             LiftsCard(state.totalLifts)
@@ -119,7 +131,7 @@ fun Profile(
 
 @Composable
 private fun Header(
-    onNavigateToSettings: () -> Unit,
+    onSettingsClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -131,7 +143,7 @@ private fun Header(
             text = stringResource(R.string.label_settings_greeting),
             style = MaterialTheme.typography.headlineMedium
         )
-        IconButton(onClick = onNavigateToSettings) {
+        IconButton(onClick = onSettingsClick) {
             Icon(imageVector = KenkoIcons.Settings, contentDescription = null)
         }
     }
@@ -139,7 +151,7 @@ private fun Header(
 
 @Composable
 private fun CurrentPlanCard(
-    onEditClick: () -> Unit,
+    onPlanClick: () -> Unit,
     name: String,
     content: @Composable ColumnScope.() -> Unit,
     modifier: Modifier = Modifier,
@@ -151,7 +163,7 @@ private fun CurrentPlanCard(
                 border = OnSurfaceVariantBorder,
                 shape = MaterialTheme.shapes.extraLarge
             )
-            .clickable(onClick = onEditClick),
+            .clickable(onClick = onPlanClick),
     ) {
         Row(
             modifier = Modifier
@@ -166,7 +178,7 @@ private fun CurrentPlanCard(
                 style = MaterialTheme.typography.titleMedium
             )
             Spacer(modifier = Modifier.weight(1F))
-            FilledTonalIconButton(onClick = onEditClick) {
+            FilledTonalIconButton(onClick = onPlanClick) {
                 Icon(imageVector = KenkoIcons.Rename, contentDescription = null)
             }
         }
@@ -327,7 +339,7 @@ private fun LiftsCard(setsPerformed: Int) {
 private fun PlanCard() {
     KenkoTheme {
         CurrentPlanCard(
-            onEditClick = {
+            onPlanClick = {
             },
             name = "Push-Pull-Leg",
             content = {
@@ -352,5 +364,19 @@ private fun EmptyPlanCardPreview() {
 private fun ExerciseCardPreview() {
     KenkoTheme {
         ExerciseCard(21, {}, {})
+    }
+}
+
+@Preview
+@Composable
+private fun ProfilePreview() {
+    KenkoTheme {
+        Profile(
+            state = ProfileUiState(12, 12, true, "Push-Pull-Leg", 2, 5, 12),
+            onSettingsClick = { },
+            onPlanClick = { },
+            onAddExerciseClick = { },
+            onExercisesClick = { },
+        )
     }
 }
