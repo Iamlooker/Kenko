@@ -21,7 +21,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -29,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
 import com.looker.kenko.data.model.Session
 import com.looker.kenko.ui.components.texture.GradientStart
@@ -47,16 +47,29 @@ fun Sessions(
     viewModel: SessionsViewModel,
     onSessionClick: (LocalDate?) -> Unit,
 ) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    Sessions(
+        state = state,
+        onSessionClick = onSessionClick,
+    )
+}
+
+@Composable
+private fun Sessions(
+    state: SessionsUiData,
+    onSessionClick: (LocalDate?) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Scaffold(
-        modifier = Modifier.padding(bottom = 80.dp),
+        modifier = modifier.padding(bottom = 80.dp),
         floatingActionButton = {
             Button(
                 onClick = { onSessionClick(null) },
                 contentPadding = PaddingValues(vertical = 24.dp, horizontal = 40.dp)
             ) {
-                val isActive by viewModel.isCurrentSessionActive.collectAsState()
-                val text = remember(isActive) {
-                    if (isActive) R.string.label_continue
+                val isCurrentSessionActive = state.isCurrentSessionActive
+                val text = remember(isCurrentSessionActive) {
+                    if (isCurrentSessionActive) R.string.label_continue
                     else R.string.label_start
                 }
                 Text(text = stringResource(id = text))
@@ -70,14 +83,13 @@ fun Sessions(
         floatingActionButtonPosition = FabPosition.Center,
         containerColor = MaterialTheme.colorScheme.surface,
     ) { padding ->
-        val sessions by viewModel.sessionsStream.collectAsState()
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             contentPadding = padding + PaddingValues(bottom = 80.dp),
             verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
             items(
-                items = sessions,
+                items = state.sessions,
                 key = { it.date.toEpochDays() },
             ) { session ->
                 SessionCard(
@@ -95,6 +107,7 @@ fun Sessions(
             }
         }
     }
+
 }
 
 @Composable
@@ -147,13 +160,6 @@ fun SessionCard(
             )
         }
     }
-}
-
-@Composable
-fun LocalDate.format(
-    format: DateTimeFormat = DateTimeFormat.Short,
-): String = remember(this) {
-    formatDate(this, dateTimeFormat = format)
 }
 
 @Composable

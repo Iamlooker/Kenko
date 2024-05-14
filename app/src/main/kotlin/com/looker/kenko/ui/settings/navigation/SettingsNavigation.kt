@@ -16,7 +16,9 @@ fun NavController.navigateToSettings(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.settings(
     onBackPress: () -> Unit,
 ) {
-    composable(SETTINGS_ROUTE) {
+    composable(
+        route = SETTINGS_ROUTE
+    ) {
         Settings(
             onBackPress = onBackPress,
             viewModel = hiltViewModel(),

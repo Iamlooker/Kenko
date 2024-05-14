@@ -19,7 +19,9 @@ fun NavGraphBuilder.profile(
     onPlanClick: () -> Unit,
     onSettingsClick: () -> Unit,
 ) {
-    composable(PROFILE_ROUTE) {
+    composable(
+        route = PROFILE_ROUTE
+    ) {
         Profile(
             onExercisesClick = onExercisesClick,
             onAddExerciseClick = onAddExerciseClick,
