@@ -6,19 +6,22 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.looker.kenko.ui.plans.Plan
+import kotlinx.serialization.Serializable
 
-const val PLAN_ROUTE = "plan_list"
+@Serializable
+object PlanRoute
 
 fun NavController.navigateToPlans(navOptions: NavOptions? = null) {
-    navigate(PLAN_ROUTE, navOptions)
+    navigate(PlanRoute, navOptions)
 }
 
 fun NavGraphBuilder.plans(
-    onNavigateToAddPage: (Long?) -> Unit
+    onPlanClick: (Long?) -> Unit,
 ) {
-    composable(
-        route = PLAN_ROUTE,
-    ) {
-        Plan(viewModel = hiltViewModel(), onNavigateToAddPage = onNavigateToAddPage)
+    composable<PlanRoute> {
+        Plan(
+            onPlanClick = onPlanClick,
+            viewModel = hiltViewModel(),
+        )
     }
 }
