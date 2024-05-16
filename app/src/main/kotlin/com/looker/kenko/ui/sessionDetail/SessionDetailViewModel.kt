@@ -5,6 +5,7 @@ import androidx.compose.runtime.Stable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.looker.kenko.R
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.Session
@@ -12,7 +13,7 @@ import com.looker.kenko.data.model.Set
 import com.looker.kenko.data.model.localDate
 import com.looker.kenko.data.repository.PlanRepo
 import com.looker.kenko.data.repository.SessionRepo
-import com.looker.kenko.ui.sessionDetail.navigation.ARG_SESSION_ID
+import com.looker.kenko.ui.sessionDetail.navigation.SessionDetailRoute
 import com.looker.kenko.utils.asStateFlow
 import com.looker.kenko.utils.isToday
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,9 +33,9 @@ class SessionDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    private val epochDays: Int? = savedStateHandle
-        .get<Int?>(ARG_SESSION_ID)
-        .takeIf { it != -1 }
+    private val route: SessionDetailRoute = savedStateHandle.toRoute<SessionDetailRoute>()
+
+    private val epochDays: Int? = route.epochDays.takeIf { it != -1 }
 
     private val sessionDate: LocalDate = epochDays?.let {
         LocalDate.fromEpochDays(it)

@@ -6,11 +6,13 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.looker.kenko.ui.profile.Profile
+import kotlinx.serialization.Serializable
 
-const val PROFILE_ROUTE = "profile"
+@Serializable
+object ProfileRoute
 
 fun NavController.navigateToProfile(navOptions: NavOptions? = null) {
-    navigate(PROFILE_ROUTE, navOptions)
+    navigate(ProfileRoute, navOptions)
 }
 
 fun NavGraphBuilder.profile(
@@ -19,9 +21,7 @@ fun NavGraphBuilder.profile(
     onPlanClick: () -> Unit,
     onSettingsClick: () -> Unit,
 ) {
-    composable(
-        route = PROFILE_ROUTE
-    ) {
+    composable<ProfileRoute> {
         Profile(
             onExercisesClick = onExercisesClick,
             onAddExerciseClick = onAddExerciseClick,

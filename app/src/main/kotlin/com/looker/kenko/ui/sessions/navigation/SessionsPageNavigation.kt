@@ -7,17 +7,17 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.looker.kenko.ui.sessions.Sessions
 import kotlinx.datetime.LocalDate
+import kotlinx.serialization.Serializable
 
-const val SESSIONS_ROUTE = "sessions"
+@Serializable
+object SessionRoute
 
 fun NavController.navigateToSessions(navOptions: NavOptions? = null) {
-    navigate(SESSIONS_ROUTE, navOptions = navOptions)
+    navigate(SessionRoute, navOptions = navOptions)
 }
 
 fun NavGraphBuilder.sessions(onSessionClick: (LocalDate?) -> Unit) {
-    composable(
-        route = SESSIONS_ROUTE
-    ) {
+    composable<SessionRoute> {
         Sessions(
             onSessionClick = onSessionClick,
             viewModel = hiltViewModel(),

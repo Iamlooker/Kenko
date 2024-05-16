@@ -40,7 +40,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.Samples
@@ -60,9 +59,10 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 
 @Composable
-fun SessionDetails(onBackPress: () -> Unit) {
-    val viewModel: SessionDetailViewModel = hiltViewModel()
-
+fun SessionDetails(
+    viewModel: SessionDetailViewModel,
+    onBackPress: () -> Unit,
+) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     SessionDetail(
         state = state,
