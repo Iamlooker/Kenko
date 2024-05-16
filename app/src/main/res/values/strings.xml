@@ -108,6 +108,7 @@
     <string name="error_invalid_url">Invalid URL</string>
     <string name="error_plan_name_empty">Enter a plan name</string>
     <string name="error_plan_empty">Plan is empty</string>
+    <string name="label_current_plan">Current Plan</string>
 
     <string-array name="label_health_quotes">
         <item>you can do it</item>

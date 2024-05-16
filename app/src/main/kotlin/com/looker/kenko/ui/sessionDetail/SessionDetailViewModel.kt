@@ -37,7 +37,7 @@ class SessionDetailViewModel @Inject constructor(
 
     private val routeData: SessionDetailRoute = savedStateHandle.toRoute<SessionDetailRoute>()
 
-    private val epochDays: Int? = routeData.epochDays
+    private val epochDays: Int? = routeData.epochDays.takeIf { it != -1 }
 
     private val sessionDate: LocalDate = epochDays?.let {
         LocalDate.fromEpochDays(it)

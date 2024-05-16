@@ -10,11 +10,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PlanEditRoute(
-    val id: Long?,
+    val id: Long,
 )
 
 fun NavController.navigateToPlanEdit(id: Long? = null, navOptions: NavOptions? = null) {
-    navigate(PlanEditRoute(id), navOptions)
+    navigate(PlanEditRoute(id ?: -1L), navOptions)
 }
 
 fun NavGraphBuilder.planEdit(

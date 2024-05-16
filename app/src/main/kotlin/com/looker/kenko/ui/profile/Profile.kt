@@ -179,7 +179,7 @@ private fun CurrentPlanCard(
             Icon(imageVector = KenkoIcons.Plan, contentDescription = null)
             Spacer(modifier = Modifier.width(12.dp))
             Text(
-                text = "Current Plan",
+                text = stringResource(R.string.label_current_plan),
                 style = MaterialTheme.typography.titleMedium
             )
             Spacer(modifier = Modifier.weight(1F))

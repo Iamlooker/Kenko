@@ -38,7 +38,7 @@ class PlanEditViewModel @Inject constructor(
 
     private val routeData: PlanEditRoute = savedStateHandle.toRoute<PlanEditRoute>()
 
-    private val planId: Long? = routeData.id
+    private val planId: Long? = routeData.id.takeIf { it != -1L }
 
     private val planStream: Flow<Plan?> = repo.get(planId)
 

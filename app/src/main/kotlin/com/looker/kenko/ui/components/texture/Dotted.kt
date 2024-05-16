@@ -6,7 +6,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.geometry.center
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.DrawScope
 import kotlin.random.Random
 
 private const val DOT_SIZE = 3F
@@ -75,4 +74,14 @@ sealed interface GradientStart {
     data object BottomRight : GradientStart
 
     data class Custom(val offset: CacheDrawScope.() -> Offset) : GradientStart
+}
+
+sealed interface GradientType {
+
+    data object Vertical : GradientType
+
+    data object Horizontal : GradientType
+
+    data object Radial : GradientType
+
 }

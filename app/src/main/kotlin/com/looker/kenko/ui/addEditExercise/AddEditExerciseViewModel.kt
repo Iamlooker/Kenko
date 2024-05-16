@@ -34,7 +34,7 @@ class AddEditExerciseViewModel @Inject constructor(
 
     private val defaultExerciseName: String? = routeData.exerciseName
 
-    private val defaultTarget: MuscleGroups? = routeData.target
+    private val defaultTarget: MuscleGroups? = routeData.target?.let { MuscleGroups.valueOf(it) }
 
     private val targetMuscle = MutableStateFlow(MuscleGroups.Chest)
 
