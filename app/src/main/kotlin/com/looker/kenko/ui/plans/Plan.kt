@@ -14,6 +14,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
@@ -21,15 +22,29 @@ import com.looker.kenko.data.model.Plan
 import com.looker.kenko.ui.helper.plus
 import com.looker.kenko.ui.plans.components.PlanItem
 import com.looker.kenko.ui.theme.KenkoIcons
+import com.looker.kenko.ui.theme.KenkoTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Plan(
     viewModel: PlanViewModel,
-    onNavigateToAddPage: (Long?) -> Unit,
+    onPlanClick: (Long?) -> Unit,
 ) {
     val plans: List<Plan> by viewModel.plans.collectAsStateWithLifecycle()
 
+    Plan(
+        plans = plans,
+        onSelectPlan = viewModel::switchPlan,
+        onPlanClick = onPlanClick,
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun Plan(
+    plans: List<Plan>,
+    onSelectPlan: (Plan) -> Unit,
+    onPlanClick: (Long?) -> Unit,
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -39,7 +54,7 @@ fun Plan(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { onNavigateToAddPage(null) }) {
+            FloatingActionButton(onClick = { onPlanClick(null) }) {
                 Icon(imageVector = KenkoIcons.Add, contentDescription = null)
             }
         },
@@ -51,11 +66,23 @@ fun Plan(
             items(items = plans) { plan ->
                 PlanItem(
                     plan = plan,
-                    onClick = { onNavigateToAddPage(plan.id) },
-                    onActiveChange = { viewModel.switchPlan(plan) },
+                    onClick = { onPlanClick(plan.id!!) },
+                    onActiveChange = { onSelectPlan(plan) },
                 )
                 HorizontalDivider()
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun PlanPreview() {
+    KenkoTheme {
+        Plan(
+            plans = emptyList(),
+            onSelectPlan = {},
+            onPlanClick = {}
+        )
     }
 }
