@@ -11,9 +11,15 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.looker.kenko.ui.navigation.TopLevelDestinations
+import com.looker.kenko.ui.navigation.TopLevelDestinations.Home
+import com.looker.kenko.ui.navigation.TopLevelDestinations.Performance
+import com.looker.kenko.ui.navigation.TopLevelDestinations.Profile
 import com.looker.kenko.ui.performance.navigation.PerformanceRoute
+import com.looker.kenko.ui.performance.navigation.navigateToPerformance
 import com.looker.kenko.ui.profile.navigation.ProfileRoute
+import com.looker.kenko.ui.profile.navigation.navigateToProfile
 import com.looker.kenko.ui.sessions.navigation.SessionRoute
+import com.looker.kenko.ui.sessions.navigation.navigateToSessions
 
 @Composable
 fun rememberKenkoAppState(
@@ -27,15 +33,15 @@ class KenkoAppState(
     val navController: NavController,
 ) {
 
-    val currentDestination: NavDestination?
+    private val currentDestination: NavDestination?
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination
 
     val currentTopLevelDestination: TopLevelDestinations?
         @Composable get() = when {
             currentDestination == null -> null
-            currentDestination?.hasRoute(SessionRoute::class) == true -> TopLevelDestinations.Home
-            currentDestination?.hasRoute(ProfileRoute::class) == true -> TopLevelDestinations.Profile
-            currentDestination?.hasRoute(PerformanceRoute::class) == true -> TopLevelDestinations.Performance
+            currentDestination?.hasRoute(SessionRoute::class) == true -> Home
+            currentDestination?.hasRoute(ProfileRoute::class) == true -> Profile
+            currentDestination?.hasRoute(PerformanceRoute::class) == true -> Performance
             else -> null
         }
 
@@ -53,9 +59,9 @@ class KenkoAppState(
             restoreState = true
         }
         when (topLevelDestination) {
-            TopLevelDestinations.Performance -> navController.navigate(PerformanceRoute, topLevelNavOptions)
-            TopLevelDestinations.Home -> navController.navigate(SessionRoute, topLevelNavOptions)
-            TopLevelDestinations.Profile -> navController.navigate(ProfileRoute, topLevelNavOptions)
+            Performance -> navController.navigateToPerformance(topLevelNavOptions)
+            Home -> navController.navigateToSessions(topLevelNavOptions)
+            Profile -> navController.navigateToProfile(topLevelNavOptions)
         }
     }
 }
