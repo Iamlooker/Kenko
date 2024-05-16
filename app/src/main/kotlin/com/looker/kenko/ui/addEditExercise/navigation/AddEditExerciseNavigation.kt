@@ -8,11 +8,6 @@ import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.ui.addEditExercise.AddEditExercise
 import kotlinx.serialization.Serializable
 
-const val ADD_EDIT_EXERCISE_ROUTE = "add_edit_exercise"
-
-const val ARG_EXERCISE_NAME = "exercise_name"
-const val ARG_TARGET_NAME = "target_name"
-
 @Serializable
 data class AddEditExerciseRoute(
     val exerciseName: String? = null,

@@ -1,25 +1,26 @@
 package com.looker.kenko.ui.planEdit
 
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.looker.kenko.R
 import com.looker.kenko.data.StringHandler
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.Plan
 import com.looker.kenko.data.repository.PlanRepo
-import com.looker.kenko.ui.planEdit.navigation.ARG_PLAN_ID
+import com.looker.kenko.ui.planEdit.navigation.PlanEditRoute
 import com.looker.kenko.utils.asStateFlow
 import com.looker.kenko.utils.updateAsMutable
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
@@ -35,7 +36,9 @@ class PlanEditViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    private val planId: Long? = savedStateHandle.get<Long?>(ARG_PLAN_ID)?.takeIf { it != -1L }
+    private val routeData: PlanEditRoute = savedStateHandle.toRoute<PlanEditRoute>()
+
+    private val planId: Long? = routeData.id
 
     private val planStream: Flow<Plan?> = repo.get(planId)
 
@@ -48,17 +51,21 @@ class PlanEditViewModel @Inject constructor(
         MutableStateFlow<Map<DayOfWeek, List<Exercise>>>(emptyMap())
 
     private val _dayOfWeek: MutableStateFlow<DayOfWeek> = MutableStateFlow(DayOfWeek.THURSDAY)
-    val dayOfWeek: StateFlow<DayOfWeek> = _dayOfWeek.asStateFlow()
 
     private val _isSheetVisible: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val isSheetVisible: StateFlow<Boolean> = _isSheetVisible.asStateFlow()
 
-    val exercisesList = combine(
-        dayOfWeek,
-        _dayAndExercises
-    ) { day, exerciseMap ->
-        exerciseMap[day] ?: emptyList()
-    }.asStateFlow(emptyList())
+    val state: StateFlow<PlanEditUiData> = combine(
+        _dayOfWeek,
+        _dayAndExercises,
+        _isSheetVisible,
+    ) { day, exerciseMap, sheetVisible ->
+        val exercises = exerciseMap[day] ?: emptyList()
+        PlanEditUiData(
+            currentDay = day,
+            isSheetVisible = sheetVisible,
+            exercises = exercises,
+        )
+    }.asStateFlow(PlanEditUiData(DayOfWeek.THURSDAY, false, emptyList()))
 
     fun setName(value: String) {
         planName = value
@@ -83,11 +90,11 @@ class PlanEditViewModel @Inject constructor(
     }
 
     fun addExercise(exercise: Exercise) {
-        modifyExercise(dayOfWeek.value) { add(exercise) }
+        modifyExercise(state.value.currentDay) { add(exercise) }
     }
 
     fun removeExercise(exercise: Exercise) {
-        modifyExercise(dayOfWeek.value) { remove(exercise) }
+        modifyExercise(state.value.currentDay) { remove(exercise) }
     }
 
     fun savePlan(onDone: () -> Unit) {
@@ -148,3 +155,10 @@ class PlanEditViewModel @Inject constructor(
         }
     }
 }
+
+@Stable
+data class PlanEditUiData(
+    val currentDay: DayOfWeek,
+    val isSheetVisible: Boolean,
+    val exercises: List<Exercise>,
+)

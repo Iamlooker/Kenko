@@ -11,11 +11,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SessionDetailRoute(
-    val epochDays: Int,
+    val epochDays: Int?,
 )
 
 fun NavController.navigateToSessionDetail(date: LocalDate?, navOptions: NavOptions? = null) {
-    navigate(SessionDetailRoute(date?.toEpochDays() ?: -1), navOptions)
+    navigate(SessionDetailRoute(date?.toEpochDays()), navOptions)
 }
 
 fun NavGraphBuilder.sessionDetail(

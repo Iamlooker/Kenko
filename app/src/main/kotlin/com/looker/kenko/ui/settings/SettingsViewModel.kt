@@ -1,5 +1,6 @@
 package com.looker.kenko.ui.settings
 
+import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.looker.kenko.data.model.settings.ColorPalettes
@@ -37,6 +38,7 @@ class SettingsViewModel @Inject constructor(
     }
 }
 
+@Stable
 data class SettingsUiData(
     val selectedTheme: Theme,
     val selectedColorPalette: ColorPalettes,
