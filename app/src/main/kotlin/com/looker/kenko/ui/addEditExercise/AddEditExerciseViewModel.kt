@@ -7,17 +7,18 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.data.repository.ExerciseRepo
-import com.looker.kenko.ui.addEditExercise.navigation.ARG_EXERCISE_NAME
-import com.looker.kenko.ui.addEditExercise.navigation.ARG_TARGET_NAME
+import com.looker.kenko.ui.addEditExercise.navigation.AddEditExerciseRoute
 import com.looker.kenko.utils.asStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -29,17 +30,17 @@ class AddEditExerciseViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    private val defaultExerciseName: String? = savedStateHandle[ARG_EXERCISE_NAME]
+    private val routeData = savedStateHandle.toRoute<AddEditExerciseRoute>()
 
-    private val defaultTargetName: String? = savedStateHandle[ARG_TARGET_NAME]
+    private val defaultExerciseName: String? = routeData.exerciseName
 
-    private val _targetMuscle = MutableStateFlow(MuscleGroups.Chest)
-    val targetMuscle: StateFlow<MuscleGroups> = _targetMuscle.asStateFlow()
+    private val defaultTarget: MuscleGroups? = routeData.target
 
-    private val _isIsometric = MutableStateFlow(false)
-    val isIsometric: StateFlow<Boolean> = _isIsometric.asStateFlow()
+    private val targetMuscle = MutableStateFlow(MuscleGroups.Chest)
 
-    val isReadOnly: Boolean = defaultExerciseName != null
+    private val isIsometric = MutableStateFlow(false)
+
+    private val isReadOnly: Boolean = defaultExerciseName != null
 
     var exerciseName: String by mutableStateOf(defaultExerciseName ?: "")
         private set
@@ -47,10 +48,30 @@ class AddEditExerciseViewModel @Inject constructor(
     var reference: String by mutableStateOf("")
         private set
 
-    val exerciseAlreadyExistError: StateFlow<Boolean> =
+    private val exerciseAlreadyExistError: Flow<Boolean> =
         snapshotFlow { exerciseName }
             .mapLatest { repo.isExerciseAvailable(it) && !isReadOnly }
-            .asStateFlow(false)
+
+    val state = combine(
+        targetMuscle,
+        isIsometric,
+        flowOf(isReadOnly),
+        exerciseAlreadyExistError
+    ) { target, isometric, readOnly, alreadyExist ->
+        AddEditExerciseUiState(
+            targetMuscle = target,
+            isIsometric = isometric,
+            isReadOnly = readOnly,
+            isError = alreadyExist
+        )
+    }.asStateFlow(
+        AddEditExerciseUiState(
+            targetMuscle = MuscleGroups.Chest,
+            isIsometric = false,
+            isError = false,
+            isReadOnly = false,
+        )
+    )
 
     fun setName(value: String) {
         exerciseName = value
@@ -62,13 +83,13 @@ class AddEditExerciseViewModel @Inject constructor(
 
     fun setTargetMuscle(value: MuscleGroups) {
         viewModelScope.launch {
-            _targetMuscle.emit(value)
+            targetMuscle.emit(value)
         }
     }
 
     fun setIsometric(value: Boolean) {
         viewModelScope.launch {
-            _isIsometric.emit(value)
+            isIsometric.emit(value)
         }
     }
 
@@ -95,9 +116,17 @@ class AddEditExerciseViewModel @Inject constructor(
                     setIsometric(it.isIsometric)
                     setTargetMuscle(it.target)
                 }
-            } else if (defaultTargetName != null) {
-                setTargetMuscle(MuscleGroups.valueOf(defaultTargetName))
+            } else if (defaultTarget != null) {
+                setTargetMuscle(defaultTarget)
             }
         }
     }
 }
+
+data class AddEditExerciseUiState(
+    val targetMuscle: MuscleGroups,
+    val isIsometric: Boolean,
+    val isError: Boolean,
+    val isReadOnly: Boolean,
+)
+

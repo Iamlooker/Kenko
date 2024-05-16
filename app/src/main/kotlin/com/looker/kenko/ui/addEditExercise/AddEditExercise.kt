@@ -45,15 +45,39 @@ import com.looker.kenko.ui.theme.KenkoTheme
 @Composable
 fun AddEditExercise(onDone: () -> Unit) {
     val viewModel: AddEditExerciseViewModel = hiltViewModel()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
+    AddEditExercise(
+        exerciseName = viewModel.exerciseName,
+        exerciseReference = viewModel.reference,
+        state = state,
+        onSelectTarget = viewModel::setTargetMuscle,
+        onSelectIsometric = viewModel::setIsometric,
+        onNameChange = viewModel::setName,
+        onReferenceChange = viewModel::addReference,
+        onDone = {
+            viewModel.addNewExercise()
+            onDone()
+        }
+    )
+}
+
+@Composable
+private fun AddEditExercise(
+    exerciseName: String,
+    exerciseReference: String,
+    state: AddEditExerciseUiState,
+    onSelectTarget: (MuscleGroups) -> Unit,
+    onSelectIsometric: (Boolean) -> Unit,
+    onNameChange: (String) -> Unit,
+    onReferenceChange: (String) -> Unit,
+    onDone: () -> Unit,
+) {
     Column(
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .statusBarsPadding(),
     ) {
-        val isError by viewModel.exerciseAlreadyExistError.collectAsStateWithLifecycle()
-        val isIsometric by viewModel.isIsometric.collectAsStateWithLifecycle()
-        val target by viewModel.targetMuscle.collectAsStateWithLifecycle()
         Spacer(modifier = Modifier.height(32.dp))
         Text(
             text = stringResource(R.string.label_new_exercise),
@@ -62,10 +86,10 @@ fun AddEditExercise(onDone: () -> Unit) {
         )
         Spacer(modifier = Modifier.height(32.dp))
         ExerciseTextField(
-            exerciseName = viewModel.exerciseName,
-            onNameChange = viewModel::setName,
-            isError = isError,
-            isReadOnly = viewModel.isReadOnly,
+            exerciseName = exerciseName,
+            onNameChange = onNameChange,
+            isError = state.isError,
+            isReadOnly = state.isReadOnly,
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(8.dp))
@@ -75,13 +99,13 @@ fun AddEditExercise(onDone: () -> Unit) {
             color = MaterialTheme.colorScheme.outline
         )
         Spacer(modifier = Modifier.height(8.dp))
-        TargetMuscleSelection(target = target, onSet = viewModel::setTargetMuscle)
+        TargetMuscleSelection(target = state.targetMuscle, onSet = onSelectTarget)
         Spacer(modifier = Modifier.height(12.dp))
-        IsIsometricButton(isIsometric = isIsometric, onChange = viewModel::setIsometric)
+        IsIsometricButton(isIsometric = state.isIsometric, onChange = onSelectIsometric)
         Spacer(modifier = Modifier.height(18.dp))
         ReferenceTextField(
-            reference = viewModel.reference,
-            onReferenceChange = viewModel::addReference,
+            reference = exerciseReference,
+            onReferenceChange = onReferenceChange,
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(18.dp))
@@ -90,10 +114,7 @@ fun AddEditExercise(onDone: () -> Unit) {
                 .align(Alignment.CenterHorizontally)
                 .padding(12.dp)
                 .navigationBarsPadding(),
-            onClick = {
-                viewModel.addNewExercise()
-                onDone()
-            },
+            onClick = onDone,
             contentPadding = PaddingValues(vertical = 32.dp, horizontal = 48.dp)
         ) {
             Icon(
@@ -249,5 +270,23 @@ private fun ErrorNameTextFieldPreview() {
             isReadOnly = true,
             modifier = Modifier.fillMaxWidth()
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun AddEditPreview() {
+    KenkoTheme {
+        AddEditExercise(
+            exerciseName = "BenchPress",
+            exerciseReference = "yt.be",
+            state = AddEditExerciseUiState(MuscleGroups.Chest, false, false, false),
+            onSelectTarget = {},
+            onSelectIsometric = {},
+            onNameChange = {},
+            onReferenceChange = {}
+        ) {
+
+        }
     }
 }
