@@ -6,19 +6,19 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.looker.kenko.ui.settings.Settings
+import kotlinx.serialization.Serializable
 
-const val SETTINGS_ROUTE = "settings"
+@Serializable
+object SettingsRoute
 
 fun NavController.navigateToSettings(navOptions: NavOptions? = null) {
-    navigate(SETTINGS_ROUTE, navOptions)
+    navigate(SettingsRoute, navOptions)
 }
 
 fun NavGraphBuilder.settings(
     onBackPress: () -> Unit,
 ) {
-    composable(
-        route = SETTINGS_ROUTE
-    ) {
+    composable<SettingsRoute> {
         Settings(
             onBackPress = onBackPress,
             viewModel = hiltViewModel(),
