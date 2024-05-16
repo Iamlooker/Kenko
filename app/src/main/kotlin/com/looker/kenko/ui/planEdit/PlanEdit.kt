@@ -25,6 +25,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -39,7 +40,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
 import com.looker.kenko.data.model.Exercise
@@ -50,40 +50,72 @@ import com.looker.kenko.ui.components.ErrorSnackbar
 import com.looker.kenko.ui.components.kenkoTextFieldColor
 import com.looker.kenko.ui.helper.normalizeInt
 import com.looker.kenko.ui.helper.vertical
-import com.looker.kenko.ui.planEdit.components.SelectExerciseButton
 import com.looker.kenko.ui.planEdit.components.DayItem
 import com.looker.kenko.ui.planEdit.components.DaySelector
 import com.looker.kenko.ui.planEdit.components.ExerciseItem
+import com.looker.kenko.ui.planEdit.components.SelectExerciseButton
 import com.looker.kenko.ui.planEdit.components.dayName
 import com.looker.kenko.ui.selectExercise.SelectExercise
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 import kotlinx.coroutines.launch
+import kotlinx.datetime.DayOfWeek
+
+@Composable
+fun PlanEdit(
+    viewModel: PlanEditViewModel,
+    onBackPress: () -> Unit,
+    onAddNewExerciseClick: () -> Unit,
+) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    PlanEdit(
+        snackbarHostState = viewModel.snackbarState,
+        state = state,
+        planName = viewModel.planName,
+        onSelectDay = viewModel::setCurrentDay,
+        onNameChange = viewModel::setName,
+        onAddExercisesClick = viewModel::openSheet,
+        onRemoveExerciseClick = viewModel::removeExercise,
+        onSaveClick = viewModel::savePlan,
+        onBackPress = onBackPress,
+    )
+
+    if (state.isSheetVisible) {
+        AddExerciseSheet(
+            onDismiss = viewModel::closeSheet,
+            onDone = viewModel::addExercise,
+            onAddNewExerciseClick = onAddNewExerciseClick
+        )
+    }
+}
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun PlanEdit(
+private fun PlanEdit(
+    snackbarHostState: SnackbarHostState,
+    state: PlanEditUiData,
+    planName: String,
+    onSelectDay: (DayOfWeek) -> Unit,
+    onNameChange: (String) -> Unit,
+    onAddExercisesClick: () -> Unit,
+    onRemoveExerciseClick: (Exercise) -> Unit,
+    onSaveClick: (() -> Unit) -> Unit,
     onBackPress: () -> Unit,
-    onRequestNewExercise: () -> Unit,
 ) {
-    val viewModel: PlanEditViewModel = hiltViewModel()
-
     val focusManager = LocalFocusManager.current
-    val currentDayOfWeek by viewModel.dayOfWeek.collectAsStateWithLifecycle()
-    val isSheetVisible by viewModel.isSheetVisible.collectAsStateWithLifecycle()
-    val currentExercises by viewModel.exercisesList.collectAsStateWithLifecycle()
-    val isCurrentDayBlank by remember { derivedStateOf { currentExercises.isEmpty() } }
+    val isCurrentDayBlank by remember { derivedStateOf { state.exercises.isEmpty() } }
     Scaffold(
         floatingActionButton = {
             SelectExerciseButton(
                 onClick = {
                     focusManager.clearFocus()
-                    viewModel.openSheet()
+                    onAddExercisesClick()
                 }
             )
         },
         snackbarHost = {
-            SnackbarHost(hostState = viewModel.snackbarState) {
+            SnackbarHost(hostState = snackbarHostState) {
                 ErrorSnackbar(data = it)
             }
         },
@@ -101,7 +133,7 @@ fun PlanEdit(
                     .align(Alignment.TopStart)
                     .offset(x = (-10).dp, y = 30.dp)
                     .vertical(false),
-                text = dayName(dayOfWeek = currentDayOfWeek),
+                text = dayName(dayOfWeek = state.currentDay),
                 style = MaterialTheme.typography.displayLarge,
                 color = MaterialTheme.colorScheme.surfaceContainer,
             )
@@ -121,7 +153,7 @@ fun PlanEdit(
                     ) {
                         BackButton(onClick = onBackPress)
                         OutlinedButton(
-                            onClick = { viewModel.savePlan(onBackPress) },
+                            onClick = { onSaveClick(onBackPress) },
                             colors = ButtonDefaults.outlinedButtonColors(
                                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
                                 contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
@@ -135,9 +167,9 @@ fun PlanEdit(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp),
-                        value = viewModel.planName,
+                        value = planName,
                         shape = MaterialTheme.shapes.medium,
-                        onValueChange = viewModel::setName,
+                        onValueChange = onNameChange,
                         colors = kenkoTextFieldColor(),
                         label = {
                             Text(text = stringResource(R.string.label_name))
@@ -151,10 +183,10 @@ fun PlanEdit(
                         dayItem = {
                             DayItem(
                                 dayOfWeek = it,
-                                isSelected = it == currentDayOfWeek,
+                                isSelected = it == state.currentDay,
                                 onClick = {
                                     focusManager.clearFocus()
-                                    viewModel.setCurrentDay(it)
+                                    onSelectDay(it)
                                 },
                             )
                         }
@@ -175,27 +207,19 @@ fun PlanEdit(
                     }
                 }
             } else {
-                itemsIndexed(currentExercises) { index, exercise ->
+                itemsIndexed(state.exercises) { index, exercise ->
                     ExerciseItem(exercise = exercise) {
                         ExerciseItemActions(
                             index = index,
                             onRemove = {
                                 focusManager.clearFocus()
-                                viewModel.removeExercise(exercise)
+                                onRemoveExerciseClick(exercise)
                             },
                         )
                     }
                 }
             }
         }
-    }
-
-    if (isSheetVisible) {
-        AddExerciseSheet(
-            onDismiss = viewModel::closeSheet,
-            onDone = viewModel::addExercise,
-            onRequestNewExercise = onRequestNewExercise
-        )
     }
 }
 
@@ -225,7 +249,7 @@ private fun ExerciseItemActions(
 private fun AddExerciseSheet(
     onDismiss: () -> Unit,
     onDone: (Exercise) -> Unit,
-    onRequestNewExercise: () -> Unit,
+    onAddNewExerciseClick: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val state = rememberModalBottomSheetState()
@@ -239,7 +263,7 @@ private fun AddExerciseSheet(
                     if (!state.isVisible) onDismiss()
                 }
             },
-            onRequestNewExercise = onRequestNewExercise,
+            onRequestNewExercise = onAddNewExerciseClick,
         )
     }
 }
