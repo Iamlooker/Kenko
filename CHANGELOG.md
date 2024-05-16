@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Back button on Exercises Page
 - Whole Plan card is clickable
+- Option to open References from workout page(if added)
 
 ### Changed
 - Splash Screen Image to reduce dependency on `NonFreeNet`
@@ -20,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Zestful` Color Palettes
 - Crash when using invalid reference
 - UI/UX for Exercises Page
+- Some navigation crashes
 
 ## [1.0.0] - 2024-05-12
 
