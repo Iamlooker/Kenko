@@ -2,6 +2,7 @@ package com.looker.kenko.ui.sessionDetail
 
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Stable
+import androidx.compose.ui.platform.UriHandler
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -31,6 +32,7 @@ class SessionDetailViewModel @Inject constructor(
     repo: SessionRepo,
     planRepo: PlanRepo,
     savedStateHandle: SavedStateHandle,
+    private val uriHandler: UriHandler,
 ) : ViewModel() {
 
     private val routeData: SessionDetailRoute = savedStateHandle.toRoute<SessionDetailRoute>()
@@ -87,6 +89,16 @@ class SessionDetailViewModel @Inject constructor(
     fun hideSheet() {
         viewModelScope.launch {
             _currentExercise.emit(null)
+        }
+    }
+
+    fun openReference(reference: String) {
+        viewModelScope.launch {
+            try {
+                uriHandler.openUri(reference)
+            } catch (e: IllegalStateException) {
+                // do nothing
+            }
         }
     }
 }

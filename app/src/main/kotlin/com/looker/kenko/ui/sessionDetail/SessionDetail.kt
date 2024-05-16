@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -41,6 +42,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.Samples
 import com.looker.kenko.data.model.Session
@@ -67,7 +69,8 @@ fun SessionDetails(
     SessionDetail(
         state = state,
         onBackPress = onBackPress,
-        onSelectBottomSheet = { viewModel.showBottomSheet(it) },
+        onReferenceClick = viewModel::openReference,
+        onSelectBottomSheet = viewModel::showBottomSheet,
     )
     val exercise by viewModel.current.collectAsStateWithLifecycle()
     if (exercise != null) {
@@ -82,6 +85,7 @@ fun SessionDetails(
 private fun SessionDetail(
     state: SessionDetailState,
     onBackPress: () -> Unit,
+    onReferenceClick: (String) -> Unit,
     onSelectBottomSheet: (Exercise) -> Unit,
 ) {
     when (state) {
@@ -125,6 +129,7 @@ private fun SessionDetail(
                 exerciseSets = data.sets,
                 isEditable = data.isToday,
                 onBackPress = onBackPress,
+                onReferenceClick = onReferenceClick,
                 onSelectBottomSheet = onSelectBottomSheet,
             )
         }
@@ -137,6 +142,7 @@ private fun SessionList(
     exerciseSets: Map<Exercise, List<Set>>?,
     isEditable: Boolean,
     onBackPress: () -> Unit,
+    onReferenceClick: (String) -> Unit,
     onSelectBottomSheet: (Exercise) -> Unit,
 ) {
     LazyVerticalGrid(
@@ -158,6 +164,11 @@ private fun SessionList(
                 span = { GridItemSpan(maxLineSpan) },
             ) {
                 StickyHeader(name = exercise.name) {
+                    if (exercise.reference != null) {
+                        FilledTonalIconButton(onClick = { onReferenceClick(exercise.reference) }) {
+                            Icon(imageVector = KenkoIcons.Lightbulb, contentDescription = null)
+                        }
+                    }
                     if (isEditable) {
                         FilledTonalIconButton(onClick = { onSelectBottomSheet(exercise) }) {
                             Icon(imageVector = KenkoIcons.Add, contentDescription = null)
@@ -229,7 +240,7 @@ private fun Header(
 @Composable
 private fun StickyHeader(
     name: String,
-    actions: (@Composable () -> Unit)? = null,
+    actions: (@Composable RowScope.() -> Unit)? = null,
 ) {
     Surface(
         color = MaterialTheme.colorScheme.surfaceContainerLow
@@ -240,13 +251,13 @@ private fun StickyHeader(
                 .heightIn(24.dp)
                 .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
                 text = name,
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.primary
             )
+            Spacer(modifier = Modifier.weight(1F))
             if (actions != null) {
                 actions()
             }
@@ -313,6 +324,7 @@ private fun SessionDetailPreview() {
             SessionDetail(
                 state = data,
                 onBackPress = {},
+                onReferenceClick = {},
                 onSelectBottomSheet = {},
             )
         }
@@ -330,6 +342,7 @@ private fun SessionErrorPreview() {
             SessionDetail(
                 state = data,
                 onBackPress = {},
+                onReferenceClick = {},
                 onSelectBottomSheet = {},
             )
         }

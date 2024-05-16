@@ -27,13 +27,13 @@ private const val REST_PAUSE_SET_RATING_MODIFIER: Double = 1.2
 
 val Set.Companion.Samples: List<Set>
     get() = listOf(
-        Set(12, 55.0, SetType.Standard, Exercise("Bench", MuscleGroups.Chest)),
-        Set(12, 55.0, SetType.Standard, Exercise("Bench", MuscleGroups.Chest)),
-        Set(12, 55.0, SetType.Standard, Exercise("Bench", MuscleGroups.Chest)),
-        Set(12, 55.0, SetType.Standard, Exercise("Incline Bench", MuscleGroups.Chest)),
-        Set(12, 55.0, SetType.Standard, Exercise("Incline Bench", MuscleGroups.Chest)),
-        Set(12, 55.0, SetType.Standard, Exercise("Incline Bench", MuscleGroups.Chest)),
-        Set(12, 55.0, SetType.Standard, Exercise("Pec-Dec", MuscleGroups.Chest)),
-        Set(12, 55.0, SetType.Standard, Exercise("Pec-Dec", MuscleGroups.Chest)),
-        Set(12, 55.0, SetType.Standard, Exercise("Pec-Dec", MuscleGroups.Chest)),
+        Set(12, 55.0, SetType.Standard, Exercise("Bench", MuscleGroups.Chest, ".reference")),
+        Set(12, 55.0, SetType.Standard, Exercise("Bench", MuscleGroups.Chest, ".reference")),
+        Set(12, 55.0, SetType.Standard, Exercise("Bench", MuscleGroups.Chest, ".reference")),
+        Set(12, 55.0, SetType.Standard, Exercise("Incline Bench", MuscleGroups.Chest, ".reference")),
+        Set(12, 55.0, SetType.Standard, Exercise("Incline Bench", MuscleGroups.Chest, ".reference")),
+        Set(12, 55.0, SetType.Standard, Exercise("Incline Bench", MuscleGroups.Chest, ".reference")),
+        Set(12, 55.0, SetType.Standard, Exercise("Pec-Dec", MuscleGroups.Chest, ".reference")),
+        Set(12, 55.0, SetType.Standard, Exercise("Pec-Dec", MuscleGroups.Chest, ".reference")),
+        Set(12, 55.0, SetType.Standard, Exercise("Pec-Dec", MuscleGroups.Chest, ".reference")),
     )
