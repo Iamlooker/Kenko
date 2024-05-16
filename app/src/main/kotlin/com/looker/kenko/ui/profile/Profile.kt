@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -26,6 +27,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -47,6 +49,7 @@ import com.looker.kenko.ui.components.OnSurfaceVariantBorder
 import com.looker.kenko.ui.components.PrimaryBorder
 import com.looker.kenko.ui.components.SecondaryBorder
 import com.looker.kenko.ui.helper.normalizeInt
+import com.looker.kenko.ui.helper.plus
 import com.looker.kenko.ui.helper.vertical
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
@@ -87,11 +90,13 @@ private fun Profile(
     onExercisesClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Surface {
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.surface
+    ) { innerPadding ->
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .padding(start = 16.dp, end = 16.dp, bottom = 80.dp)
+                .padding(innerPadding + PaddingValues(start = 16.dp, end = 16.dp, bottom = 80.dp))
                 .verticalScroll(rememberScrollState())
         ) {
             Header(onSettingsClick = onSettingsClick)
