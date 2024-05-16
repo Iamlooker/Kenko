@@ -56,8 +56,8 @@ import kotlinx.coroutines.delay
 @Composable
 fun GetStarted(onNext: (Boolean) -> Unit) {
     val viewModel: GetStartedViewModel = hiltViewModel()
-    val isOnboardingDone by viewModel.isOnboardingDone.collectAsStateWithLifecycle()
 
+    val isOnboardingDone by viewModel.isOnboardingDone.collectAsStateWithLifecycle()
     val updatedOnNext by rememberUpdatedState(newValue = onNext)
 
     LaunchedEffect(isOnboardingDone) {
@@ -67,6 +67,17 @@ fun GetStarted(onNext: (Boolean) -> Unit) {
         }
     }
 
+    GetStarted(
+        isOnboardingDone = isOnboardingDone,
+        onNextClick = updatedOnNext,
+    )
+}
+
+@Composable
+private fun GetStarted(
+    isOnboardingDone: Boolean,
+    onNextClick: (Boolean) -> Unit,
+) {
     Surface {
         Box(
             modifier = Modifier.fillMaxSize()
@@ -115,7 +126,7 @@ fun GetStarted(onNext: (Boolean) -> Unit) {
                                         }
                                 )
                             },
-                            onClick = { updatedOnNext(isOnboardingDone) }
+                            onClick = { onNextClick(isOnboardingDone) }
                         )
                     }
                 }
@@ -288,5 +299,13 @@ private fun ButtonIcon(
 private fun HeroPreview() {
     KenkoTheme {
         ButtonGroup(onClick = {}, buttonIcon = { ButtonIcon() })
+    }
+}
+
+@Preview
+@Composable
+private fun GetStartedPreview() {
+    KenkoTheme {
+        GetStarted(isOnboardingDone = false, onNextClick = {})
     }
 }
