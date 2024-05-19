@@ -8,12 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- New Home Page
 - Back button on Exercises Page
-- Whole Plan card is clickable
 - Option to open References from workout page(if added)
 
 ### Changed
 - Splash Screen Image to reduce dependency on `NonFreeNet`
+- Whole Plan card is clickable
 
 ### Fixed
 - APK dependency tree encryption
