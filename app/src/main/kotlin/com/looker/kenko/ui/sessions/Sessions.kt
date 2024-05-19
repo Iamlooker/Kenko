@@ -61,7 +61,7 @@ private fun Sessions(
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
-        modifier = modifier.padding(bottom = 80.dp),
+        modifier = modifier,
         floatingActionButton = {
             Button(
                 onClick = { onSessionClick(null) },
