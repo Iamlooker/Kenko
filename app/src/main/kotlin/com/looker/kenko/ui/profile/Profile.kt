@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -46,8 +47,8 @@ import com.looker.kenko.R
 import com.looker.kenko.ui.components.HealthQuotes
 import com.looker.kenko.ui.components.KenkoBorderWidth
 import com.looker.kenko.ui.components.OnSurfaceVariantBorder
-import com.looker.kenko.ui.components.PrimaryBorder
 import com.looker.kenko.ui.components.SecondaryBorder
+import com.looker.kenko.ui.helper.PHI
 import com.looker.kenko.ui.helper.normalizeInt
 import com.looker.kenko.ui.helper.plus
 import com.looker.kenko.ui.helper.vertical
@@ -117,7 +118,7 @@ private fun Profile(
                     }
                 )
             } else {
-                EmptyPlanCard(onPlanClick)
+                SelectPlanCard(onPlanClick)
             }
             Spacer(modifier = Modifier.height(12.dp))
             ExerciseCard(
@@ -222,28 +223,31 @@ private fun CurrentPlanCard(
 }
 
 @Composable
-private fun EmptyPlanCard(
-    onNavigateToPlans: () -> Unit,
+fun SelectPlanCard(
+    onSelectPlanClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .aspectRatio(PHI)
             .clip(MaterialTheme.shapes.extraLarge)
-            .border(
-                border = PrimaryBorder,
-                shape = MaterialTheme.shapes.extraLarge
-            )
-            .clickable(onClick = onNavigateToPlans)
+            .background(MaterialTheme.colorScheme.primaryContainer)
+            .clickable(onClick = onSelectPlanClick)
             .padding(vertical = 24.dp),
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = stringResource(R.string.label_select_plan),
-            style = MaterialTheme.typography.headlineLarge
+            style = MaterialTheme.typography.headlineLarge,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
         )
-        Icon(imageVector = KenkoIcons.ArrowOutwardLarge, contentDescription = null)
+        Icon(
+            imageVector = KenkoIcons.ArrowOutwardLarge,
+            tint = MaterialTheme.colorScheme.onPrimaryContainer,
+            contentDescription = null
+        )
     }
 }
 
@@ -360,7 +364,7 @@ private fun PlanCard() {
 @Composable
 private fun EmptyPlanCardPreview() {
     KenkoTheme {
-        EmptyPlanCard({})
+        SelectPlanCard({})
     }
 }
 

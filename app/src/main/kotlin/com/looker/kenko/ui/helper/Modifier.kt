@@ -14,3 +14,5 @@ fun Modifier.vertical(towardsRight: Boolean = true) =
             )
         }
     }.rotate(90F * (if (towardsRight) 1 else -1))
+
+const val PHI = 16F / 10F

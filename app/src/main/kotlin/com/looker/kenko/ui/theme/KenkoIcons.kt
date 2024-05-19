@@ -43,6 +43,8 @@ object KenkoIcons {
     val Settings: ImageVector = com.looker.kenko.ui.components.icons.symbols.Settings
 
     // Brutalist Icons
+    val AddLarge: ImageVector = com.looker.kenko.ui.components.icons.AddLarge
+
     val ArrowOutwardLarge: ImageVector = com.looker.kenko.ui.components.icons.ArrowOutwardLarge
 
     val Cloud: ImageVector = com.looker.kenko.ui.components.icons.Cloud

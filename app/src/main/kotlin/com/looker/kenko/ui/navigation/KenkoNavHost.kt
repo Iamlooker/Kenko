@@ -12,12 +12,13 @@ import com.looker.kenko.ui.exercises.navigation.exercises
 import com.looker.kenko.ui.exercises.navigation.navigateToExercises
 import com.looker.kenko.ui.getStarted.navigation.GetStartedRoute
 import com.looker.kenko.ui.getStarted.navigation.getStarted
+import com.looker.kenko.ui.home.navigation.home
+import com.looker.kenko.ui.home.navigation.navigateToHome
 import com.looker.kenko.ui.performance.navigation.performance
 import com.looker.kenko.ui.planEdit.navigation.navigateToPlanEdit
 import com.looker.kenko.ui.planEdit.navigation.planEdit
 import com.looker.kenko.ui.plans.navigation.navigateToPlans
 import com.looker.kenko.ui.plans.navigation.plans
-import com.looker.kenko.ui.profile.navigation.navigateToProfile
 import com.looker.kenko.ui.profile.navigation.profile
 import com.looker.kenko.ui.sessionDetail.navigation.navigateToSessionDetail
 import com.looker.kenko.ui.sessionDetail.navigation.sessionDetail
@@ -49,13 +50,30 @@ fun KenkoNavHost(
         navController = navController as NavHostController,
         startDestination = startDestination,
     ) {
-        getStarted { isOnboardingDone ->
-            if (isOnboardingDone) {
-                navController.navigateToSessions(navOptions = splashNavOptions)
-            } else {
-                navController.navigateToProfile(navOptions = splashNavOptions)
-            }
+        getStarted {
+            navController.navigateToHome(splashNavOptions)
         }
+
+        home(
+            onSelectPlanClick = {
+                navController.navigateToPlans(navOptions = singleTopNavOptions)
+            },
+            onAddExerciseClick = {
+                navController.navigateToAddEditExercise(navOptions = singleTopNavOptions)
+            },
+            onExploreSessionsClick = {
+                navController.navigateToSessions(navOptions = singleTopNavOptions)
+            },
+            onExploreExercisesClick = {
+                navController.navigateToPlans(navOptions = singleTopNavOptions)
+            },
+            onStartSessionClick = {
+                navController.navigateToSessionDetail(
+                    date = null,
+                    navOptions = singleTopNavOptions
+                )
+            }
+        )
 
         sessions {
             navController.navigateToSessionDetail(

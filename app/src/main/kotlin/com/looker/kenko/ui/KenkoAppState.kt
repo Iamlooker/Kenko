@@ -10,6 +10,8 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.looker.kenko.ui.home.navigation.HomeRoute
+import com.looker.kenko.ui.home.navigation.navigateToHome
 import com.looker.kenko.ui.navigation.TopLevelDestinations
 import com.looker.kenko.ui.navigation.TopLevelDestinations.Home
 import com.looker.kenko.ui.navigation.TopLevelDestinations.Performance
@@ -39,7 +41,7 @@ class KenkoAppState(
     val currentTopLevelDestination: TopLevelDestinations?
         @Composable get() = when {
             currentDestination == null -> null
-            currentDestination?.hasRoute(SessionRoute::class) == true -> Home
+            currentDestination?.hasRoute(HomeRoute::class) == true -> Home
             currentDestination?.hasRoute(ProfileRoute::class) == true -> Profile
             currentDestination?.hasRoute(PerformanceRoute::class) == true -> Performance
             else -> null
@@ -60,7 +62,7 @@ class KenkoAppState(
         }
         when (topLevelDestination) {
             Performance -> navController.navigateToPerformance(topLevelNavOptions)
-            Home -> navController.navigateToSessions(topLevelNavOptions)
+            Home -> navController.navigateToHome(topLevelNavOptions)
             Profile -> navController.navigateToProfile(topLevelNavOptions)
         }
     }

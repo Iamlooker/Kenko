@@ -48,13 +48,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
 import com.looker.kenko.ui.components.HealthQuotes
+import com.looker.kenko.ui.helper.PHI
 import com.looker.kenko.ui.helper.vertical
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 import kotlinx.coroutines.delay
 
 @Composable
-fun GetStarted(onNext: (Boolean) -> Unit) {
+fun GetStarted(onNext: () -> Unit) {
     val viewModel: GetStartedViewModel = hiltViewModel()
 
     val isOnboardingDone by viewModel.isOnboardingDone.collectAsStateWithLifecycle()
@@ -63,7 +64,7 @@ fun GetStarted(onNext: (Boolean) -> Unit) {
     LaunchedEffect(isOnboardingDone) {
         if (isOnboardingDone) {
             delay(300)
-            updatedOnNext(true)
+            updatedOnNext()
         }
     }
 
@@ -76,7 +77,7 @@ fun GetStarted(onNext: (Boolean) -> Unit) {
 @Composable
 private fun GetStarted(
     isOnboardingDone: Boolean,
-    onNextClick: (Boolean) -> Unit,
+    onNextClick: () -> Unit,
 ) {
     Surface {
         Box(
@@ -126,7 +127,7 @@ private fun GetStarted(
                                         }
                                 )
                             },
-                            onClick = { onNextClick(isOnboardingDone) }
+                            onClick = onNextClick,
                         )
                     }
                 }
@@ -246,7 +247,7 @@ private fun HeroTitle(modifier: Modifier = Modifier) {
             Box(
                 modifier = Modifier
                     .width(48.dp)
-                    .aspectRatio(9F / 16F)
+                    .aspectRatio(1 / PHI)
                     .graphicsLayer {
                         this.transformOrigin = TransformOrigin(0.5F, 0F)
                         scaleY = iconAnimation.value

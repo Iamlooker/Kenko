@@ -21,6 +21,9 @@
     <string name="label_muscle_quads">Quads</string>
     <string name="label_muscle_delts">Shoulders</string>
 
+    <string name="label_session">Session</string>
+    <string name="label_continue">Continue \nSession</string>
+    <string name="label_start">Start \nSession</string>
     <string name="label_cant_find_session">Can\'t Find Session</string>
     <string name="label_cant_find_exercise">Can\'t Find Exercise</string>
     <string name="label_no_exercise_today">No exercises planned today</string>
@@ -56,6 +59,10 @@
     <string name="label_profile">You</string>
     <string name="label_record">Record</string>
 
+    <string name="label_explore_sessions">Explore\nSessions</string>
+    <string name="label_explore_exercises">Explore\nExercises</string>
+    <string name="label_add_new_exercises_home">Add\nExercise</string>
+
     <string name="label_monday">.mon</string>
     <string name="label_tuesday">.tue</string>
     <string name="label_wednesday">.wed</string>
@@ -79,8 +86,6 @@
 
     <string name="label_coming_soon">Coming Soon</string>
     <string name="label_select_plan">Select\nPlan</string>
-    <string name="label_continue">Continue</string>
-    <string name="label_start">Start</string>
     <string name="all">All</string>
     <string name="no_exercises_yet">No exercises yet</string>
 
