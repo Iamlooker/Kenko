@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Navigation from home screen
+- Annoying animations on home page
+- Plan Edit Page
+- Back button on all pages
+
 ## [1.1.0] - 2024-05-19
 
 ### Added

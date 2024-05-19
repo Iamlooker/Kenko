@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
 import com.looker.kenko.data.model.Plan
+import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.helper.plus
 import com.looker.kenko.ui.plans.components.PlanItem
 import com.looker.kenko.ui.theme.KenkoIcons
@@ -27,12 +28,14 @@ import com.looker.kenko.ui.theme.KenkoTheme
 @Composable
 fun Plan(
     viewModel: PlanViewModel,
+    onBackPress: () -> Unit,
     onPlanClick: (Long?) -> Unit,
 ) {
     val plans: List<Plan> by viewModel.plans.collectAsStateWithLifecycle()
 
     Plan(
         plans = plans,
+        onBackPress = onBackPress,
         onSelectPlan = viewModel::switchPlan,
         onPlanClick = onPlanClick,
     )
@@ -42,12 +45,16 @@ fun Plan(
 @Composable
 private fun Plan(
     plans: List<Plan>,
+    onBackPress: () -> Unit,
     onSelectPlan: (Plan) -> Unit,
     onPlanClick: (Long?) -> Unit,
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
+                navigationIcon = {
+                    BackButton(onClick = onBackPress)
+                },
                 title = {
                     Text(text = stringResource(R.string.label_plans_title))
                 }
@@ -82,6 +89,7 @@ private fun PlanPreview() {
         Plan(
             plans = emptyList(),
             onSelectPlan = {},
+            onBackPress = {},
             onPlanClick = {}
         )
     }

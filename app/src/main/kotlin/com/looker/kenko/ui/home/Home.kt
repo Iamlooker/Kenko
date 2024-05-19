@@ -124,10 +124,6 @@ private fun Home(
                         modifier = Modifier.cardWidth(),
                         onSelectPlanClick = onSelectPlanClick,
                     )
-                } else {
-                    CurrentPlanCard(
-                        onClick = { onCurrentPlanClick(state.currentPlanId!!) }
-                    )
                 }
             }
             Spacer(modifier = Modifier.weight(1F))

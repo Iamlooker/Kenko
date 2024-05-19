@@ -16,10 +16,14 @@ fun NavController.navigateToSessions(navOptions: NavOptions? = null) {
     navigate(SessionRoute, navOptions = navOptions)
 }
 
-fun NavGraphBuilder.sessions(onSessionClick: (LocalDate?) -> Unit) {
+fun NavGraphBuilder.sessions(
+    onSessionClick: (LocalDate?) -> Unit,
+    onBackPress: () -> Unit,
+) {
     composable<SessionRoute> {
         Sessions(
             onSessionClick = onSessionClick,
+            onBackPress = onBackPress,
             viewModel = hiltViewModel(),
         )
     }

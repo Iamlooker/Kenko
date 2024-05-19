@@ -75,19 +75,25 @@ fun KenkoNavHost(
             },
         )
 
-        sessions {
-            navController.navigateToSessionDetail(
-                date = it,
-                navOptions = singleTopNavOptions
-            )
-        }
+        sessions(
+            onSessionClick = {date ->
+                navController.navigateToSessionDetail(
+                    date = date,
+                    navOptions = singleTopNavOptions
+                )
+            },
+            onBackPress = navController::popBackStack
+        )
 
-        plans {
-            navController.navigateToPlanEdit(
-                id = it,
-                navOptions = singleTopNavOptions
-            )
-        }
+        plans(
+            onPlanClick = {
+                navController.navigateToPlanEdit(
+                    id = it,
+                    navOptions = singleTopNavOptions
+                )
+            },
+            onBackPress = navController::popBackStack
+        )
 
         settings(navController::popBackStack)
 

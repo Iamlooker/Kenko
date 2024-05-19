@@ -14,12 +14,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -31,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
 import com.looker.kenko.data.model.Session
+import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.components.texture.GradientStart
 import com.looker.kenko.ui.components.texture.dottedGradient
 import com.looker.kenko.ui.helper.plus
@@ -46,22 +49,36 @@ import kotlinx.datetime.LocalDate
 fun Sessions(
     viewModel: SessionsViewModel,
     onSessionClick: (LocalDate?) -> Unit,
+    onBackPress: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     Sessions(
         state = state,
         onSessionClick = onSessionClick,
+        onBackPress = onBackPress,
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Sessions(
     state: SessionsUiData,
     onSessionClick: (LocalDate?) -> Unit,
+    onBackPress: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
         modifier = modifier,
+        topBar = {
+            TopAppBar(
+                navigationIcon = {
+                    BackButton(onClick = onBackPress)
+                },
+                title = {
+                    Text(text = stringResource(id = R.string.label_session))
+                }
+            )
+        },
         floatingActionButton = {
             Button(
                 onClick = { onSessionClick(null) },
@@ -192,7 +209,10 @@ private fun SessionCardPreview() {
 @Composable
 private fun SessionsPreview() {
     KenkoTheme {
-        Sessions(state = SessionsUiData(listOf(Session.SAMPLE), false), onSessionClick = {})
+        Sessions(
+            state = SessionsUiData(listOf(Session.SAMPLE), false),
+            onBackPress = {},
+            onSessionClick = {})
     }
 }
 

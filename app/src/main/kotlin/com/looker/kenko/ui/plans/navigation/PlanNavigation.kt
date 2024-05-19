@@ -17,10 +17,12 @@ fun NavController.navigateToPlans(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.plans(
     onPlanClick: (Long?) -> Unit,
+    onBackPress: () -> Unit,
 ) {
     composable<PlanRoute> {
         Plan(
             onPlanClick = onPlanClick,
+            onBackPress = onBackPress,
             viewModel = hiltViewModel(),
         )
     }
