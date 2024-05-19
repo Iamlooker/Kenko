@@ -104,7 +104,7 @@ private fun PlanEdit(
     onBackPress: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
-    val isCurrentDayBlank by remember { derivedStateOf { state.exercises.isEmpty() } }
+    val isCurrentDayBlank by remember(state.exercises) { derivedStateOf { state.exercises.isEmpty() } }
     Scaffold(
         floatingActionButton = {
             SelectExerciseButton(
