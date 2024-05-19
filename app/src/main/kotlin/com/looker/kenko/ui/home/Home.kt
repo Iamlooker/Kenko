@@ -1,6 +1,5 @@
 package com.looker.kenko.ui.home
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -46,7 +45,6 @@ import com.looker.kenko.ui.profile.SelectPlanCard
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Home(
     viewModel: HomeViewModel,
@@ -93,15 +91,17 @@ private fun Home(
                 .padding(innerPadding + PaddingValues(bottom = 80.dp)),
             horizontalAlignment = CenterHorizontally
         ) {
-            AnimatedVisibility(state.isPlanSelected) {
+            if (state.isPlanSelected) {
                 Category(label = stringResource(R.string.label_session)) {
                     StartSessionCard(
                         isSessionStarted = state.isSessionStarted,
                         onClick = onStartSessionClick,
                     )
-                    ExploreSessionsCard(
-                        onClick = onExploreSessionsClick
-                    )
+                    if (state.hasMultipleSessions) {
+                        ExploreSessionsCard(
+                            onClick = onExploreSessionsClick
+                        )
+                    }
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
@@ -114,7 +114,7 @@ private fun Home(
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
-            AnimatedVisibility(!state.isPlanSelected) {
+            if (!state.isPlanSelected) {
                 Category(label = stringResource(R.string.label_plan)) {
                     SelectPlanCard(
                         modifier = Modifier.cardWidth(),
