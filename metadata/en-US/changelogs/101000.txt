@@ -1,0 +1,19 @@
+Added:
+
+* New Home Page
+* Back button on Exercises Page
+* Option to open References from workout page(if added)
+
+Changed:
+
+* Splash Screen Image to reduce dependency on `NonFreeNet`
+* Whole Plan card is clickable
+
+Fixed:
+
+* APK dependency tree encryption
+* Color of icons on some buttons
+* `Zestful` Color Palettes
+* Crash when using invalid reference
+* UI/UX for Exercises Page
+* Some navigation crashes
