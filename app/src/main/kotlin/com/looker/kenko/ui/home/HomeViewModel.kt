@@ -30,12 +30,14 @@ class HomeViewModel @Inject constructor(
             isPlanSelected = currentPlan != null,
             isSessionStarted = currentSession != null,
             hasMultipleSessions = sessions.isNotEmpty(),
+            currentPlanId = currentPlan?.id,
         )
     }.asStateFlow(
         HomeUiData(
             isPlanSelected = false,
             isSessionStarted = false,
             hasMultipleSessions = false,
+            currentPlanId = null,
         )
     )
 
@@ -45,4 +47,5 @@ data class HomeUiData(
     val isPlanSelected: Boolean,
     val isSessionStarted: Boolean,
     val hasMultipleSessions: Boolean,
+    val currentPlanId: Long?,
 )

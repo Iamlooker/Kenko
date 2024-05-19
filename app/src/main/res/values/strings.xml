@@ -62,6 +62,7 @@
     <string name="label_explore_sessions">Explore\nSessions</string>
     <string name="label_explore_exercises">Explore\nExercises</string>
     <string name="label_add_new_exercises_home">Add\nExercise</string>
+    <string name="label_current_plan_home">Current\nPlan</string>
 
     <string name="label_monday">.mon</string>
     <string name="label_tuesday">.tue</string>

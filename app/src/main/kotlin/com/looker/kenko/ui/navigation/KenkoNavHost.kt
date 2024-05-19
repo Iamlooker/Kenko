@@ -69,7 +69,10 @@ fun KenkoNavHost(
             },
             onStartSessionClick = {
                 navController.navigateToSessionDetail(date = null, navOptions = singleTopNavOptions)
-            }
+            },
+            onCurrentPlanClick = {
+                navController.navigateToPlanEdit(id = it, navOptions = singleTopNavOptions)
+            },
         )
 
         sessions {

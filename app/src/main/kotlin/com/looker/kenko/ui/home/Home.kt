@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
 import com.looker.kenko.ui.components.LiftingQuotes
+import com.looker.kenko.ui.components.OutlineBorder
 import com.looker.kenko.ui.components.SecondaryBorder
 import com.looker.kenko.ui.helper.PHI
 import com.looker.kenko.ui.helper.plus
@@ -53,6 +54,7 @@ fun Home(
     onExploreSessionsClick: () -> Unit,
     onExploreExercisesClick: () -> Unit,
     onStartSessionClick: () -> Unit,
+    onCurrentPlanClick: (Long) -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     Home(
@@ -62,6 +64,7 @@ fun Home(
         onExploreSessionsClick = onExploreSessionsClick,
         onExploreExercisesClick = onExploreExercisesClick,
         onStartSessionClick = onStartSessionClick,
+        onCurrentPlanClick = onCurrentPlanClick,
     )
 }
 
@@ -69,11 +72,12 @@ fun Home(
 @Composable
 private fun Home(
     state: HomeUiData,
-    onSelectPlanClick: () -> Unit,
-    onAddExerciseClick: () -> Unit,
-    onExploreSessionsClick: () -> Unit,
-    onExploreExercisesClick: () -> Unit,
-    onStartSessionClick: () -> Unit,
+    onSelectPlanClick: () -> Unit = {},
+    onAddExerciseClick: () -> Unit = {},
+    onExploreSessionsClick: () -> Unit = {},
+    onExploreExercisesClick: () -> Unit = {},
+    onStartSessionClick: () -> Unit = {},
+    onCurrentPlanClick: (Long) -> Unit = {},
 ) {
     Scaffold(
         topBar = {
@@ -92,7 +96,7 @@ private fun Home(
             horizontalAlignment = CenterHorizontally
         ) {
             if (state.isPlanSelected) {
-                Category(label = stringResource(R.string.label_session)) {
+                Category {
                     StartSessionCard(
                         isSessionStarted = state.isSessionStarted,
                         onClick = onStartSessionClick,
@@ -105,7 +109,7 @@ private fun Home(
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
-            Category(label = stringResource(R.string.label_exercise)) {
+            Category {
                 ExploreExercisesCard(
                     onClick = onExploreExercisesClick
                 )
@@ -114,11 +118,15 @@ private fun Home(
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
-            if (!state.isPlanSelected) {
-                Category(label = stringResource(R.string.label_plan)) {
+            Category {
+                if (!state.isPlanSelected) {
                     SelectPlanCard(
                         modifier = Modifier.cardWidth(),
                         onSelectPlanClick = onSelectPlanClick,
+                    )
+                } else {
+                    CurrentPlanCard(
+                        onClick = { onCurrentPlanClick(state.currentPlanId!!) }
                     )
                 }
             }
@@ -131,16 +139,13 @@ private fun Home(
 
 @Composable
 fun Category(
-    label: String,
     modifier: Modifier = Modifier,
-    content: @Composable RowScope.() -> Unit,
+    content: @Composable() (RowScope.() -> Unit),
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
-        horizontalAlignment = CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        Label(text = label)
         Row(
             modifier = modifier
                 .horizontalScroll(rememberScrollState())
@@ -277,12 +282,31 @@ private fun AddExerciseCard(
 }
 
 @Composable
-private fun Label(text: String) {
-    Text(
-        text = text.uppercase(),
-        style = MaterialTheme.typography.labelMedium,
-        color = MaterialTheme.colorScheme.outline,
-    )
+private fun CurrentPlanCard(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier
+            .cardWidth()
+            .aspectRatio(PHI)
+            .clip(MaterialTheme.shapes.extraLarge)
+            .border(OutlineBorder, MaterialTheme.shapes.extraLarge)
+            .clickable(onClick = onClick)
+            .padding(vertical = 24.dp),
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = stringResource(R.string.label_current_plan_home),
+            style = MaterialTheme.typography.headlineLarge,
+        )
+        Icon(
+            modifier = Modifier.offset(40.dp),
+            imageVector = KenkoIcons.Colony,
+            contentDescription = null,
+        )
+    }
 }
 
 @Preview
@@ -294,13 +318,9 @@ private fun HomePreview() {
                 isPlanSelected = true,
                 isSessionStarted = true,
                 hasMultipleSessions = true,
+                currentPlanId = null,
             ),
-            onSelectPlanClick = { /*TODO*/ },
-            onAddExerciseClick = { /*TODO*/ },
-            onExploreSessionsClick = { /*TODO*/ },
-            onExploreExercisesClick = { /*TODO*/ }) {
-
-        }
+        )
     }
 }
 
@@ -313,12 +333,8 @@ private fun FirstStartHomePreview() {
                 isPlanSelected = false,
                 isSessionStarted = false,
                 hasMultipleSessions = false,
+                currentPlanId = null,
             ),
-            onSelectPlanClick = { /*TODO*/ },
-            onAddExerciseClick = { /*TODO*/ },
-            onExploreSessionsClick = { /*TODO*/ },
-            onExploreExercisesClick = { /*TODO*/ }) {
-
-        }
+        )
     }
 }
