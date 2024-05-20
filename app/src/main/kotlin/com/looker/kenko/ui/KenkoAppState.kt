@@ -11,17 +11,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.looker.kenko.ui.home.navigation.HomeRoute
-import com.looker.kenko.ui.home.navigation.navigateToHome
 import com.looker.kenko.ui.navigation.TopLevelDestinations
 import com.looker.kenko.ui.navigation.TopLevelDestinations.Home
 import com.looker.kenko.ui.navigation.TopLevelDestinations.Performance
 import com.looker.kenko.ui.navigation.TopLevelDestinations.Profile
 import com.looker.kenko.ui.performance.navigation.PerformanceRoute
-import com.looker.kenko.ui.performance.navigation.navigateToPerformance
 import com.looker.kenko.ui.profile.navigation.ProfileRoute
-import com.looker.kenko.ui.profile.navigation.navigateToProfile
-import com.looker.kenko.ui.sessions.navigation.SessionRoute
-import com.looker.kenko.ui.sessions.navigation.navigateToSessions
 
 @Composable
 fun rememberKenkoAppState(
@@ -53,6 +48,8 @@ class KenkoAppState(
     val topLevelDestinations: List<TopLevelDestinations> = TopLevelDestinations.entries
 
     fun navigateToTopLevelDestination(topLevelDestination: TopLevelDestinations) {
+        val route = topLevelDestination.route
+        if (navController.currentDestination?.hasRoute(route::class) == true) return
         val topLevelNavOptions = navOptions {
             popUpTo(navController.graph.findStartDestination().id) {
                 saveState = true
@@ -60,10 +57,6 @@ class KenkoAppState(
             launchSingleTop = true
             restoreState = true
         }
-        when (topLevelDestination) {
-            Performance -> navController.navigateToPerformance(topLevelNavOptions)
-            Home -> navController.navigateToHome(topLevelNavOptions)
-            Profile -> navController.navigateToProfile(topLevelNavOptions)
-        }
+        navController.navigate(route = route, navOptions = topLevelNavOptions)
     }
 }
