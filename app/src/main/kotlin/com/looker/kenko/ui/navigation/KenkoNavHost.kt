@@ -2,6 +2,7 @@ package com.looker.kenko.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
@@ -76,13 +77,13 @@ fun KenkoNavHost(
         )
 
         sessions(
-            onSessionClick = {date ->
+            onSessionClick = { date ->
                 navController.navigateToSessionDetail(
                     date = date,
                     navOptions = singleTopNavOptions
                 )
             },
-            onBackPress = navController::popBackStack
+            onBackPress = navController::popBackStackOnResume
         )
 
         plans(
@@ -92,10 +93,10 @@ fun KenkoNavHost(
                     navOptions = singleTopNavOptions
                 )
             },
-            onBackPress = navController::popBackStack
+            onBackPress = navController::popBackStackOnResume
         )
 
-        settings(navController::popBackStack)
+        settings(navController::popBackStackOnResume)
 
         profile(
             onAddExerciseClick = {
@@ -127,18 +128,27 @@ fun KenkoNavHost(
                     navOptions = singleTopNavOptions
                 )
             },
-            onBackPress = navController::popBackStack
+            onBackPress = navController::popBackStackOnResume
         )
 
-        planEdit(navController::popBackStack) {
+        planEdit(navController::popBackStackOnResume) {
             navController.navigateToAddEditExercise(navOptions = singleTopNavOptions)
         }
 
-        sessionDetail(navController::popBackStack)
+        sessionDetail(navController::popBackStackOnResume)
 
-        addEditExercise(navController::popBackStack)
+        addEditExercise(navController::popBackStackOnResume)
 
         performance()
 
     }
 }
+
+private fun NavHostController.popBackStackOnResume() {
+    if (lifecycleState?.isAtLeast(Lifecycle.State.RESUMED) == true) {
+        popBackStack()
+    }
+}
+
+private val NavHostController.lifecycleState: Lifecycle.State?
+    get() = currentBackStackEntry?.lifecycle?.currentState
