@@ -50,16 +50,7 @@
     <string name="label_explore_exercises">Explore\nExercises</string>
     <string name="label_add_new_exercises_home">Add\nExercise</string>
     <string name="label_current_plan_home">Current\nPlan</string>
-
-    <string name="label_monday">.mon</string>
-    <string name="label_tuesday">.tue</string>
-    <string name="label_wednesday">.wed</string>
-    <string name="label_thursday">.thu</string>
-    <string name="label_friday">.fri</string>
-    <string name="label_saturday">.sat</string>
-    <string name="label_sunday">.sun</string>
-    <string name="label_today">.today</string>
-    <string name="label_plan">Plan</string>
+    <string name="label_current_plan">Current Plan</string>
     <string name="label_settings_greeting">hey there</string>
 
     <string name="label_lifts">Lifts</string>
@@ -83,11 +74,11 @@
 
     <string name="label_create_exercise">Create</string>
 
+    <!--Error-->
     <string name="error_invalid_reference">Invalid Reference</string>
     <string name="error_invalid_url">Invalid URL</string>
     <string name="error_plan_name_empty">Enter a plan name</string>
     <string name="error_plan_empty">Plan is empty</string>
-    <string name="label_current_plan">Current Plan</string>
 
     <!--Themes-->
     <string name="label_theme">Theme</string>
@@ -116,6 +107,17 @@
     <string name="label_muscle_hamstrings">Hamstrings</string>
     <string name="label_muscle_quads">Quads</string>
     <string name="label_muscle_delts">Shoulders</string>
+
+    <!--Day of Week-->
+    <string name="label_monday">.mon</string>
+    <string name="label_tuesday">.tue</string>
+    <string name="label_wednesday">.wed</string>
+    <string name="label_thursday">.thu</string>
+    <string name="label_friday">.fri</string>
+    <string name="label_saturday">.sat</string>
+    <string name="label_sunday">.sun</string>
+    <string name="label_today">.today</string>
+    <string name="label_plan">Plan</string>
 
     <string-array name="label_health_quotes">
         <item>you can do it</item>
