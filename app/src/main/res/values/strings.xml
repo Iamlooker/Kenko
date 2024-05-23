@@ -8,19 +8,6 @@
 
     <string name="label_lets_go">Get Started</string>
 
-    <string name="label_muscle_biceps">Biceps</string>
-    <string name="label_muscle_triceps">Triceps</string>
-    <string name="label_muscle_back">Back</string>
-    <string name="label_muscle_lats">Lats</string>
-    <string name="label_muscle_traps">Traps</string>
-    <string name="label_muscle_chest">Chest</string>
-    <string name="label_muscle_core">Core</string>
-    <string name="label_muscle_glutes">Glutes</string>
-    <string name="label_muscle_calves">Calves</string>
-    <string name="label_muscle_hamstrings">Hamstrings</string>
-    <string name="label_muscle_quads">Quads</string>
-    <string name="label_muscle_delts">Shoulders</string>
-
     <string name="label_session">Session</string>
     <string name="label_continue">Continue \nSession</string>
     <string name="label_start">Start \nSession</string>
@@ -90,6 +77,18 @@
     <string name="all">All</string>
     <string name="no_exercises_yet">No exercises yet</string>
 
+    <string name="label_plus_int">+%s</string>
+    <string name="label_minus_int">-%s</string>
+    <string name="label_settings">Settings</string>
+
+    <string name="label_create_exercise">Create</string>
+
+    <string name="error_invalid_reference">Invalid Reference</string>
+    <string name="error_invalid_url">Invalid URL</string>
+    <string name="error_plan_name_empty">Enter a plan name</string>
+    <string name="error_plan_empty">Plan is empty</string>
+    <string name="label_current_plan">Current Plan</string>
+
     <!--Themes-->
     <string name="label_theme">Theme</string>
     <string name="label_theme_system">System</string>
@@ -104,17 +103,19 @@
     <string name="label_color_scheme_zestful">Zestful</string>
     <string name="label_color_scheme_twilight">Twilight</string>
 
-    <string name="label_plus_int">+%s</string>
-    <string name="label_minus_int">-%s</string>
-    <string name="label_settings">Settings</string>
-
-    <string name="label_create_exercise">Create</string>
-
-    <string name="error_invalid_reference">Invalid Reference</string>
-    <string name="error_invalid_url">Invalid URL</string>
-    <string name="error_plan_name_empty">Enter a plan name</string>
-    <string name="error_plan_empty">Plan is empty</string>
-    <string name="label_current_plan">Current Plan</string>
+    <!--Muscle Groups-->
+    <string name="label_muscle_biceps">Biceps</string>
+    <string name="label_muscle_triceps">Triceps</string>
+    <string name="label_muscle_back">Back</string>
+    <string name="label_muscle_lats">Lats</string>
+    <string name="label_muscle_traps">Traps</string>
+    <string name="label_muscle_chest">Chest</string>
+    <string name="label_muscle_core">Core</string>
+    <string name="label_muscle_glutes">Glutes</string>
+    <string name="label_muscle_calves">Calves</string>
+    <string name="label_muscle_hamstrings">Hamstrings</string>
+    <string name="label_muscle_quads">Quads</string>
+    <string name="label_muscle_delts">Shoulders</string>
 
     <string-array name="label_health_quotes">
         <item>you can do it</item>
