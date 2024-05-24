@@ -49,6 +49,7 @@ fun DraggableTextField(
             .draggable(
                 orientation = Orientation.Horizontal,
                 state = state,
+                startDragImmediately = offset.value == 0F,
                 onDragStopped = {
                     dragState.events.onStop()
                     offset.animateTo(
