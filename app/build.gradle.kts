@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.app)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
 }
@@ -52,6 +53,11 @@ android {
     }
     buildFeatures {
         compose = true
+    }
+    composeCompiler {
+        enableStrongSkippingMode = true
+        metricsDestination = file("$projectDir/reports/metrics")
+        reportsDestination = file("$projectDir/reports")
     }
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
@@ -106,17 +112,6 @@ dependencies {
     // Compose Tests
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.compose.ui.test)
-}
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>() {
-    compilerOptions.freeCompilerArgs.addAll(
-        "-P",
-        "plugin:androidx.compose.compiler.plugins.kotlin:experimentalStrongSkipping=true",
-        "-P",
-        "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=$projectDir/reports/metrics",
-        "-P",
-        "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=$projectDir/reports",
-    )
 }
 
 fun DependencyHandlerScope.kotlin(name: String): Any = kotlin(name, libs.versions.kotlin.get())
