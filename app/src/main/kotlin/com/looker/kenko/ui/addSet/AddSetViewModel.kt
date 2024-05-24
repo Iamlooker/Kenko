@@ -9,7 +9,7 @@ import com.looker.kenko.data.model.SetType
 import com.looker.kenko.data.model.localDate
 import com.looker.kenko.data.repository.ExerciseRepo
 import com.looker.kenko.data.repository.SessionRepo
-import com.looker.kenko.ui.components.draggableTextField.DragEvents
+import com.looker.kenko.ui.addSet.components.DragEvents
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject

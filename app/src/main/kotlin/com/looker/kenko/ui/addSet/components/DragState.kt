@@ -1,4 +1,4 @@
-package com.looker.kenko.ui.components.draggableTextField
+package com.looker.kenko.ui.addSet.components
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
@@ -32,6 +32,7 @@ class DragState(
 
     val offset: Animatable<Float, AnimationVector1D> = Animatable(0F)
 
+    @Stable
     val state: DraggableState = DraggableState { delta ->
         val targetOffset = offset.value + delta
         val adjustedOffset = OFFSET_DAMPING * targetOffset
@@ -43,6 +44,7 @@ class DragState(
     private val isOutside: Flow<Boolean> =
         snapshotFlow { offset.value !in constraints.noIncrementZone }
 
+    @Stable
     val onDragStopped: suspend CoroutineScope.(velocity: Float) -> Unit = {
         events.onStop()
         offset.animateTo(

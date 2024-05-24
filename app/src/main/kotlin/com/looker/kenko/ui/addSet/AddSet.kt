@@ -28,8 +28,8 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.looker.kenko.R
 import com.looker.kenko.data.model.Exercise
-import com.looker.kenko.ui.components.draggableTextField.DraggableTextField
-import com.looker.kenko.ui.components.draggableTextField.rememberDraggableTextFieldState
+import com.looker.kenko.ui.addSet.components.DraggableTextField
+import com.looker.kenko.ui.addSet.components.rememberDraggableTextFieldState
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 
