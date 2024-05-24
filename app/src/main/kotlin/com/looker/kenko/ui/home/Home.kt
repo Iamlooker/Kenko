@@ -176,9 +176,9 @@ private fun StartSessionCard(
     ) {
         val stringRes = remember(isSessionStarted) {
             if (isSessionStarted) {
-                R.string.label_continue
+                R.string.label_continue_session
             } else {
-                R.string.label_start
+                R.string.label_start_session
             }
         }
         Text(

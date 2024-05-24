@@ -1,7 +1,6 @@
 package com.looker.kenko.ui.selectExercise
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,13 +10,16 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -36,6 +38,7 @@ import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.ui.components.kenkoTextFieldColor
 import com.looker.kenko.ui.planEdit.components.ExerciseItem
+import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 
 @Composable
@@ -102,13 +105,21 @@ private fun SearchNotFound(onAddNewExercise: () -> Unit, modifier: Modifier = Mo
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
-                text = stringResource(R.string.label_cant_find_exercise),
+                text = stringResource(R.string.error_cant_find_exercise),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onErrorContainer,
             )
             Spacer(modifier = Modifier.height(12.dp))
-            Button(onClick = onAddNewExercise) {
-                Text(text = stringResource(R.string.label_add_new_exercise))
+            Button(
+                onClick = onAddNewExercise,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.onErrorContainer,
+                    contentColor = MaterialTheme.colorScheme.errorContainer
+                ),
+            ) {
+                Icon(imageVector = KenkoIcons.Add, contentDescription = null)
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(text = stringResource(R.string.label_create_exercise))
             }
         }
     }
@@ -139,7 +150,7 @@ private fun AddExerciseHeader(
 ) {
     Text(
         modifier = modifier,
-        text = stringResource(R.string.label_add_exercise),
+        text = stringResource(R.string.label_add_exercise_header),
         style = MaterialTheme.typography.displayMedium,
         color = MaterialTheme.colorScheme.tertiary
     )

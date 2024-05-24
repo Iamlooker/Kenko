@@ -146,7 +146,7 @@ private fun Header(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            text = stringResource(R.string.label_settings_greeting),
+            text = stringResource(R.string.label_profile_greeting),
             style = MaterialTheme.typography.headlineMedium
         )
         IconButton(onClick = onSettingsClick) {

@@ -92,7 +92,7 @@ fun SelectExerciseButton(onClick: () -> Unit) {
     ) {
         Icon(imageVector = KenkoIcons.Add, contentDescription = null)
         Spacer(modifier = Modifier.width(8.dp))
-        Text(text = stringResource(R.string.label_add_exercise))
+        Text(text = stringResource(R.string.label_add))
     }
 }
 

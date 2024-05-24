@@ -1,84 +1,90 @@
 <resources>
     <string name="app_name" translatable="false">Kenko</string>
 
+    <!--Onboarding-->
     <string name="label_kenko" translatable="false">Kenko</string>
     <string name="label_kenko_jp" translatable="false">ケンコウ</string>
     <string name="label_kenko_meaning">○ healthy</string>
     <string name="label_kenko_meaning_ALT">○ strong</string>
-
     <string name="label_lets_go">Get Started</string>
 
-    <string name="label_session">Session</string>
-    <string name="label_continue">Continue \nSession</string>
-    <string name="label_start">Start \nSession</string>
-    <string name="label_cant_find_session">Can\'t Find Session</string>
-    <string name="label_cant_find_exercise">Can\'t Find Exercise</string>
-    <string name="label_no_exercise_today">No exercises planned today</string>
-    <string name="label_nothing_today">Nothing today</string>
-    <string name="label_missed_day">Did you miss the day?</string>
-    <string name="label_create_session">Create Session</string>
-    <string name="label_add_new_exercise">New Exercise</string>
-    <string name="label_add_exercise">Select Exercise</string>
-    <string name="label_reps">.reps</string>
-    <string name="label_weight">.weight</string>
-
-    <string name="label_reference">Reference</string>
-    <string name="label_exercise">Exercise</string>
-    <string name="label_browse_exercises">Browse Exercises</string>
-    <string name="label_search_exercise">Search Exercise</string>
-    <string name="label_reference_optional">optional *</string>
-    <string name="label_name">Name</string>
-    <string name="label_exercise_exists">Exercise Already Exists</string>
-    <string name="label_is_isometric">Isometric</string>
-    <string name="label_is_isometric_DESC">Exercise requires static holds</string>
-    <string name="label_new_exercise">New Exercise?</string>
-    <string name="label_save">Save</string>
-    <string name="label_set_number">Set %s</string>
-    <string name="label_sets">Sets</string>
-    <string name="label_performed_on">Performed On</string>
-    <string name="label_add_set">Add Set</string>
-    <string name="label_add_set_for">Add Set for</string>
-    <string name="label_add">Add</string>
-    <string name="label_target">Target</string>
-
-    <string name="label_home">Home</string>
-    <string name="label_performance">Performance</string>
-    <string name="label_profile">You</string>
-    <string name="label_record">Record</string>
-
+    <!--Home-->
+    <string name="label_continue_session">Continue\nSession</string>
+    <string name="label_start_session">Start\nSession</string>
     <string name="label_explore_sessions">Explore\nSessions</string>
     <string name="label_explore_exercises">Explore\nExercises</string>
     <string name="label_add_new_exercises_home">Add\nExercise</string>
     <string name="label_current_plan_home">Current\nPlan</string>
-    <string name="label_current_plan">Current Plan</string>
-    <string name="label_settings_greeting">hey there</string>
 
-    <string name="label_lifts">Lifts</string>
+    <!--Session Details-->
+    <string name="label_nothing_today">Nothing today</string>
+    <string name="label_missed_day">Did you miss the day?</string>
 
+    <!--Plans-->
     <string name="label_plans_title">Plans</string>
+    <string name="no_exercises_yet">No exercises yet</string>
 
+    <!--Profile-->
+    <string name="label_profile_greeting">hey there</string>
+    <string name="label_select_plan">Select\nPlan</string>
+    <string name="label_current_plan">Current Plan</string>
+    <string name="label_lifts">Lifts</string>
     <string name="label_plan_description">
         <ul>%1$s exercises</ul>\n
         <ul>%2$s days</ul>\n
         <ul>%3$s rest days</ul>
     </string>
 
-    <string name="label_coming_soon">Coming Soon</string>
-    <string name="label_select_plan">Select\nPlan</string>
-    <string name="all">All</string>
-    <string name="no_exercises_yet">No exercises yet</string>
+    <!--Exercises-->
+    <string name="label_browse_exercises">Browse Exercises</string>
+    <string name="label_all_muscle_groups">All</string>
+    <string name="label_create_exercise">Create</string>
 
+    <!--Add Exercises-->
+    <string name="label_new_exercise">New Exercise?</string>
+    <string name="label_target">Target</string>
+    <string name="label_is_isometric">Isometric</string>
+    <string name="label_reference">Reference</string>
+    <string name="label_is_isometric_DESC">Exercise requires static holds</string>
+    <string name="label_reference_optional">optional *</string>
+    <string name="label_exercise_exists">Exercise Already Exists</string>
+
+    <!--Select Exercises-->
+    <string name="label_add_exercise_header">Add Exercise</string>
+    <string name="label_search_exercise">Search Exercise</string>
+    <string name="label_no_exercise_today">No exercises planned today</string>
+
+    <!--Add Sets-->
+    <string name="label_add_set_for">Add Set for</string>
     <string name="label_plus_int">+%s</string>
     <string name="label_minus_int">-%s</string>
+
     <string name="label_settings">Settings</string>
 
-    <string name="label_create_exercise">Create</string>
+    <!--Common-->
+    <string name="label_name">Name</string>
+    <string name="label_add">Add</string>
+    <string name="label_save">Save</string>
+
+    <!--Project Specific-->
+    <string name="label_session">Session</string>
+    <string name="label_exercise">Exercise</string>
+    <string name="label_reps">.reps</string>
+    <string name="label_weight">.weight</string>
+    <string name="label_coming_soon">Coming Soon</string>
+
+    <!--Navigation-->
+    <string name="label_home">Home</string>
+    <string name="label_performance">Performance</string>
+    <string name="label_profile">You</string>
 
     <!--Error-->
     <string name="error_invalid_reference">Invalid Reference</string>
     <string name="error_invalid_url">Invalid URL</string>
     <string name="error_plan_name_empty">Enter a plan name</string>
     <string name="error_plan_empty">Plan is empty</string>
+    <string name="error_cant_find_session">Can\'t Find Session</string>
+    <string name="error_cant_find_exercise">Can\'t Find Exercise</string>
 
     <!--Themes-->
     <string name="label_theme">Theme</string>
