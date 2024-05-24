@@ -1,4 +1,4 @@
-package com.looker.kenko.ui.components
+package com.looker.kenko.ui.sessionDetail.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,14 +19,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import com.looker.kenko.R
+import com.looker.kenko.data.model.MuscleGroups
+import com.looker.kenko.data.model.Set
+import com.looker.kenko.data.model.SetType
+import com.looker.kenko.data.model.repDurationStringRes
+import com.looker.kenko.data.model.sampleExercises
 import com.looker.kenko.ui.theme.KenkoTheme
 import com.looker.kenko.ui.theme.numbers
 
 @Composable
 fun SetItem(
     title: String,
-    rep: Int,
-    weight: Double,
+    set: Set,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -51,8 +55,14 @@ fun SetItem(
                 .padding(vertical = 16.dp, horizontal = 24.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            PerformedItem(title = stringResource(R.string.label_reps), performance = "$rep")
-            PerformedItem(title = stringResource(R.string.label_weight), performance = "$weight KG")
+            PerformedItem(
+                title = stringResource(set.exercise.repDurationStringRes),
+                performance = "${set.repsOrDuration}"
+            )
+            PerformedItem(
+                title = stringResource(R.string.label_weight),
+                performance = "${set.weight} KG"
+            )
         }
     }
 }
@@ -80,6 +90,9 @@ private fun PerformedItem(
 @Composable
 private fun SetItemPreview() {
     KenkoTheme {
-        SetItem("01", 14, 45.0)
+        SetItem(
+            "01",
+            Set(12, 40.0, SetType.Drop, MuscleGroups.Chest.sampleExercises.first())
+        )
     }
 }

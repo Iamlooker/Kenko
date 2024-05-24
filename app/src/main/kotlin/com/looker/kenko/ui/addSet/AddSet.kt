@@ -28,6 +28,7 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.looker.kenko.R
 import com.looker.kenko.data.model.Exercise
+import com.looker.kenko.data.model.repDurationStringRes
 import com.looker.kenko.ui.addSet.components.DraggableTextField
 import com.looker.kenko.ui.addSet.components.rememberDraggableTextFieldState
 import com.looker.kenko.ui.theme.KenkoIcons
@@ -72,7 +73,7 @@ fun AddSet(exercise: Exercise, onDone: () -> Unit) {
                 Text(text = stringResource(R.string.label_minus_int, 1))
             }
             val reps = rememberDraggableTextFieldState(
-                supportingText = stringResource(R.string.label_reps),
+                supportingText = stringResource(exercise.repDurationStringRes),
                 textFieldState = viewModel.reps,
                 events = viewModel.repsDragEvents,
             )

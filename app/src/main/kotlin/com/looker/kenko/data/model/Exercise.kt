@@ -1,8 +1,10 @@
 package com.looker.kenko.data.model
 
+import androidx.annotation.StringRes
 import androidx.compose.runtime.Stable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.looker.kenko.R
 import com.looker.kenko.data.model.MuscleGroups.Biceps
 import com.looker.kenko.data.model.MuscleGroups.Calves
 import com.looker.kenko.data.model.MuscleGroups.Chest
@@ -27,6 +29,11 @@ data class Exercise(
     val reference: String? = null,
     val isIsometric: Boolean = false,
 )
+
+@Stable
+val Exercise.repDurationStringRes: Int
+    @StringRes
+    get() = if (isIsometric) R.string.label_duration else R.string.label_reps
 
 private fun MuscleGroups.exercise(block: MutableList<String>.() -> Unit): List<Exercise> {
     val list = mutableListOf<String>()
