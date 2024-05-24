@@ -96,7 +96,7 @@ dependencies {
     // Rebugger
     implementation(libs.rebugger)
 
-    testImplementation(libs.junit)
+    testImplementation(libs.junit.jupiter)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
