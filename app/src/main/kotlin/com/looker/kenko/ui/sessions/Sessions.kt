@@ -86,8 +86,8 @@ private fun Sessions(
             ) {
                 val isCurrentSessionActive = state.isCurrentSessionActive
                 val text = remember(isCurrentSessionActive) {
-                    if (isCurrentSessionActive) R.string.label_continue
-                    else R.string.label_start
+                    if (isCurrentSessionActive) R.string.label_continue_session
+                    else R.string.label_start_session
                 }
                 Text(text = stringResource(id = text))
                 Spacer(modifier = Modifier.width(16.dp))

@@ -72,7 +72,7 @@ class ExercisesViewModel @Inject constructor(
 
 val MuscleGroups?.string: Int
     @StringRes
-    get() = this?.stringRes ?: R.string.all
+    get() = this?.stringRes ?: R.string.label_all_muscle_groups
 
 @Stable
 class ExercisesUiState(

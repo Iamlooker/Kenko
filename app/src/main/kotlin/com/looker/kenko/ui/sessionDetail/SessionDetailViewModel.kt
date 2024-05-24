@@ -122,7 +122,7 @@ sealed interface SessionDetailState {
     ) : SessionDetailState {
         data object InvalidSession : Error(
             title = R.string.label_missed_day,
-            errorMessage = R.string.label_cant_find_session,
+            errorMessage = R.string.error_cant_find_session,
         )
 
         data object EmptyPlan : Error(
