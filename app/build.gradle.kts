@@ -59,9 +59,6 @@ android {
         metricsDestination = file("$projectDir/reports/metrics")
         reportsDestination = file("$projectDir/reports")
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
-    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
