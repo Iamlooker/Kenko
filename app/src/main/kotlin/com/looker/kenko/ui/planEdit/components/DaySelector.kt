@@ -82,21 +82,14 @@ fun DayItem(
             MaterialTheme.colorScheme.onSurface
         }
     }
-    val selectionPadding by selectionTransition.animateDp(label = "Padding") { selected ->
-        if (selected) {
-            8.dp
-        } else {
-            0.dp
-        }
-    }
 
     Box(
         modifier = Modifier
             .wrapContentSize()
             .clip(CircleShape)
             .drawBehind { drawRect(selectionBackground) }
-            .padding(selectionPadding)
             .clickable(onClick = onClick)
+            .padding(8.dp)
             .then(modifier),
         contentAlignment = Alignment.Center,
     ) {

@@ -109,7 +109,7 @@ class PlanEditViewModel @Inject constructor(
             }
             repo.upsert(
                 Plan(
-                    exercisesPerDay = _dayAndExercises.value,
+                    exercisesPerDay = _dayAndExercises.value.toSortedMap(),
                     id = planId,
                     name = planName,
                     isActive = true,
