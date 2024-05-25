@@ -56,10 +56,12 @@ fun ExerciseItem(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Column(
+                modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.SpaceAround
             ) {
                 Text(
                     text = exercise.name,
+                    maxLines = 2,
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -96,7 +98,7 @@ fun SelectExerciseButton(onClick: () -> Unit) {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun ExerciseItemPreview() {
     KenkoTheme {
