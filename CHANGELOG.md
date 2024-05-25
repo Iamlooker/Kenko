@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Navigation to same page again
 - Double back presses
 - Swipe gesture on Text field
+- Elements squashing on small screens
 
 ## [1.1.1] - 2024-05-19
 
