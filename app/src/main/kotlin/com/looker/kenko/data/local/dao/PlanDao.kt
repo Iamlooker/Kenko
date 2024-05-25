@@ -34,6 +34,9 @@ interface PlanDao {
     @Upsert
     suspend fun upsert(plan: Plan)
 
+    @Query("DELETE FROM plan_table WHERE id = :id")
+    fun remove(id: Long)
+
     @Query("SELECT * FROM plan_table WHERE isActive = 1")
     suspend fun currentPlan(): Plan?
 

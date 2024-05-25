@@ -42,6 +42,10 @@ class OfflinePlanRepo @Inject constructor(
         }
     }
 
+    override suspend fun remove(id: Long) {
+        dao.remove(id)
+    }
+
     override suspend fun current(): Plan? {
         return dao.currentPlan()
     }

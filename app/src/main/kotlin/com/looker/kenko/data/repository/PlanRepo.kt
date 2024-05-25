@@ -19,6 +19,8 @@ interface PlanRepo {
 
     suspend fun upsert(plan: Plan)
 
+    suspend fun remove(id: Long)
+
     suspend fun current(): Plan?
 
 }
