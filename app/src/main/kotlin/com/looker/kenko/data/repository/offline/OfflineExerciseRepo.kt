@@ -21,6 +21,10 @@ class OfflineExerciseRepo @Inject constructor (
         dao.upsert(exercise)
     }
 
+    override suspend fun remove(name: String) {
+        dao.delete(name)
+    }
+
     override suspend fun isExerciseAvailable(name: String): Boolean {
         return get(name) != null
     }

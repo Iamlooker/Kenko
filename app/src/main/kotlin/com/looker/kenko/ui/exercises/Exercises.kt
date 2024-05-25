@@ -33,6 +33,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -47,6 +48,7 @@ import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.components.ErrorSnackbar
 import com.looker.kenko.ui.components.KenkoBorderWidth
 import com.looker.kenko.ui.components.OutlineBorder
+import com.looker.kenko.ui.components.SwipeToDeleteBox
 import com.looker.kenko.ui.helper.plus
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
@@ -67,6 +69,7 @@ fun Exercises(
         onCreateClick = onCreateClick,
         onSelectTarget = viewModel::setTarget,
         onReferenceClick = viewModel::onReferenceClick,
+        onRemove = viewModel::removeExercise,
     )
 }
 
@@ -77,6 +80,7 @@ private fun Exercises(
     onExerciseClick: (name: String) -> Unit,
     onCreateClick: (target: MuscleGroups?) -> Unit,
     onSelectTarget: (MuscleGroups?) -> Unit,
+    onRemove: (String) -> Unit,
     onBackPress: () -> Unit,
     onReferenceClick: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -116,7 +120,8 @@ private fun Exercises(
             exercises = state.exercises,
             contentPadding = innerPadding + PaddingValues(bottom = 80.dp),
             onExerciseClick = onExerciseClick,
-            onReferenceClick = onReferenceClick
+            onReferenceClick = onReferenceClick,
+            onRemove = onRemove,
         )
     }
 }
@@ -126,30 +131,35 @@ private fun ExercisesList(
     exercises: List<Exercise>,
     contentPadding: PaddingValues,
     onExerciseClick: (String) -> Unit,
+    onRemove: (String) -> Unit,
     onReferenceClick: (String) -> Unit,
 ) {
     LazyColumn(
         contentPadding = contentPadding,
     ) {
         items(exercises, key = { it.name }) { exercise ->
-            ExerciseItem(
-                modifier = Modifier
-                    .padding(horizontal = 12.dp)
-                    .animateItem(),
-                exercise = exercise,
-                onClick = { onExerciseClick(exercise.name) },
-                referenceButton = {
-                    if (exercise.reference != null) {
-                        FilledTonalIconButton(
-                            modifier = Modifier.size(56.dp),
-                            shape = MaterialTheme.shapes.extraLarge,
-                            onClick = { onReferenceClick(exercise.reference) }
-                        ) {
-                            Icon(imageVector = KenkoIcons.Lightbulb, contentDescription = null)
+            val exerciseName by rememberUpdatedState(newValue = exercise.name)
+            SwipeToDeleteBox(
+                modifier = Modifier.animateItem(),
+                onDismiss = { onRemove(exerciseName) }
+            ) {
+                ExerciseItem(
+                    modifier = Modifier.padding(horizontal = 12.dp),
+                    exercise = exercise,
+                    onClick = { onExerciseClick(exerciseName) },
+                    referenceButton = {
+                        if (exercise.reference != null) {
+                            FilledTonalIconButton(
+                                modifier = Modifier.size(56.dp),
+                                shape = MaterialTheme.shapes.extraLarge,
+                                onClick = { onReferenceClick(exercise.reference) }
+                            ) {
+                                Icon(imageVector = KenkoIcons.Lightbulb, contentDescription = null)
+                            }
                         }
                     }
-                }
-            )
+                )
+            }
         }
     }
 
@@ -254,7 +264,8 @@ private fun ExercisesPreview() {
             onCreateClick = {},
             onSelectTarget = {},
             onBackPress = {},
-            onReferenceClick = {}
+            onReferenceClick = {},
+            onRemove = {}
         )
     }
 }

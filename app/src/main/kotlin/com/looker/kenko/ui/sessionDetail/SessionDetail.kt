@@ -188,7 +188,10 @@ private fun SetsList(
                 }
             }
             itemsIndexed(items = sets) { index, set ->
-                SwipeToDeleteBox(onDismiss = { onRemoveSet(set) }) {
+                SwipeToDeleteBox(
+                    modifier = Modifier.animateItem(),
+                    onDismiss = { onRemoveSet(set) },
+                ) {
                     SetItem(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
                         set = set,

@@ -24,7 +24,7 @@ val Targets = listOf(null) + MuscleGroups.entries
 
 @HiltViewModel
 class ExercisesViewModel @Inject constructor(
-    repo: ExerciseRepo,
+    private val repo: ExerciseRepo,
     private val uriHandler: UriHandler,
     private val stringHandler: StringHandler,
 ) : ViewModel() {
@@ -50,6 +50,12 @@ class ExercisesViewModel @Inject constructor(
             selected = target,
         )
     }.asStateFlow(ExercisesUiState())
+
+    fun removeExercise(name: String) {
+        viewModelScope.launch {
+            repo.remove(name)
+        }
+    }
 
     fun setTarget(value: MuscleGroups?) {
         viewModelScope.launch {

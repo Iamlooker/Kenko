@@ -11,6 +11,8 @@ interface ExerciseRepo {
 
     suspend fun upsert(exercise: Exercise)
 
+    suspend fun remove(name: String)
+
     suspend fun isExerciseAvailable(name: String): Boolean
 
 }
