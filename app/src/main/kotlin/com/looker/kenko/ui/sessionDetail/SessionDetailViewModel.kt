@@ -29,7 +29,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SessionDetailViewModel @Inject constructor(
-    repo: SessionRepo,
+    private val repo: SessionRepo,
     planRepo: PlanRepo,
     savedStateHandle: SavedStateHandle,
     private val uriHandler: UriHandler,
@@ -78,6 +78,12 @@ class SessionDetailViewModel @Inject constructor(
             )
         }.onStart { emit(SessionDetailState.Loading) }
             .asStateFlow(SessionDetailState.Loading)
+
+    fun removeSet(set: Set) {
+        viewModelScope.launch {
+            repo.removeSet(sessionDate, set)
+        }
+    }
 
 
     fun showBottomSheet(exercise: Exercise) {

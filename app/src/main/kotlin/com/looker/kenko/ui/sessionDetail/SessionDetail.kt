@@ -1,5 +1,12 @@
 package com.looker.kenko.ui.sessionDetail
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -48,6 +55,7 @@ import com.looker.kenko.data.model.Session
 import com.looker.kenko.data.model.Set
 import com.looker.kenko.ui.addSet.AddSet
 import com.looker.kenko.ui.components.BackButton
+import com.looker.kenko.ui.components.SwipeToDeleteBox
 import com.looker.kenko.ui.helper.normalizeInt
 import com.looker.kenko.ui.helper.plus
 import com.looker.kenko.ui.planEdit.components.dayName
@@ -70,6 +78,7 @@ fun SessionDetails(
         onBackPress = onBackPress,
         onReferenceClick = viewModel::openReference,
         onSelectBottomSheet = viewModel::showBottomSheet,
+        onRemoveSet = viewModel::removeSet,
     )
     val exercise by viewModel.current.collectAsStateWithLifecycle()
     if (exercise != null) {
@@ -84,6 +93,7 @@ fun SessionDetails(
 private fun SessionDetail(
     state: SessionDetailState,
     onBackPress: () -> Unit,
+    onRemoveSet: (Set) -> Unit,
     onReferenceClick: (String) -> Unit,
     onSelectBottomSheet: (Exercise) -> Unit,
 ) {
@@ -123,11 +133,12 @@ private fun SessionDetail(
 
         is SessionDetailState.Success -> {
             val data = state.data
-            SessionList(
+            SetsList(
                 session = data.session,
                 exerciseSets = data.sets,
                 isEditable = data.isToday,
                 onBackPress = onBackPress,
+                onRemoveSet = onRemoveSet,
                 onReferenceClick = onReferenceClick,
                 onSelectBottomSheet = onSelectBottomSheet,
             )
@@ -136,11 +147,12 @@ private fun SessionDetail(
 }
 
 @Composable
-private fun SessionList(
+private fun SetsList(
     session: Session,
     exerciseSets: Map<Exercise, List<Set>>?,
     isEditable: Boolean,
     onBackPress: () -> Unit,
+    onRemoveSet: (Set) -> Unit,
     onReferenceClick: (String) -> Unit,
     onSelectBottomSheet: (Exercise) -> Unit,
 ) {
@@ -176,13 +188,37 @@ private fun SessionList(
                 }
             }
             itemsIndexed(items = sets) { index, set ->
-                SetItem(
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
-                    title = normalizeInt(index + 1),
-                    set = set,
-                )
+                SwipeToDeleteBox(onDismiss = { onRemoveSet(set) }) {
+                    SetItem(
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
+                        set = set,
+                        title = {
+                            AnimatedSetIndex(index = index)
+                        },
+                    )
+                }
             }
         }
+    }
+}
+
+@Composable
+private fun AnimatedSetIndex(
+    index: Int,
+) {
+    AnimatedContent(
+        targetState = index,
+        transitionSpec = {
+            if (targetState > initialState) {
+                (slideInVertically { height -> height } + fadeIn()) togetherWith
+                        (slideOutVertically { height -> -height } + fadeOut())
+            } else {
+                slideInVertically { height -> -height } + fadeIn() togetherWith
+                        (slideOutVertically { height -> height } + fadeOut())
+            } using SizeTransform(clip = false)
+        }, label = ""
+    ) { targetCount ->
+        Text(text = normalizeInt(targetCount + 1))
     }
 }
 
@@ -324,6 +360,7 @@ private fun SessionDetailPreview() {
                 onBackPress = {},
                 onReferenceClick = {},
                 onSelectBottomSheet = {},
+                onRemoveSet = {},
             )
         }
     }
@@ -342,6 +379,7 @@ private fun SessionErrorPreview() {
                 onBackPress = {},
                 onReferenceClick = {},
                 onSelectBottomSheet = {},
+                onRemoveSet = {},
             )
         }
     }

@@ -2,6 +2,7 @@ package com.looker.kenko.ui.sessionDetail.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,9 +10,12 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,23 +33,26 @@ import com.looker.kenko.ui.theme.numbers
 
 @Composable
 fun SetItem(
-    title: String,
     set: Set,
     modifier: Modifier = Modifier,
+    title: @Composable () -> Unit,
 ) {
     Row(
         modifier = Modifier
             .heightIn(64.dp)
             .widthIn(240.dp, 420.dp)
+            .background(MaterialTheme.colorScheme.surface)
             .then(modifier),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            modifier = Modifier.padding(horizontal = 12.dp),
-            text = title,
-            style = MaterialTheme.typography.displayMedium.numbers(),
-            color = MaterialTheme.colorScheme.outline
-        )
+        CompositionLocalProvider(
+            LocalContentColor provides MaterialTheme.colorScheme.outline,
+            LocalTextStyle provides MaterialTheme.typography.displayMedium.numbers()
+        ) {
+            Box(modifier = Modifier.padding(horizontal = 16.dp)) {
+                title()
+            }
+        }
         Spacer(modifier = Modifier.width(12.dp))
         Row(
             modifier = Modifier
@@ -91,8 +98,9 @@ private fun PerformedItem(
 private fun SetItemPreview() {
     KenkoTheme {
         SetItem(
-            "01",
             Set(12, 40.0, SetType.Drop, MuscleGroups.Chest.sampleExercises.first())
-        )
+        ) {
+            Text(text = "01")
+        }
     }
 }

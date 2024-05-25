@@ -1,6 +1,5 @@
 package com.looker.kenko.ui.theme
 
-import android.provider.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 
 /**
@@ -27,6 +26,8 @@ object KenkoIcons {
     val Add: ImageVector = com.looker.kenko.ui.components.icons.symbols.Add
 
     val Done: ImageVector = com.looker.kenko.ui.components.icons.symbols.Done
+
+    val Delete: ImageVector = com.looker.kenko.ui.components.icons.symbols.Delete
 
     val Remove: ImageVector = com.looker.kenko.ui.components.icons.symbols.Remove
 

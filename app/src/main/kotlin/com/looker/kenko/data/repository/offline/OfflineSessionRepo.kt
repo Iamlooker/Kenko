@@ -29,6 +29,13 @@ class OfflineSessionRepo @Inject constructor(
         dao.upsert(currentSession.copy(sets = updatedSets))
     }
 
+    override suspend fun removeSet(date: LocalDate, set: Set) {
+        if (!date.isToday) error("Editing on old dates is not supported!")
+        val currentSession = get(date) ?: error("For localDate it should not be null")
+        val updatedSets = currentSession.sets.updateAsMutable { remove(set) }
+        dao.upsert(currentSession.copy(sets = updatedSets))
+    }
+
     override suspend fun createEmpty() {
         return dao.upsert(Session.create(emptyList()))
     }
