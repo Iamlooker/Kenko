@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Double back presses
 - Swipe gesture on Text field
 - Elements squashing on small screens
+- Empty exercises
+- Invalid reference
 
 ## [1.1.1] - 2024-05-19
 
