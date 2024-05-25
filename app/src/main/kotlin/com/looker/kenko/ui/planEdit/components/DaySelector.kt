@@ -1,9 +1,9 @@
 package com.looker.kenko.ui.planEdit.components
 
 import androidx.compose.animation.animateColor
-import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -46,17 +47,16 @@ fun DaySelector(
 ) {
     Row(
         modifier = modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState()),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Spacer(modifier = Modifier.weight(1F))
+        Spacer(modifier = Modifier.width(8.dp))
         DayOfWeek.entries.forEach {
             dayItem(it)
-            if (it != SUNDAY) {
-                Spacer(modifier = Modifier.width(12.dp))
-            }
+            if (it != SUNDAY) Spacer(modifier = Modifier.width(6.dp))
         }
-        Spacer(modifier = Modifier.weight(1F))
+        Spacer(modifier = Modifier.width(8.dp))
     }
 }
 
