@@ -1,5 +1,6 @@
 package com.looker.kenko.ui.addEditExercise
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,6 +9,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.looker.kenko.R
+import com.looker.kenko.data.StringHandler
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.data.repository.ExerciseRepo
@@ -21,12 +24,14 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import javax.inject.Inject
 
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
 class AddEditExerciseViewModel @Inject constructor(
     private val repo: ExerciseRepo,
+    private val stringHandler: StringHandler,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -42,11 +47,17 @@ class AddEditExerciseViewModel @Inject constructor(
 
     private val isReadOnly: Boolean = defaultExerciseName != null
 
+    val snackbarState = SnackbarHostState()
+
     var exerciseName: String by mutableStateOf(defaultExerciseName ?: "")
         private set
 
     var reference: String by mutableStateOf("")
         private set
+
+    private val isReferenceInvalid: Flow<Boolean> =
+        snapshotFlow { reference }
+            .mapLatest { it.toHttpUrlOrNull() == null && it.isNotBlank() }
 
     private val exerciseAlreadyExistError: Flow<Boolean> =
         snapshotFlow { exerciseName }
@@ -56,13 +67,15 @@ class AddEditExerciseViewModel @Inject constructor(
         targetMuscle,
         isIsometric,
         flowOf(isReadOnly),
-        exerciseAlreadyExistError
-    ) { target, isometric, readOnly, alreadyExist ->
+        exerciseAlreadyExistError,
+        isReferenceInvalid,
+    ) { target, isometric, readOnly, alreadyExist, referenceInvalid ->
         AddEditExerciseUiState(
             targetMuscle = target,
             isIsometric = isometric,
             isReadOnly = readOnly,
-            isError = alreadyExist
+            isError = alreadyExist,
+            isReferenceInvalid = referenceInvalid,
         )
     }.asStateFlow(
         AddEditExerciseUiState(
@@ -70,6 +83,7 @@ class AddEditExerciseViewModel @Inject constructor(
             isIsometric = false,
             isError = false,
             isReadOnly = false,
+            isReferenceInvalid = false,
         )
     )
 
@@ -93,8 +107,16 @@ class AddEditExerciseViewModel @Inject constructor(
         }
     }
 
-    fun addNewExercise() {
+    fun addNewExercise(onDone: () -> Unit) {
         viewModelScope.launch {
+            if (exerciseName.isBlank()) {
+                snackbarState.showSnackbar(stringHandler.getString(R.string.error_exercise_name_empty))
+                return@launch
+            }
+            if (state.value.isReferenceInvalid) {
+                snackbarState.showSnackbar(stringHandler.getString(R.string.error_invalid_reference_format))
+                return@launch
+            }
             repo.upsert(
                 Exercise(
                     name = exerciseName,
@@ -103,6 +125,7 @@ class AddEditExerciseViewModel @Inject constructor(
                     isIsometric = isIsometric.value
                 )
             )
+            onDone()
         }
     }
 
@@ -128,5 +151,6 @@ data class AddEditExerciseUiState(
     val isIsometric: Boolean,
     val isError: Boolean,
     val isReadOnly: Boolean,
+    val isReferenceInvalid: Boolean,
 )
 

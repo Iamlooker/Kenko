@@ -12,13 +12,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -38,7 +40,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
 import com.looker.kenko.data.model.MuscleGroups
+import com.looker.kenko.ui.components.ErrorSnackbar
 import com.looker.kenko.ui.components.kenkoTextFieldColor
+import com.looker.kenko.ui.helper.plus
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 
@@ -51,14 +55,12 @@ fun AddEditExercise(onDone: () -> Unit) {
         exerciseName = viewModel.exerciseName,
         exerciseReference = viewModel.reference,
         state = state,
+        snackbarState = viewModel.snackbarState,
         onSelectTarget = viewModel::setTargetMuscle,
         onSelectIsometric = viewModel::setIsometric,
         onNameChange = viewModel::setName,
         onReferenceChange = viewModel::addReference,
-        onDone = {
-            viewModel.addNewExercise()
-            onDone()
-        }
+        onDone = { viewModel.addNewExercise(onDone) },
     )
 }
 
@@ -67,62 +69,71 @@ private fun AddEditExercise(
     exerciseName: String,
     exerciseReference: String,
     state: AddEditExerciseUiState,
+    snackbarState: SnackbarHostState,
     onSelectTarget: (MuscleGroups) -> Unit,
     onSelectIsometric: (Boolean) -> Unit,
     onNameChange: (String) -> Unit,
     onReferenceChange: (String) -> Unit,
     onDone: () -> Unit,
 ) {
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .statusBarsPadding(),
-    ) {
-        Spacer(modifier = Modifier.height(32.dp))
-        Text(
-            text = stringResource(R.string.label_new_exercise),
-            style = MaterialTheme.typography.displayMedium,
-            color = MaterialTheme.colorScheme.tertiary
-        )
-        Spacer(modifier = Modifier.height(32.dp))
-        ExerciseTextField(
-            exerciseName = exerciseName,
-            onNameChange = onNameChange,
-            isError = state.isError,
-            isReadOnly = state.isReadOnly,
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = stringResource(R.string.label_target),
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.outline
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        TargetMuscleSelection(target = state.targetMuscle, onSet = onSelectTarget)
-        Spacer(modifier = Modifier.height(12.dp))
-        IsIsometricButton(isIsometric = state.isIsometric, onChange = onSelectIsometric)
-        Spacer(modifier = Modifier.height(18.dp))
-        ReferenceTextField(
-            reference = exerciseReference,
-            onReferenceChange = onReferenceChange,
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(18.dp))
-        Button(
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarState) {
+                ErrorSnackbar(data = it)
+            }
+        },
+    ) { innerPadding ->
+        Column(
             modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(12.dp)
-                .navigationBarsPadding(),
-            onClick = onDone,
-            contentPadding = PaddingValues(vertical = 32.dp, horizontal = 48.dp)
+                .padding(PaddingValues(horizontal = 16.dp) + innerPadding),
         ) {
-            Icon(
-                imageVector = KenkoIcons.Save,
-                contentDescription = ""
+            Spacer(modifier = Modifier.height(32.dp))
+            Text(
+                text = stringResource(R.string.label_new_exercise),
+                style = MaterialTheme.typography.displayMedium,
+                color = MaterialTheme.colorScheme.tertiary
             )
-            Spacer(modifier = Modifier.width(16.dp))
-            Text(text = stringResource(R.string.label_save))
+            Spacer(modifier = Modifier.height(32.dp))
+            ExerciseTextField(
+                exerciseName = exerciseName,
+                onNameChange = onNameChange,
+                isError = state.isError,
+                isReadOnly = state.isReadOnly,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = stringResource(R.string.label_target),
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.outline
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            TargetMuscleSelection(target = state.targetMuscle, onSet = onSelectTarget)
+            Spacer(modifier = Modifier.height(12.dp))
+            IsIsometricButton(isIsometric = state.isIsometric, onChange = onSelectIsometric)
+            Spacer(modifier = Modifier.height(18.dp))
+            ReferenceTextField(
+                reference = exerciseReference,
+                onReferenceChange = onReferenceChange,
+                isError = state.isReferenceInvalid,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(18.dp))
+            Button(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(12.dp)
+                    .navigationBarsPadding(),
+                onClick = onDone,
+                contentPadding = PaddingValues(vertical = 32.dp, horizontal = 48.dp)
+            ) {
+                Icon(
+                    imageVector = KenkoIcons.Save,
+                    contentDescription = ""
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Text(text = stringResource(R.string.label_save))
+            }
         }
     }
 }
@@ -130,6 +141,7 @@ private fun AddEditExercise(
 @Composable
 private fun ReferenceTextField(
     reference: String,
+    isError: Boolean,
     onReferenceChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -146,6 +158,7 @@ private fun ReferenceTextField(
         label = {
             Text(text = stringResource(R.string.label_reference))
         },
+        isError = isError,
         leadingIcon = {
             Icon(imageVector = KenkoIcons.Lightbulb, contentDescription = null)
         }
@@ -229,6 +242,7 @@ private fun ReferenceTextFieldPreview() {
         ReferenceTextField(
             reference = "https://youtu.be",
             onReferenceChange = {},
+            isError = false,
             modifier = Modifier.fillMaxWidth()
         )
     }
@@ -280,7 +294,8 @@ private fun AddEditPreview() {
         AddEditExercise(
             exerciseName = "BenchPress",
             exerciseReference = "yt.be",
-            state = AddEditExerciseUiState(MuscleGroups.Chest, false, false, false),
+            state = AddEditExerciseUiState(MuscleGroups.Chest, false, false, false, false),
+            snackbarState = SnackbarHostState(),
             onSelectTarget = {},
             onSelectIsometric = {},
             onNameChange = {},

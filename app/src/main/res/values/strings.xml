@@ -46,7 +46,7 @@
     <string name="label_is_isometric">Isometric</string>
     <string name="label_reference">Reference</string>
     <string name="label_is_isometric_DESC">Exercise requires static holds</string>
-    <string name="label_reference_optional">optional *</string>
+    <string name="label_reference_optional">optional*</string>
     <string name="label_exercise_exists">Exercise Already Exists</string>
 
     <!--Select Exercises-->
@@ -81,8 +81,10 @@
 
     <!--Error-->
     <string name="error_invalid_reference">Invalid Reference</string>
+    <string name="error_invalid_reference_format">Invalid reference format</string>
     <string name="error_invalid_url">Invalid URL</string>
     <string name="error_plan_name_empty">Enter a plan name</string>
+    <string name="error_exercise_name_empty">Enter an exercise name</string>
     <string name="error_plan_empty">Plan is empty</string>
     <string name="error_cant_find_session">Can\'t Find Session</string>
     <string name="error_cant_find_exercise">Can\'t Find Exercise</string>
