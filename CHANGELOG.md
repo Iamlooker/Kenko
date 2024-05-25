@@ -9,7 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Support for isometric exercises
+- Allow Deleting Sets
+
 ### Changed
+
 ### Fixed
 - Navigation to same page again
 - Double back presses
