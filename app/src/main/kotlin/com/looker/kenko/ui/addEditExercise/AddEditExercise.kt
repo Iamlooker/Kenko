@@ -1,10 +1,7 @@
 package com.looker.kenko.ui.addEditExercise
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -41,6 +37,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
 import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.ui.components.ErrorSnackbar
+import com.looker.kenko.ui.components.FlowHorizontalChips
 import com.looker.kenko.ui.components.kenkoTextFieldColor
 import com.looker.kenko.ui.helper.plus
 import com.looker.kenko.ui.theme.KenkoIcons
@@ -108,7 +105,7 @@ private fun AddEditExercise(
                 color = MaterialTheme.colorScheme.outline
             )
             Spacer(modifier = Modifier.height(8.dp))
-            TargetMuscleSelection(target = state.targetMuscle, onSet = onSelectTarget)
+            FlowHorizontalChips(target = state.targetMuscle, onSet = onSelectTarget)
             Spacer(modifier = Modifier.height(12.dp))
             IsIsometricButton(isIsometric = state.isIsometric, onChange = onSelectIsometric)
             Spacer(modifier = Modifier.height(18.dp))
@@ -193,25 +190,6 @@ private fun ExerciseTextField(
             }
         }
     )
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-private fun TargetMuscleSelection(
-    target: MuscleGroups,
-    onSet: (MuscleGroups) -> Unit,
-) {
-    FlowRow(
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        MuscleGroups.entries.forEach { muscle ->
-            FilterChip(
-                selected = target == muscle,
-                onClick = { onSet(muscle) },
-                label = { Text(text = stringResource(muscle.stringRes)) }
-            )
-        }
-    }
 }
 
 @Composable

@@ -31,8 +31,8 @@ class SelectExerciseViewModel @Inject constructor(
 
     private val exerciseStream = repo.stream
 
-    private val _targetMuscle: MutableStateFlow<MuscleGroups> = MutableStateFlow(MuscleGroups.Chest)
-    val targetMuscle: StateFlow<MuscleGroups> = _targetMuscle.asStateFlow()
+    private val _targetMuscle: MutableStateFlow<MuscleGroups?> = MutableStateFlow(null)
+    val targetMuscle: StateFlow<MuscleGroups?> = _targetMuscle.asStateFlow()
 
     val searchResult = combine(
         searchQueryFlow,
@@ -41,8 +41,7 @@ class SelectExerciseViewModel @Inject constructor(
     ) { query, target, exercises ->
         val filteredExercises = exercises
             .filter {
-                it.target == target
-                        && (query.isBlank() || it.name.contains(query, ignoreCase = true))
+                (it.target == target || target == null) && it.satisfiesSearch(query)
             }
         if (filteredExercises.isNotEmpty()) {
             SearchResult.Success(filteredExercises)
@@ -51,7 +50,7 @@ class SelectExerciseViewModel @Inject constructor(
         }
     }.asStateFlow(SearchResult.Loading)
 
-    fun setTarget(target: MuscleGroups) {
+    fun setTarget(target: MuscleGroups?) {
         viewModelScope.launch {
             _targetMuscle.emit(target)
         }
@@ -59,6 +58,10 @@ class SelectExerciseViewModel @Inject constructor(
 
     fun setSearch(value: String) {
         searchQuery = value
+    }
+
+    private fun Exercise.satisfiesSearch(query: String): Boolean {
+        return query.isBlank() || name.contains(query, ignoreCase = true)
     }
 }
 

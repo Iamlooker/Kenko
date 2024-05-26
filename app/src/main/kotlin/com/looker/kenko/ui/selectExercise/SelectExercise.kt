@@ -36,6 +36,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.MuscleGroups
+import com.looker.kenko.ui.components.HorizontalTargetChips
 import com.looker.kenko.ui.components.kenkoTextFieldColor
 import com.looker.kenko.ui.planEdit.components.ExerciseItem
 import com.looker.kenko.ui.theme.KenkoIcons
@@ -56,7 +57,7 @@ fun SelectExercise(onDone: (Exercise) -> Unit, onRequestNewExercise: () -> Unit)
 
         AddExerciseHeader()
         ExerciseSearchField(name = viewModel.searchQuery, onNameChange = viewModel::setSearch)
-        MuscleGroupFilterChips(target = target, onSelect = viewModel::setTarget)
+        HorizontalTargetChips(target = target, onSelect = viewModel::setTarget)
 
         when (searchResult) {
             SearchResult.Loading -> {

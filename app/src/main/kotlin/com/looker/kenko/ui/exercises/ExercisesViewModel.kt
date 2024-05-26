@@ -20,8 +20,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-val Targets = listOf(null) + MuscleGroups.entries
-
 @HiltViewModel
 class ExercisesViewModel @Inject constructor(
     private val repo: ExerciseRepo,

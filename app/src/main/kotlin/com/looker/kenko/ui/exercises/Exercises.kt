@@ -1,7 +1,7 @@
 package com.looker.kenko.ui.exercises
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,12 +14,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FilledTonalIconButton
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -47,6 +45,7 @@ import com.looker.kenko.data.model.sampleExercises
 import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.components.ErrorSnackbar
 import com.looker.kenko.ui.components.KenkoBorderWidth
+import com.looker.kenko.ui.components.HorizontalTargetChips
 import com.looker.kenko.ui.components.OutlineBorder
 import com.looker.kenko.ui.components.SwipeToDeleteBox
 import com.looker.kenko.ui.helper.plus
@@ -173,7 +172,7 @@ private fun Header(
     onBackPress: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier) {
+    Column(modifier = modifier.background(MaterialTheme.colorScheme.background)) {
         TopAppBar(
             title = {
                 Text(text = stringResource(id = R.string.label_browse_exercises))
@@ -182,35 +181,8 @@ private fun Header(
                 BackButton(onClick = onBackPress)
             }
         )
-        MuscleGroupFilterChips(target = target, onSelect = onSelect)
+        HorizontalTargetChips(target = target, onSelect = onSelect)
         HorizontalDivider(thickness = KenkoBorderWidth)
-    }
-}
-
-@Composable
-private fun MuscleGroupFilterChips(
-    target: MuscleGroups?,
-    onSelect: (MuscleGroups?) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Surface {
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .horizontalScroll(rememberScrollState())
-                .padding(bottom = 4.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Spacer(modifier = Modifier.width(12.dp))
-            Targets.forEach { muscle ->
-                FilterChip(
-                    selected = target == muscle,
-                    onClick = { onSelect(muscle) },
-                    label = { Text(text = stringResource(muscle.string)) }
-                )
-            }
-            Spacer(modifier = Modifier.width(12.dp))
-        }
     }
 }
 
