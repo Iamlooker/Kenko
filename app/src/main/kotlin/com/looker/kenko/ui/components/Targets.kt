@@ -16,6 +16,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
@@ -40,12 +41,13 @@ fun HorizontalTargetChips(
     ) {
         Spacer(modifier = Modifier.width(contentPadding.calculateStartPadding(LocalLayoutDirection.current)))
         Targets.forEach { muscle ->
+            val isLast = remember { Targets.last() == muscle }
             FilterChip(
                 selected = target == muscle,
                 onClick = { onSelect(muscle) },
                 label = { Text(text = stringResource(muscle.string)) }
             )
-            if (Targets.last() != muscle) {
+            if (isLast) {
                 Spacer(modifier = Modifier.width(8.dp))
             }
         }

@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Deleting Sets / Exercises / Plans
 
 ### Changed
+- Error message height
+- Chips type in `Select Exercise`
 
 ### Fixed
 - Navigation to same page again
@@ -20,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Elements squashing on small screens
 - Empty exercises
 - Invalid reference
+- False reference icon
 
 ## [1.1.1] - 2024-05-19
 
