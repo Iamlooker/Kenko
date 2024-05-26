@@ -1,7 +1,6 @@
 package com.looker.kenko.ui.components
 
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.Spring.DampingRatioMediumBouncy
 import androidx.compose.animation.core.Spring.StiffnessLow
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Box
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SwipeToDismissBox
-import androidx.compose.material3.SwipeToDismissBoxState
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
@@ -72,10 +70,9 @@ fun SwipeToDeleteBox(
         modifier = modifier,
         state = state,
         backgroundContent = {
-            val direction = state.dismissDirection
-            val alignment by remember(direction) {
+            val alignment by remember {
                 derivedStateOf {
-                    when (direction) {
+                    when (state.dismissDirection) {
                         SwipeToDismissBoxValue.StartToEnd -> Alignment.CenterStart
                         SwipeToDismissBoxValue.EndToStart -> Alignment.CenterEnd
                         SwipeToDismissBoxValue.Settled -> Alignment.Center
@@ -88,11 +85,7 @@ fun SwipeToDeleteBox(
                     .clipToBounds()
                     .fillMaxSize()
                     .drawWithCache {
-                        val circleCenter = when (direction) {
-                            SwipeToDismissBoxValue.StartToEnd -> center.copy(x = 0F)
-                            SwipeToDismissBoxValue.EndToStart -> center.copy(x = size.width)
-                            SwipeToDismissBoxValue.Settled -> center
-                        }
+                        val circleCenter = state.dismissDirection.toOffset()
                         onDrawBehind {
                             drawCircle(
                                 color = backgroundColor,
@@ -115,6 +108,13 @@ fun SwipeToDeleteBox(
     ) {
         content()
     }
+}
+
+context(CacheDrawScope)
+fun SwipeToDismissBoxValue.toOffset(): Offset = when (this) {
+    SwipeToDismissBoxValue.StartToEnd -> center.copy(x = 0F)
+    SwipeToDismissBoxValue.EndToStart -> center.copy(x = size.width)
+    SwipeToDismissBoxValue.Settled -> center
 }
 
 val CacheDrawScope.center: Offset
