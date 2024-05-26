@@ -175,7 +175,7 @@ private fun SetsList(
                 span = { GridItemSpan(maxLineSpan) },
             ) {
                 StickyHeader(name = exercise.name) {
-                    if (exercise.reference != null) {
+                    if (!exercise.reference.isNullOrBlank()) {
                         FilledTonalIconButton(onClick = { onReferenceClick(exercise.reference) }) {
                             Icon(imageVector = KenkoIcons.Lightbulb, contentDescription = null)
                         }

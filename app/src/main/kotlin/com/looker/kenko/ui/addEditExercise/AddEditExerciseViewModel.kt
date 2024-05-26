@@ -121,7 +121,7 @@ class AddEditExerciseViewModel @Inject constructor(
                 Exercise(
                     name = exerciseName,
                     target = targetMuscle.value,
-                    reference = reference,
+                    reference = reference.ifBlank { null },
                     isIsometric = isIsometric.value
                 )
             )
