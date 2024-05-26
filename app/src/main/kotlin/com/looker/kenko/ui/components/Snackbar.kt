@@ -1,6 +1,6 @@
 package com.looker.kenko.ui.components
 
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Snackbar
@@ -9,7 +9,6 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarVisuals
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.looker.kenko.ui.theme.KenkoTheme
@@ -20,7 +19,7 @@ fun ErrorSnackbar(
     modifier: Modifier = Modifier,
 ) {
     Snackbar(
-        modifier = modifier.height(96.dp),
+        modifier = modifier.heightIn(84.dp),
         shape = CircleShape,
         containerColor = MaterialTheme.colorScheme.error,
         contentColor = MaterialTheme.colorScheme.onError,
