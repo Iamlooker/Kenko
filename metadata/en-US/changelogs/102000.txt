@@ -1,0 +1,19 @@
+Added:
+
+* Support for isometric exercises
+* Deleting Sets / Exercises / Plans
+
+Changed:
+
+* Error message height
+* Chips type in `Select Exercise`
+
+Fixed:
+
+* Navigation to same page again
+* Double back presses
+* Swipe gesture on Text field
+* Elements squashing on small screens
+* Empty exercises
+* Invalid reference
+* False reference icon

@@ -15,8 +15,11 @@ android {
         applicationId = "com.looker.kenko"
         minSdk = 26
         targetSdk = 34
-        versionCode = 101010
-        versionName = "1.1.1"
+        // 1.2.0 -> 102000
+        // 1.12.2 -> 112020
+        // 1.12.10 -> 112100
+        versionCode = 102000
+        versionName = "1.2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

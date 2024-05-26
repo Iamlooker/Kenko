@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+### Changed
+### Fixed
+
+## [1.2.0] - 2024-05-26
+
+### Added
 - Support for isometric exercises
 - Deleting Sets / Exercises / Plans
 
@@ -18,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Navigation to same page again
 - Double back presses
-- Swipe gesture on Text field
+- Swipe gesture on reps and weight text field
 - Elements squashing on small screens
 - Empty exercises
 - Invalid reference
