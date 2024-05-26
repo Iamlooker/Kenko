@@ -252,7 +252,7 @@ private fun AddExerciseSheet(
     onAddNewExerciseClick: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
-    val state = rememberModalBottomSheetState()
+    val state = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     ModalBottomSheet(sheetState = state, onDismissRequest = onDismiss) {
         SelectExercise(
             onDone = { exercise ->

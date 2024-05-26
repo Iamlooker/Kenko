@@ -44,8 +44,8 @@ import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.data.model.sampleExercises
 import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.components.ErrorSnackbar
-import com.looker.kenko.ui.components.KenkoBorderWidth
 import com.looker.kenko.ui.components.HorizontalTargetChips
+import com.looker.kenko.ui.components.KenkoBorderWidth
 import com.looker.kenko.ui.components.OutlineBorder
 import com.looker.kenko.ui.components.SwipeToDeleteBox
 import com.looker.kenko.ui.helper.plus
@@ -181,7 +181,11 @@ private fun Header(
                 BackButton(onClick = onBackPress)
             }
         )
-        HorizontalTargetChips(target = target, onSelect = onSelect)
+        HorizontalTargetChips(
+            target = target,
+            onSelect = onSelect,
+            contentPadding = PaddingValues(12.dp),
+        )
         HorizontalDivider(thickness = KenkoBorderWidth)
     }
 }
