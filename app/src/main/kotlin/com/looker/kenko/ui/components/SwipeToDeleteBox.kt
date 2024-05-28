@@ -24,6 +24,8 @@ import androidx.compose.ui.draw.CacheDrawScope
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.unit.dp
 import com.looker.kenko.ui.theme.KenkoIcons
 
@@ -119,3 +121,16 @@ fun SwipeToDismissBoxValue.toOffset(): Offset = when (this) {
 
 val CacheDrawScope.center: Offset
     get() = Offset(size.width / 2, size.height / 2)
+
+@Composable
+fun disableScrollConnection() = remember {
+    object : NestedScrollConnection {
+        override fun onPostScroll(
+            consumed: Offset,
+            available: Offset,
+            source: NestedScrollSource,
+        ): Offset {
+            return available
+        }
+    }
+}

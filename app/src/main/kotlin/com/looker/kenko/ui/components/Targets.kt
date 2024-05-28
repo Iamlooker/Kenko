@@ -47,7 +47,7 @@ fun HorizontalTargetChips(
                 onClick = { onSelect(muscle) },
                 label = { Text(text = stringResource(muscle.string)) }
             )
-            if (isLast) {
+            if (!isLast) {
                 Spacer(modifier = Modifier.width(8.dp))
             }
         }

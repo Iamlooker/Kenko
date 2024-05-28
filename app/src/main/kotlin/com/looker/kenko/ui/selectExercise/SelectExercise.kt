@@ -20,7 +20,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -28,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,6 +37,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.ui.components.HorizontalTargetChips
+import com.looker.kenko.ui.components.disableScrollConnection
 import com.looker.kenko.ui.components.kenkoTextFieldColor
 import com.looker.kenko.ui.planEdit.components.ExerciseItem
 import com.looker.kenko.ui.theme.KenkoIcons
@@ -53,6 +54,7 @@ fun SelectExercise(
 
     Column(
         modifier = Modifier
+            .nestedScroll(disableScrollConnection())
             .wrapContentHeight(),
     ) {
         val target by viewModel.targetMuscle.collectAsStateWithLifecycle()
