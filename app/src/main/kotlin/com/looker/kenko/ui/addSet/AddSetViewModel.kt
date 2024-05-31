@@ -36,19 +36,11 @@ class AddSetViewModel @AssistedInject constructor(
     val weights: TextFieldState = TextFieldState("20.0")
 
     fun addRep(value: Int) {
-        updateReps((repInt ?: 0) + value)
+        reps.setTextAndPlaceCursorAtEnd((repInt + value).toString())
     }
 
     fun addWeight(value: Double) {
-        updateWeights((weightDouble ?: 0.0) + value)
-    }
-
-    fun updateReps(value: Int) {
-        reps.setTextAndPlaceCursorAtEnd(value.toString())
-    }
-
-    fun updateWeights(value: Double) {
-        weights.setTextAndPlaceCursorAtEnd(value.toString())
+        weights.setTextAndPlaceCursorAtEnd((weightDouble + value).toString())
     }
 
     val repsDragEvents: DragEvents = object : DragEvents {
@@ -90,11 +82,9 @@ class AddSetViewModel @AssistedInject constructor(
     fun addSet() {
         viewModelScope.launch {
             val exercise = exerciseRepo.get(exerciseName) ?: return@launch
-            val reps = repInt ?: return@launch
-            val weights = weightDouble ?: return@launch
             val set = Set(
-                repsOrDuration = reps,
-                weight = weights,
+                repsOrDuration = repInt,
+                weight = weightDouble,
                 exercise = exercise,
                 type = SetType.Standard
             )
@@ -102,11 +92,11 @@ class AddSetViewModel @AssistedInject constructor(
         }
     }
 
-    private inline val repInt: Int?
-        get() = reps.text.toString().toIntOrNull()
+    private inline val repInt: Int
+        get() = reps.text.toString().toIntOrNull() ?: 0
 
-    private inline val weightDouble: Double?
-        get() = weights.text.toString().toDoubleOrNull()
+    private inline val weightDouble: Double
+        get() = weights.text.toString().toDoubleOrNull() ?: 0.0
 
     @AssistedFactory
     interface AddSetViewModelFactory {
