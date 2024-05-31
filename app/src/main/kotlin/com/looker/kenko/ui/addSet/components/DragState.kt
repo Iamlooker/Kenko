@@ -5,7 +5,6 @@ import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.gestures.DraggableState
-import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
@@ -23,8 +22,6 @@ import kotlinx.coroutines.launch
 
 @Stable
 class DragState(
-    val textFieldState: TextFieldState,
-    val supportingText: String?,
     val events: DragEvents,
     constraints: DragConstraints,
     scope: CoroutineScope,
@@ -79,9 +76,7 @@ class DragState(
 
 @Composable
 fun rememberDraggableTextFieldState(
-    textFieldState: TextFieldState,
     events: DragEvents,
-    supportingText: String? = null,
     constraints: DragConstraints = DragConstraints(
         density = LocalDensity.current,
         swipeRange = (-48).dp..96.dp,
@@ -89,11 +84,9 @@ fun rememberDraggableTextFieldState(
     ),
 ): DragState {
     return DragState(
-        textFieldState = textFieldState,
-        supportingText = supportingText,
+        events = events,
         constraints = constraints,
         scope = rememberCoroutineScope(),
-        events = events,
     )
 }
 

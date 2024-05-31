@@ -14,7 +14,9 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.InputTransformation
 import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -33,7 +35,10 @@ import com.looker.kenko.ui.components.kenkoTextDecorator
 @Composable
 fun DraggableTextField(
     dragState: DragState,
+    textFieldState: TextFieldState,
     modifier: Modifier = Modifier,
+    supportingText: String? = null,
+    inputTransformation: InputTransformation? = null,
     containerColor: Color = MaterialTheme.colorScheme.secondaryContainer,
     textColor: Color = MaterialTheme.colorScheme.onSecondaryContainer,
     style: TextStyle = MaterialTheme.typography.titleMedium.copy(color = textColor),
@@ -67,11 +72,12 @@ fun DraggableTextField(
         contentAlignment = Alignment.Center
     ) {
         BasicTextField(
-            state = dragState.textFieldState,
+            state = textFieldState,
             lineLimits = TextFieldLineLimits.SingleLine,
+            inputTransformation = inputTransformation,
             cursorBrush = SolidColor(MaterialTheme.colorScheme.onSecondaryContainer),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            decorator = if (dragState.supportingText != null) kenkoTextDecorator(dragState.supportingText) else null,
+            decorator = if (supportingText != null) kenkoTextDecorator(supportingText) else null,
             textStyle = style.copy(textAlign = TextAlign.Center)
         )
     }

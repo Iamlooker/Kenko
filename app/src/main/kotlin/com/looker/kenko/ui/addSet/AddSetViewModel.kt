@@ -1,7 +1,12 @@
 package com.looker.kenko.ui.addSet
 
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.InputTransformation
+import androidx.compose.foundation.text.input.TextFieldBuffer
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.looker.kenko.data.model.Set
@@ -14,7 +19,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.util.Timer
 import kotlin.concurrent.fixedRateTimer
@@ -32,13 +36,19 @@ class AddSetViewModel @AssistedInject constructor(
     val weights: TextFieldState = TextFieldState("20.0")
 
     fun addRep(value: Int) {
-        val updatedRep = (getRep() ?: 0) + value
-        reps.setTextAndPlaceCursorAtEnd(updatedRep.toString())
+        updateReps((repInt ?: 0) + value)
     }
 
     fun addWeight(value: Double) {
-        val updatedWeight = (getWeight() ?: 0.0) + value
-        weights.setTextAndPlaceCursorAtEnd(updatedWeight.toString())
+        updateWeights((weightDouble ?: 0.0) + value)
+    }
+
+    fun updateReps(value: Int) {
+        reps.setTextAndPlaceCursorAtEnd(value.toString())
+    }
+
+    fun updateWeights(value: Double) {
+        weights.setTextAndPlaceCursorAtEnd(value.toString())
     }
 
     val repsDragEvents: DragEvents = object : DragEvents {
@@ -79,31 +89,43 @@ class AddSetViewModel @AssistedInject constructor(
 
     fun addSet() {
         viewModelScope.launch {
-            val exercise = async {
-                exerciseRepo.get(exerciseName)
-            }
-            val reps = getRep() ?: return@launch
-            val weights = getWeight() ?: return@launch
+            val exercise = exerciseRepo.get(exerciseName) ?: return@launch
+            val reps = repInt ?: return@launch
+            val weights = weightDouble ?: return@launch
             val set = Set(
                 repsOrDuration = reps,
                 weight = weights,
-                exercise = exercise.await() ?: return@launch,
+                exercise = exercise,
                 type = SetType.Standard
             )
             sessionRepo.addSet(localDate, set)
         }
     }
 
-    private fun getRep(): Int? {
-        return reps.text.toString().toIntOrNull()
-    }
+    private inline val repInt: Int?
+        get() = reps.text.toString().toIntOrNull()
 
-    private fun getWeight(): Double? {
-        return weights.text.toString().toDoubleOrNull()
-    }
+    private inline val weightDouble: Double?
+        get() = weights.text.toString().toDoubleOrNull()
 
     @AssistedFactory
     interface AddSetViewModelFactory {
         fun create(name: String): AddSetViewModel
+    }
+
+    object IntTransformation : InputTransformation {
+        override val keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        override fun TextFieldBuffer.transformInput() {
+            if (!asCharSequence().isDigitsOnly()) {
+                revertAllChanges()
+            }
+        }
+    }
+
+    object DoubleTransformation : InputTransformation {
+        override val keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        override fun TextFieldBuffer.transformInput() {
+            toString().toDoubleOrNull() ?: revertAllChanges()
+        }
     }
 }

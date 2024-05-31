@@ -331,7 +331,7 @@ private fun AddSetSheet(
     onDismiss: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
-    val state = rememberModalBottomSheetState()
+    val state = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     ModalBottomSheet(sheetState = state, onDismissRequest = onDismiss) {
         AddSet(
             exercise = exercise,

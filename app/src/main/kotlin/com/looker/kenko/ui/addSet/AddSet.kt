@@ -29,6 +29,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.looker.kenko.R
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.repDurationStringRes
+import com.looker.kenko.ui.addSet.AddSetViewModel.DoubleTransformation
+import com.looker.kenko.ui.addSet.AddSetViewModel.IntTransformation
 import com.looker.kenko.ui.addSet.components.DraggableTextField
 import com.looker.kenko.ui.addSet.components.rememberDraggableTextFieldState
 import com.looker.kenko.ui.theme.KenkoIcons
@@ -73,11 +75,15 @@ fun AddSet(exercise: Exercise, onDone: () -> Unit) {
                 Text(text = stringResource(R.string.label_minus_int, 1))
             }
             val reps = rememberDraggableTextFieldState(
-                supportingText = stringResource(exercise.repDurationStringRes),
-                textFieldState = viewModel.reps,
                 events = viewModel.repsDragEvents,
             )
-            DraggableTextField(dragState = reps, modifier = zIndexModifier)
+            DraggableTextField(
+                dragState = reps,
+                textFieldState = viewModel.reps,
+                inputTransformation = IntTransformation,
+                supportingText = stringResource(exercise.repDurationStringRes),
+                modifier = zIndexModifier,
+            )
             TextButton(
                 modifier = incrementButtonModifier,
                 onClick = { viewModel.addRep(1) }
@@ -102,11 +108,15 @@ fun AddSet(exercise: Exercise, onDone: () -> Unit) {
                 Text(text = stringResource(R.string.label_minus_int, 1.0))
             }
             val weights = rememberDraggableTextFieldState(
-                supportingText = stringResource(R.string.label_weight),
-                textFieldState = viewModel.weights,
                 events = viewModel.weightsDragEvents,
             )
-            DraggableTextField(dragState = weights, modifier = zIndexModifier)
+            DraggableTextField(
+                dragState = weights,
+                textFieldState = viewModel.weights,
+                supportingText = stringResource(R.string.label_weight),
+                inputTransformation = DoubleTransformation,
+                modifier = zIndexModifier,
+            )
             TextButton(
                 modifier = incrementButtonModifier,
                 onClick = { viewModel.addWeight(1.0) }
@@ -166,9 +176,10 @@ private fun SwipeableTextField(
         shape = CircleShape,
         color = MaterialTheme.colorScheme.surfaceContainer
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            content()
-        }
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            content = content
+        )
     }
 }
 
