@@ -11,7 +11,7 @@ enum class MuscleGroups(@StringRes val stringRes: Int) {
     // Arms
     Biceps(R.string.label_muscle_biceps),
     Triceps(R.string.label_muscle_triceps),
-    Shoulders(R.string.label_muscle_delts),
+    Shoulders(R.string.label_muscle_shoulders),
 
     // Legs
     Quads(R.string.label_muscle_quads),

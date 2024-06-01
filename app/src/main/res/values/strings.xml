@@ -115,7 +115,7 @@
     <string name="label_muscle_calves">Calves</string>
     <string name="label_muscle_hamstrings">Hamstrings</string>
     <string name="label_muscle_quads">Quads</string>
-    <string name="label_muscle_delts">Shoulders</string>
+    <string name="label_muscle_shoulders">Shoulders</string>
 
     <!--Day of Week-->
     <string name="label_monday">.mon</string>
