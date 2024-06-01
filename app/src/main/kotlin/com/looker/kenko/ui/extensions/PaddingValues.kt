@@ -1,4 +1,4 @@
-package com.looker.kenko.ui.helper
+package com.looker.kenko.ui.extensions
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding

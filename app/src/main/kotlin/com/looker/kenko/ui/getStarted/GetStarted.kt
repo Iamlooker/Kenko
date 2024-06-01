@@ -48,8 +48,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
 import com.looker.kenko.ui.components.HealthQuotes
-import com.looker.kenko.ui.helper.PHI
-import com.looker.kenko.ui.helper.vertical
+import com.looker.kenko.ui.extensions.PHI
+import com.looker.kenko.ui.extensions.vertical
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 import kotlinx.coroutines.delay

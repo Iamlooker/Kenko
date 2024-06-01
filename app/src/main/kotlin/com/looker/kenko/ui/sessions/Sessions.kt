@@ -36,7 +36,7 @@ import com.looker.kenko.data.model.Session
 import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.components.texture.GradientStart
 import com.looker.kenko.ui.components.texture.dottedGradient
-import com.looker.kenko.ui.helper.plus
+import com.looker.kenko.ui.extensions.plus
 import com.looker.kenko.ui.planEdit.components.dayName
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme

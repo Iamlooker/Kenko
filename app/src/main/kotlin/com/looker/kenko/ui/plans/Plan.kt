@@ -22,7 +22,7 @@ import com.looker.kenko.R
 import com.looker.kenko.data.model.Plan
 import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.components.SwipeToDeleteBox
-import com.looker.kenko.ui.helper.plus
+import com.looker.kenko.ui.extensions.plus
 import com.looker.kenko.ui.plans.components.PlanItem
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme

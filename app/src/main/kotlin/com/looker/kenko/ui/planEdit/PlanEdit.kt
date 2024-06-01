@@ -48,8 +48,8 @@ import com.looker.kenko.data.model.sampleExercises
 import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.components.ErrorSnackbar
 import com.looker.kenko.ui.components.kenkoTextFieldColor
-import com.looker.kenko.ui.helper.normalizeInt
-import com.looker.kenko.ui.helper.vertical
+import com.looker.kenko.ui.extensions.normalizeInt
+import com.looker.kenko.ui.extensions.vertical
 import com.looker.kenko.ui.planEdit.components.DayItem
 import com.looker.kenko.ui.planEdit.components.DaySelector
 import com.looker.kenko.ui.planEdit.components.ExerciseItem

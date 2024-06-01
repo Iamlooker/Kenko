@@ -40,8 +40,8 @@ import com.looker.kenko.R
 import com.looker.kenko.ui.components.LiftingQuotes
 import com.looker.kenko.ui.components.OutlineBorder
 import com.looker.kenko.ui.components.SecondaryBorder
-import com.looker.kenko.ui.helper.PHI
-import com.looker.kenko.ui.helper.plus
+import com.looker.kenko.ui.extensions.PHI
+import com.looker.kenko.ui.extensions.plus
 import com.looker.kenko.ui.profile.SelectPlanCard
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme

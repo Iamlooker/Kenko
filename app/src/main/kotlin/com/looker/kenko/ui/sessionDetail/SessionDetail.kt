@@ -56,8 +56,8 @@ import com.looker.kenko.data.model.Set
 import com.looker.kenko.ui.addSet.AddSet
 import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.components.SwipeToDeleteBox
-import com.looker.kenko.ui.helper.normalizeInt
-import com.looker.kenko.ui.helper.plus
+import com.looker.kenko.ui.extensions.normalizeInt
+import com.looker.kenko.ui.extensions.plus
 import com.looker.kenko.ui.planEdit.components.dayName
 import com.looker.kenko.ui.sessionDetail.components.SetItem
 import com.looker.kenko.ui.theme.KenkoIcons

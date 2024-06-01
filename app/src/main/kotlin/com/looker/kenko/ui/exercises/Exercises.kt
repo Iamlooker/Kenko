@@ -48,7 +48,7 @@ import com.looker.kenko.ui.components.HorizontalTargetChips
 import com.looker.kenko.ui.components.KenkoBorderWidth
 import com.looker.kenko.ui.components.OutlineBorder
 import com.looker.kenko.ui.components.SwipeToDeleteBox
-import com.looker.kenko.ui.helper.plus
+import com.looker.kenko.ui.extensions.plus
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 

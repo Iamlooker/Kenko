@@ -41,7 +41,7 @@ import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.ui.components.ErrorSnackbar
 import com.looker.kenko.ui.components.FlowHorizontalChips
 import com.looker.kenko.ui.components.kenkoTextFieldColor
-import com.looker.kenko.ui.helper.plus
+import com.looker.kenko.ui.extensions.plus
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 

@@ -35,10 +35,10 @@ private const val FINAL_PHASE = (2 * PI).toFloat()
 @Composable
 fun Wave(
     modifier: Modifier = Modifier,
-    strokeWidth: Float= 4F,
+    strokeWidth: Float = 4F,
     amplitude: Float = WAVE_AMPLITUDE,
     frequency: Float = WAVE_FREQUENCY,
-    color: Color = MaterialTheme.colorScheme.tertiary
+    color: Color = MaterialTheme.colorScheme.tertiary,
 ) {
     Canvas(modifier = modifier) {
         drawWave(
@@ -90,7 +90,7 @@ fun DrawScope.drawWave(
     for (x in 0..size.width.toInt()) {
         val y = amplitude * sin((frequency * x) + phase)
         if (x == 0) {
-            path.moveTo(0F, y)
+            path.moveTo(0F, centerY)
         }
         path.lineTo(x.toFloat(), y + centerY)
     }
@@ -110,9 +110,11 @@ private fun WavePreview() {
     KenkoTheme {
         Row(modifier = Modifier.fillMaxWidth()) {
             Text(text = "Howz the Wave?")
-            Wave(modifier = Modifier
-                .weight(1F)
-                .height(24.dp))
+            Wave(
+                modifier = Modifier
+                    .weight(1F)
+                    .height(24.dp)
+            )
         }
     }
 }

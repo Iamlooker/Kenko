@@ -48,10 +48,10 @@ import com.looker.kenko.ui.components.HealthQuotes
 import com.looker.kenko.ui.components.KenkoBorderWidth
 import com.looker.kenko.ui.components.OnSurfaceVariantBorder
 import com.looker.kenko.ui.components.SecondaryBorder
-import com.looker.kenko.ui.helper.PHI
-import com.looker.kenko.ui.helper.normalizeInt
-import com.looker.kenko.ui.helper.plus
-import com.looker.kenko.ui.helper.vertical
+import com.looker.kenko.ui.extensions.PHI
+import com.looker.kenko.ui.extensions.normalizeInt
+import com.looker.kenko.ui.extensions.plus
+import com.looker.kenko.ui.extensions.vertical
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 import com.looker.kenko.ui.theme.end
