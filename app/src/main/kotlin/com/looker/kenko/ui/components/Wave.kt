@@ -87,11 +87,9 @@ fun DrawScope.drawWave(
 ) {
     val path = Path()
     val centerY = center.y
+    path.moveTo(0F, amplitude * sin(phase) + centerY)
     for (x in 0..size.width.toInt()) {
         val y = amplitude * sin((frequency * x) + phase)
-        if (x == 0) {
-            path.moveTo(0F, centerY)
-        }
         path.lineTo(x.toFloat(), y + centerY)
     }
     drawPath(
@@ -109,8 +107,23 @@ fun DrawScope.drawWave(
 private fun WavePreview() {
     KenkoTheme {
         Row(modifier = Modifier.fillMaxWidth()) {
-            Text(text = "Howz the Wave?")
+            Text(text = "How the Wave?")
             Wave(
+                modifier = Modifier
+                    .weight(1F)
+                    .height(24.dp)
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun AnimatedWavePreview() {
+    KenkoTheme {
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Text(text = "How the Wave?")
+            AnimatedWave(
                 modifier = Modifier
                     .weight(1F)
                     .height(24.dp)
