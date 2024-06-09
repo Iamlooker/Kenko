@@ -21,7 +21,7 @@ android {
         versionCode = 102000
         versionName = "1.2.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.looker.kenko.KenkoTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -74,6 +74,9 @@ dependencies {
     kotlin("stdlib")
     implementation(libs.androidx.core.ktx)
 
+    implementation(platform(libs.compose.bom))
+    androidTestImplementation(platform(libs.compose.bom))
+
     implementation(libs.bundles.lifecycle)
     implementation(libs.androidx.navigation.compose)
 
@@ -83,8 +86,6 @@ dependencies {
     implementation(libs.kotlinx.datetime)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.bundles.coroutines)
-
-    implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
     debugImplementation(libs.bundles.compose.debug)
 
@@ -102,16 +103,11 @@ dependencies {
     // Rebugger
     implementation(libs.rebugger)
 
-    testImplementation(libs.junit.jupiter)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    kspTest(libs.hilt.test)
+    testImplementation(libs.bundles.test)
 
-    // Room Test
-    testImplementation(libs.androidx.room.testing)
-
-    // Compose Tests
-    androidTestImplementation(platform(libs.compose.bom))
-    androidTestImplementation(libs.compose.ui.test)
+    kspAndroidTest(libs.hilt.test)
+    androidTestImplementation(libs.bundles.instrumented.test)
 }
 
 fun DependencyHandlerScope.kotlin(name: String): Any = kotlin(name, libs.versions.kotlin.get())
