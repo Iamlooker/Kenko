@@ -7,7 +7,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,10 +18,8 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -33,10 +30,13 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -71,14 +71,16 @@ import kotlinx.datetime.LocalDate
 fun SessionDetails(
     viewModel: SessionDetailViewModel,
     onBackPress: () -> Unit,
+    onHistoryClick: (LocalDate) -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     SessionDetail(
         state = state,
         onBackPress = onBackPress,
+        onRemoveSet = viewModel::removeSet,
         onReferenceClick = viewModel::openReference,
         onSelectBottomSheet = viewModel::showBottomSheet,
-        onRemoveSet = viewModel::removeSet,
+        onHistoryClick = { onHistoryClick(viewModel.previousSessionDate) },
     )
     val exercise by viewModel.current.collectAsStateWithLifecycle()
     if (exercise != null) {
@@ -89,23 +91,25 @@ fun SessionDetails(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SessionDetail(
     state: SessionDetailState,
-    onBackPress: () -> Unit,
-    onRemoveSet: (Set) -> Unit,
-    onReferenceClick: (String) -> Unit,
-    onSelectBottomSheet: (Exercise) -> Unit,
+    onBackPress: () -> Unit = {},
+    onRemoveSet: (Set) -> Unit = {},
+    onReferenceClick: (String) -> Unit = {},
+    onSelectBottomSheet: (Exercise) -> Unit = {},
+    onHistoryClick: () -> Unit = {},
 ) {
     when (state) {
         is SessionDetailState.Error -> {
             Column(Modifier.statusBarsPadding()) {
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.CenterStart
-                ) {
-                    BackButton(onClick = onBackPress)
-                }
+                TopAppBar(
+                    navigationIcon = {
+                        BackButton(onClick = onBackPress)
+                    },
+                    title = {},
+                )
                 SessionError(
                     title = stringResource(state.title),
                     message = stringResource(state.errorMessage),
@@ -116,12 +120,12 @@ private fun SessionDetail(
 
         SessionDetailState.Loading -> {
             Column(Modifier.statusBarsPadding()) {
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.CenterStart
-                ) {
-                    BackButton(onClick = onBackPress)
-                }
+                TopAppBar(
+                    navigationIcon = {
+                        BackButton(onClick = onBackPress)
+                    },
+                    title = {},
+                )
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
@@ -137,10 +141,12 @@ private fun SessionDetail(
                 session = data.session,
                 exerciseSets = data.sets,
                 isEditable = data.isToday,
+                hasPreviousSession = data.hasPreviousSession,
                 onBackPress = onBackPress,
                 onRemoveSet = onRemoveSet,
                 onReferenceClick = onReferenceClick,
                 onSelectBottomSheet = onSelectBottomSheet,
+                onHistoryClick = onHistoryClick,
             )
         }
     }
@@ -151,10 +157,12 @@ private fun SetsList(
     session: Session,
     exerciseSets: Map<Exercise, List<Set>>?,
     isEditable: Boolean,
+    hasPreviousSession: Boolean,
     onBackPress: () -> Unit,
     onRemoveSet: (Set) -> Unit,
     onReferenceClick: (String) -> Unit,
     onSelectBottomSheet: (Exercise) -> Unit,
+    onHistoryClick: () -> Unit,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(360.dp),
@@ -168,6 +176,16 @@ private fun SetsList(
             Header(
                 performedOn = session.date,
                 onBackPress = onBackPress,
+                actions = {
+                    if (hasPreviousSession) {
+                        IconButton(onClick = onHistoryClick) {
+                            Icon(
+                                imageVector = KenkoIcons.History,
+                                contentDescription = null,
+                            )
+                        }
+                    }
+                }
             )
         }
         exerciseSets?.forEach { (exercise, sets) ->
@@ -225,53 +243,36 @@ private fun AnimatedSetIndex(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Header(
     performedOn: LocalDate,
     onBackPress: () -> Unit,
     modifier: Modifier = Modifier,
+    actions: @Composable RowScope.() -> Unit,
 ) {
     val date = remember {
         formatDate(performedOn, DateTimeFormat.Short)
     }
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(180.dp)
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .statusBarsPadding()
-            .padding(top = 6.dp)
-    ) {
-        Icon(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .offset(x = (16).dp),
-            imageVector = KenkoIcons.Stack,
-            tint = MaterialTheme.colorScheme.outlineVariant,
-            contentDescription = null
-        )
-        BackButton(
-            modifier = Modifier.align(Alignment.TopStart),
-            onClick = onBackPress,
-        )
-        Column(
-            modifier = Modifier.matchParentSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Spacer(modifier = Modifier.weight(1F))
-            Text(
-                text = dayName(performedOn.dayOfWeek),
-                style = MaterialTheme.typography.headlineLarge,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
-            Text(
-                text = date,
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.outline,
-            )
-            Spacer(modifier = Modifier.weight(1F))
-        }
-    }
+    TopAppBar(
+        modifier = modifier,
+        navigationIcon = {
+            BackButton(onClick = onBackPress)
+        },
+        title = {
+            Column(
+                verticalArrangement = Arrangement.Center,
+            ) {
+                Text(text = dayName(performedOn.dayOfWeek))
+                Text(
+                    text = date,
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.outline,
+                )
+            }
+        },
+        actions = actions,
+    )
 }
 
 @Composable
@@ -358,13 +359,7 @@ private fun SessionDetailPreview() {
             )
         }
         Surface(modifier = Modifier.fillMaxSize()) {
-            SessionDetail(
-                state = data,
-                onBackPress = {},
-                onReferenceClick = {},
-                onSelectBottomSheet = {},
-                onRemoveSet = {},
-            )
+            SessionDetail(state = data)
         }
     }
 }
@@ -377,13 +372,7 @@ private fun SessionErrorPreview() {
             SessionDetailState.Error.InvalidSession
         }
         Surface(modifier = Modifier.fillMaxSize()) {
-            SessionDetail(
-                state = data,
-                onBackPress = {},
-                onReferenceClick = {},
-                onSelectBottomSheet = {},
-                onRemoveSet = {},
-            )
+            SessionDetail(state = data)
         }
     }
 }

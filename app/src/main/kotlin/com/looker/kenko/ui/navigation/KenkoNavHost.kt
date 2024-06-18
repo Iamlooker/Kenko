@@ -135,7 +135,10 @@ fun KenkoNavHost(
             navController.navigateToAddEditExercise(navOptions = singleTopNavOptions)
         }
 
-        sessionDetail(navController::popBackStackOnResume)
+        sessionDetail(
+            onBackPress = navController::popBackStackOnResume,
+            onHistoryClick = navController::navigateToSessionDetail,
+        )
 
         addEditExercise(navController::popBackStackOnResume)
 

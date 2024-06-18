@@ -4,6 +4,7 @@ import androidx.compose.runtime.Stable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.datetime.Clock
+import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -20,4 +21,4 @@ data class Plan(
 
 val localDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
 
-val localDayOfWeek = localDate.dayOfWeek
+val week = DatePeriod(days = 7)

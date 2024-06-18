@@ -20,10 +20,12 @@ fun NavController.navigateToSessionDetail(date: LocalDate?, navOptions: NavOptio
 
 fun NavGraphBuilder.sessionDetail(
     onBackPress: () -> Unit,
+    onHistoryClick: (LocalDate) -> Unit,
 ) {
     composable<SessionDetailRoute> {
         SessionDetails(
             onBackPress = onBackPress,
+            onHistoryClick = onHistoryClick,
             viewModel = hiltViewModel(),
         )
     }

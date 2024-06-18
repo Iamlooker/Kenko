@@ -12,6 +12,7 @@ import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.Session
 import com.looker.kenko.data.model.Set
 import com.looker.kenko.data.model.localDate
+import com.looker.kenko.data.model.week
 import com.looker.kenko.data.repository.PlanRepo
 import com.looker.kenko.data.repository.SessionRepo
 import com.looker.kenko.ui.sessionDetail.navigation.SessionDetailRoute
@@ -22,9 +23,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.minus
 import javax.inject.Inject
 
 @HiltViewModel
@@ -43,6 +46,11 @@ class SessionDetailViewModel @Inject constructor(
         LocalDate.fromEpochDays(it)
     } ?: localDate
 
+    val previousSessionDate = sessionDate - week
+
+    private val previousSessionExists: Flow<Boolean> = repo.getStream(previousSessionDate)
+            .map { it != null }
+
     private val sessionStream: Flow<Session?> = repo.getStream(sessionDate)
 
     private val exercisesStream: Flow<List<Exercise>?> = planRepo.exercises(sessionDate)
@@ -54,7 +62,8 @@ class SessionDetailViewModel @Inject constructor(
         combine(
             sessionStream,
             exercisesStream,
-        ) { session, exercises ->
+            previousSessionExists,
+        ) { session, exercises, previousSession ->
             if (session == null && epochDays != null) {
                 return@combine SessionDetailState.Error.InvalidSession
             }
@@ -73,7 +82,8 @@ class SessionDetailViewModel @Inject constructor(
                 SessionUiData(
                     session = currentSession,
                     sets = setsExerciseMap,
-                    isToday = currentSession.date.isToday
+                    isToday = currentSession.date.isToday,
+                    hasPreviousSession = previousSession
                 )
             )
         }.onStart { emit(SessionDetailState.Loading) }
@@ -114,6 +124,7 @@ data class SessionUiData(
     val session: Session,
     val sets: Map<Exercise, List<Set>>?,
     val isToday: Boolean = false,
+    val hasPreviousSession: Boolean = false,
 )
 
 sealed interface SessionDetailState {
