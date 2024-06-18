@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -31,6 +32,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -82,6 +84,7 @@ fun Profile(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Profile(
     state: ProfileUiState,
@@ -92,6 +95,18 @@ private fun Profile(
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(text = stringResource(R.string.label_profile_greeting))
+                },
+                actions = {
+                    IconButton(onClick = onSettingsClick) {
+                        Icon(imageVector = KenkoIcons.Settings, contentDescription = null)
+                    }
+                },
+            )
+        },
         containerColor = MaterialTheme.colorScheme.surface
     ) { innerPadding ->
         Column(
@@ -100,8 +115,6 @@ private fun Profile(
                 .padding(innerPadding + PaddingValues(start = 16.dp, end = 16.dp, bottom = 80.dp))
                 .verticalScroll(rememberScrollState())
         ) {
-            Header(onSettingsClick = onSettingsClick)
-            Spacer(modifier = Modifier.height(24.dp))
             if (state.isPlanAvailable) {
                 CurrentPlanCard(
                     onPlanClick = onPlanClick,
@@ -131,26 +144,6 @@ private fun Profile(
             Spacer(modifier = Modifier.weight(1F))
             HealthQuotes(Modifier.align(Alignment.CenterHorizontally))
             Spacer(modifier = Modifier.height(4.dp))
-        }
-    }
-}
-
-@Composable
-private fun Header(
-    onSettingsClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(
-            text = stringResource(R.string.label_profile_greeting),
-            style = MaterialTheme.typography.headlineMedium
-        )
-        IconButton(onClick = onSettingsClick) {
-            Icon(imageVector = KenkoIcons.Settings, contentDescription = null)
         }
     }
 }
