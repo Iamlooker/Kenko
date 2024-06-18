@@ -27,6 +27,8 @@ object KenkoIcons {
 
     val Done: ImageVector = com.looker.kenko.ui.components.icons.symbols.Done
 
+    val History: ImageVector = com.looker.kenko.ui.components.icons.symbols.History
+
     val Delete: ImageVector = com.looker.kenko.ui.components.icons.symbols.Delete
 
     val Remove: ImageVector = com.looker.kenko.ui.components.icons.symbols.Remove
