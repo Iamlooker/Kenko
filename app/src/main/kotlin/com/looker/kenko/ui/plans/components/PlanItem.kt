@@ -16,11 +16,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.looker.kenko.data.model.Exercise
+import com.looker.kenko.data.model.MuscleGroups.Biceps
+import com.looker.kenko.data.model.MuscleGroups.Chest
+import com.looker.kenko.data.model.MuscleGroups.Hamstrings
+import com.looker.kenko.data.model.MuscleGroups.Quads
+import com.looker.kenko.data.model.MuscleGroups.Shoulders
+import com.looker.kenko.data.model.MuscleGroups.Triceps
+import com.looker.kenko.data.model.MuscleGroups.UpperBack
 import com.looker.kenko.data.model.Plan
-import com.looker.kenko.data.model.mock.PlanProvider
+import com.looker.kenko.data.model.sampleExercises
 import com.looker.kenko.ui.planEdit.components.kenkoDayName
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
@@ -94,20 +100,38 @@ private fun DayInPlan(
 
 @PreviewLightDark
 @Composable
-private fun PlanItemPreview(
-    @PreviewParameter(PlanProvider::class) plan: Plan
-) {
+private fun PlanItemPreview() {
     KenkoTheme {
-        PlanItem(plan = plan, {}, {})
+        PlanItem(plan = Plan(
+            name = "Push Pull Leg",
+            exercisesPerDay = mapOf(
+                DayOfWeek.MONDAY to Chest.sampleExercises + Triceps.sampleExercises,
+                DayOfWeek.TUESDAY to UpperBack.sampleExercises + Biceps.sampleExercises,
+                DayOfWeek.WEDNESDAY to Quads.sampleExercises + Hamstrings.sampleExercises
+                        + Shoulders.sampleExercises,
+                DayOfWeek.THURSDAY to Chest.sampleExercises + Triceps.sampleExercises,
+                DayOfWeek.FRIDAY to UpperBack.sampleExercises + Biceps.sampleExercises,
+            ).mapValues { it.value.shuffled().take(5) },
+            isActive = true
+        ), {}, {})
     }
 }
 
 @PreviewLightDark
 @Composable
-private fun PlanItemInActivePreview(
-    @PreviewParameter(PlanProvider::class) plan: Plan
-) {
+private fun PlanItemInActivePreview() {
     KenkoTheme {
-        PlanItem(plan = plan, {}, {})
+        PlanItem(plan = Plan(
+            name = "Push Pull Leg",
+            exercisesPerDay = mapOf(
+                DayOfWeek.MONDAY to Chest.sampleExercises + Triceps.sampleExercises,
+                DayOfWeek.TUESDAY to UpperBack.sampleExercises + Biceps.sampleExercises,
+                DayOfWeek.WEDNESDAY to Quads.sampleExercises + Hamstrings.sampleExercises
+                        + Shoulders.sampleExercises,
+                DayOfWeek.THURSDAY to Chest.sampleExercises + Triceps.sampleExercises,
+                DayOfWeek.FRIDAY to UpperBack.sampleExercises + Biceps.sampleExercises,
+            ).mapValues { it.value.shuffled().take(5) },
+            isActive = true
+        ), {}, {})
     }
 }
