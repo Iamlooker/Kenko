@@ -8,8 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- History Icon (You can check last week's session if it exists)
+- Support for Monochrome icon on Android 12+ 
+
 ### Changed
+- Remove Drag in counter
+- Sorting of muscle groups chips
+
 ### Fixed
+- Save button not visible
+- Scrolling on `Select Exercise` Sheet
+- Performance issues on `Add Set` Sheet
+- Weird line in the setting wave
 
 ## [1.2.0] - 2024-05-26
 
