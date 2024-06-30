@@ -110,6 +110,10 @@ private fun Sessions(
                 key = { it.date.toEpochDays() },
             ) { session ->
                 SessionCard(
+                    modifier = Modifier.padding(
+                        horizontal = 12.dp,
+                        vertical = 8.dp,
+                    ),
                     session = session,
                     isTodayLabel = {
                         val isToday = remember(session.date) {
@@ -152,7 +156,8 @@ fun SessionCard(
 ) {
     Surface(
         modifier = modifier,
-        color = MaterialTheme.colorScheme.surfaceContainerLowest,
+        color = MaterialTheme.colorScheme.surfaceContainer,
+        shape = MaterialTheme.shapes.large,
         onClick = onClick
     ) {
         Column(
@@ -163,7 +168,7 @@ fun SessionCard(
                     MaterialTheme.colorScheme.onSurfaceVariant,
                     start = GradientStart.TopRight
                 )
-                .padding(horizontal = 18.dp, vertical = 28.dp),
+                .padding(horizontal = 16.dp, vertical = 16.dp),
         ) {
             isTodayLabel()
             Text(
