@@ -31,11 +31,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.Layout
@@ -48,11 +49,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
 import com.looker.kenko.ui.components.HealthQuotes
+import com.looker.kenko.ui.components.TypingText
 import com.looker.kenko.ui.extensions.PHI
 import com.looker.kenko.ui.extensions.vertical
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun GetStarted(onNext: () -> Unit) {
@@ -180,7 +183,7 @@ private fun ButtonGroup(
             ) {
                 buttonIcon()
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(text = stringResource(R.string.label_lets_go))
+                TypingText(text = stringResource(R.string.label_lets_go))
             }
         }
     ) { measurables, constraints ->
@@ -222,7 +225,6 @@ private fun ButtonGroup(
 
 @Composable
 private fun HeroTitle(modifier: Modifier = Modifier) {
-    val iconAnimation = remember { Animatable(1.2F) }
     Row(modifier, horizontalArrangement = Arrangement.spacedBy((-12).dp)) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -234,43 +236,39 @@ private fun HeroTitle(modifier: Modifier = Modifier) {
                 style = MaterialTheme.typography.displayLarge,
                 color = MaterialTheme.colorScheme.tertiary,
             )
-            LaunchedEffect(true) {
-                delay(300)
-                iconAnimation.animateTo(
-                    targetValue = 1F,
-                    animationSpec = spring(
-                        stiffness = Spring.StiffnessVeryLow,
-                        dampingRatio = Spring.DampingRatioHighBouncy
-                    )
-                )
-            }
             Box(
                 modifier = Modifier
                     .width(48.dp)
                     .aspectRatio(1 / PHI)
-                    .graphicsLayer {
-                        this.transformOrigin = TransformOrigin(0.5F, 0F)
-                        scaleY = iconAnimation.value
-                        shape = CircleShape
-                    }
                     .border(2.dp, MaterialTheme.colorScheme.outline, CircleShape),
             )
         }
         Column {
-            Text(
+            var startShowingFirstMeaning by remember { mutableStateOf(false) }
+            var startShowingSecondMeaning by remember { mutableStateOf(false) }
+            TypingText(
                 text = stringResource(R.string.label_kenko_jp),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.primary,
+                typingDelay = 10.milliseconds,
+                onCompleteListener = { startShowingFirstMeaning = true },
             )
-            Text(
+            TypingText(
                 text = stringResource(R.string.label_kenko_meaning),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.secondary,
+                startTyping = startShowingFirstMeaning,
+                typingDelay = 10.milliseconds,
+                initialDelay = 0.milliseconds,
+                onCompleteListener = { startShowingSecondMeaning = true },
             )
-            Text(
+            TypingText(
                 text = stringResource(R.string.label_kenko_meaning_ALT),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.secondary,
+                startTyping = startShowingSecondMeaning,
+                typingDelay = 10.milliseconds,
+                initialDelay = 0.milliseconds,
             )
         }
     }
