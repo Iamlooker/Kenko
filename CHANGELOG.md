@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Remove Drag in counter
 - Sorting of muscle groups chips
+- Always save plan on going back
 
 ### Fixed
 - Save button not visible
