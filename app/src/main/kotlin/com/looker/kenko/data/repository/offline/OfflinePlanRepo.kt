@@ -18,7 +18,7 @@ class OfflinePlanRepo @Inject constructor(
         get() = dao.stream()
 
     override val current: Flow<Plan?>
-        get() = dao.currentPlanStream(true)
+        get() = dao.currentPlanStream()
 
     override fun get(id: Long?): Flow<Plan?> {
         return id?.let { dao.getStream(it) } ?: flowOf(null)

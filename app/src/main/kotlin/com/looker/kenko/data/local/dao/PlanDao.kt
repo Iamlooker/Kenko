@@ -13,8 +13,8 @@ interface PlanDao {
     @Query("SELECT * FROM plan_table")
     fun stream(): Flow<List<Plan>>
 
-    @Query("SELECT * FROM plan_table WHERE isActive = :isActive")
-    fun currentPlanStream(isActive: Boolean): Flow<Plan?>
+    @Query("SELECT * FROM plan_table WHERE isActive = 1")
+    fun currentPlanStream(): Flow<Plan?>
 
     @Query("UPDATE plan_table SET isActive = 0 WHERE isActive = 1")
     suspend fun deactivateOldPlan()

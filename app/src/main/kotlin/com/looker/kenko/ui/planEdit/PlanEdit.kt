@@ -78,7 +78,7 @@ fun PlanEdit(
         onAddExercisesClick = viewModel::openSheet,
         onRemoveExerciseClick = viewModel::removeExercise,
         onSaveClick = viewModel::savePlan,
-        onBackPress = onBackPress,
+        onBackPress = { viewModel.savePlan(onBackPress) },
     )
 
     if (state.isSheetVisible) {
