@@ -19,16 +19,8 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.looker.kenko.data.model.Exercise
-import com.looker.kenko.data.model.MuscleGroups.Biceps
-import com.looker.kenko.data.model.MuscleGroups.Chest
-import com.looker.kenko.data.model.MuscleGroups.Hamstrings
-import com.looker.kenko.data.model.MuscleGroups.Quads
-import com.looker.kenko.data.model.MuscleGroups.Shoulders
-import com.looker.kenko.data.model.MuscleGroups.Triceps
-import com.looker.kenko.data.model.MuscleGroups.UpperBack
 import com.looker.kenko.data.model.Plan
 import com.looker.kenko.data.model.mock.PlanProvider
-import com.looker.kenko.data.model.sampleExercises
 import com.looker.kenko.ui.planEdit.components.kenkoDayName
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
