@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - History Icon (You can check last week's session if it exists)
 - Support for Monochrome icon on Android 12+ 
+- Text animation on Onboarding
 
 ### Changed
 - Remove Drag in counter
