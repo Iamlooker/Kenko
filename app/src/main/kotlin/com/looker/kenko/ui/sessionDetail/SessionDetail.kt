@@ -31,21 +31,27 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -64,8 +70,11 @@ import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 import com.looker.kenko.utils.DateTimeFormat
 import com.looker.kenko.utils.formatDate
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
+import java.text.BreakIterator
+import java.text.StringCharacterIterator
 
 @Composable
 fun SessionDetails(
@@ -263,8 +272,8 @@ private fun Header(
             Column(
                 verticalArrangement = Arrangement.Center,
             ) {
-                Text(text = dayName(performedOn.dayOfWeek))
-                Text(
+                SessionHeaderTitle(text = dayName(performedOn.dayOfWeek))
+                SessionHeaderTitle(
                     text = date,
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.outline,
@@ -301,6 +310,36 @@ private fun StickyHeader(
             }
         }
     }
+}
+
+@Composable
+private fun SessionHeaderTitle(
+    text: String,
+    style: TextStyle = LocalTextStyle.current,
+    color: Color = LocalContentColor.current,
+) {
+    val breakIterator = remember(text) { BreakIterator.getCharacterInstance() }
+    val typingDelayInMs = 50L
+
+    var substringText by remember {
+        mutableStateOf("")
+    }
+    LaunchedEffect(text) {
+        delay(100)
+        breakIterator.text = StringCharacterIterator(text)
+
+        var nextIndex = breakIterator.next()
+        while (nextIndex != BreakIterator.DONE) {
+            substringText = text.subSequence(0, nextIndex).toString()
+            nextIndex = breakIterator.next()
+            delay(typingDelayInMs)
+        }
+    }
+    Text(
+        text = substringText,
+        style = style,
+        color = color,
+    )
 }
 
 @Composable
