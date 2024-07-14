@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - History Icon (You can check last week's session if it exists)
 - Support for Monochrome icon on Android 12+ 
 - Text animation on Onboarding
+- Safer way to delete Sets / Exercises / Plans
 
 ### Changed
 - Remove Drag in counter
