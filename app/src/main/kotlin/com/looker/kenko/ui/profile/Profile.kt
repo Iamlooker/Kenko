@@ -22,7 +22,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalIconButton
+import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -47,7 +47,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
 import com.looker.kenko.ui.components.HealthQuotes
 import com.looker.kenko.ui.components.KenkoBorderWidth
-import com.looker.kenko.ui.components.OnSurfaceVariantBorder
+import com.looker.kenko.ui.components.OutlineBorder
 import com.looker.kenko.ui.components.SecondaryBorder
 import com.looker.kenko.ui.extensions.PHI
 import com.looker.kenko.ui.extensions.normalizeInt
@@ -148,62 +148,68 @@ private fun CurrentPlanCard(
     content: @Composable ColumnScope.() -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
+    Surface(
         modifier = modifier
-            .clip(MaterialTheme.shapes.extraLarge)
-            .border(
-                border = OnSurfaceVariantBorder,
-                shape = MaterialTheme.shapes.extraLarge
-            )
-            .clickable(onClick = onPlanClick),
+            .fillMaxWidth()
+            .aspectRatio(PHI),
+        color = MaterialTheme.colorScheme.secondaryContainer,
+        shape = MaterialTheme.shapes.extraLarge,
+        border = SecondaryBorder,
+        onClick = onPlanClick,
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 24.dp, top = 2.dp, end = 2.dp),
-            verticalAlignment = Alignment.CenterVertically,
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceEvenly,
         ) {
-            Icon(imageVector = KenkoIcons.Plan, contentDescription = null)
-            Spacer(modifier = Modifier.width(12.dp))
-            Text(
-                text = stringResource(R.string.label_current_plan),
-                style = MaterialTheme.typography.titleMedium
-            )
-            Spacer(modifier = Modifier.weight(1F))
-            FilledTonalIconButton(onClick = onPlanClick) {
-                Icon(imageVector = KenkoIcons.Rename, contentDescription = null)
-            }
-        }
-        HorizontalDivider(
-            thickness = KenkoBorderWidth,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Column(
+            Row(
                 modifier = Modifier
-                    .padding(start = 24.dp, bottom = 16.dp)
+                    .fillMaxWidth()
+                    .padding(start = 24.dp, top = 2.dp, end = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
+                Icon(imageVector = KenkoIcons.Plan, contentDescription = null)
+                Spacer(modifier = Modifier.width(12.dp))
                 Text(
-                    text = name,
-                    style = MaterialTheme.typography.titleLarge
+                    text = stringResource(R.string.label_current_plan),
+                    style = MaterialTheme.typography.titleMedium
                 )
-                Spacer(modifier = Modifier.height(8.dp))
-                CompositionLocalProvider(
-                    LocalTextStyle provides MaterialTheme.typography.bodyLarge,
-                    LocalContentColor provides MaterialTheme.colorScheme.outline,
-                ) {
-                    content()
+                Spacer(modifier = Modifier.weight(1F))
+                FilledIconButton(onClick = onPlanClick) {
+                    Icon(imageVector = KenkoIcons.Rename, contentDescription = null)
                 }
             }
-            Icon(
-                imageVector = KenkoIcons.Colony,
-                contentDescription = null,
-                modifier = Modifier.offset(x = 70.dp)
+            HorizontalDivider(
+                thickness = KenkoBorderWidth,
+                color = MaterialTheme.colorScheme.secondary
             )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(start = 24.dp, bottom = 16.dp)
+                ) {
+                    Text(
+                        text = name,
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    CompositionLocalProvider(
+                        LocalTextStyle provides MaterialTheme.typography.bodyLarge,
+                        LocalContentColor provides MaterialTheme.colorScheme.outline,
+                    ) {
+                        content()
+                    }
+                }
+                Icon(
+                    imageVector = KenkoIcons.Stack,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.offset(x = 0.dp)
+                )
+            }
         }
     }
 }
@@ -256,7 +262,7 @@ private fun ExerciseCard(
         Surface(
             modifier = Modifier.weight(1.5F),
             shape = surfaceShape,
-            border = OnSurfaceVariantBorder,
+            border = OutlineBorder,
             onClick = onExercisesClick
         ) {
             Column(Modifier.padding(24.dp)) {
@@ -300,7 +306,7 @@ private fun LiftsCard(setsPerformed: Int) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.extraLarge,
-        border = OnSurfaceVariantBorder,
+        border = SecondaryBorder,
     ) {
         Row(
             modifier = Modifier
@@ -338,9 +344,14 @@ private fun PlanCard() {
             },
             name = "Push-Pull-Leg",
             content = {
-                Text(text = Typography.bullet + "21 exercises")
-                Text(text = Typography.bullet + "05 days")
-                Text(text = Typography.bullet + "02 rests")
+                Text(
+                    text = stringResource(
+                        R.string.label_plan_description,
+                        12,
+                        normalizeInt(5),
+                        normalizeInt(2)
+                    )
+                )
             }
         )
     }

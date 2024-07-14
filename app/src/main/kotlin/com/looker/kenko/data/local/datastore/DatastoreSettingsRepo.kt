@@ -49,7 +49,7 @@ class DatastoreSettingsRepo @Inject constructor(
     private fun mapSettings(preferences: Preferences): Settings {
         val isOnboardingDone = preferences[ONBOARDING_DONE] ?: false
         val theme = preferences[THEME] ?: Theme.System.name
-        val colorPalettes = preferences[COLOR_PALETTE] ?: ColorPalettes.Default.toString()
+        val colorPalettes = preferences[COLOR_PALETTE] ?: ColorPalettes.Default.name
         return Settings(
             isOnboardingDone = isOnboardingDone,
             theme = Theme.valueOf(theme),
