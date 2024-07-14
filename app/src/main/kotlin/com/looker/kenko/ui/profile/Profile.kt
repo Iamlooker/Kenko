@@ -252,7 +252,7 @@ private fun ExerciseCard(
 ) {
     Row(
         modifier = modifier.height(IntrinsicSize.Max),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         val cardShape = MaterialTheme.shapes.extraLarge
