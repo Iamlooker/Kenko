@@ -1,10 +1,8 @@
 package com.looker.kenko.ui.getStarted
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -44,6 +42,7 @@ import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -55,6 +54,7 @@ import com.looker.kenko.ui.extensions.vertical
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
@@ -87,9 +87,23 @@ private fun GetStarted(
             modifier = Modifier.fillMaxSize()
         ) {
             val iconVisibility = remember { Animatable(-50F) }
+            val buttonVisibility = remember { Animatable(0.75F) }
             LaunchedEffect(true) {
-                iconVisibility.animateTo(
-                    targetValue = 0F,
+                buttonVisibility.animateTo(
+                    targetValue = 0.85F,
+                    animationSpec = spring()
+                )
+                launch {
+                    iconVisibility.animateTo(
+                        targetValue = 0F,
+                        animationSpec = spring(
+                            stiffness = Spring.StiffnessVeryLow,
+                            dampingRatio = Spring.DampingRatioMediumBouncy
+                        )
+                    )
+                }
+                buttonVisibility.animateTo(
+                    targetValue = 1F,
                     animationSpec = spring(
                         stiffness = Spring.StiffnessVeryLow,
                         dampingRatio = Spring.DampingRatioMediumBouncy
@@ -115,22 +129,35 @@ private fun GetStarted(
                     .navigationBarsPadding(),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                AnimatedVisibility(
-                    visible = !isOnboardingDone,
-                    enter = fadeIn()
-                ) {
+                if (!isOnboardingDone) {
                     CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.secondary) {
                         ButtonGroup(
                             buttonIcon = {
-                                ButtonIcon(
+                                FilledTonalButton(
                                     modifier = Modifier
+                                        .layoutId(ButtonID.Button)
                                         .graphicsLayer {
-                                            translationX = iconVisibility.value
-                                            rotationZ = iconVisibility.value
-                                        }
-                                )
+                                            scaleX = buttonVisibility.value
+                                            scaleY = buttonVisibility.value
+                                            translationY = (1F - buttonVisibility.value) * 15F
+                                        },
+                                    onClick = onNextClick,
+                                    contentPadding = PaddingValues(
+                                        vertical = 24.dp,
+                                        horizontal = 40.dp
+                                    )
+                                ) {
+                                    ButtonIcon(
+                                        modifier = Modifier
+                                            .graphicsLayer {
+                                                translationX = iconVisibility.value
+                                                rotationZ = iconVisibility.value
+                                            }
+                                    )
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    TypingText(text = stringResource(R.string.label_lets_go))
+                                }
                             },
-                            onClick = onNextClick,
                         )
                     }
                 }
@@ -144,7 +171,6 @@ private fun GetStarted(
 
 @Composable
 private fun ButtonGroup(
-    onClick: () -> Unit,
     buttonIcon: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -176,15 +202,7 @@ private fun ButtonGroup(
                 imageVector = KenkoIcons.Arrow4,
                 contentDescription = null
             )
-            FilledTonalButton(
-                modifier = Modifier.layoutId(ButtonID.Button),
-                onClick = onClick,
-                contentPadding = PaddingValues(vertical = 24.dp, horizontal = 40.dp)
-            ) {
-                buttonIcon()
-                Spacer(modifier = Modifier.width(8.dp))
-                TypingText(text = stringResource(R.string.label_lets_go))
-            }
+            buttonIcon()
         }
     ) { measurables, constraints ->
         lateinit var cloud: Measurable
@@ -297,11 +315,12 @@ private fun ButtonIcon(
 @Composable
 private fun HeroPreview() {
     KenkoTheme {
-        ButtonGroup(onClick = {}, buttonIcon = { ButtonIcon() })
+        ButtonGroup(buttonIcon = { ButtonIcon() })
     }
 }
 
 @Preview
+@PreviewScreenSizes
 @Composable
 private fun GetStartedPreview() {
     KenkoTheme {

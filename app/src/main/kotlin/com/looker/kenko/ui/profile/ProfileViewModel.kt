@@ -2,20 +2,16 @@ package com.looker.kenko.ui.profile
 
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.looker.kenko.BuildConfig
 import com.looker.kenko.data.model.Plan
 import com.looker.kenko.data.repository.ExerciseRepo
 import com.looker.kenko.data.repository.PlanRepo
 import com.looker.kenko.data.repository.SessionRepo
-import com.looker.kenko.data.repository.SettingsRepo
 import com.looker.kenko.utils.asStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,7 +19,6 @@ class ProfileViewModel @Inject constructor(
     repo: ExerciseRepo,
     planRepo: PlanRepo,
     sessionRepo: SessionRepo,
-    private val settingsRepo: SettingsRepo,
 ) : ViewModel() {
 
     private val exercisesSizeStream: Flow<Int> = repo.stream.map { it.size }
@@ -49,13 +44,17 @@ class ProfileViewModel @Inject constructor(
             restDays = 7 - (plan?.exercisesPerDay?.size ?: 0),
         )
     }
-        .asStateFlow(ProfileUiState(0, 0, false, "", 0, 0, 0))
-
-    fun completeOnboarding() {
-        viewModelScope.launch {
-            if (!BuildConfig.DEBUG) settingsRepo.setOnboardingDone()
-        }
-    }
+        .asStateFlow(
+            ProfileUiState(
+                numberOfExercises = 0,
+                numberOfExercisesPerPlan = 0,
+                isPlanAvailable = false,
+                planName = "",
+                restDays = 0,
+                workDays = 0,
+                totalLifts = 0
+            )
+        )
 
 }
 

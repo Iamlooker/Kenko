@@ -2,8 +2,10 @@ package com.looker.kenko.ui.plans
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.looker.kenko.BuildConfig
 import com.looker.kenko.data.model.Plan
 import com.looker.kenko.data.repository.PlanRepo
+import com.looker.kenko.data.repository.SettingsRepo
 import com.looker.kenko.utils.asStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -12,6 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PlanViewModel @Inject constructor(
     private val repo: PlanRepo,
+    private val settingsRepo: SettingsRepo,
 ) : ViewModel() {
 
     val plans = repo.stream.asStateFlow(emptyList())
@@ -25,6 +28,10 @@ class PlanViewModel @Inject constructor(
     fun switchPlan(plan: Plan) {
         viewModelScope.launch {
             repo.switchPlan(plan)
+            val isPlanSelected = repo.current() != null
+            if (isPlanSelected && !BuildConfig.DEBUG) {
+                settingsRepo.setOnboardingDone()
+            }
         }
     }
 }

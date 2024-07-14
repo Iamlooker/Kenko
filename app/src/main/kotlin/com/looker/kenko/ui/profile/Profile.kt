@@ -35,7 +35,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -58,7 +57,6 @@ import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 import com.looker.kenko.ui.theme.end
 import com.looker.kenko.ui.theme.start
-import kotlinx.coroutines.delay
 
 @Composable
 fun Profile(
@@ -69,11 +67,6 @@ fun Profile(
     onSettingsClick: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-
-    LaunchedEffect(true) {
-        delay(2_000)
-        viewModel.completeOnboarding()
-    }
 
     Profile(
         state = state,
