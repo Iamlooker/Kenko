@@ -1,11 +1,18 @@
 package com.looker.kenko.ui.home
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -20,7 +27,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -33,16 +43,17 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
+import com.looker.kenko.ui.components.KenkoBorderWidth
 import com.looker.kenko.ui.components.LiftingQuotes
 import com.looker.kenko.ui.components.OutlineBorder
 import com.looker.kenko.ui.components.SecondaryBorder
 import com.looker.kenko.ui.extensions.PHI
 import com.looker.kenko.ui.extensions.plus
-import com.looker.kenko.ui.profile.SelectPlanCard
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 
@@ -84,7 +95,17 @@ private fun Home(
             TopAppBar(
                 title = {
                     Text(text = stringResource(R.string.label_home))
-                }
+                },
+                actions = {
+                    if (state.hasMultipleSessions) {
+                        IconButton(onClick = onExploreSessionsClick) {
+                            Icon(
+                                imageVector = KenkoIcons.History,
+                                contentDescription = null,
+                            )
+                        }
+                    }
+                },
             )
         }
     ) { innerPadding ->
@@ -95,42 +116,68 @@ private fun Home(
                 .padding(innerPadding + PaddingValues(bottom = 80.dp)),
             horizontalAlignment = CenterHorizontally
         ) {
-            if (state.isPlanSelected) {
+            AnimatedVisibility(
+                visible = !state.isPlanSelected,
+                enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
+                exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top),
+            ) {
+                SelectPlanTicker()
+            }
+            if (!state.isPlanSelected) {
+                SelectPlan(onSelectPlanClick = onSelectPlanClick)
+            } else {
                 Category {
                     StartSessionCard(
                         isSessionStarted = state.isSessionStarted,
                         onClick = onStartSessionClick,
                     )
-                    if (state.hasMultipleSessions) {
-                        ExploreSessionsCard(
-                            onClick = onExploreSessionsClick
-                        )
-                    }
                 }
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            Category {
-                ExploreExercisesCard(
-                    onClick = onExploreExercisesClick
-                )
-                AddExerciseCard(
-                    onClick = onAddExerciseClick
-                )
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            Category {
-                if (!state.isPlanSelected) {
-                    SelectPlanCard(
-                        modifier = Modifier.cardWidth(),
-                        onSelectPlanClick = onSelectPlanClick,
+                Spacer(modifier = Modifier.height(16.dp))
+                Category {
+                    ExploreExercisesCard(
+                        onClick = onExploreExercisesClick
+                    )
+                    AddExerciseCard(
+                        onClick = onAddExerciseClick
                     )
                 }
+                Spacer(modifier = Modifier.weight(1F))
             }
-            Spacer(modifier = Modifier.weight(1F))
             LiftingQuotes()
             Spacer(modifier = Modifier.height(4.dp))
         }
     }
+}
+
+@Composable
+private fun ColumnScope.SelectPlan(
+    onSelectPlanClick: () -> Unit,
+) {
+    Spacer(modifier = Modifier.weight(1F))
+    Text(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        text = stringResource(R.string.label__selecting_a_plan),
+        style = MaterialTheme.typography.displayLarge.copy(
+            lineBreak = LineBreak.Heading
+        ),
+        color = MaterialTheme.colorScheme.tertiary,
+    )
+    Spacer(modifier = Modifier.weight(1F))
+    FilledTonalButton(
+        onClick = onSelectPlanClick,
+        contentPadding = PaddingValues(
+            vertical = 24.dp,
+            horizontal = 40.dp
+        )
+    ) {
+        Text(text = stringResource(R.string.label_select_plan_one))
+        Spacer(modifier = Modifier.width(12.dp))
+        Icon(
+            imageVector = KenkoIcons.ArrowOutward,
+            contentDescription = ""
+        )
+    }
+    Spacer(modifier = Modifier.height(16.dp))
 }
 
 @Composable
@@ -156,6 +203,44 @@ fun Category(
 }
 
 private fun Modifier.cardWidth() = width(310.dp)
+
+@Composable
+private fun SelectPlanTicker(
+    modifier: Modifier = Modifier
+) {
+    val tickerText = stringResource(R.string.label_select_a_plan)
+    val tickerMarquee = remember {
+        List(10) {
+            tickerText
+        }.joinToString(
+            separator = " ${Typography.bullet} ",
+            postfix = " ${Typography.bullet} ",
+        )
+    }
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        HorizontalDivider(
+            modifier = Modifier.fillMaxWidth(),
+            thickness = KenkoBorderWidth,
+            color = MaterialTheme.colorScheme.outline
+        )
+        Text(
+            modifier = Modifier
+                .padding(vertical = 4.dp)
+                .basicMarquee(),
+            text = tickerMarquee,
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.outline,
+        )
+        HorizontalDivider(
+            modifier = Modifier.fillMaxWidth(),
+            thickness = KenkoBorderWidth,
+            color = MaterialTheme.colorScheme.outline
+        )
+    }
+}
 
 @Composable
 private fun StartSessionCard(

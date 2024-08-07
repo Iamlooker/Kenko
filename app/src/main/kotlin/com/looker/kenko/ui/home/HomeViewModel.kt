@@ -29,12 +29,12 @@ class HomeViewModel @Inject constructor(
         HomeUiData(
             isPlanSelected = currentPlan != null,
             isSessionStarted = currentSession != null,
-            hasMultipleSessions = sessions.isNotEmpty(),
+            hasMultipleSessions = sessions.size > 1,
             currentPlanId = currentPlan?.id,
         )
     }.asStateFlow(
         HomeUiData(
-            isPlanSelected = false,
+            isPlanSelected = true,
             isSessionStarted = false,
             hasMultipleSessions = false,
             currentPlanId = null,

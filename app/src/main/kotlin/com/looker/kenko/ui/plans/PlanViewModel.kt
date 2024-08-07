@@ -2,7 +2,6 @@ package com.looker.kenko.ui.plans
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.looker.kenko.BuildConfig
 import com.looker.kenko.data.model.Plan
 import com.looker.kenko.data.repository.PlanRepo
 import com.looker.kenko.data.repository.SettingsRepo
@@ -29,7 +28,7 @@ class PlanViewModel @Inject constructor(
         viewModelScope.launch {
             repo.switchPlan(plan)
             val isPlanSelected = repo.current() != null
-            if (isPlanSelected && !BuildConfig.DEBUG) {
+            if (isPlanSelected) {
                 settingsRepo.setOnboardingDone()
             }
         }
