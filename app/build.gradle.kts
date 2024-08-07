@@ -9,12 +9,12 @@ plugins {
 
 android {
     namespace = "com.looker.kenko"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.looker.kenko"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         // 1.2.0 -> 102000
         // 1.12.2 -> 112020
         // 1.12.10 -> 112100
