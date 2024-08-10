@@ -229,7 +229,7 @@ private fun SelectPlanTicker(
         Text(
             modifier = Modifier
                 .padding(vertical = 4.dp)
-                .basicMarquee(),
+                .basicMarquee(initialDelayMillis = 0),
             text = tickerMarquee,
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.outline,
