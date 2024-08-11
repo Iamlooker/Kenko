@@ -1,29 +1,23 @@
 package com.looker.kenko.ui.home
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.background
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.basicMarquee
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,28 +25,36 @@ import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.ui.Alignment.Companion.TopEnd
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineBreak
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
 import com.looker.kenko.ui.components.KenkoBorderWidth
 import com.looker.kenko.ui.components.LiftingQuotes
-import com.looker.kenko.ui.components.OutlineBorder
-import com.looker.kenko.ui.components.SecondaryBorder
-import com.looker.kenko.ui.extensions.PHI
+import com.looker.kenko.ui.components.icons.symbols.Add
+import com.looker.kenko.ui.components.icons.symbols.ArrowOutward
 import com.looker.kenko.ui.extensions.plus
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
@@ -79,6 +81,7 @@ fun Home(
     )
 }
 
+// TODO: Add current plan indicator on this page
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Home(
@@ -114,38 +117,79 @@ private fun Home(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(innerPadding + PaddingValues(bottom = 80.dp)),
-            horizontalAlignment = CenterHorizontally
         ) {
-            AnimatedVisibility(
-                visible = !state.isPlanSelected,
-                enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
-                exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top),
+            HorizontalDivider(thickness = KenkoBorderWidth)
+            AnimatedContent(
+                modifier = Modifier.align(CenterHorizontally),
+                targetState = state.isPlanSelected, label = "",
             ) {
-                SelectPlanTicker()
+                if (it) {
+                    Row(
+                        modifier = Modifier
+                            .widthIn(240.dp, 420.dp)
+                            .height(120.dp),
+                    ) {
+                        ExploreExerciseCard(
+                            modifier = Modifier
+                                .weight(1F)
+                                .clickable(onClick = onExploreExercisesClick),
+                        )
+                        VerticalDivider()
+                        AddExerciseCard(
+                            modifier = Modifier
+                                .weight(1F)
+                                .clickable(onClick = onAddExerciseClick),
+                        )
+                    }
+                } else {
+                    SelectPlanTicker()
+                }
             }
-            if (!state.isPlanSelected) {
-                SelectPlan(onSelectPlanClick = onSelectPlanClick)
+            HorizontalDivider(thickness = KenkoBorderWidth)
+            if (state.isPlanSelected) {
+                StartSession(onStartSessionClick = onStartSessionClick) {
+                    val stringRes = remember(state.isSessionStarted) {
+                        if (state.isSessionStarted) {
+                            R.string.label_continue_session
+                        } else {
+                            R.string.label_start_session
+                        }
+                    }
+                    Text(text = stringResource(stringRes))
+                }
             } else {
-                Category {
-                    StartSessionCard(
-                        isSessionStarted = state.isSessionStarted,
-                        onClick = onStartSessionClick,
-                    )
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-                Category {
-                    ExploreExercisesCard(
-                        onClick = onExploreExercisesClick
-                    )
-                    AddExerciseCard(
-                        onClick = onAddExerciseClick
-                    )
-                }
-                Spacer(modifier = Modifier.weight(1F))
+                SelectPlan(onSelectPlanClick = onSelectPlanClick)
             }
-            LiftingQuotes()
-            Spacer(modifier = Modifier.height(4.dp))
+            LiftingQuotes(
+                modifier = Modifier
+                    .padding(vertical = 6.dp)
+                    .align(CenterHorizontally)
+            )
         }
+    }
+}
+
+@Composable
+private fun ColumnScope.StartSession(
+    onStartSessionClick: () -> Unit,
+    content: @Composable RowScope.() -> Unit
+) {
+    Spacer(modifier = Modifier.weight(1F))
+    FilledTonalButton(
+        modifier = Modifier.align(CenterHorizontally),
+        onClick = onStartSessionClick,
+        contentPadding = PaddingValues(
+            vertical = 24.dp,
+            horizontal = 40.dp
+        )
+    ) {
+        content()
+        Spacer(modifier = Modifier.width(8.dp))
+        Icon(
+            modifier = Modifier.size(18.dp),
+            imageVector = KenkoIcons.ArrowOutward,
+            contentDescription = null
+        )
     }
 }
 
@@ -155,7 +199,9 @@ private fun ColumnScope.SelectPlan(
 ) {
     Spacer(modifier = Modifier.weight(1F))
     Text(
-        modifier = Modifier.padding(horizontal = 16.dp),
+        modifier = Modifier
+            .align(CenterHorizontally)
+            .padding(horizontal = 16.dp),
         text = stringResource(R.string.label__selecting_a_plan),
         style = MaterialTheme.typography.displayLarge.copy(
             lineBreak = LineBreak.Heading
@@ -164,6 +210,7 @@ private fun ColumnScope.SelectPlan(
     )
     Spacer(modifier = Modifier.weight(1F))
     FilledTonalButton(
+        modifier = Modifier.align(CenterHorizontally),
         onClick = onSelectPlanClick,
         contentPadding = PaddingValues(
             vertical = 24.dp,
@@ -174,35 +221,10 @@ private fun ColumnScope.SelectPlan(
         Spacer(modifier = Modifier.width(12.dp))
         Icon(
             imageVector = KenkoIcons.ArrowOutward,
-            contentDescription = ""
+            contentDescription = null
         )
     }
-    Spacer(modifier = Modifier.height(16.dp))
 }
-
-@Composable
-fun Category(
-    modifier: Modifier = Modifier,
-    content: @Composable() (RowScope.() -> Unit),
-) {
-    Column(
-        modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        Row(
-            modifier = modifier
-                .horizontalScroll(rememberScrollState())
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            Spacer(modifier = Modifier)
-            content()
-            Spacer(modifier = Modifier)
-        }
-    }
-}
-
-private fun Modifier.cardWidth() = width(310.dp)
 
 @Composable
 private fun SelectPlanTicker(
@@ -221,11 +243,6 @@ private fun SelectPlanTicker(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,
     ) {
-        HorizontalDivider(
-            modifier = Modifier.fillMaxWidth(),
-            thickness = KenkoBorderWidth,
-            color = MaterialTheme.colorScheme.outline
-        )
         Text(
             modifier = Modifier
                 .padding(vertical = 4.dp)
@@ -234,163 +251,65 @@ private fun SelectPlanTicker(
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.outline,
         )
-        HorizontalDivider(
-            modifier = Modifier.fillMaxWidth(),
-            thickness = KenkoBorderWidth,
-            color = MaterialTheme.colorScheme.outline
+    }
+}
+
+@Composable
+private fun ExploreExerciseCard(modifier: Modifier = Modifier) {
+    HelperCards(modifier = modifier) {
+        Text(text = stringResource(R.string.label_explore_exercises))
+        Icon(
+            modifier = Modifier
+                .padding(16.dp)
+                .align(TopEnd),
+            imageVector = ArrowOutward,
+            contentDescription = null
         )
     }
 }
 
 @Composable
-private fun StartSessionCard(
-    isSessionStarted: Boolean,
-    onClick: () -> Unit,
+private fun AddExerciseCard(modifier: Modifier = Modifier) {
+    HelperCards(modifier = modifier) {
+        Text(text = stringResource(R.string.label_add_new_exercises_home))
+        Icon(
+            modifier = Modifier
+                .padding(16.dp)
+                .align(TopEnd),
+            imageVector = Add,
+            contentDescription = null
+        )
+    }
+}
+
+@Composable
+private fun HelperCards(
     modifier: Modifier = Modifier,
+    boxModifier: Modifier = Modifier,
+    shape: Shape = RectangleShape,
+    color: Color = MaterialTheme.colorScheme.surface,
+    textStyle: TextStyle = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+    content: @Composable BoxScope.() -> Unit,
 ) {
-    Row(
-        modifier = modifier
-            .cardWidth()
-            .aspectRatio(PHI)
-            .clip(MaterialTheme.shapes.extraLarge)
-            .background(MaterialTheme.colorScheme.secondaryContainer)
-            .clickable(onClick = onClick)
-            .padding(vertical = 24.dp),
-        horizontalArrangement = Arrangement.SpaceAround,
-        verticalAlignment = Alignment.CenterVertically,
+    Surface(
+        modifier = modifier,
+        shape = shape,
+        color = color,
     ) {
-        val stringRes = remember(isSessionStarted) {
-            if (isSessionStarted) {
-                R.string.label_continue_session
-            } else {
-                R.string.label_start_session
+        Box(
+            modifier = boxModifier.fillMaxSize(),
+            contentAlignment = Alignment.Center,
+        ) {
+            CompositionLocalProvider(
+                LocalTextStyle provides textStyle
+            ) {
+                content()
             }
         }
-        Text(
-            text = stringResource(stringRes),
-            style = MaterialTheme.typography.headlineLarge,
-            color = MaterialTheme.colorScheme.onSecondaryContainer,
-        )
-        Icon(
-            imageVector = KenkoIcons.ArrowOutwardLarge,
-            tint = MaterialTheme.colorScheme.onSecondaryContainer,
-            contentDescription = null,
-        )
     }
 }
 
-@Composable
-private fun ExploreSessionsCard(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Row(
-        modifier = modifier
-            .cardWidth()
-            .aspectRatio(PHI)
-            .clip(MaterialTheme.shapes.extraLarge)
-            .border(SecondaryBorder, MaterialTheme.shapes.extraLarge)
-            .clickable(onClick = onClick)
-            .padding(vertical = 24.dp),
-        horizontalArrangement = Arrangement.SpaceAround,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(
-            text = stringResource(R.string.label_explore_sessions),
-            style = MaterialTheme.typography.headlineLarge,
-        )
-        Icon(
-            imageVector = KenkoIcons.QuarterCircles,
-            tint = MaterialTheme.colorScheme.outline,
-            contentDescription = null,
-        )
-    }
-}
-
-@Composable
-private fun ExploreExercisesCard(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Row(
-        modifier = modifier
-            .cardWidth()
-            .aspectRatio(PHI)
-            .clip(MaterialTheme.shapes.extraLarge)
-            .border(SecondaryBorder, MaterialTheme.shapes.extraLarge)
-            .clickable(onClick = onClick)
-            .padding(vertical = 24.dp),
-        horizontalArrangement = Arrangement.SpaceAround,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(
-            text = stringResource(R.string.label_explore_exercises),
-            style = MaterialTheme.typography.headlineLarge,
-        )
-        Icon(
-            modifier = Modifier.offset(x = 40.dp),
-            imageVector = KenkoIcons.Wireframe,
-            contentDescription = null,
-        )
-    }
-}
-
-@Composable
-private fun AddExerciseCard(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Row(
-        modifier = modifier
-            .cardWidth()
-            .aspectRatio(PHI)
-            .clip(MaterialTheme.shapes.extraLarge)
-            .border(SecondaryBorder, MaterialTheme.shapes.extraLarge)
-            .clickable(onClick = onClick)
-            .padding(vertical = 24.dp),
-        horizontalArrangement = Arrangement.SpaceAround,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(
-            text = stringResource(R.string.label_add_new_exercises_home),
-            style = MaterialTheme.typography.headlineLarge,
-        )
-        Icon(
-            imageVector = KenkoIcons.AddLarge,
-            contentDescription = null,
-        )
-    }
-}
-
-@Composable
-private fun CurrentPlanCard(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Row(
-        modifier = modifier
-            .cardWidth()
-            .aspectRatio(PHI)
-            .clip(MaterialTheme.shapes.extraLarge)
-            .border(OutlineBorder, MaterialTheme.shapes.extraLarge)
-            .clickable(onClick = onClick)
-            .padding(vertical = 24.dp),
-        horizontalArrangement = Arrangement.SpaceAround,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(
-            text = stringResource(R.string.label_current_plan_home),
-            style = MaterialTheme.typography.headlineLarge,
-        )
-        Icon(
-            modifier = Modifier.offset(40.dp),
-            imageVector = KenkoIcons.Colony,
-            contentDescription = null,
-        )
-    }
-}
-
-@Preview
+@PreviewScreenSizes
 @Composable
 private fun HomePreview() {
     KenkoTheme {
@@ -405,7 +324,7 @@ private fun HomePreview() {
     }
 }
 
-@Preview
+@PreviewScreenSizes
 @Composable
 private fun FirstStartHomePreview() {
     KenkoTheme {

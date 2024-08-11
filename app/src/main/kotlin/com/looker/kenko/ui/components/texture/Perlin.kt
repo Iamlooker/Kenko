@@ -15,7 +15,7 @@ object Perlin {
 
     private val permutation = randomIntArray(
         size = 512,
-        seed = 5802377276231659318,
+        seed = -8937972728836847419,
     )
 
     fun noise(x: Double, y: Double, z: Double): Double {

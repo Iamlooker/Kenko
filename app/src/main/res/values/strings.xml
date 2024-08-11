@@ -9,8 +9,8 @@
     <string name="label_lets_go">Get Started</string>
 
     <!--Home-->
-    <string name="label_continue_session">Continue\nSession</string>
-    <string name="label_start_session">Start\nSession</string>
+    <string name="label_continue_session">Continue</string>
+    <string name="label_start_session">Start</string>
     <string name="label_explore_sessions">Explore\nSessions</string>
     <string name="label_explore_exercises">Explore\nExercises</string>
     <string name="label_add_new_exercises_home">Add\nExercise</string>

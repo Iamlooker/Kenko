@@ -170,7 +170,7 @@ private fun GetStarted(
 }
 
 @Composable
-private fun ButtonGroup(
+fun ButtonGroup(
     buttonIcon: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {

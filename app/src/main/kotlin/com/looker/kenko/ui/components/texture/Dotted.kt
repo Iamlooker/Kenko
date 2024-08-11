@@ -11,7 +11,7 @@ import kotlin.math.max
 import kotlin.math.sqrt
 
 private const val DOT_SIZE = 1F
-private const val DOT_GAP = 3F
+private const val DOT_GAP = 2F
 
 fun CacheDrawScope.dottedTexture(
     color: Color,
@@ -19,7 +19,7 @@ fun CacheDrawScope.dottedTexture(
     noiseScale: Double,
     start: GradientStart = GradientStart.TopLeft,
 ): DrawResult {
-    val dots = getDotsPerSize(size)
+    val dots = dotPositions(size)
     val drawDistance = (size.center * 2F * drawDistanceRatio).getDistanceSquared()
     val startPosition = when (start) {
         GradientStart.BottomLeft -> Offset.Zero.copy(y = size.height)
@@ -30,7 +30,7 @@ fun CacheDrawScope.dottedTexture(
     }
     val centerAndAlpha = dots.associateWith { center ->
         val distance = (center - startPosition).getDistanceSquared() / drawDistance
-        val fadeFactor = max(0F, 0.7F - sqrt(distance))
+        val fadeFactor = max(0F, 1F - sqrt(distance))
         val noise = noise2D(
             center.x * noiseScale,
             center.y * noiseScale,
@@ -43,13 +43,13 @@ fun CacheDrawScope.dottedTexture(
                 color = color.copy(alpha = alpha),
                 radius = DOT_SIZE,
                 center = center,
-                blendMode = BlendMode.Difference,
+//                blendMode = BlendMode.Difference,
             )
         }
     }
 }
 
-private fun getDotsPerSize(size: Size): List<Offset> {
+private fun dotPositions(size: Size): List<Offset> {
     val horizontalDots = (size.width / (DOT_SIZE + DOT_GAP)).toInt()
     val verticalDots = (size.height / (DOT_SIZE + DOT_GAP)).toInt()
     return List(horizontalDots * verticalDots) { index ->
