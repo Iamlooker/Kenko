@@ -19,11 +19,12 @@ import com.looker.kenko.data.model.MuscleGroups.Triceps
 import com.looker.kenko.data.model.MuscleGroups.UpperBack
 import kotlinx.serialization.Serializable
 
-@Entity
+@Entity("exercises")
 @Stable
 @Serializable
 data class Exercise(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    val id: Long? = null,
     val name: String,
     val target: MuscleGroups,
     val reference: String? = null,
