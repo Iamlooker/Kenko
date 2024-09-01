@@ -1,26 +1,26 @@
 [versions]
 activity = "1.9.1"
-agp = "8.5.2"
+agp = "8.6.0"
 coil = "2.7.0"
-composeBom = "2024.08.00-alpha01"
+composeBom = "2024.08.00"
 core = "1.13.1"
-core-test = "1.6.1"
-coroutines = "1.9.0-RC"
+core-test = "1.6.2"
+coroutines = "1.9.0-RC.2"
 datastore = "1.1.1"
 dateTime = "0.6.0"
 espresso = "3.6.1"
-hilt = "2.51.1"
+hilt = "2.52"
 hiltNavigation = "1.2.0"
 jUnitExt = "1.2.1"
-junitJupiter = "5.10.3"
+junitJupiter = "5.11.0"
 kotlin = "2.0.10"
 ksp = "2.0.10-1.0.24"
 lifecycle = "2.8.4"
-navigation = "2.8.0-beta07"
+navigation = "2.8.0-rc01"
 rebugger = "1.0.0-rc03"
 room = "2.6.1"
-serialization = "1.7.1"
-shapes = "1.0.0-rc01"
+serialization = "1.7.2"
+shapes = "1.0.0"
 
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity" }
@@ -44,7 +44,7 @@ androidx-test-core-ktx = { group = "androidx.test", name = "core-ktx", version.r
 androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "core-test" }
 androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "core-test" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
-compose-bom = { group = "dev.chrisbanes.compose", name = "compose-bom", version.ref = "composeBom" }
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
 compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
 compose-ui = { group = "androidx.compose.ui", name = "ui" }
