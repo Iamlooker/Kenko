@@ -2,17 +2,24 @@ package com.looker.kenko.ui.planEdit.components
 
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.updateTransition
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.KeyboardArrowLeft
+import androidx.compose.material.icons.rounded.KeyboardArrowRight
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,21 +49,49 @@ import java.time.format.TextStyle
 
 @Composable
 fun DaySelector(
-    dayItem: @Composable (DayOfWeek) -> Unit,
+    dayItem: @Composable () -> Unit,
+    onNext: () -> Unit,
+    onPrevious: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .horizontalScroll(rememberScrollState()),
-        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier.widthIn(max = 400.dp),
+        horizontalArrangement = Arrangement.Center,
     ) {
-        Spacer(modifier = Modifier.width(8.dp))
-        DayOfWeek.entries.forEach {
-            dayItem(it)
-            if (it != SUNDAY) Spacer(modifier = Modifier.width(6.dp))
+        val buttonColors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+            contentColor = MaterialTheme.colorScheme.onSurface,
+        )
+        Button(
+            modifier = Modifier.height(56.dp),
+            shape = MaterialTheme.shapes.large,
+            colors = buttonColors,
+            onClick = onPrevious,
+        ) {
+            Icon(imageVector = Icons.Rounded.KeyboardArrowLeft, contentDescription = null)
         }
         Spacer(modifier = Modifier.width(8.dp))
+        Box(
+            modifier = Modifier
+                .height(56.dp)
+                .weight(1F)
+                .background(
+                    MaterialTheme.colorScheme.surfaceContainerHigh,
+                    MaterialTheme.shapes.large,
+                ),
+            contentAlignment = Alignment.Center,
+        ) {
+            dayItem()
+        }
+        Spacer(modifier = Modifier.width(8.dp))
+        Button(
+            modifier = Modifier.height(56.dp),
+            shape = MaterialTheme.shapes.large,
+            colors = buttonColors,
+            onClick = onNext,
+        ) {
+            Icon(imageVector = Icons.Rounded.KeyboardArrowRight, contentDescription = null)
+        }
     }
 }
 
@@ -133,10 +168,13 @@ private fun DaySelectorPreview() {
         }
         DaySelector(
             dayItem = {
-                DayItem(
-                    dayOfWeek = it,
-                    isSelected = isSelected == it,
-                    onClick = { isSelected = it })
+                Text(text = kenkoDayName(dayOfWeek = isSelected))
+            },
+            onNext = {
+                isSelected += 1
+            },
+            onPrevious = {
+                isSelected -= 1
             }
         )
     }
