@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
     alias(libs.plugins.hilt)
 }
 
@@ -22,11 +23,13 @@ android {
         versionName = "1.2.0"
 
         testInstrumentationRunner = "com.looker.kenko.KenkoTestRunner"
+
         vectorDrawables {
             useSupportLibrary = true
         }
-        ksp {
-            arg("room.schemaLocation", "$projectDir/schemas")
+
+        room {
+            schemaDirectory("$projectDir/schemas")
         }
     }
 
@@ -46,22 +49,32 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlinOptions {
         jvmTarget = "17"
         freeCompilerArgs += "-Xcontext-receivers"
     }
+
     buildFeatures {
         compose = true
     }
+
+    sourceSets {
+        getByName("androidTest").assets.srcDir("$projectDir/schemas")
+    }
+
+
     composeCompiler {
         enableStrongSkippingMode = true
         metricsDestination = file("$projectDir/reports/metrics")
         reportsDestination = file("$projectDir/reports")
     }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -98,6 +111,7 @@ dependencies {
     implementation(libs.androidx.datastore)
 
     implementation(libs.bundles.room)
+    testImplementation(libs.androidx.room.test)
     ksp(libs.androidx.room.compiler)
 
     // Rebugger
