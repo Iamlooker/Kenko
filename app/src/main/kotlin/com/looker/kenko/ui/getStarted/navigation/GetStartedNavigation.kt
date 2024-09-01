@@ -8,8 +8,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 object GetStartedRoute
 
-// We never navigate "TO" Get Started Screen
-
 fun NavGraphBuilder.getStarted(onNext: () -> Unit) {
     composable<GetStartedRoute> {
         GetStarted(onNext)

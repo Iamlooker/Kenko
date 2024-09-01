@@ -9,6 +9,7 @@ import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Icon
@@ -22,6 +23,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.looker.kenko.ui.getStarted.navigation.GetStartedRoute
+import com.looker.kenko.ui.home.navigation.HomeRoute
 import com.looker.kenko.ui.navigation.KenkoNavHost
 import com.looker.kenko.ui.theme.KenkoTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,11 +40,18 @@ class MainActivity : ComponentActivity() {
         setContent {
             val theme by viewModel.theme.collectAsStateWithLifecycle()
             val colorScheme by viewModel.colorScheme.collectAsStateWithLifecycle()
+            val appState = rememberKenkoAppState()
             KenkoTheme(
                 theme = theme,
                 colorSchemes = colorScheme,
             ) {
-                Kenko()
+                Kenko(appState) {
+                    KenkoNavHost(
+                        appState = appState,
+                        startDestination = if (viewModel.isOnboardingDone) HomeRoute
+                        else GetStartedRoute
+                    )
+                }
             }
         }
     }
@@ -49,8 +59,10 @@ class MainActivity : ComponentActivity() {
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun Kenko() {
-    val appState = rememberKenkoAppState()
+fun Kenko(
+    appState: KenkoAppState,
+    content: @Composable (innerPadding: PaddingValues) -> Unit
+) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.surface,
@@ -79,8 +91,7 @@ fun Kenko() {
                 }
             }
         },
-        contentWindowInsets = WindowInsets(0)
-    ) {
-        KenkoNavHost(appState)
-    }
+        contentWindowInsets = WindowInsets(0),
+        content = content
+    )
 }
