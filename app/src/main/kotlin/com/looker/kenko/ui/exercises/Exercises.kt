@@ -7,21 +7,17 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -46,7 +42,7 @@ import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.components.ErrorSnackbar
 import com.looker.kenko.ui.components.HorizontalTargetChips
 import com.looker.kenko.ui.components.KenkoBorderWidth
-import com.looker.kenko.ui.components.OutlineBorder
+import com.looker.kenko.ui.components.SecondaryKenkoButton
 import com.looker.kenko.ui.components.SwipeToDeleteBox
 import com.looker.kenko.ui.extensions.plus
 import com.looker.kenko.ui.theme.KenkoIcons
@@ -87,19 +83,18 @@ private fun Exercises(
     Scaffold(
         modifier = modifier.fillMaxWidth(),
         floatingActionButton = {
-            OutlinedButton(
+            SecondaryKenkoButton(
                 onClick = { onCreateClick(state.selected) },
-                contentPadding = PaddingValues(vertical = 20.dp, horizontal = 32.dp),
-                border = OutlineBorder,
-                colors = ButtonDefaults.outlinedButtonColors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                ),
-            ) {
-                Icon(imageVector = KenkoIcons.Add, contentDescription = null)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = stringResource(R.string.label_create_exercise))
-            }
+                label = {
+                    Icon(
+                        imageVector = KenkoIcons.Add,
+                        contentDescription = null,
+                    )
+                },
+                icon = {
+                    Text(stringResource(R.string.label_create_exercise))
+                }
+            )
         },
         floatingActionButtonPosition = FabPosition.Center,
         snackbarHost = {
@@ -143,7 +138,6 @@ private fun ExercisesList(
                 onDismiss = { onRemove(exerciseName) }
             ) {
                 ExerciseItem(
-                    modifier = Modifier.padding(horizontal = 12.dp),
                     exercise = exercise,
                     onClick = { onExerciseClick(exerciseName) },
                     referenceButton = {
@@ -161,7 +155,6 @@ private fun ExercisesList(
             }
         }
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -202,12 +195,11 @@ private fun ExerciseItem(
     Surface(
         modifier = modifier,
         onClick = onClick,
-        shape = MaterialTheme.shapes.large,
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 8.dp),
+                .padding(horizontal = 20.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {

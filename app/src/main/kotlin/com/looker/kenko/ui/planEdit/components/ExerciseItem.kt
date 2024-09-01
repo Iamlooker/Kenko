@@ -1,6 +1,5 @@
 package com.looker.kenko.ui.planEdit.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,12 +9,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -67,7 +66,7 @@ fun ExerciseItem(
                 )
                 Text(
                     text = stringResource(exercise.target.stringRes),
-                    style = MaterialTheme.typography.titleSmall,
+                    style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.outline,
                 )
             }
@@ -82,12 +81,11 @@ fun ExerciseItem(
 }
 
 @Composable
-fun SelectExerciseButton(onClick: () -> Unit) {
-    OutlinedButton(
+fun KenkoAddButton(onClick: () -> Unit) {
+    Button(
         onClick = onClick,
         contentPadding = PaddingValues(vertical = 24.dp, horizontal = 40.dp),
-        border = BorderStroke(2.dp, color = MaterialTheme.colorScheme.outline),
-        colors = ButtonDefaults.outlinedButtonColors(
+        colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
             contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
         ),
@@ -112,7 +110,7 @@ private fun ExerciseItemPreview() {
 @Composable
 private fun ExerciseButtonPreview() {
     KenkoTheme {
-        SelectExerciseButton {
+        KenkoAddButton {
 
         }
     }

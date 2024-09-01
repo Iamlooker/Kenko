@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -20,8 +19,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -47,17 +47,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineBreak
-import androidx.compose.ui.tooling.preview.PreviewScreenSizes
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
 import com.looker.kenko.ui.components.KenkoBorderWidth
 import com.looker.kenko.ui.components.LiftingQuotes
+import com.looker.kenko.ui.components.TertiaryKenkoButton
 import com.looker.kenko.ui.components.icons.symbols.Add
 import com.looker.kenko.ui.components.icons.symbols.ArrowOutward
 import com.looker.kenko.ui.extensions.plus
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
+import com.looker.kenko.ui.theme.header
 
 @Composable
 fun Home(
@@ -100,7 +102,7 @@ private fun Home(
                     Text(text = stringResource(R.string.label_home))
                 },
                 actions = {
-                    if (state.hasMultipleSessions) {
+                    if (!state.isFirstSession) {
                         IconButton(onClick = onExploreSessionsClick) {
                             Icon(
                                 imageVector = KenkoIcons.History,
@@ -147,24 +149,46 @@ private fun Home(
             }
             HorizontalDivider(thickness = KenkoBorderWidth)
             if (state.isPlanSelected) {
-                StartSession(onStartSessionClick = onStartSessionClick) {
-                    val stringRes = remember(state.isSessionStarted) {
-                        if (state.isSessionStarted) {
-                            R.string.label_continue_session
-                        } else {
-                            R.string.label_start_session
+                StartSession(
+                    onStartSessionClick = onStartSessionClick,
+                    content = {
+                        val heading = remember(state.isSessionStarted) {
+                            if (state.isSessionStarted) {
+                                R.string.label_continue_session_heading
+                            } else {
+                                if (state.isFirstSession) {
+                                    R.string.label_start_first_session
+                                } else {
+                                    R.string.label_start_session_heading
+                                }
+                            }
                         }
+                        Text(
+                            modifier = Modifier
+                                .align(CenterHorizontally)
+                                .padding(horizontal = 16.dp),
+                            text = stringResource(heading),
+                            style = MaterialTheme.typography.header().copy(
+                                lineBreak = LineBreak.Heading
+                            ),
+                            color = MaterialTheme.colorScheme.primary,
+                        )
+                    },
+                    buttonText = {
+                        val stringRes = remember(state.isSessionStarted) {
+                            if (state.isSessionStarted) {
+                                R.string.label_continue_session
+                            } else {
+                                R.string.label_start_session
+                            }
+                        }
+                        Text(text = stringResource(stringRes))
                     }
-                    Text(text = stringResource(stringRes))
-                }
+                )
             } else {
                 SelectPlan(onSelectPlanClick = onSelectPlanClick)
             }
-            LiftingQuotes(
-                modifier = Modifier
-                    .padding(vertical = 6.dp)
-                    .align(CenterHorizontally)
-            )
+            LiftingQuotes(Modifier.align(CenterHorizontally))
         }
     }
 }
@@ -172,25 +196,24 @@ private fun Home(
 @Composable
 private fun ColumnScope.StartSession(
     onStartSessionClick: () -> Unit,
-    content: @Composable RowScope.() -> Unit
+    content: @Composable () -> Unit,
+    buttonText: @Composable () -> Unit
 ) {
     Spacer(modifier = Modifier.weight(1F))
-    FilledTonalButton(
+    content()
+    Spacer(modifier = Modifier.weight(1F))
+    TertiaryKenkoButton(
         modifier = Modifier.align(CenterHorizontally),
         onClick = onStartSessionClick,
-        contentPadding = PaddingValues(
-            vertical = 24.dp,
-            horizontal = 40.dp
-        )
-    ) {
-        content()
-        Spacer(modifier = Modifier.width(8.dp))
-        Icon(
-            modifier = Modifier.size(18.dp),
-            imageVector = KenkoIcons.ArrowOutward,
-            contentDescription = null
-        )
-    }
+        label = buttonText,
+        icon = {
+            Icon(
+                modifier = Modifier.size(18.dp),
+                imageVector = KenkoIcons.ArrowOutward,
+                contentDescription = null
+            )
+        }
+    )
 }
 
 @Composable
@@ -202,16 +225,20 @@ private fun ColumnScope.SelectPlan(
         modifier = Modifier
             .align(CenterHorizontally)
             .padding(horizontal = 16.dp),
-        text = stringResource(R.string.label__selecting_a_plan),
-        style = MaterialTheme.typography.displayLarge.copy(
+        text = stringResource(R.string.label_selecting_a_plan),
+        style = MaterialTheme.typography.header().copy(
             lineBreak = LineBreak.Heading
         ),
-        color = MaterialTheme.colorScheme.tertiary,
+        color = MaterialTheme.colorScheme.primary,
     )
     Spacer(modifier = Modifier.weight(1F))
-    FilledTonalButton(
+    Button(
         modifier = Modifier.align(CenterHorizontally),
         onClick = onSelectPlanClick,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.tertiary,
+            contentColor = MaterialTheme.colorScheme.onTertiary,
+        ),
         contentPadding = PaddingValues(
             vertical = 24.dp,
             horizontal = 40.dp
@@ -309,7 +336,7 @@ private fun HelperCards(
     }
 }
 
-@PreviewScreenSizes
+@PreviewLightDark
 @Composable
 private fun HomePreview() {
     KenkoTheme {
@@ -317,14 +344,14 @@ private fun HomePreview() {
             state = HomeUiData(
                 isPlanSelected = true,
                 isSessionStarted = true,
-                hasMultipleSessions = true,
+                isFirstSession = true,
                 currentPlanId = null,
             ),
         )
     }
 }
 
-@PreviewScreenSizes
+@PreviewLightDark
 @Composable
 private fun FirstStartHomePreview() {
     KenkoTheme {
@@ -332,7 +359,7 @@ private fun FirstStartHomePreview() {
             state = HomeUiData(
                 isPlanSelected = false,
                 isSessionStarted = false,
-                hasMultipleSessions = false,
+                isFirstSession = false,
                 currentPlanId = null,
             ),
         )

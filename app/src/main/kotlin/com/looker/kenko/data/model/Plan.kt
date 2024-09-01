@@ -19,6 +19,20 @@ data class Plan(
     val id: Long? = null,
 )
 
+@Stable
+val Plan.stats: PlanStats
+    get() = PlanStats(
+        exercises = exercisesPerDay.values.flatten().size,
+        workDays = exercisesPerDay.size,
+    )
+
+@Stable
+data class PlanStats(
+    val exercises: Int,
+    val workDays: Int,
+    val restDays: Int = 7 - workDays,
+)
+
 val localDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
 
 val week = DatePeriod(days = 7)

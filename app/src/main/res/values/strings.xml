@@ -129,7 +129,10 @@
     <string name="label_today">.today</string>
     <string name="label_plan">Plan</string>
     <string name="label_select_a_plan">Select A Plan</string>
-    <string name="label__selecting_a_plan">Start by Selecting a Plan</string>
+    <string name="label_selecting_a_plan">Start by Selecting a Plan</string>
+    <string name="label_start_first_session">Start your first session</string>
+    <string name="label_start_session_heading">Start today\'s session</string>
+    <string name="label_continue_session_heading">Continue today\'s session</string>
 
     <string-array name="label_health_quotes">
         <item>you can do it</item>

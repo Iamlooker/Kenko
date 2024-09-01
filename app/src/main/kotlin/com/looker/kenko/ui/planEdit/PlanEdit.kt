@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,6 +19,7 @@ import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
@@ -49,15 +49,14 @@ import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.components.ErrorSnackbar
 import com.looker.kenko.ui.components.kenkoTextFieldColor
 import com.looker.kenko.ui.extensions.normalizeInt
-import com.looker.kenko.ui.extensions.vertical
-import com.looker.kenko.ui.planEdit.components.DayItem
 import com.looker.kenko.ui.planEdit.components.DaySelector
 import com.looker.kenko.ui.planEdit.components.ExerciseItem
-import com.looker.kenko.ui.planEdit.components.SelectExerciseButton
-import com.looker.kenko.ui.planEdit.components.dayName
+import com.looker.kenko.ui.planEdit.components.KenkoAddButton
+import com.looker.kenko.ui.planEdit.components.kenkoDayName
 import com.looker.kenko.ui.selectExercise.SelectExercise
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
+import com.looker.kenko.ui.theme.numbers
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DayOfWeek
 
@@ -107,7 +106,7 @@ private fun PlanEdit(
     val isCurrentDayBlank by remember(state.exercises) { derivedStateOf { state.exercises.isEmpty() } }
     Scaffold(
         floatingActionButton = {
-            SelectExerciseButton(
+            KenkoAddButton(
                 onClick = {
                     focusManager.clearFocus()
                     onAddExercisesClick()
@@ -121,23 +120,6 @@ private fun PlanEdit(
         },
         floatingActionButtonPosition = FabPosition.Center,
     ) { innerPadding ->
-        Box(modifier = Modifier.fillMaxSize()) {
-            Icon(
-                modifier = Modifier.align(Alignment.TopEnd),
-                imageVector = KenkoIcons.Wireframe,
-                tint = MaterialTheme.colorScheme.outline,
-                contentDescription = null
-            )
-            Text(
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .offset(x = (-10).dp, y = 30.dp)
-                    .vertical(false),
-                text = dayName(dayOfWeek = state.currentDay),
-                style = MaterialTheme.typography.displayLarge,
-                color = MaterialTheme.colorScheme.surfaceContainer,
-            )
-        }
         LazyColumn(
             contentPadding = innerPadding,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -155,14 +137,12 @@ private fun PlanEdit(
                         OutlinedButton(
                             onClick = { onSaveClick(onBackPress) },
                             colors = ButtonDefaults.outlinedButtonColors(
-                                containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                             )
                         ) {
                             Text(text = stringResource(R.string.label_save))
                         }
                     }
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
                     TextField(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -177,19 +157,12 @@ private fun PlanEdit(
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                     DaySelector(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(48.dp),
+                        modifier = Modifier.padding(horizontal = 16.dp),
                         dayItem = {
-                            DayItem(
-                                dayOfWeek = it,
-                                isSelected = it == state.currentDay,
-                                onClick = {
-                                    focusManager.clearFocus()
-                                    onSelectDay(it)
-                                },
-                            )
-                        }
+                            Text(text = kenkoDayName(dayOfWeek = state.currentDay))
+                        },
+                        onNext = { onSelectDay(state.currentDay + 1) },
+                        onPrevious = { onSelectDay(state.currentDay - 1) },
                     )
                 }
             }
@@ -208,7 +181,10 @@ private fun PlanEdit(
                 }
             } else {
                 itemsIndexed(state.exercises) { index, exercise ->
-                    ExerciseItem(exercise = exercise) {
+                    ExerciseItem(
+                        modifier = Modifier.animateItem(),
+                        exercise = exercise
+                    ) {
                         ExerciseItemActions(
                             index = index,
                             onRemove = {
@@ -240,7 +216,10 @@ private fun ExerciseItemActions(
             Icon(imageVector = KenkoIcons.Remove, contentDescription = null)
         }
         Spacer(modifier = Modifier.width(12.dp))
-        Text(text = normalizeInt(index + 1))
+        Text(
+            text = normalizeInt(index + 1),
+            style = LocalTextStyle.current.numbers(),
+        )
     }
 }
 

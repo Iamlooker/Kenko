@@ -26,9 +26,12 @@ class PlanViewModel @Inject constructor(
 
     fun switchPlan(plan: Plan) {
         viewModelScope.launch {
-            repo.switchPlan(plan)
-            val isPlanSelected = repo.current() != null
-            if (isPlanSelected) {
+            if (!plan.isActive) {
+                repo.switchPlan(plan)
+            } else {
+                repo.upsert(plan.copy(isActive = false))
+            }
+            if (repo.current() != null) {
                 settingsRepo.setOnboardingDone()
             }
         }

@@ -9,11 +9,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -40,6 +38,7 @@ import com.looker.kenko.R
 import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.ui.components.ErrorSnackbar
 import com.looker.kenko.ui.components.FlowHorizontalChips
+import com.looker.kenko.ui.components.KenkoButton
 import com.looker.kenko.ui.components.kenkoTextFieldColor
 import com.looker.kenko.ui.extensions.plus
 import com.looker.kenko.ui.theme.KenkoIcons
@@ -119,21 +118,26 @@ private fun AddEditExercise(
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(18.dp))
-            Button(
+            KenkoButton(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .padding(12.dp)
                     .navigationBarsPadding(),
                 onClick = onDone,
-                contentPadding = PaddingValues(vertical = 32.dp, horizontal = 48.dp)
-            ) {
-                Icon(
-                    imageVector = KenkoIcons.Save,
-                    contentDescription = ""
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Text(text = stringResource(R.string.label_save))
-            }
+                label = {
+                    Icon(
+                        imageVector = KenkoIcons.Save,
+                        contentDescription = null,
+                    )
+                },
+                icon = {
+                    Text(stringResource(R.string.label_save))
+                }
+            )
+            Spacer(
+                modifier = Modifier
+                    .navigationBarsPadding()
+                    .padding(bottom = 8.dp)
+            )
         }
     }
 }

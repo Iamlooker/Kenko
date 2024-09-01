@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
@@ -34,8 +35,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
 import com.looker.kenko.data.model.Session
 import com.looker.kenko.ui.components.BackButton
-import com.looker.kenko.ui.components.texture.GradientStart
-import com.looker.kenko.ui.components.texture.dottedGradient
+import com.looker.kenko.ui.components.TertiaryKenkoButton
 import com.looker.kenko.ui.extensions.plus
 import com.looker.kenko.ui.planEdit.components.dayName
 import com.looker.kenko.ui.theme.KenkoIcons
@@ -80,22 +80,24 @@ private fun Sessions(
             )
         },
         floatingActionButton = {
-            Button(
+            TertiaryKenkoButton(
                 onClick = { onSessionClick(null) },
-                contentPadding = PaddingValues(vertical = 24.dp, horizontal = 40.dp)
-            ) {
-                val isCurrentSessionActive = state.isCurrentSessionActive
-                val text = remember(isCurrentSessionActive) {
-                    if (isCurrentSessionActive) R.string.label_continue_session
-                    else R.string.label_start_session
+                label = {
+                    val isCurrentSessionActive = state.isCurrentSessionActive
+                    val text = remember(isCurrentSessionActive) {
+                        if (isCurrentSessionActive) R.string.label_continue_session
+                        else R.string.label_start_session
+                    }
+                    Text(text = stringResource(id = text))
+                },
+                icon = {
+                    Icon(
+                        modifier = Modifier.size(18.dp),
+                        imageVector = KenkoIcons.ArrowOutward,
+                        contentDescription = null
+                    )
                 }
-                Text(text = stringResource(id = text))
-                Spacer(modifier = Modifier.width(16.dp))
-                Icon(
-                    imageVector = KenkoIcons.ArrowForward,
-                    contentDescription = ""
-                )
-            }
+            )
         },
         floatingActionButtonPosition = FabPosition.Center,
         containerColor = MaterialTheme.colorScheme.surface,
@@ -164,10 +166,6 @@ fun SessionCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
-                .dottedGradient(
-                    MaterialTheme.colorScheme.onSurfaceVariant,
-                    start = GradientStart.TopRight
-                )
                 .padding(horizontal = 16.dp, vertical = 16.dp),
         ) {
             isTodayLabel()

@@ -285,6 +285,7 @@ private fun ColorPaletteSample(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ThemeButton(
     selectedTheme: Theme,
@@ -301,6 +302,7 @@ private fun ThemeButton(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SingleChoiceSegmentedButtonRowScope.SystemButton(
     isSelected: Boolean,
@@ -318,6 +320,7 @@ private fun SingleChoiceSegmentedButtonRowScope.SystemButton(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SingleChoiceSegmentedButtonRowScope.LightButton(
     isSelected: Boolean,
@@ -335,6 +338,7 @@ private fun SingleChoiceSegmentedButtonRowScope.LightButton(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SingleChoiceSegmentedButtonRowScope.DarkButton(
     isSelected: Boolean,
@@ -352,6 +356,7 @@ private fun SingleChoiceSegmentedButtonRowScope.DarkButton(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 private val themeButtonColors: SegmentedButtonColors
     @Composable
     get() = SegmentedButtonDefaults.colors(

@@ -56,6 +56,7 @@ import com.looker.kenko.ui.extensions.vertical
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 import com.looker.kenko.ui.theme.end
+import com.looker.kenko.ui.theme.numbers
 import com.looker.kenko.ui.theme.start
 
 @Composable
@@ -91,7 +92,7 @@ private fun Profile(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = stringResource(R.string.label_profile_greeting))
+                    Text(text = stringResource(R.string.label_profile))
                 },
                 actions = {
                     IconButton(onClick = onSettingsClick) {
@@ -136,7 +137,6 @@ private fun Profile(
             LiftsCard(state.totalLifts)
             Spacer(modifier = Modifier.weight(1F))
             HealthQuotes(Modifier.align(Alignment.CenterHorizontally))
-            Spacer(modifier = Modifier.height(4.dp))
         }
     }
 }
@@ -152,7 +152,7 @@ private fun CurrentPlanCard(
         modifier = modifier
             .fillMaxWidth()
             .aspectRatio(PHI),
-        color = MaterialTheme.colorScheme.secondaryContainer,
+        color = MaterialTheme.colorScheme.surfaceContainerHigh,
         shape = MaterialTheme.shapes.extraLarge,
         border = SecondaryBorder,
         onClick = onPlanClick,
@@ -322,7 +322,7 @@ private fun LiftsCard(setsPerformed: Int) {
             Spacer(modifier = Modifier.width(12.dp))
             Text(
                 text = setsPerformed.toString(),
-                style = MaterialTheme.typography.displayLarge
+                style = MaterialTheme.typography.displayLarge.numbers(),
             )
             Spacer(modifier = Modifier.weight(1F))
             Icon(

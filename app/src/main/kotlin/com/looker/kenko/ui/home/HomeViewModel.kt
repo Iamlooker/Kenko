@@ -26,17 +26,18 @@ class HomeViewModel @Inject constructor(
         sessionStream,
         sessionsStream,
     ) { currentPlan, currentSession, sessions ->
+        val isFirstSession = sessions.size <= 1 && sessions.firstOrNull()?.date == localDate
         HomeUiData(
             isPlanSelected = currentPlan != null,
             isSessionStarted = currentSession != null,
-            hasMultipleSessions = sessions.size > 1,
+            isFirstSession = isFirstSession,
             currentPlanId = currentPlan?.id,
         )
     }.asStateFlow(
         HomeUiData(
             isPlanSelected = true,
             isSessionStarted = false,
-            hasMultipleSessions = false,
+            isFirstSession = false,
             currentPlanId = null,
         )
     )
@@ -46,6 +47,6 @@ class HomeViewModel @Inject constructor(
 data class HomeUiData(
     val isPlanSelected: Boolean,
     val isSessionStarted: Boolean,
-    val hasMultipleSessions: Boolean,
+    val isFirstSession: Boolean,
     val currentPlanId: Long?,
 )
