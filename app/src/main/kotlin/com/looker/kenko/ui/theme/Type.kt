@@ -11,118 +11,85 @@ import com.looker.kenko.R
 val FontFamily.Companion.Numbers
     get() = FontFamily(Font(R.font.spacemono_bold))
 
-val FontFamily.Companion.SpaceMono
-    get() = FontFamily(
-        Font(R.font.spacemono_bold, weight = FontWeight.Bold),
-        Font(R.font.spacemono_normal, weight = FontWeight.Normal),
-    )
+val displayFont = FontFamily(
+    Font(R.font.darkergrotesque_bold, weight = FontWeight.Bold),
+    Font(R.font.darkergrotesque_semibold, weight = FontWeight.SemiBold),
+)
+
+val bodyFont = FontFamily(
+    Font(R.font.spacemono_bold, weight = FontWeight.Bold),
+    Font(R.font.spacemono_normal, weight = FontWeight.Normal),
+)
+
+fun Typography.header() = displayLarge.copy(
+    fontSize = 82.sp,
+    lineHeight = 80.0.sp,
+)
 
 fun TextStyle.numbers() = copy(fontFamily = FontFamily.Numbers)
 
-val Typography = Typography(
-    displayLarge = TextStyle(
-        fontFamily = FontFamily.SpaceMono,
+val baseline = Typography()
+
+val Typography = Typography().copy(
+    displayLarge = baseline.displayLarge.copy(
+        fontFamily = displayFont,
         fontWeight = FontWeight.Bold,
-        fontSize = 57.sp,
-        lineHeight = 64.0.sp,
-        letterSpacing = (-2).sp
     ),
-    displayMedium = TextStyle(
-        fontFamily = FontFamily.SpaceMono,
+    displayMedium = baseline.displayMedium.copy(
+        fontFamily = displayFont,
         fontWeight = FontWeight.Bold,
-        fontSize = 45.sp,
-        lineHeight = 52.0.sp,
-        letterSpacing = 0.0.sp
     ),
-    displaySmall = TextStyle(
-        fontFamily = FontFamily.SpaceMono,
+    displaySmall = baseline.displaySmall.copy(
+        fontFamily = displayFont,
+        fontWeight = FontWeight.SemiBold,
+    ),
+    headlineLarge = baseline.headlineLarge.copy(
+        fontFamily = displayFont,
         fontWeight = FontWeight.Bold,
-        fontSize = 36.sp,
-        lineHeight = 44.0.sp,
-        letterSpacing = 0.0.sp
     ),
-    headlineLarge = TextStyle(
-        fontFamily = FontFamily.SpaceMono,
+    headlineMedium = baseline.headlineMedium.copy(
+        fontFamily = displayFont,
         fontWeight = FontWeight.Bold,
-        fontSize = 32.sp,
-        lineHeight = 36.0.sp,
-        letterSpacing = 0.0.sp
     ),
-    headlineMedium = TextStyle(
-        fontFamily = FontFamily.SpaceMono,
-        fontWeight = FontWeight.Bold,
-        fontSize = 28.sp,
-        lineHeight = 36.0.sp,
-        letterSpacing = 0.0.sp
+    headlineSmall = baseline.headlineSmall.copy(
+        fontFamily = displayFont,
+        fontWeight = FontWeight.SemiBold,
     ),
-    headlineSmall = TextStyle(
-        fontFamily = FontFamily.SpaceMono,
+    titleLarge = baseline.titleLarge.copy(
+        fontFamily = displayFont,
+        fontWeight = FontWeight.SemiBold,
+    ),
+    titleMedium = baseline.titleMedium.copy(
+        fontFamily = displayFont,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 17.sp,
+    ),
+    titleSmall = baseline.titleSmall.copy(
+        fontFamily = displayFont,
+        fontWeight = FontWeight.SemiBold,
+    ),
+    bodyLarge = baseline.bodyLarge.copy(
+        fontFamily = bodyFont,
         fontWeight = FontWeight.Normal,
-        fontSize = 24.sp,
-        lineHeight = 32.0.sp,
-        letterSpacing = 0.0.sp
     ),
-    titleLarge = TextStyle(
-        fontFamily = FontFamily.SpaceMono,
+    bodyMedium = baseline.bodyMedium.copy(
+        fontFamily = bodyFont,
         fontWeight = FontWeight.Normal,
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
     ),
-    titleMedium = TextStyle(
-        fontFamily = FontFamily.SpaceMono,
+    bodySmall = baseline.bodySmall.copy(
+        fontFamily = bodyFont,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.2.sp
     ),
-    titleSmall = TextStyle(
-        fontFamily = FontFamily.SpaceMono,
+    labelLarge = baseline.labelLarge.copy(
+        fontFamily = bodyFont,
         fontWeight = FontWeight.Normal,
-        fontSize = 14.sp,
-        lineHeight = 20.sp,
-        letterSpacing = 0.1.sp
     ),
-    bodyLarge = TextStyle(
-        fontFamily = FontFamily.SpaceMono,
+    labelMedium = baseline.labelMedium.copy(
+        fontFamily = bodyFont,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
     ),
-    bodyMedium = TextStyle(
-        fontFamily = FontFamily.SpaceMono,
+    labelSmall = baseline.labelSmall.copy(
+        fontFamily = bodyFont,
         fontWeight = FontWeight.Normal,
-        fontSize = 14.sp,
-        lineHeight = 20.sp,
-        letterSpacing = 0.2.sp
     ),
-    bodySmall = TextStyle(
-        fontFamily = FontFamily.SpaceMono,
-        fontWeight = FontWeight.Normal,
-        fontSize = 12.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.4.sp
-    ),
-    labelLarge = TextStyle(
-        fontFamily = FontFamily.SpaceMono,
-        fontWeight = FontWeight.Normal,
-        fontSize = 14.sp,
-        lineHeight = 20.sp,
-        letterSpacing = 0.1.sp
-    ),
-    labelMedium = TextStyle(
-        fontFamily = FontFamily.SpaceMono,
-        fontWeight = FontWeight.Normal,
-        fontSize = 12.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
-    ),
-    labelSmall = TextStyle(
-        fontFamily = FontFamily.SpaceMono,
-        fontWeight = FontWeight.Normal,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
-    )
 )
