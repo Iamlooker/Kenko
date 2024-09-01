@@ -45,7 +45,6 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
@@ -60,8 +59,6 @@ import com.looker.kenko.ui.components.AnimatedWave
 import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.components.HealthQuotes
 import com.looker.kenko.ui.components.KenkoBorderWidth
-import com.looker.kenko.ui.components.texture.GradientStart
-import com.looker.kenko.ui.components.texture.gradient
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 import com.looker.kenko.ui.theme.colorSchemes.defaultColorSchemes
@@ -94,14 +91,7 @@ private fun Settings(
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
-        modifier = modifier
-            .gradient(
-                0F to MaterialTheme.colorScheme.secondaryContainer.copy(0.2F),
-                1F to MaterialTheme.colorScheme.background,
-                start = GradientStart.Custom {
-                    Offset(x = size.width - 100F, y = 150F)
-                },
-            ),
+        modifier = modifier,
         containerColor = Color.Transparent,
         topBar = {
             TopAppBar(
