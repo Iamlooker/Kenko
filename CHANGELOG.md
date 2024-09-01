@@ -12,12 +12,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for Monochrome icon on Android 12+ 
 - Text animation on Onboarding
 - Safer way to delete Sets / Exercises / Plans
+- New Font for headings
 
 ### Changed
+- Targets Android 15
 - Remove Drag in counter
 - Sorting of muscle groups chips
 - Always save plan on going back
 - Color in Profile
+- Home Screen and On-boarding Screen
+- Some buttons and UI elements
 
 ### Fixed
 - Save button not visible
