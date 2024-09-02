@@ -1,6 +1,7 @@
 package com.looker.kenko.data.local
 
 import androidx.room.TypeConverter
+import com.looker.kenko.data.local.model.SetEntity
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.Set
 import kotlinx.datetime.DayOfWeek
@@ -11,7 +12,7 @@ import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.json.Json
 
 private val json = Json
-private val setListSerializer = ListSerializer(Set.serializer())
+private val setListSerializer = ListSerializer(SetEntity.serializer())
 private val exerciseMapSerializer =
     MapSerializer(DayOfWeekSerializer, ListSerializer(Exercise.serializer()))
 
@@ -28,12 +29,12 @@ class Converters {
     }
 
     @TypeConverter
-    fun fromSetList(value: List<Set>): String {
+    fun fromSetList(value: List<SetEntity>): String {
         return json.encodeToString(setListSerializer, value)
     }
 
     @TypeConverter
-    fun toSetList(value: String): List<Set> {
+    fun toSetList(value: String): List<SetEntity> {
         return json.decodeFromString(setListSerializer, value)
     }
 
@@ -45,16 +46,6 @@ class Converters {
     @TypeConverter
     fun toExerciseMap(value: String): Map<DayOfWeek, List<Exercise>> {
         return json.decodeFromString(exerciseMapSerializer, value)
-    }
-
-    @TypeConverter
-    fun fromSet(value: Set): String {
-        return json.encodeToString(Set.serializer(), value)
-    }
-
-    @TypeConverter
-    fun toSet(value: String): Set {
-        return json.decodeFromString(Set.serializer(), value)
     }
 
     @TypeConverter

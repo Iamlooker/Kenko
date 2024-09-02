@@ -5,10 +5,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.datetime.LocalDate
 
-@Entity
 @Stable
 data class Session(
-    @PrimaryKey
     val date: LocalDate,
     val sets: List<Set>,
 ) {

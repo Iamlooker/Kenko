@@ -1,11 +1,11 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 2,
-    "identityHash": "e3428f9a8d912e582f0a8f30e783f334",
+    "version": 3,
+    "identityHash": "eae42b9230c6dbf6ce8be6073e99688e",
     "entities": [
       {
-        "tableName": "session",
+        "tableName": "sessions",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`date` INTEGER NOT NULL, `sets` TEXT NOT NULL, PRIMARY KEY(`date`))",
         "fields": [
           {
@@ -116,7 +116,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e3428f9a8d912e582f0a8f30e783f334')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'eae42b9230c6dbf6ce8be6073e99688e')"
     ]
   }
 }

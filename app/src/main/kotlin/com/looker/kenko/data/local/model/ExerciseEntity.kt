@@ -4,9 +4,11 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.MuscleGroups
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName("exercise")
 @Entity("exercises")
 data class ExerciseEntity(
     val name: String,

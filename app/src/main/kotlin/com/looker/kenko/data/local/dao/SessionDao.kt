@@ -3,8 +3,8 @@ package com.looker.kenko.data.local.dao
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
-import com.looker.kenko.data.model.Session
-import com.looker.kenko.data.model.Set
+import com.looker.kenko.data.local.model.SessionEntity
+import com.looker.kenko.data.local.model.SetEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDate
 
@@ -12,18 +12,18 @@ import kotlinx.datetime.LocalDate
 interface SessionDao {
 
     @Upsert
-    suspend fun upsert(session: Session)
+    suspend fun upsert(session: SessionEntity)
 
-    @Query("UPDATE session SET sets = :sets WHERE date = :date")
-    suspend fun updateSets(date: LocalDate, sets: List<Set>)
+    @Query("UPDATE sessions SET sets = :sets WHERE date = :date")
+    suspend fun updateSets(date: LocalDate, sets: List<SetEntity>)
 
-    @Query("SELECT * FROM session")
-    fun stream(): Flow<List<Session>>
+    @Query("SELECT * FROM sessions")
+    fun stream(): Flow<List<SessionEntity>>
 
-    @Query("SELECT * FROM session WHERE date = :date")
-    fun session(date: LocalDate): Flow<Session>
+    @Query("SELECT * FROM sessions WHERE date = :date")
+    fun session(date: LocalDate): Flow<SessionEntity>
 
-    @Query("SELECT * FROM session WHERE date = :date")
-    suspend fun getSession(date: LocalDate): Session?
+    @Query("SELECT * FROM sessions WHERE date = :date")
+    suspend fun getSession(date: LocalDate): SessionEntity?
 
 }
