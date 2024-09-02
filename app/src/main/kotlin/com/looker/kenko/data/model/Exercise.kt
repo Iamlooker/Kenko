@@ -2,8 +2,6 @@ package com.looker.kenko.data.model
 
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Stable
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.looker.kenko.R
 import com.looker.kenko.data.model.MuscleGroups.Biceps
 import com.looker.kenko.data.model.MuscleGroups.Calves
@@ -19,11 +17,9 @@ import com.looker.kenko.data.model.MuscleGroups.Triceps
 import com.looker.kenko.data.model.MuscleGroups.UpperBack
 import kotlinx.serialization.Serializable
 
-@Entity("exercises")
 @Stable
 @Serializable
 data class Exercise(
-    @PrimaryKey(autoGenerate = true)
     val id: Long? = null,
     val name: String,
     val target: MuscleGroups,

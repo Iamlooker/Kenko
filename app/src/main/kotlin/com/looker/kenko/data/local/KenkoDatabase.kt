@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
 import com.looker.kenko.data.local.dao.ExerciseDao
 import com.looker.kenko.data.local.dao.PlanDao
 import com.looker.kenko.data.local.dao.SessionDao
-import com.looker.kenko.data.model.Exercise
+import com.looker.kenko.data.local.model.ExerciseEntity
 import com.looker.kenko.data.model.Plan
 import com.looker.kenko.data.model.Session
 
@@ -16,7 +16,7 @@ import com.looker.kenko.data.model.Session
     version = 2,
     entities = [
         Session::class,
-        Exercise::class,
+        ExerciseEntity::class,
         Plan::class,
     ]
 )
