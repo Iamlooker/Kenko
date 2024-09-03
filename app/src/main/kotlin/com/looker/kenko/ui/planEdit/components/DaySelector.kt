@@ -15,8 +15,8 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.KeyboardArrowLeft
-import androidx.compose.material.icons.rounded.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -68,7 +68,10 @@ fun DaySelector(
             colors = buttonColors,
             onClick = onPrevious,
         ) {
-            Icon(imageVector = Icons.Rounded.KeyboardArrowLeft, contentDescription = null)
+            Icon(
+                imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowLeft,
+                contentDescription = null
+            )
         }
         Spacer(modifier = Modifier.width(8.dp))
         Box(
@@ -90,7 +93,10 @@ fun DaySelector(
             colors = buttonColors,
             onClick = onNext,
         ) {
-            Icon(imageVector = Icons.Rounded.KeyboardArrowRight, contentDescription = null)
+            Icon(
+                imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
+                contentDescription = null
+            )
         }
     }
 }
