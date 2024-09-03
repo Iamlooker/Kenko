@@ -39,7 +39,7 @@ class AddSetViewModel @AssistedInject constructor(
         reps.setTextAndPlaceCursorAtEnd((repInt + value).toString())
     }
 
-    fun addWeight(value: Double) {
+    fun addWeight(value: Float) {
         weights.setTextAndPlaceCursorAtEnd((weightDouble + value).toString())
     }
 
@@ -69,7 +69,7 @@ class AddSetViewModel @AssistedInject constructor(
                 initialDelay = 100L,
                 period = 200L
             ) {
-                addWeight(if (isRight) 1.0 else -1.0)
+                addWeight(if (isRight) 1F else -1F)
             }
         }
 
@@ -95,8 +95,8 @@ class AddSetViewModel @AssistedInject constructor(
     private inline val repInt: Int
         get() = reps.text.toString().toIntOrNull() ?: 0
 
-    private inline val weightDouble: Double
-        get() = weights.text.toString().toDoubleOrNull() ?: 0.0
+    private inline val weightDouble: Float
+        get() = weights.text.toString().toFloatOrNull() ?: 0F
 
     @AssistedFactory
     interface AddSetViewModelFactory {

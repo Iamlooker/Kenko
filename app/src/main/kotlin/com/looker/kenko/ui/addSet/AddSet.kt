@@ -103,9 +103,9 @@ fun AddSet(exercise: Exercise, onDone: () -> Unit) {
         ) {
             TextButton(
                 modifier = incrementButtonModifier,
-                onClick = { viewModel.addWeight(-1.0) }
+                onClick = { viewModel.addWeight(-1F) }
             ) {
-                Text(text = stringResource(R.string.label_minus_int, 1.0))
+                Text(text = stringResource(R.string.label_minus_int, 1F))
             }
             val weights = rememberDraggableTextFieldState(
                 events = viewModel.weightsDragEvents,
@@ -119,15 +119,15 @@ fun AddSet(exercise: Exercise, onDone: () -> Unit) {
             )
             TextButton(
                 modifier = incrementButtonModifier,
-                onClick = { viewModel.addWeight(1.0) }
+                onClick = { viewModel.addWeight(1F) }
             ) {
-                Text(text = stringResource(R.string.label_plus_int, 1.0))
+                Text(text = stringResource(R.string.label_plus_int, 1F))
             }
             TextButton(
                 modifier = incrementButtonModifier,
-                onClick = { viewModel.addWeight(5.0) }
+                onClick = { viewModel.addWeight(5F) }
             ) {
-                Text(text = stringResource(R.string.label_plus_int, 5.0))
+                Text(text = stringResource(R.string.label_plus_int, 5F))
             }
         }
         Spacer(modifier = Modifier.height(36.dp))
@@ -180,15 +180,5 @@ private fun SwipeableTextField(
             verticalAlignment = Alignment.CenterVertically,
             content = content
         )
-    }
-}
-
-@Preview
-@Composable
-private fun UpdateTextFieldPreview() {
-    KenkoTheme {
-        SwipeableTextField {
-
-        }
     }
 }

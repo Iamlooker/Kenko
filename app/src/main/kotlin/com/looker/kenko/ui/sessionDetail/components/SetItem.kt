@@ -98,7 +98,7 @@ private fun PerformedItem(
 private fun SetItemPreview() {
     KenkoTheme {
         SetItem(
-            Set(12, 40.0, SetType.Drop, MuscleGroups.Chest.sampleExercises.first())
+            Set(12, 40F, SetType.Drop, MuscleGroups.Chest.sampleExercises.first())
         ) {
             Text(text = "01")
         }

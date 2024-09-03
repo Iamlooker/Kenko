@@ -5,7 +5,7 @@ import androidx.compose.runtime.Immutable
 @Immutable
 data class Set(
     val repsOrDuration: Int,
-    val weight: Double,
+    val weight: Float,
     val type: SetType,
     val exercise: Exercise,
 ) {

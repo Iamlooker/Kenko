@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 @SerialName("set")
 data class SetEntity(
     val repsOrDuration: Int,
-    val weight: Double,
+    val weight: Float,
     val type: SetType,
     val exercise: ExerciseEntity,
 )
