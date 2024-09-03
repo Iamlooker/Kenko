@@ -1,6 +1,7 @@
 package com.looker.kenko.data.model
 
 import androidx.annotation.StringRes
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import com.looker.kenko.R
 import com.looker.kenko.data.model.MuscleGroups.Biceps
@@ -15,10 +16,8 @@ import com.looker.kenko.data.model.MuscleGroups.Shoulders
 import com.looker.kenko.data.model.MuscleGroups.Traps
 import com.looker.kenko.data.model.MuscleGroups.Triceps
 import com.looker.kenko.data.model.MuscleGroups.UpperBack
-import kotlinx.serialization.Serializable
 
-@Stable
-@Serializable
+@Immutable
 data class Exercise(
     val id: Long? = null,
     val name: String,

@@ -9,15 +9,15 @@ import com.looker.kenko.data.local.dao.ExerciseDao
 import com.looker.kenko.data.local.dao.PlanDao
 import com.looker.kenko.data.local.dao.SessionDao
 import com.looker.kenko.data.local.model.ExerciseEntity
+import com.looker.kenko.data.local.model.PlanEntity
 import com.looker.kenko.data.local.model.SessionEntity
-import com.looker.kenko.data.model.Plan
 
 @Database(
-    version = 3,
+    version = 2,
     entities = [
         SessionEntity::class,
         ExerciseEntity::class,
-        Plan::class,
+        PlanEntity::class,
     ],
 )
 @TypeConverters(Converters::class)
@@ -36,7 +36,6 @@ abstract class KenkoDatabase : RoomDatabase() {
                 .createFromAsset("kenko.db")
                 .addMigrations(
                     MIGRATION_1_2,
-                    MIGRATION_2_3,
                 )
                 .build()
         }

@@ -3,16 +3,15 @@ package com.looker.kenko.data.local.model
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.looker.kenko.data.model.Plan
 import com.looker.kenko.data.model.Session
-import kotlinx.datetime.LocalDate
 import com.looker.kenko.data.model.Set
+import kotlinx.datetime.LocalDate
 
 @Entity(
     "sessions",
     foreignKeys = [
         ForeignKey(
-            entity = Plan::class,
+            entity = PlanEntity::class,
             parentColumns = ["id"],
             childColumns = ["planId"],
             onDelete = ForeignKey.CASCADE,

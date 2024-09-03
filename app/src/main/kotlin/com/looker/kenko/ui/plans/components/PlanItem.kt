@@ -104,7 +104,7 @@ fun PlanItem(
                     R.string.label_plan_description,
                     stats.exercises,
                     normalizeInt(stats.workDays),
-                    normalizeInt(stats.restDays)
+                    normalizeInt(7 - stats.workDays)
                 )
             )
         }

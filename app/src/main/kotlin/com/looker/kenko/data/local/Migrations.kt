@@ -5,6 +5,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 val MIGRATION_1_2 = object : Migration(1, 2) {
     override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE `plan_table` RENAME TO `plans`")
         db.execSQL(
             """
             CREATE TABLE exercises (
@@ -22,18 +23,12 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
             SELECT `name`,`target`,`reference`,`isIsometric` FROM `Exercise`
         """.trimIndent()
         )
-        db.execSQL("DROP TABLE `Exercise`")
-    }
-}
-
-val MIGRATION_2_3 = object : Migration(2, 3) {
-    override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL(
             """
             CREATE TABLE IF NOT EXISTS sessions (
             `date` INTEGER NOT NULL,
             `sets` TEXT NOT NULL,
-            `planId` INTEGER NOT NULL CONSTRAINT `fk_sessions_plan_table_id` REFERENCES `plan_table` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE,
+            `planId` INTEGER NOT NULL CONSTRAINT `fk_sessions_plans_id` REFERENCES `plans` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE,
             `id` INTEGER PRIMARY KEY AUTOINCREMENT
             )
         """.trimIndent()
@@ -41,10 +36,11 @@ val MIGRATION_2_3 = object : Migration(2, 3) {
         db.execSQL(
             """
             INSERT INTO `sessions` (`date`,`sets`, `planId`) 
-            SELECT Session.`date`, Session.`sets`, plan_table.`id`
-            FROM `Session` INNER JOIN `plan_table` ON plan_table.`isActive` = 1 OR plan_table.`isActive` = 0
+            SELECT Session.`date`, Session.`sets`, plans.`id`
+            FROM `Session` INNER JOIN `plans` ON plans.`isActive` = 1 OR plans.`isActive` = 0
         """.trimIndent()
         )
         db.execSQL("DROP TABLE `Session`")
+        db.execSQL("DROP TABLE `Exercise`")
     }
 }

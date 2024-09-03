@@ -1,6 +1,9 @@
 package com.looker.kenko.data.repository.offline
 
 import com.looker.kenko.data.local.dao.PlanDao
+import com.looker.kenko.data.local.model.PlanEntity
+import com.looker.kenko.data.local.model.toEntity
+import com.looker.kenko.data.local.model.toExternal
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.Plan
 import com.looker.kenko.data.repository.PlanRepo
@@ -15,13 +18,13 @@ class OfflinePlanRepo @Inject constructor(
 ) : PlanRepo {
 
     override val stream: Flow<List<Plan>>
-        get() = dao.stream()
+        get() = dao.stream().map { it.map(PlanEntity::toExternal) }
 
     override val current: Flow<Plan?>
-        get() = dao.currentPlanStream()
+        get() = dao.currentPlanStream().map { it?.toExternal() }
 
     override fun get(id: Long?): Flow<Plan?> {
-        return id?.let { dao.getStream(it) } ?: flowOf(null)
+        return id?.let { dao.getStream(it).map { it?.toExternal() } } ?: flowOf(null)
     }
 
     override fun exercises(date: LocalDate): Flow<List<Exercise>?> {
@@ -34,11 +37,12 @@ class OfflinePlanRepo @Inject constructor(
 
     override suspend fun upsert(plan: Plan) {
         val isPlanActivable = plan.isActive && plan.id != null
+        val entity = plan.toEntity()
         if (isPlanActivable) {
-            dao.upsert(plan)
+            dao.upsert(entity)
             dao.switchPlan(plan.id!!)
         } else {
-            dao.upsert(plan.copy(isActive = false))
+            dao.upsert(entity.copy(isActive = false))
         }
     }
 
@@ -47,7 +51,7 @@ class OfflinePlanRepo @Inject constructor(
     }
 
     override suspend fun current(): Plan? {
-        return dao.currentPlan()
+        return dao.currentPlan()?.toExternal()
     }
 
 }

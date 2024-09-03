@@ -5,7 +5,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.looker.kenko.data.local.KenkoDatabase
 import com.looker.kenko.data.local.MIGRATION_1_2
-import com.looker.kenko.data.local.MIGRATION_2_3
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -32,10 +31,9 @@ class RoomDatabaseTesting {
         }
         helper.runMigrationsAndValidate(
             DB_NAME,
-            3,
+            2,
             true,
             MIGRATION_1_2,
-            MIGRATION_2_3,
         )
     }
 }

@@ -4,22 +4,22 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
-import com.looker.kenko.data.model.Plan
+import com.looker.kenko.data.local.model.PlanEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PlanDao {
 
-    @Query("SELECT * FROM plan_table")
-    fun stream(): Flow<List<Plan>>
+    @Query("SELECT * FROM plans")
+    fun stream(): Flow<List<PlanEntity>>
 
-    @Query("SELECT * FROM plan_table WHERE isActive = 1")
-    fun currentPlanStream(): Flow<Plan?>
+    @Query("SELECT * FROM plans WHERE isActive = 1")
+    fun currentPlanStream(): Flow<PlanEntity?>
 
-    @Query("UPDATE plan_table SET isActive = 0 WHERE isActive = 1")
+    @Query("UPDATE plans SET isActive = 0 WHERE isActive = 1")
     suspend fun deactivateOldPlan()
 
-    @Query("UPDATE plan_table SET isActive = 1 WHERE id = :id")
+    @Query("UPDATE plans SET isActive = 1 WHERE id = :id")
     suspend fun activatePlan(id: Long)
 
     @Transaction
@@ -28,16 +28,16 @@ interface PlanDao {
         activatePlan(id)
     }
 
-    @Query("SELECT * FROM plan_table WHERE id = :id")
-    fun getStream(id: Long): Flow<Plan?>
+    @Query("SELECT * FROM plans WHERE id = :id")
+    fun getStream(id: Long): Flow<PlanEntity?>
 
     @Upsert
-    suspend fun upsert(plan: Plan)
+    suspend fun upsert(plan: PlanEntity)
 
-    @Query("DELETE FROM plan_table WHERE id = :id")
+    @Query("DELETE FROM plans WHERE id = :id")
     suspend fun remove(id: Long)
 
-    @Query("SELECT * FROM plan_table WHERE isActive = 1")
-    suspend fun currentPlan(): Plan?
+    @Query("SELECT * FROM plans WHERE isActive = 1")
+    suspend fun currentPlan(): PlanEntity?
 
 }

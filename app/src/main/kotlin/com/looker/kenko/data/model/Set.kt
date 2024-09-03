@@ -1,8 +1,8 @@
 package com.looker.kenko.data.model
 
-import androidx.compose.runtime.Stable
+import androidx.compose.runtime.Immutable
 
-@Stable
+@Immutable
 data class Set(
     val repsOrDuration: Int,
     val weight: Double,

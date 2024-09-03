@@ -1,9 +1,9 @@
 package com.looker.kenko.data.model
 
-import androidx.compose.runtime.Stable
+import androidx.compose.runtime.Immutable
 import kotlinx.datetime.LocalDate
 
-@Stable
+@Immutable
 data class Session(
     val date: LocalDate,
     val sets: List<Set>,
