@@ -112,10 +112,10 @@ class AddSetViewModel @AssistedInject constructor(
         }
     }
 
-    object DoubleTransformation : InputTransformation {
+    object FloatTransformation : InputTransformation {
         override val keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         override fun TextFieldBuffer.transformInput() {
-            toString().toDoubleOrNull() ?: revertAllChanges()
+            toString().toFloatOrNull() ?: revertAllChanges()
         }
     }
 }

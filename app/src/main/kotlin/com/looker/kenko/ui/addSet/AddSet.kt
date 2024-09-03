@@ -22,19 +22,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.looker.kenko.R
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.repDurationStringRes
-import com.looker.kenko.ui.addSet.AddSetViewModel.DoubleTransformation
+import com.looker.kenko.ui.addSet.AddSetViewModel.FloatTransformation
 import com.looker.kenko.ui.addSet.AddSetViewModel.IntTransformation
 import com.looker.kenko.ui.addSet.components.DraggableTextField
 import com.looker.kenko.ui.addSet.components.rememberDraggableTextFieldState
 import com.looker.kenko.ui.theme.KenkoIcons
-import com.looker.kenko.ui.theme.KenkoTheme
 
 private val incrementButtonModifier = Modifier
     .height(48.dp)
@@ -114,7 +112,7 @@ fun AddSet(exercise: Exercise, onDone: () -> Unit) {
                 dragState = weights,
                 textFieldState = viewModel.weights,
                 supportingText = stringResource(R.string.label_weight),
-                inputTransformation = DoubleTransformation,
+                inputTransformation = FloatTransformation,
                 modifier = zIndexModifier,
             )
             TextButton(
