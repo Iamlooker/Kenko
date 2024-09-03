@@ -5,7 +5,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.looker.kenko.data.local.KenkoDatabase
 import com.looker.kenko.data.local.MIGRATION_1_2
-import com.looker.kenko.data.local.MIGRATION_3_4
+import com.looker.kenko.data.local.MIGRATION_2_3
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -26,15 +26,16 @@ class RoomDatabaseTesting {
         val db = helper.createDatabase(DB_NAME, 1)
         db.use {
             it.execSQL("""INSERT INTO Exercise (name, target, isIsometric) VALUES ('Curls', 'Biceps', 0)""")
-            it.execSQL("""INSERT INTO Session (date, sets) VALUES ('41', '')""")
-            it.execSQL("""INSERT INTO Session (date, sets) VALUES ('42', '')""")
+            it.execSQL("""INSERT INTO plan_table (name, exercisesPerDay, isActive) VALUES ('PPL', '', 1)""")
+            it.execSQL("""INSERT INTO Session (date, sets) VALUES (412, '')""")
+            it.execSQL("""INSERT INTO Session (date, sets) VALUES (413, '')""")
         }
         helper.runMigrationsAndValidate(
             DB_NAME,
-            4,
+            3,
             true,
             MIGRATION_1_2,
-            MIGRATION_3_4,
+            MIGRATION_2_3,
         )
     }
 }

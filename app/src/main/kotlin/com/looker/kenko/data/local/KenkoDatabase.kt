@@ -1,7 +1,6 @@
 package com.looker.kenko.data.local
 
 import android.content.Context
-import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -14,15 +13,12 @@ import com.looker.kenko.data.local.model.SessionEntity
 import com.looker.kenko.data.model.Plan
 
 @Database(
-    version = 4,
+    version = 3,
     entities = [
         SessionEntity::class,
         ExerciseEntity::class,
         Plan::class,
     ],
-    autoMigrations = [
-        AutoMigration(2,3, MIGRATION_2_3::class)
-    ]
 )
 @TypeConverters(Converters::class)
 abstract class KenkoDatabase : RoomDatabase() {
@@ -40,7 +36,7 @@ abstract class KenkoDatabase : RoomDatabase() {
                 .createFromAsset("kenko.db")
                 .addMigrations(
                     MIGRATION_1_2,
-                    MIGRATION_3_4,
+                    MIGRATION_2_3,
                 )
                 .build()
         }

@@ -1,8 +1,6 @@
 package com.looker.kenko.data.model
 
 import androidx.compose.runtime.Stable
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import kotlinx.datetime.LocalDate
 
 @Stable
