@@ -10,12 +10,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class OfflineExerciseRepo @Inject constructor (
+class OfflineExerciseRepo @Inject constructor(
     private val dao: ExerciseDao,
 ) : ExerciseRepo {
 
-    override val stream: Flow<List<Exercise>>
-        get() = dao.stream().map { it.map(ExerciseEntity::toExternal) }
+    override val stream: Flow<List<Exercise>> =
+        dao.stream().map { it.map(ExerciseEntity::toExternal) }
 
     override suspend fun get(name: String): Exercise? {
         return dao.get(name)?.toExternal()

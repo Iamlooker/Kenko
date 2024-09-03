@@ -17,13 +17,13 @@ class OfflinePlanRepo @Inject constructor(
     private val dao: PlanDao,
 ) : PlanRepo {
 
-    override val stream: Flow<List<Plan>>
-        get() = dao.stream().map { it.map(PlanEntity::toExternal) }
+    override val stream: Flow<List<Plan>> =
+        dao.stream().map { it.map(PlanEntity::toExternal) }
 
-    override val current: Flow<Plan?>
-        get() = dao.currentPlanStream().map { it?.toExternal() }
+    override val current: Flow<Plan?> =
+        dao.currentPlanStream().map { it?.toExternal() }
 
-    override fun get(id: Long?): Flow<Plan?> {
+    override fun get(id: Int?): Flow<Plan?> {
         return id?.let { dao.getStream(it).map { it?.toExternal() } } ?: flowOf(null)
     }
 
@@ -46,7 +46,7 @@ class OfflinePlanRepo @Inject constructor(
         }
     }
 
-    override suspend fun remove(id: Long) {
+    override suspend fun remove(id: Int) {
         dao.remove(id)
     }
 

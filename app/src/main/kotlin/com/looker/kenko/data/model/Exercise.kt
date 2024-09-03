@@ -19,11 +19,11 @@ import com.looker.kenko.data.model.MuscleGroups.UpperBack
 
 @Immutable
 data class Exercise(
-    val id: Long? = null,
     val name: String,
     val target: MuscleGroups,
     val reference: String? = null,
     val isIsometric: Boolean = false,
+    val id: Int? = null,
 )
 
 @Stable

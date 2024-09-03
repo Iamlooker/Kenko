@@ -21,19 +21,20 @@ import kotlinx.datetime.LocalDate
 data class SessionEntity(
     val date: LocalDate,
     val sets: List<SetEntity>,
-    val planId: Long,
+    val planId: Int,
+) {
     @PrimaryKey(autoGenerate = true)
-    val id: Long? = null,
-)
+    var id: Int = 0
+}
 
 fun SessionEntity.toExternal(): Session = Session(
     date = date,
     sets = sets.map(SetEntity::toExternal),
 )
 
-fun Session.toEntity(): SessionEntity = SessionEntity(
+fun Session.toEntity(planId: Int): SessionEntity = SessionEntity(
     date = date,
     sets = sets.map(Set::toEntity),
     // TODO: Fix in future
-    planId = 1L,
+    planId = planId,
 )

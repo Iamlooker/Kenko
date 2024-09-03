@@ -21,8 +21,8 @@ class OfflineSessionRepo @Inject constructor(
     private val planDao: PlanDao,
 ) : SessionRepo {
 
-    override val stream: Flow<List<Session>>
-        get() = dao.stream().map { it.map(SessionEntity::toExternal) }
+    override val stream: Flow<List<Session>> =
+        dao.stream().map { it.map(SessionEntity::toExternal) }
 
     override suspend fun updateSet(sets: List<Set>) {
         dao.updateSets(date = localDate, sets = sets.map(Set::toEntity))
@@ -30,20 +30,22 @@ class OfflineSessionRepo @Inject constructor(
 
     override suspend fun addSet(date: LocalDate, set: Set) {
         if (!date.isToday) error("Editing on old dates is not supported!")
-        val currentSession = get(date) ?: error("For localDate it should not be null")
+        val currentSession = requireNotNull(get(date)) { "For localDate it should not be null" }
+        val currentPlan = requireNotNull(planDao.currentPlanId()) { "No plan active" }
         val updatedSets = currentSession.sets.updateAsMutable { add(set) }
-        dao.upsert(currentSession.copy(sets = updatedSets).toEntity())
+        dao.upsert(currentSession.copy(sets = updatedSets).toEntity(currentPlan))
     }
 
     override suspend fun removeSet(date: LocalDate, set: Set) {
         if (!date.isToday) error("Editing on old dates is not supported!")
-        val currentSession = get(date) ?: error("For localDate it should not be null")
+        val currentSession = requireNotNull(get(date)) { "For localDate it should not be null" }
+        val currentPlan = requireNotNull(planDao.currentPlanId()) { "No plan active" }
         val updatedSets = currentSession.sets.updateAsMutable { remove(set) }
-        dao.upsert(currentSession.copy(sets = updatedSets).toEntity())
+        dao.upsert(currentSession.copy(sets = updatedSets).toEntity(currentPlan))
     }
 
     override suspend fun createEmpty() {
-        val currentPlanId = requireNotNull(planDao.currentPlan()?.id) { "No plan active" }
+        val currentPlanId = requireNotNull(planDao.currentPlanId()) { "No plan active" }
         return dao.upsert(SessionEntity(localDate, emptyList(), currentPlanId))
     }
 

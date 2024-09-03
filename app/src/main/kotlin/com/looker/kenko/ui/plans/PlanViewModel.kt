@@ -18,7 +18,7 @@ class PlanViewModel @Inject constructor(
 
     val plans = repo.stream.asStateFlow(emptyList())
 
-    fun removePlan(id: Long) {
+    fun removePlan(id: Int) {
         viewModelScope.launch {
             repo.remove(id)
         }

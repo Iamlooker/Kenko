@@ -11,7 +11,7 @@ interface PlanRepo {
 
     val current: Flow<Plan?>
 
-    fun get(id: Long?): Flow<Plan?>
+    fun get(id: Int?): Flow<Plan?>
 
     fun exercises(date: LocalDate): Flow<List<Exercise>?>
 
@@ -19,7 +19,7 @@ interface PlanRepo {
 
     suspend fun upsert(plan: Plan)
 
-    suspend fun remove(id: Long)
+    suspend fun remove(id: Int)
 
     suspend fun current(): Plan?
 

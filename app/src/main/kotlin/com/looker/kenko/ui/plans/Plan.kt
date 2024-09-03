@@ -42,7 +42,7 @@ import kotlinx.datetime.DayOfWeek
 fun Plan(
     viewModel: PlanViewModel,
     onBackPress: () -> Unit,
-    onPlanClick: (Long?) -> Unit,
+    onPlanClick: (Int?) -> Unit,
 ) {
     val plans: List<Plan> by viewModel.plans.collectAsStateWithLifecycle()
 
@@ -61,8 +61,8 @@ private fun Plan(
     plans: List<Plan>,
     onBackPress: () -> Unit,
     onSelectPlan: (Plan) -> Unit,
-    onRemove: (Long) -> Unit,
-    onPlanClick: (Long?) -> Unit,
+    onRemove: (Int) -> Unit,
+    onPlanClick: (Int?) -> Unit,
 ) {
     Scaffold(
         topBar = {

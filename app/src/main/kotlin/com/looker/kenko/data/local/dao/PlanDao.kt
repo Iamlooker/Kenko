@@ -20,22 +20,25 @@ interface PlanDao {
     suspend fun deactivateOldPlan()
 
     @Query("UPDATE plans SET isActive = 1 WHERE id = :id")
-    suspend fun activatePlan(id: Long)
+    suspend fun activatePlan(id: Int)
 
     @Transaction
-    suspend fun switchPlan(id: Long) {
+    suspend fun switchPlan(id: Int) {
         deactivateOldPlan()
         activatePlan(id)
     }
 
     @Query("SELECT * FROM plans WHERE id = :id")
-    fun getStream(id: Long): Flow<PlanEntity?>
+    fun getStream(id: Int): Flow<PlanEntity?>
 
     @Upsert
     suspend fun upsert(plan: PlanEntity)
 
     @Query("DELETE FROM plans WHERE id = :id")
-    suspend fun remove(id: Long)
+    suspend fun remove(id: Int)
+
+    @Query("SELECT id FROM plans WHERE isActive = 1")
+    suspend fun currentPlanId(): Int?
 
     @Query("SELECT * FROM plans WHERE isActive = 1")
     suspend fun currentPlan(): PlanEntity?
