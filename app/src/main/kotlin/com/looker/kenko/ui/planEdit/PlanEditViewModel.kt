@@ -13,6 +13,7 @@ import com.looker.kenko.R
 import com.looker.kenko.data.StringHandler
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.Plan
+import com.looker.kenko.data.model.localDate
 import com.looker.kenko.data.repository.PlanRepo
 import com.looker.kenko.ui.planEdit.navigation.PlanEditRoute
 import com.looker.kenko.utils.asStateFlow
@@ -65,7 +66,7 @@ class PlanEditViewModel @Inject constructor(
             isSheetVisible = sheetVisible,
             exercises = exercises,
         )
-    }.asStateFlow(PlanEditUiData(DayOfWeek.THURSDAY, false, emptyList()))
+    }.asStateFlow(PlanEditUiData(localDate.dayOfWeek, false, emptyList()))
 
     fun setName(value: String) {
         planName = value
