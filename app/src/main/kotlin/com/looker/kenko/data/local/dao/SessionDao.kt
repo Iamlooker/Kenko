@@ -21,7 +21,7 @@ interface SessionDao {
     fun stream(): Flow<List<SessionEntity>>
 
     @Query("SELECT * FROM sessions WHERE date = :date")
-    fun session(date: LocalDate): Flow<SessionEntity>
+    fun session(date: LocalDate): Flow<SessionEntity?>
 
     @Query("SELECT * FROM sessions WHERE date = :date")
     suspend fun getSession(date: LocalDate): SessionEntity?

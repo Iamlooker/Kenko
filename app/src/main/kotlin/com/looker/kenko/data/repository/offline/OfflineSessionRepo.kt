@@ -60,7 +60,7 @@ class OfflineSessionRepo @Inject constructor(
     }
 
     override fun getStream(date: LocalDate): Flow<Session?> {
-        return dao.session(date).map(SessionEntity::toExternal)
+        return dao.session(date).map { it?.toExternal() }
     }
 
 }
