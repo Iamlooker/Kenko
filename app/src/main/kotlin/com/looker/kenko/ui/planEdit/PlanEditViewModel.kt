@@ -19,12 +19,9 @@ import com.looker.kenko.ui.planEdit.navigation.PlanEditRoute
 import com.looker.kenko.utils.asStateFlow
 import com.looker.kenko.utils.updateAsMutable
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DayOfWeek
@@ -40,8 +37,6 @@ class PlanEditViewModel @Inject constructor(
     private val routeData: PlanEditRoute = savedStateHandle.toRoute<PlanEditRoute>()
 
     private val planId: Int? = routeData.id.takeIf { it != -1 }
-
-    private val planStream: Flow<Plan?> = repo.get(planId)
 
     var planName: String by mutableStateOf("")
         private set
@@ -140,7 +135,8 @@ class PlanEditViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val plan = planStream.filterNotNull().firstOrNull() ?: return@launch
+            if (planId == null) return@launch
+            val plan = repo.get(planId) ?: return@launch
             setName(plan.name)
             plan.exercisesPerDay.forEach { (day, exercises) ->
                 launch {

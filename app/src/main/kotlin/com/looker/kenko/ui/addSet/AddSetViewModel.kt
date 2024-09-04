@@ -88,7 +88,7 @@ class AddSetViewModel @AssistedInject constructor(
                 exercise = exercise,
                 type = SetType.Standard
             )
-            sessionRepo.addSet(localDate, set)
+            sessionRepo.addSet(set)
         }
     }
 

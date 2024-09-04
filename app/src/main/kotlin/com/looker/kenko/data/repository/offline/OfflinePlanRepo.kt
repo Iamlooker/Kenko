@@ -8,7 +8,6 @@ import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.Plan
 import com.looker.kenko.data.repository.PlanRepo
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.LocalDate
 import javax.inject.Inject
@@ -23,8 +22,8 @@ class OfflinePlanRepo @Inject constructor(
     override val current: Flow<Plan?> =
         dao.currentPlanStream().map { it?.toExternal() }
 
-    override fun get(id: Int?): Flow<Plan?> {
-        return id?.let { dao.getStream(it).map { it?.toExternal() } } ?: flowOf(null)
+    override suspend fun get(id: Int): Plan? {
+        return dao.getPlan(id)?.toExternal()
     }
 
     override fun exercises(date: LocalDate): Flow<List<Exercise>?> {

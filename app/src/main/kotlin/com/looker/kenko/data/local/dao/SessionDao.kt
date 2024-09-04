@@ -15,7 +15,7 @@ interface SessionDao {
     suspend fun upsert(session: SessionEntity)
 
     @Query("SELECT EXISTS(SELECT * FROM sessions WHERE date = :date)")
-    suspend fun wasCreatedOn(date: LocalDate): Boolean
+    suspend fun sessionExistsOn(date: LocalDate): Boolean
 
     @Query("UPDATE sessions SET sets = :sets WHERE date = :date")
     suspend fun updateSets(date: LocalDate, sets: List<SetEntity>)

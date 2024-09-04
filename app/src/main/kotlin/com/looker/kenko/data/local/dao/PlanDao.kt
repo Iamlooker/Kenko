@@ -31,6 +31,9 @@ interface PlanDao {
     @Query("SELECT * FROM plans WHERE id = :id")
     fun getStream(id: Int): Flow<PlanEntity?>
 
+    @Query("SELECT * FROM plans WHERE id = :id")
+    suspend fun getPlan(id: Int): PlanEntity?
+
     @Upsert
     suspend fun upsert(plan: PlanEntity)
 

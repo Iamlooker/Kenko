@@ -76,7 +76,7 @@ fun PlanEdit(
         onNameChange = viewModel::setName,
         onAddExercisesClick = viewModel::openSheet,
         onRemoveExerciseClick = viewModel::removeExercise,
-        onSaveClick = viewModel::savePlan,
+        onSaveClick = { viewModel.savePlan(onBackPress) },
         onBackPress = { viewModel.savePlan(onBackPress) },
     )
 
@@ -99,7 +99,7 @@ private fun PlanEdit(
     onNameChange: (String) -> Unit,
     onAddExercisesClick: () -> Unit,
     onRemoveExerciseClick: (Exercise) -> Unit,
-    onSaveClick: (() -> Unit) -> Unit,
+    onSaveClick: () -> Unit,
     onBackPress: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
@@ -135,7 +135,7 @@ private fun PlanEdit(
                     ) {
                         BackButton(onClick = onBackPress)
                         OutlinedButton(
-                            onClick = { onSaveClick(onBackPress) },
+                            onClick = onSaveClick,
                             colors = ButtonDefaults.outlinedButtonColors(
                             )
                         ) {

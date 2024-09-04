@@ -11,9 +11,9 @@ interface SessionRepo {
 
     suspend fun updateSet(sets: List<Set>)
 
-    suspend fun addSet(date: LocalDate, set: Set)
+    suspend fun addSet(set: Set)
 
-    suspend fun removeSet(date: LocalDate, set: Set)
+    suspend fun removeSet(set: Set)
 
     suspend fun createEmpty(date: LocalDate)
 
