@@ -15,7 +15,7 @@ interface SessionRepo {
 
     suspend fun removeSet(date: LocalDate, set: Set)
 
-    suspend fun createEmpty()
+    suspend fun createEmpty(date: LocalDate)
 
     suspend fun get(date: LocalDate): Session?
 

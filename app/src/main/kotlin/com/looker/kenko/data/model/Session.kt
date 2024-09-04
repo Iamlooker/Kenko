@@ -7,6 +7,7 @@ import kotlinx.datetime.LocalDate
 data class Session(
     val date: LocalDate,
     val sets: List<Set>,
+    val id: Int? = null
 ) {
     companion object {
         fun create(sets: List<Set>): Session {

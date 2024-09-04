@@ -49,9 +49,13 @@ class ExercisesViewModel @Inject constructor(
         )
     }.asStateFlow(ExercisesUiState())
 
-    fun removeExercise(name: String) {
+    fun removeExercise(id: Int?) {
         viewModelScope.launch {
-            repo.remove(name)
+            if (id == null) {
+                snackbarState.showSnackbar(stringHandler.getString(R.string.error_unknown))
+                return@launch
+            }
+            repo.remove(id)
         }
     }
 

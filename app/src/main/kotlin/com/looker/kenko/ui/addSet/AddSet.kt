@@ -44,7 +44,7 @@ private val zIndexModifier = Modifier.zIndex(1F)
 fun AddSet(exercise: Exercise, onDone: () -> Unit) {
     val viewModel: AddSetViewModel =
         hiltViewModel<AddSetViewModel, AddSetViewModel.AddSetViewModelFactory>(key = exercise.name) {
-            it.create(exercise.name)
+            it.create(exercise.id!!)
         }
     Column(
         modifier = Modifier

@@ -15,11 +15,9 @@ data class ExerciseEntity(
     val target: MuscleGroups,
     val reference: String? = null,
     val isIsometric: Boolean = false,
-) {
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
-}
-
+    val id: Int = 0
+)
 fun ExerciseEntity.toExternal(): Exercise = Exercise(
     id = id,
     name = name,
@@ -29,6 +27,7 @@ fun ExerciseEntity.toExternal(): Exercise = Exercise(
 )
 
 fun Exercise.toEntity(): ExerciseEntity = ExerciseEntity(
+    id = id ?: 0,
     name = name,
     target = target,
     reference = reference,

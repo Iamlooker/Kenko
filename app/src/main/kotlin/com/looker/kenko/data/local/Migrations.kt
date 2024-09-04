@@ -8,7 +8,7 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
         db.execSQL(
             """
             CREATE TABLE plans (
-            `name` VARCHAR(100) NOT NULL,
+            `name` TEXT NOT NULL,
             `exercisesPerDay` TEXT NOT NULL,
             `isActive` INTEGER NOT NULL,
             `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT)
@@ -23,8 +23,8 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
         db.execSQL(
             """
             CREATE TABLE exercises (
-            `name` VARCHAR(100) NOT NULL,
-            `target` VARCHAR(15) NOT NULL,
+            `name` TEXT NOT NULL,
+            `target` TEXT NOT NULL,
             `reference` TEXT,
             `isIsometric` INTEGER NOT NULL,
             `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT)

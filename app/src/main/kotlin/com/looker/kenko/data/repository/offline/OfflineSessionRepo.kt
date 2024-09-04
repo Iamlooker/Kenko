@@ -25,7 +25,9 @@ class OfflineSessionRepo @Inject constructor(
         dao.stream().map { it.map(SessionEntity::toExternal) }
 
     override suspend fun updateSet(sets: List<Set>) {
-        dao.updateSets(date = localDate, sets = sets.map(Set::toEntity))
+        val session = get(localDate)!!
+        val currentPlan = requireNotNull(planDao.currentPlanId()) { "No plan active" }
+        dao.upsert(session.copy(sets = sets).toEntity(currentPlan))
     }
 
     override suspend fun addSet(date: LocalDate, set: Set) {
@@ -44,20 +46,17 @@ class OfflineSessionRepo @Inject constructor(
         dao.upsert(currentSession.copy(sets = updatedSets).toEntity(currentPlan))
     }
 
-    override suspend fun createEmpty() {
+    override suspend fun createEmpty(date: LocalDate) {
+        if (!date.isToday) error("Editing on old dates is not supported!")
         val currentPlanId = requireNotNull(planDao.currentPlanId()) { "No plan active" }
-        return dao.upsert(SessionEntity(localDate, emptyList(), currentPlanId))
+        dao.upsert(SessionEntity(localDate, emptyList(), currentPlanId))
     }
 
     override suspend fun get(date: LocalDate): Session? {
-        val todaySession = dao.getSession(date)
-        if (todaySession != null || !date.isToday) {
-            return todaySession?.toExternal()
+        if (!dao.wasCreatedOn(date)) {
+            if (!date.isToday) return null
+            createEmpty(date)
         }
-        if (!date.isToday) {
-            return dao.getSession(date)?.toExternal()
-        }
-        createEmpty()
         return dao.getSession(date)?.toExternal()
     }
 

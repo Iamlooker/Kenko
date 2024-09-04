@@ -10,16 +10,16 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class AddEditExerciseRoute(
-    val exerciseName: String? = null,
+    val id: Int? = null,
     val target: String? = null,
 )
 
 fun NavController.navigateToAddEditExercise(
-    exerciseName: String? = null,
+    id: Int? = null,
     target: MuscleGroups? = null,
     navOptions: NavOptions? = null,
 ) {
-    navigate(AddEditExerciseRoute(exerciseName, target?.name), navOptions)
+    navigate(AddEditExerciseRoute(id, target?.name), navOptions)
 }
 
 fun NavGraphBuilder.addEditExercise(

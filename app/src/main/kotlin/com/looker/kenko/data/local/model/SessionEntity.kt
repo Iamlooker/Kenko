@@ -22,19 +22,19 @@ data class SessionEntity(
     val date: LocalDate,
     val sets: List<SetEntity>,
     val planId: Int,
-) {
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
-}
+    val id: Int = 0
+)
 
 fun SessionEntity.toExternal(): Session = Session(
     date = date,
     sets = sets.map(SetEntity::toExternal),
+    id = id,
 )
 
 fun Session.toEntity(planId: Int): SessionEntity = SessionEntity(
     date = date,
     sets = sets.map(Set::toEntity),
-    // TODO: Fix in future
     planId = planId,
+    id = id ?: 0,
 )

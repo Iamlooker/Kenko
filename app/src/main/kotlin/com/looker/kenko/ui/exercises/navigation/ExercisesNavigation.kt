@@ -17,7 +17,7 @@ fun NavController.navigateToExercises(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.exercises(
-    onExerciseClick: (name: String) -> Unit,
+    onExerciseClick: (id: Int?) -> Unit,
     onCreateClick: (target: MuscleGroups?) -> Unit,
     onBackPress: () -> Unit,
 ) {

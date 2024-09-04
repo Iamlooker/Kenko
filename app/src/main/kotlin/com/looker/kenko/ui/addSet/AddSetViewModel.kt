@@ -27,7 +27,7 @@ import kotlin.concurrent.fixedRateTimer
 class AddSetViewModel @AssistedInject constructor(
     private val sessionRepo: SessionRepo,
     private val exerciseRepo: ExerciseRepo,
-    @Assisted private val exerciseName: String,
+    @Assisted private val id: Int,
 ) : ViewModel() {
 
     private var timer: Timer? = null
@@ -81,7 +81,7 @@ class AddSetViewModel @AssistedInject constructor(
 
     fun addSet() {
         viewModelScope.launch {
-            val exercise = exerciseRepo.get(exerciseName) ?: return@launch
+            val exercise = exerciseRepo.get(id) ?: return@launch
             val set = Set(
                 repsOrDuration = repInt,
                 weight = weightDouble,
@@ -100,7 +100,7 @@ class AddSetViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface AddSetViewModelFactory {
-        fun create(name: String): AddSetViewModel
+        fun create(id: Int): AddSetViewModel
     }
 
     object IntTransformation : InputTransformation {

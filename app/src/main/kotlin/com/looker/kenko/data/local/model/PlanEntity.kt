@@ -11,19 +11,19 @@ data class PlanEntity(
     val name: String,
     val exercisesPerDay: Map<DayOfWeek, List<ExerciseEntity>>,
     val isActive: Boolean,
-) {
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
-}
+    val id: Int = 0
+)
 
 fun PlanEntity.toExternal(): Plan = Plan(
+    id = id,
     name = name,
     exercisesPerDay = exercisesPerDay.mapValues { it.value.map(ExerciseEntity::toExternal) },
     isActive = isActive,
-    id = id,
 )
 
 fun Plan.toEntity(): PlanEntity = PlanEntity(
+    id = id ?: 0,
     name = name,
     exercisesPerDay = exercisesPerDay.mapValues { it.value.map(Exercise::toEntity) },
     isActive = isActive,
