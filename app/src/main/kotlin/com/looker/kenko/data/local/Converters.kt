@@ -2,7 +2,6 @@ package com.looker.kenko.data.local
 
 import androidx.room.TypeConverter
 import com.looker.kenko.data.local.model.ExerciseEntity
-import com.looker.kenko.data.local.model.SetEntity
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.serializers.DayOfWeekSerializer
@@ -11,7 +10,6 @@ import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.json.Json
 
 private val json = Json
-private val setListSerializer = ListSerializer(SetEntity.serializer())
 private val exerciseMapSerializer =
     MapSerializer(DayOfWeekSerializer, ListSerializer(ExerciseEntity.serializer()))
 
@@ -25,16 +23,6 @@ class Converters {
     @TypeConverter
     fun toLocalDate(value: Int): LocalDate {
         return LocalDate.fromEpochDays(value)
-    }
-
-    @TypeConverter
-    fun fromSetList(value: List<SetEntity>): String {
-        return json.encodeToString(setListSerializer, value)
-    }
-
-    @TypeConverter
-    fun toSetList(value: String): List<SetEntity> {
-        return json.decodeFromString(setListSerializer, value)
     }
 
     @TypeConverter

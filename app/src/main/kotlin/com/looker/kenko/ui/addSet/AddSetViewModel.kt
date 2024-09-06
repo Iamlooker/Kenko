@@ -86,7 +86,7 @@ class AddSetViewModel @AssistedInject constructor(
                 repsOrDuration = repInt,
                 weight = weightDouble,
                 exercise = exercise,
-                type = SetType.Standard
+                type = SetType.Standard,
             )
             sessionRepo.addSet(set)
         }

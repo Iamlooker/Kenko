@@ -9,15 +9,11 @@ interface SessionRepo {
 
     val stream: Flow<List<Session>>
 
-    suspend fun updateSet(sets: List<Set>)
-
     suspend fun addSet(set: Set)
 
     suspend fun removeSet(set: Set)
 
     suspend fun createEmpty(date: LocalDate)
-
-    suspend fun get(date: LocalDate): Session?
 
     fun getStream(date: LocalDate): Flow<Session?>
 

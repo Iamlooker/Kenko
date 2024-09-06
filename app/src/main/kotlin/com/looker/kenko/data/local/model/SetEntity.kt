@@ -1,29 +1,56 @@
 package com.looker.kenko.data.local.model
 
-import com.looker.kenko.data.model.SetType
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.PrimaryKey
+import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.Set
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.looker.kenko.data.model.SetType
 
-@Serializable
-@SerialName("set")
+@Entity(
+    "sets",
+    foreignKeys = [
+        ForeignKey(
+            entity = ExerciseEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["exerciseId"],
+            onDelete = ForeignKey.CASCADE,
+        ),
+        ForeignKey(
+            entity = SessionDataEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["sessionId"],
+            onDelete = ForeignKey.CASCADE,
+        )
+    ]
+)
 data class SetEntity(
+    @ColumnInfo("reps")
     val repsOrDuration: Int,
     val weight: Float,
     val type: SetType,
-    val exercise: ExerciseEntity,
+    val order: Int,
+    val sessionId: Int,
+    val exerciseId: Int,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
 )
 
-fun SetEntity.toExternal(): Set = Set(
+fun SetEntity.toExternal(exercise: Exercise): Set = Set(
     repsOrDuration = repsOrDuration,
     weight = weight,
     type = type,
-    exercise = exercise.toExternal(),
+    exercise = exercise,
+    id = id,
 )
 
-fun Set.toEntity(): SetEntity = SetEntity(
+fun Set.toEntity(sessionId: Int, order: Int): SetEntity = SetEntity(
+    id = id ?: 0,
     repsOrDuration = repsOrDuration,
     weight = weight,
     type = type,
-    exercise = exercise.toEntity(),
+    order = order,
+    sessionId = sessionId,
+    exerciseId = requireNotNull(exercise.id),
 )

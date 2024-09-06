@@ -1,13 +1,16 @@
 package com.looker.kenko.data.model
 
 import androidx.compose.runtime.Immutable
+import kotlinx.serialization.Serializable
 
+@Serializable
 @Immutable
 data class Set(
     val repsOrDuration: Int,
     val weight: Float,
     val type: SetType,
     val exercise: Exercise,
+    val id: Int? = null
 ) {
     companion object
 }

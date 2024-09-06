@@ -10,14 +10,17 @@ import com.looker.kenko.data.local.dao.PlanDao
 import com.looker.kenko.data.local.dao.SessionDao
 import com.looker.kenko.data.local.model.ExerciseEntity
 import com.looker.kenko.data.local.model.PlanEntity
+import com.looker.kenko.data.local.model.SessionDataEntity
 import com.looker.kenko.data.local.model.SessionEntity
+import com.looker.kenko.data.local.model.SetEntity
 
 @Database(
     version = 2,
     entities = [
-        SessionEntity::class,
+        SessionDataEntity::class,
         ExerciseEntity::class,
         PlanEntity::class,
+        SetEntity::class,
     ],
 )
 @TypeConverters(Converters::class)

@@ -26,8 +26,8 @@ class RoomDatabaseTesting {
         db.use {
             it.execSQL("""INSERT INTO Exercise (name, target, isIsometric) VALUES ('Curls', 'Biceps', 0)""")
             it.execSQL("""INSERT INTO plan_table (name, exercisesPerDay, isActive) VALUES ('PPL', '', 1)""")
-            it.execSQL("""INSERT INTO Session (date, sets) VALUES (412, '')""")
-            it.execSQL("""INSERT INTO Session (date, sets) VALUES (413, '')""")
+            it.execSQL("""INSERT INTO Session (date, sets) VALUES (412, '[]')""")
+            it.execSQL("""INSERT INTO Session (date, sets) VALUES (413, '[]')""")
         }
         helper.runMigrationsAndValidate(
             DB_NAME,
