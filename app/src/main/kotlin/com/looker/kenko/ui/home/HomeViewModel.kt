@@ -48,5 +48,5 @@ data class HomeUiData(
     val isPlanSelected: Boolean,
     val isSessionStarted: Boolean,
     val isFirstSession: Boolean,
-    val currentPlanId: Long?,
+    val currentPlanId: Int?,
 )

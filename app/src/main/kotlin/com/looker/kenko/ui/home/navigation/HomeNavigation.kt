@@ -21,7 +21,7 @@ fun NavGraphBuilder.home(
     onExploreSessionsClick: () -> Unit,
     onExploreExercisesClick: () -> Unit,
     onStartSessionClick: () -> Unit,
-    onCurrentPlanClick: (Long) -> Unit,
+    onCurrentPlanClick: (Int) -> Unit,
 ) {
     composable<HomeRoute> {
         Home(

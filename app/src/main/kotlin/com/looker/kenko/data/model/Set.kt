@@ -1,16 +1,19 @@
 package com.looker.kenko.data.model
 
-import androidx.compose.runtime.Stable
+import androidx.compose.runtime.Immutable
 import kotlinx.serialization.Serializable
 
-@Stable
 @Serializable
+@Immutable
 data class Set(
     val repsOrDuration: Int,
-    val weight: Double,
+    val weight: Float,
     val type: SetType,
     val exercise: Exercise,
-)
+    val id: Int? = null
+) {
+    companion object
+}
 
 val Set.rating: Double
     get() = repsOrDuration * weight * type.ratingModifier
@@ -27,13 +30,4 @@ private const val REST_PAUSE_SET_RATING_MODIFIER: Double = 1.2
 
 val Set.Companion.Samples: List<Set>
     get() = listOf(
-        Set(12, 55.0, SetType.Standard, Exercise("Bench", MuscleGroups.Chest, ".reference")),
-        Set(12, 55.0, SetType.Standard, Exercise("Bench", MuscleGroups.Chest, ".reference")),
-        Set(12, 55.0, SetType.Standard, Exercise("Bench", MuscleGroups.Chest, ".reference")),
-        Set(12, 55.0, SetType.Standard, Exercise("Incline Bench", MuscleGroups.Chest, ".reference")),
-        Set(12, 55.0, SetType.Standard, Exercise("Incline Bench", MuscleGroups.Chest, ".reference")),
-        Set(12, 55.0, SetType.Standard, Exercise("Incline Bench", MuscleGroups.Chest, ".reference")),
-        Set(12, 55.0, SetType.Standard, Exercise("Pec-Dec", MuscleGroups.Chest, ".reference")),
-        Set(12, 55.0, SetType.Standard, Exercise("Pec-Dec", MuscleGroups.Chest, ".reference")),
-        Set(12, 55.0, SetType.Standard, Exercise("Pec-Dec", MuscleGroups.Chest, ".reference")),
     )

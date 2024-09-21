@@ -84,6 +84,7 @@
     <string name="error_invalid_reference">Invalid Reference</string>
     <string name="error_invalid_reference_format">Invalid reference format</string>
     <string name="error_invalid_url">Invalid URL</string>
+    <string name="error_unknown">Unknown Error</string>
     <string name="error_plan_name_empty">Enter a plan name</string>
     <string name="error_exercise_name_empty">Enter an exercise name</string>
     <string name="error_plan_empty">Plan is empty</string>

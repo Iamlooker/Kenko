@@ -114,16 +114,14 @@ fun KenkoNavHost(
         )
 
         exercises(
-            onExerciseClick = { exerciseName ->
+            onExerciseClick = { id ->
                 navController.navigateToAddEditExercise(
-                    exerciseName = exerciseName,
-                    target = null,
+                    id = id,
                     navOptions = singleTopNavOptions
                 )
             },
             onCreateClick = { target ->
                 navController.navigateToAddEditExercise(
-                    exerciseName = null,
                     target = target,
                     navOptions = singleTopNavOptions
                 )

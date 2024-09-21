@@ -69,7 +69,7 @@ fun Home(
     onExploreSessionsClick: () -> Unit,
     onExploreExercisesClick: () -> Unit,
     onStartSessionClick: () -> Unit,
-    onCurrentPlanClick: (Long) -> Unit,
+    onCurrentPlanClick: (Int) -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     Home(
@@ -93,7 +93,7 @@ private fun Home(
     onExploreSessionsClick: () -> Unit = {},
     onExploreExercisesClick: () -> Unit = {},
     onStartSessionClick: () -> Unit = {},
-    onCurrentPlanClick: (Long) -> Unit = {},
+    onCurrentPlanClick: (Int) -> Unit = {},
 ) {
     Scaffold(
         topBar = {

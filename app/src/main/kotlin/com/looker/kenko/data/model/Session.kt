@@ -1,16 +1,13 @@
 package com.looker.kenko.data.model
 
-import androidx.compose.runtime.Stable
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.compose.runtime.Immutable
 import kotlinx.datetime.LocalDate
 
-@Entity
-@Stable
+@Immutable
 data class Session(
-    @PrimaryKey
     val date: LocalDate,
     val sets: List<Set>,
+    val id: Int? = null
 ) {
     companion object {
         fun create(sets: List<Set>): Session {

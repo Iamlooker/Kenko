@@ -91,7 +91,7 @@ class SessionDetailViewModel @Inject constructor(
 
     fun removeSet(set: Set) {
         viewModelScope.launch {
-            repo.removeSet(sessionDate, set)
+            repo.removeSet(set)
         }
     }
 

@@ -11,15 +11,15 @@ interface PlanRepo {
 
     val current: Flow<Plan?>
 
-    fun get(id: Long?): Flow<Plan?>
-
     fun exercises(date: LocalDate): Flow<List<Exercise>?>
+
+    suspend fun get(id: Int): Plan?
 
     suspend fun switchPlan(plan: Plan)
 
     suspend fun upsert(plan: Plan)
 
-    suspend fun remove(id: Long)
+    suspend fun remove(id: Int)
 
     suspend fun current(): Plan?
 
