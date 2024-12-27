@@ -46,7 +46,7 @@ class PlanEditViewModel @Inject constructor(
     private val _dayAndExercises =
         MutableStateFlow<Map<DayOfWeek, List<Exercise>>>(emptyMap())
 
-    private val _dayOfWeek: MutableStateFlow<DayOfWeek> = MutableStateFlow(DayOfWeek.THURSDAY)
+    private val _dayOfWeek: MutableStateFlow<DayOfWeek> = MutableStateFlow(localDate.dayOfWeek)
 
     private val _isSheetVisible: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
