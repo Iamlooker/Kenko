@@ -7,11 +7,13 @@ interface ExerciseRepo {
 
     val stream: Flow<List<Exercise>>
 
-    suspend fun get(name: String): Exercise?
+    val numberOfExercise: Flow<Int>
+
+    suspend fun get(id: Int): Exercise?
 
     suspend fun upsert(exercise: Exercise)
 
-    suspend fun remove(name: String)
+    suspend fun remove(id: Int)
 
     suspend fun isExerciseAvailable(name: String): Boolean
 

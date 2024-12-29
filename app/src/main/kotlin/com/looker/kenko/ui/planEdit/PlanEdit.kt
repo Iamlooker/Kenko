@@ -1,19 +1,24 @@
 package com.looker.kenko.ui.planEdit
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Arrangement
+import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FilledTonalIconButton
@@ -22,12 +27,11 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -46,12 +50,14 @@ import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.data.model.sampleExercises
 import com.looker.kenko.ui.components.BackButton
+import com.looker.kenko.ui.components.DaySelectorChip
 import com.looker.kenko.ui.components.ErrorSnackbar
-import com.looker.kenko.ui.components.kenkoTextFieldColor
+import com.looker.kenko.ui.components.HorizontalDaySelector
+import com.looker.kenko.ui.components.KenkoButton
 import com.looker.kenko.ui.extensions.normalizeInt
-import com.looker.kenko.ui.planEdit.components.DaySelector
+import com.looker.kenko.ui.extensions.plus
+import com.looker.kenko.ui.planEdit.components.DaySwitcher
 import com.looker.kenko.ui.planEdit.components.ExerciseItem
-import com.looker.kenko.ui.planEdit.components.KenkoAddButton
 import com.looker.kenko.ui.planEdit.components.kenkoDayName
 import com.looker.kenko.ui.selectExercise.SelectExercise
 import com.looker.kenko.ui.theme.KenkoIcons
@@ -66,116 +72,231 @@ fun PlanEdit(
     onBackPress: () -> Unit,
     onAddNewExerciseClick: () -> Unit,
 ) {
+    val pageStage by viewModel.pageState.collectAsStateWithLifecycle()
     val state by viewModel.state.collectAsStateWithLifecycle()
-
-    PlanEdit(
+    BackHandler {
+        viewModel.onBackPress(pageStage, onBackPress)
+    }
+    FullEdit(
         snackbarHostState = viewModel.snackbarState,
-        state = state,
-        planName = viewModel.planName,
-        onSelectDay = viewModel::setCurrentDay,
-        onNameChange = viewModel::setName,
-        onAddExercisesClick = viewModel::openSheet,
-        onRemoveExerciseClick = viewModel::removeExercise,
-        onSaveClick = viewModel::savePlan,
-        onBackPress = { viewModel.savePlan(onBackPress) },
-    )
+        stage = pageStage,
+        fab = {
+            PlanEditFAB(
+                pageStage = pageStage,
+                onClick = {
+                    if (pageStage == PlanEditStage.NameEdit) {
+                        viewModel.saveName()
+                    } else {
+                        viewModel.openSheet()
+                    }
+                },
+            )
+        },
+        onBackPress = { viewModel.onBackPress(pageStage, onBackPress) },
+    ) { stage ->
+        when (stage) {
+            PlanEditStage.NameEdit -> {
+                NameEdit(
+                    state = viewModel.planNameState,
+                    onSaveClick = viewModel::saveName,
+                )
+            }
 
-    if (state.isSheetVisible) {
+            PlanEditStage.PlanEdit -> {
+                PlanEdit(
+                    state = state,
+                    onSelectDay = viewModel::setCurrentDay,
+                    onRemoveExerciseClick = viewModel::removeExercise,
+                    onFullDaySelection = viewModel::openFullDaySelection,
+                )
+            }
+        }
+    }
+
+    if (state.exerciseSheetVisible) {
         AddExerciseSheet(
             onDismiss = viewModel::closeSheet,
             onDone = viewModel::addExercise,
-            onAddNewExerciseClick = onAddNewExerciseClick
+            onAddNewExerciseClick = onAddNewExerciseClick,
         )
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun PlanEdit(
+private fun FullEdit(
     snackbarHostState: SnackbarHostState,
-    state: PlanEditUiData,
-    planName: String,
-    onSelectDay: (DayOfWeek) -> Unit,
-    onNameChange: (String) -> Unit,
-    onAddExercisesClick: () -> Unit,
-    onRemoveExerciseClick: (Exercise) -> Unit,
-    onSaveClick: (() -> Unit) -> Unit,
+    stage: PlanEditStage,
+    fab: @Composable () -> Unit,
     onBackPress: () -> Unit,
+    ui: @Composable (stage: PlanEditStage) -> Unit,
 ) {
-    val focusManager = LocalFocusManager.current
-    val isCurrentDayBlank by remember(state.exercises) { derivedStateOf { state.exercises.isEmpty() } }
     Scaffold(
-        floatingActionButton = {
-            KenkoAddButton(
-                onClick = {
-                    focusManager.clearFocus()
-                    onAddExercisesClick()
-                }
-            )
-        },
+        floatingActionButton = fab,
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState) {
                 ErrorSnackbar(data = it)
             }
         },
         floatingActionButtonPosition = FabPosition.Center,
+        topBar = {
+            TopAppBar(
+                title = {},
+                navigationIcon = { BackButton(onBackPress) },
+            )
+        },
     ) { innerPadding ->
-        LazyColumn(
-            contentPadding = innerPadding,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            stickyHeader {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(end = 16.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        BackButton(onClick = onBackPress)
-                        OutlinedButton(
-                            onClick = { onSaveClick(onBackPress) },
-                            colors = ButtonDefaults.outlinedButtonColors(
-                            )
-                        ) {
-                            Text(text = stringResource(R.string.label_save))
-                        }
+        AnimatedContent(
+            modifier = Modifier.padding(innerPadding + PaddingValues(horizontal = 16.dp)),
+            targetState = stage,
+            label = "Plan edit stage",
+            transitionSpec = {
+                when (targetState) {
+                    PlanEditStage.NameEdit -> {
+                        slideInHorizontally { -it / 2 } + fadeIn() togetherWith
+                            slideOutHorizontally { it / 2 } + fadeOut()
                     }
-                    Spacer(modifier = Modifier.height(8.dp))
-                    TextField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        value = planName,
-                        shape = MaterialTheme.shapes.medium,
-                        onValueChange = onNameChange,
-                        colors = kenkoTextFieldColor(),
-                        label = {
-                            Text(text = stringResource(R.string.label_name))
-                        },
+
+                    PlanEditStage.PlanEdit -> {
+                        slideInHorizontally { it / 2 } + fadeIn() togetherWith
+                            slideOutHorizontally { -it / 2 } + fadeOut()
+                    }
+                } using SizeTransform(clip = false)
+            },
+        ) {
+            ui(it)
+        }
+    }
+}
+
+@Composable
+private fun PlanEditFAB(
+    pageStage: PlanEditStage,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    KenkoButton(
+        modifier = modifier,
+        onClick = onClick,
+        label = {
+            AnimatedContent(
+                targetState = pageStage,
+                label = "FAB label",
+                transitionSpec = {
+                    when (targetState) {
+                        PlanEditStage.NameEdit -> {
+                            slideInVertically { it } + fadeIn() togetherWith
+                                slideOutVertically { -it } + fadeOut()
+                        }
+
+                        PlanEditStage.PlanEdit -> {
+                            slideInVertically { -it } + fadeIn() togetherWith
+                                slideOutVertically { it } + fadeOut()
+                        }
+                    } using SizeTransform(clip = false)
+                },
+            ) {
+                if (it == PlanEditStage.NameEdit) {
+                    Text(stringResource(R.string.label_next))
+                } else {
+                    Text(stringResource(R.string.label_add))
+                }
+            }
+        },
+        icon = {
+            AnimatedContent(
+                targetState = pageStage,
+                label = "FAB icon",
+                transitionSpec = {
+                    when (targetState) {
+                        PlanEditStage.NameEdit -> {
+                            slideInHorizontally { it * 2 } + fadeIn() togetherWith
+                                slideOutHorizontally { -it * 2 } + fadeOut()
+                        }
+
+                        PlanEditStage.PlanEdit -> {
+                            slideInHorizontally { -it * 2 } + fadeIn() togetherWith
+                                slideOutHorizontally { it * 2 } + fadeOut()
+                        }
+                    } using SizeTransform(clip = false)
+                },
+            ) {
+                if (it == PlanEditStage.NameEdit) {
+                    Icon(
+                        imageVector = KenkoIcons.ArrowForward,
+                        contentDescription = stringResource(R.string.label_next),
                     )
-                    Spacer(modifier = Modifier.height(12.dp))
-                    DaySelector(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        dayItem = {
-                            Text(text = kenkoDayName(dayOfWeek = state.currentDay))
-                        },
-                        onNext = { onSelectDay(state.currentDay + 1) },
-                        onPrevious = { onSelectDay(state.currentDay - 1) },
+                } else {
+                    Icon(
+                        imageVector = KenkoIcons.Add,
+                        contentDescription = stringResource(R.string.label_add),
                     )
                 }
             }
+        },
+    )
+}
+
+@Composable
+private fun NameEdit(
+    state: TextFieldState,
+    onSaveClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    PlanName(
+        planName = state,
+        onNext = { onSaveClick() },
+        modifier = modifier.fillMaxSize(),
+    )
+}
+
+@Composable
+private fun PlanEdit(
+    state: PlanEditState,
+    onSelectDay: (DayOfWeek) -> Unit,
+    onRemoveExerciseClick: (Exercise) -> Unit,
+    onFullDaySelection: () -> Unit,
+) {
+    val focusManager = LocalFocusManager.current
+    val isCurrentDayBlank by remember(state.exercises) { derivedStateOf { state.exercises.isEmpty() } }
+    PlanExercise(
+        modifier = Modifier.fillMaxSize(),
+        header = {
+            Header(
+                isExpandedView = state.selectionMode,
+                daySelector = {
+                    HorizontalDaySelector(
+                        item = { dayOfWeek ->
+                            DaySelectorChip(
+                                selected = dayOfWeek == state.currentDay,
+                                onClick = { onSelectDay(dayOfWeek) },
+                            ) {
+                                Text(kenkoDayName(dayOfWeek))
+                            }
+                        },
+                    )
+                },
+                daySwitcher = {
+                    DaySwitcher(
+                        selected = state.currentDay,
+                        onNext = { onSelectDay(state.currentDay + 1) },
+                        onPrevious = { onSelectDay(state.currentDay - 1) },
+                        onClick = onFullDaySelection,
+                    )
+                },
+            )
+        },
+        items = {
             if (isCurrentDayBlank) {
                 item {
                     Box(
                         modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
+                        contentAlignment = Alignment.Center,
                     ) {
                         Text(
                             text = stringResource(R.string.no_exercises_yet),
                             style = MaterialTheme.typography.titleLarge,
-                            color = MaterialTheme.colorScheme.error
+                            color = MaterialTheme.colorScheme.error,
                         )
                     }
                 }
@@ -183,7 +304,7 @@ private fun PlanEdit(
                 itemsIndexed(state.exercises) { index, exercise ->
                     ExerciseItem(
                         modifier = Modifier.animateItem(),
-                        exercise = exercise
+                        exercise = exercise,
                     ) {
                         ExerciseItemActions(
                             index = index,
@@ -195,8 +316,8 @@ private fun PlanEdit(
                     }
                 }
             }
-        }
-    }
+        },
+    )
 }
 
 @Composable
@@ -210,8 +331,8 @@ private fun ExerciseItemActions(
         FilledTonalIconButton(
             onClick = onRemove,
             colors = IconButtonDefaults.filledTonalIconButtonColors(
-                containerColor = MaterialTheme.colorScheme.errorContainer
-            )
+                containerColor = MaterialTheme.colorScheme.errorContainer,
+            ),
         ) {
             Icon(imageVector = KenkoIcons.Remove, contentDescription = null)
         }

@@ -27,7 +27,7 @@ import kotlin.concurrent.fixedRateTimer
 class AddSetViewModel @AssistedInject constructor(
     private val sessionRepo: SessionRepo,
     private val exerciseRepo: ExerciseRepo,
-    @Assisted private val exerciseName: String,
+    @Assisted private val id: Int,
 ) : ViewModel() {
 
     private var timer: Timer? = null
@@ -39,7 +39,7 @@ class AddSetViewModel @AssistedInject constructor(
         reps.setTextAndPlaceCursorAtEnd((repInt + value).toString())
     }
 
-    fun addWeight(value: Double) {
+    fun addWeight(value: Float) {
         weights.setTextAndPlaceCursorAtEnd((weightDouble + value).toString())
     }
 
@@ -69,7 +69,7 @@ class AddSetViewModel @AssistedInject constructor(
                 initialDelay = 100L,
                 period = 200L
             ) {
-                addWeight(if (isRight) 1.0 else -1.0)
+                addWeight(if (isRight) 1F else -1F)
             }
         }
 
@@ -81,26 +81,26 @@ class AddSetViewModel @AssistedInject constructor(
 
     fun addSet() {
         viewModelScope.launch {
-            val exercise = exerciseRepo.get(exerciseName) ?: return@launch
+            val exercise = exerciseRepo.get(id) ?: return@launch
             val set = Set(
                 repsOrDuration = repInt,
                 weight = weightDouble,
                 exercise = exercise,
-                type = SetType.Standard
+                type = SetType.Standard,
             )
-            sessionRepo.addSet(localDate, set)
+            sessionRepo.addSet(set)
         }
     }
 
     private inline val repInt: Int
         get() = reps.text.toString().toIntOrNull() ?: 0
 
-    private inline val weightDouble: Double
-        get() = weights.text.toString().toDoubleOrNull() ?: 0.0
+    private inline val weightDouble: Float
+        get() = weights.text.toString().toFloatOrNull() ?: 0F
 
     @AssistedFactory
     interface AddSetViewModelFactory {
-        fun create(name: String): AddSetViewModel
+        fun create(id: Int): AddSetViewModel
     }
 
     object IntTransformation : InputTransformation {
@@ -112,10 +112,10 @@ class AddSetViewModel @AssistedInject constructor(
         }
     }
 
-    object DoubleTransformation : InputTransformation {
+    object FloatTransformation : InputTransformation {
         override val keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         override fun TextFieldBuffer.transformInput() {
-            toString().toDoubleOrNull() ?: revertAllChanges()
+            toString().toFloatOrNull() ?: revertAllChanges()
         }
     }
 }

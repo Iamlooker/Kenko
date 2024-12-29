@@ -45,6 +45,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
+import com.looker.kenko.data.model.PlanStat
 import com.looker.kenko.ui.components.HealthQuotes
 import com.looker.kenko.ui.components.KenkoBorderWidth
 import com.looker.kenko.ui.components.OutlineBorder
@@ -117,9 +118,9 @@ private fun Profile(
                         Text(
                             text = stringResource(
                                 R.string.label_plan_description,
-                                state.numberOfExercisesPerPlan,
-                                normalizeInt(state.workDays),
-                                normalizeInt(state.restDays)
+                                state.planStat!!.exercises,
+                                normalizeInt(state.planStat.workDays),
+                                normalizeInt(state.planStat.restDays)
                             )
                         )
                     }
@@ -378,7 +379,7 @@ private fun ExerciseCardPreview() {
 private fun ProfilePreview() {
     KenkoTheme {
         Profile(
-            state = ProfileUiState(12, 12, true, "Push-Pull-Leg", 2, 5, 12),
+            state = ProfileUiState(12, true, "Push-Pull-Leg", 2, PlanStat(12, 5)),
             onSettingsClick = { },
             onPlanClick = { },
             onAddExerciseClick = { },

@@ -1,9 +1,8 @@
 package com.looker.kenko.data.model
 
 import androidx.annotation.StringRes
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.looker.kenko.R
 import com.looker.kenko.data.model.MuscleGroups.Biceps
 import com.looker.kenko.data.model.MuscleGroups.Calves
@@ -17,17 +16,18 @@ import com.looker.kenko.data.model.MuscleGroups.Shoulders
 import com.looker.kenko.data.model.MuscleGroups.Traps
 import com.looker.kenko.data.model.MuscleGroups.Triceps
 import com.looker.kenko.data.model.MuscleGroups.UpperBack
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@Entity
-@Stable
+@Immutable
 @Serializable
+@SerialName("exercise")
 data class Exercise(
-    @PrimaryKey
     val name: String,
     val target: MuscleGroups,
     val reference: String? = null,
     val isIsometric: Boolean = false,
+    val id: Int? = null,
 )
 
 @Stable

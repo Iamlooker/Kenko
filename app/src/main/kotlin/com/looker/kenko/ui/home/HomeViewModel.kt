@@ -21,15 +21,19 @@ class HomeViewModel @Inject constructor(
 
     private val sessionsStream = sessionRepo.stream
 
+    private val planItemStream = planRepo.planItems
+
     val state = combine(
         planStream,
         sessionStream,
         sessionsStream,
-    ) { currentPlan, currentSession, sessions ->
+        planItemStream,
+    ) { currentPlan, currentSession, sessions, planItems ->
         val isFirstSession = sessions.size <= 1 && sessions.firstOrNull()?.date == localDate
         HomeUiData(
             isPlanSelected = currentPlan != null,
             isSessionStarted = currentSession != null,
+            isTodayEmpty = planItems.isEmpty(),
             isFirstSession = isFirstSession,
             currentPlanId = currentPlan?.id,
         )
@@ -37,6 +41,7 @@ class HomeViewModel @Inject constructor(
         HomeUiData(
             isPlanSelected = true,
             isSessionStarted = false,
+            isTodayEmpty = false,
             isFirstSession = false,
             currentPlanId = null,
         )
@@ -47,6 +52,7 @@ class HomeViewModel @Inject constructor(
 data class HomeUiData(
     val isPlanSelected: Boolean,
     val isSessionStarted: Boolean,
+    val isTodayEmpty: Boolean,
     val isFirstSession: Boolean,
-    val currentPlanId: Long?,
+    val currentPlanId: Int?,
 )

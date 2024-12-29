@@ -51,7 +51,7 @@ import com.looker.kenko.ui.theme.KenkoTheme
 @Composable
 fun Exercises(
     viewModel: ExercisesViewModel,
-    onExerciseClick: (name: String) -> Unit,
+    onExerciseClick: (id: Int?) -> Unit,
     onCreateClick: (target: MuscleGroups?) -> Unit,
     onBackPress: () -> Unit,
 ) {
@@ -72,10 +72,10 @@ fun Exercises(
 private fun Exercises(
     state: ExercisesUiState,
     snackbarState: SnackbarHostState,
-    onExerciseClick: (name: String) -> Unit,
+    onExerciseClick: (id: Int?) -> Unit,
     onCreateClick: (target: MuscleGroups?) -> Unit,
     onSelectTarget: (MuscleGroups?) -> Unit,
-    onRemove: (String) -> Unit,
+    onRemove: (Int?) -> Unit,
     onBackPress: () -> Unit,
     onReferenceClick: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -124,22 +124,22 @@ private fun Exercises(
 private fun ExercisesList(
     exercises: List<Exercise>,
     contentPadding: PaddingValues,
-    onExerciseClick: (String) -> Unit,
-    onRemove: (String) -> Unit,
+    onExerciseClick: (id: Int?) -> Unit,
+    onRemove: (Int?) -> Unit,
     onReferenceClick: (String) -> Unit,
 ) {
     LazyColumn(
         contentPadding = contentPadding,
     ) {
-        items(exercises, key = { it.name }) { exercise ->
-            val exerciseName by rememberUpdatedState(newValue = exercise.name)
+        items(exercises, key = { it.id!! }) { exercise ->
+            val exerciseId by rememberUpdatedState(exercise.id)
             SwipeToDeleteBox(
                 modifier = Modifier.animateItem(),
-                onDismiss = { onRemove(exerciseName) }
+                onDismiss = { onRemove(exerciseId) }
             ) {
                 ExerciseItem(
                     exercise = exercise,
-                    onClick = { onExerciseClick(exerciseName) },
+                    onClick = { onExerciseClick(exerciseId) },
                     referenceButton = {
                         if (exercise.reference != null) {
                             FilledTonalIconButton(

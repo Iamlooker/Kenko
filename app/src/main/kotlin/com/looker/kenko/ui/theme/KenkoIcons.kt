@@ -25,6 +25,8 @@ object KenkoIcons {
 
     val Add: ImageVector = com.looker.kenko.ui.components.icons.symbols.Add
 
+    val Info: ImageVector = com.looker.kenko.ui.components.icons.symbols.Info
+
     val Done: ImageVector = com.looker.kenko.ui.components.icons.symbols.Done
 
     val History: ImageVector = com.looker.kenko.ui.components.icons.symbols.History

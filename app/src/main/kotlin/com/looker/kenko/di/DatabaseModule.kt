@@ -4,6 +4,7 @@ import android.content.Context
 import com.looker.kenko.data.local.KenkoDatabase
 import com.looker.kenko.data.local.dao.ExerciseDao
 import com.looker.kenko.data.local.dao.PlanDao
+import com.looker.kenko.data.local.dao.PlanHistoryDao
 import com.looker.kenko.data.local.dao.SessionDao
 import dagger.Module
 import dagger.Provides
@@ -39,5 +40,11 @@ object DatabaseModule {
     fun providePlanDao(
         database: KenkoDatabase,
     ): PlanDao = database.planDao
+
+    @Provides
+    @Singleton
+    fun providePlanHistoryDao(
+        database: KenkoDatabase,
+    ): PlanHistoryDao = database.historyDao
 
 }

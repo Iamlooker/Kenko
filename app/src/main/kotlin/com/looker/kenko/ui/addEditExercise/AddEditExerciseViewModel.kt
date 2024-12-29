@@ -37,7 +37,7 @@ class AddEditExerciseViewModel @Inject constructor(
 
     private val routeData = savedStateHandle.toRoute<AddEditExerciseRoute>()
 
-    private val defaultExerciseName: String? = routeData.exerciseName
+    private val exerciseId: Int? = routeData.id
 
     private val defaultTarget: MuscleGroups? = routeData.target?.let { MuscleGroups.valueOf(it) }
 
@@ -45,11 +45,11 @@ class AddEditExerciseViewModel @Inject constructor(
 
     private val isIsometric = MutableStateFlow(false)
 
-    private val isReadOnly: Boolean = defaultExerciseName != null
+    private val isReadOnly: Boolean = exerciseId != null
 
     val snackbarState = SnackbarHostState()
 
-    var exerciseName: String by mutableStateOf(defaultExerciseName ?: "")
+    var exerciseName: String by mutableStateOf("")
         private set
 
     var reference: String by mutableStateOf("")
@@ -122,7 +122,8 @@ class AddEditExerciseViewModel @Inject constructor(
                     name = exerciseName,
                     target = targetMuscle.value,
                     reference = reference.ifBlank { null },
-                    isIsometric = isIsometric.value
+                    isIsometric = isIsometric.value,
+                    id = exerciseId,
                 )
             )
             onDone()
@@ -131,8 +132,8 @@ class AddEditExerciseViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            if (defaultExerciseName != null) {
-                val exercise = repo.get(defaultExerciseName)
+            if (exerciseId != null) {
+                val exercise = repo.get(exerciseId)
                 exercise?.let {
                     setName(it.name)
                     addReference(it.reference ?: "")

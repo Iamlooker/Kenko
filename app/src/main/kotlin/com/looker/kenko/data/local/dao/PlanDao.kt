@@ -2,42 +2,159 @@ package com.looker.kenko.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Query
-import androidx.room.Transaction
 import androidx.room.Upsert
-import com.looker.kenko.data.model.Plan
+import com.looker.kenko.data.local.model.ExerciseEntity
+import com.looker.kenko.data.local.model.PlanDayEntity
+import com.looker.kenko.data.local.model.PlanEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PlanDao {
 
-    @Query("SELECT * FROM plan_table")
-    fun stream(): Flow<List<Plan>>
+    @Query(
+        """
+        SELECT *
+        FROM plans
+        """,
+    )
+    fun plansFlow(): Flow<List<PlanEntity>>
 
-    @Query("SELECT * FROM plan_table WHERE isActive = 1")
-    fun currentPlanStream(): Flow<Plan?>
+    @Query(
+        """
+        SELECT *
+        FROM plan_day
+        WHERE planId =
+        (SELECT planId
+        FROM plan_history
+        WHERE `end` IS NULL
+        AND start IS NOT NULL)
+        """,
+    )
+    fun currentPlanItemsFlow(): Flow<List<PlanDayEntity>>
 
-    @Query("UPDATE plan_table SET isActive = 0 WHERE isActive = 1")
-    suspend fun deactivateOldPlan()
+    @Query(
+        """
+        SELECT *
+        FROM plan_day
+        WHERE planId =
+        (SELECT planId
+        FROM plan_history
+        WHERE `end` IS NULL
+        AND start IS NOT NULL)
+        AND dayOfWeek = :day
+        """,
+    )
+    fun currentPlanItemsByDayFlow(day: Int): Flow<List<PlanDayEntity>>
 
-    @Query("UPDATE plan_table SET isActive = 1 WHERE id = :id")
-    suspend fun activatePlan(id: Long)
+    @Query(
+        """
+        SELECT *
+        FROM plans
+        WHERE id = :planId
+        """,
+    )
+    suspend fun getPlanById(planId: Int): PlanEntity?
 
-    @Transaction
-    suspend fun switchPlan(id: Long) {
-        deactivateOldPlan()
-        activatePlan(id)
-    }
+    @Query(
+        """
+        SELECT EXISTS
+        (SELECT name
+        FROM plans
+        WHERE name = :planName)
+        """
+    )
+    suspend fun exists(planName: String): Boolean
 
-    @Query("SELECT * FROM plan_table WHERE id = :id")
-    fun getStream(id: Long): Flow<Plan?>
+    @Query(
+        """
+        SELECT *
+        FROM plan_day
+        WHERE planId = :planId
+        """,
+    )
+    fun planItemsByPlanIdFlow(planId: Int): Flow<List<PlanDayEntity>>
+
+    @Query(
+        """
+        SELECT *
+        FROM plan_day
+        WHERE planId = :planId
+        """,
+    )
+    suspend fun getPlanItemsByPlanId(planId: Int): List<PlanDayEntity>
+
+    @Query(
+        """
+        SELECT exercises.*
+        FROM exercises
+        INNER JOIN plan_day
+        ON exercises.id = plan_day.exerciseId
+        WHERE plan_day.planId = :planId
+        """,
+    )
+    fun exerciseByPlanIdFlow(planId: Int): Flow<List<ExerciseEntity>>
+
+    @Query(
+        """
+        SELECT exercises.*
+        FROM exercises
+        INNER JOIN plan_day
+        ON exercises.id = plan_day.exerciseId
+        WHERE plan_day.planId = :planId
+        """,
+    )
+    suspend fun getExerciseByPlanId(planId: Int): List<ExerciseEntity>
+
+    @Query(
+        """
+        SELECT *
+        FROM plan_day
+        WHERE planId = :planId
+        AND dayOfWeek = :day
+        """,
+    )
+    fun planItemsByPlanIdAndDayFlow(planId: Int, day: Int): Flow<List<PlanDayEntity>>
+
+    @Query(
+        """
+        SELECT *
+        FROM plan_day
+        WHERE planId = :planId
+        AND dayOfWeek = :day
+        """,
+    )
+    suspend fun getPlanItemsByPlanIdAndDay(planId: Int, day: Int): List<PlanDayEntity>
+
+    @Query(
+        """
+        SELECT COUNT(exerciseId)
+        FROM plan_day
+        WHERE planId = :planId
+        """,
+    )
+    suspend fun getExerciseCountByPlanId(planId: Int): Int
+
+    @Query(
+        """
+        SELECT COUNT(DISTINCT dayOfWeek)
+        FROM plan_day
+        WHERE planId = :planId
+        """,
+    )
+    suspend fun getWorkDaysByPlanId(planId: Int): Int
 
     @Upsert
-    suspend fun upsert(plan: Plan)
+    suspend fun upsertPlan(plan: PlanEntity): Long
 
-    @Query("DELETE FROM plan_table WHERE id = :id")
-    suspend fun remove(id: Long)
+    @Query("DELETE FROM plans WHERE id = :planId")
+    suspend fun deletePlan(planId: Int)
 
-    @Query("SELECT * FROM plan_table WHERE isActive = 1")
-    suspend fun currentPlan(): Plan?
+    @Upsert
+    suspend fun insertPlanItem(item: PlanDayEntity)
 
+    @Query("DELETE FROM plan_day WHERE id = :planDayId")
+    suspend fun deleteItem(planDayId: Long)
+
+    @Query("DELETE FROM plan_day WHERE exerciseId = :exerciseId")
+    suspend fun deleteItemByExercise(exerciseId: Int)
 }

@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
     alias(libs.plugins.hilt)
 }
 
@@ -22,11 +23,13 @@ android {
         versionName = "1.2.0"
 
         testInstrumentationRunner = "com.looker.kenko.KenkoTestRunner"
+
         vectorDrawables {
             useSupportLibrary = true
         }
-        ksp {
-            arg("room.schemaLocation", "$projectDir/schemas")
+
+        room {
+            schemaDirectory("$projectDir/schemas")
         }
     }
 
@@ -42,29 +45,43 @@ android {
             isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlinOptions {
         jvmTarget = "17"
         freeCompilerArgs += "-Xcontext-receivers"
     }
+
     buildFeatures {
         compose = true
+        buildConfig = true
     }
+
+    sourceSets {
+        getByName("androidTest").assets.srcDir("$projectDir/schemas")
+    }
+
+    lint {
+        disable += "MissingTranslation"
+    }
+
     composeCompiler {
         enableStrongSkippingMode = true
         metricsDestination = file("$projectDir/reports/metrics")
         reportsDestination = file("$projectDir/reports")
     }
+
     packaging {
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/{AL2.0,LGPL2.1,LICENSE*}"
         }
     }
 }
@@ -75,7 +92,6 @@ dependencies {
     implementation(libs.androidx.core.ktx)
 
     implementation(platform(libs.compose.bom))
-    androidTestImplementation(platform(libs.compose.bom))
 
     implementation(libs.bundles.lifecycle)
     implementation(libs.androidx.navigation.compose)
@@ -100,14 +116,17 @@ dependencies {
     implementation(libs.bundles.room)
     ksp(libs.androidx.room.compiler)
 
-    // Rebugger
-    implementation(libs.rebugger)
+    testImplementation(kotlin("test-junit5"))
 
-    kspTest(libs.hilt.test)
+    androidTestImplementation(kotlin("test-junit5"))
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.bundles.instrumented.test)
+
+    testImplementation(libs.androidx.room.test)
     testImplementation(libs.bundles.test)
 
+    kspTest(libs.hilt.test)
     kspAndroidTest(libs.hilt.test)
-    androidTestImplementation(libs.bundles.instrumented.test)
 }
 
 fun DependencyHandlerScope.kotlin(name: String): Any = kotlin(name, libs.versions.kotlin.get())
