@@ -68,7 +68,14 @@ class PlanEditViewModel @Inject constructor(
             exerciseSheetVisible = sheetVisible,
             exercises = repo.getPlanItems(id, day).map(PlanItem::exercise),
         )
-    }.asStateFlow(PlanEditState(localDate.dayOfWeek, false, false, emptyList()))
+    }.asStateFlow(
+        PlanEditState(
+            currentDay = localDate.dayOfWeek,
+            selectionMode = false,
+            exerciseSheetVisible = false,
+            exercises = emptyList(),
+        ),
+    )
 
     val isNameAlreadyUsed = snapshotFlow { planNameState }.map {
         repo.planNameExists(it.text.toString())
