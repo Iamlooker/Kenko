@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag
+
 plugins {
     alias(libs.plugins.android.app)
     alias(libs.plugins.kotlin.android)
@@ -74,7 +76,9 @@ android {
     }
 
     composeCompiler {
-        enableStrongSkippingMode = true
+        featureFlags = setOf(
+            ComposeFeatureFlag.OptimizeNonSkippingGroups,
+        )
         metricsDestination = file("$projectDir/reports/metrics")
         reportsDestination = file("$projectDir/reports")
     }
