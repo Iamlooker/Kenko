@@ -38,6 +38,7 @@ fun KenkoTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
+        shapes = Shapes,
         content = content
     )
 }
@@ -61,4 +62,6 @@ fun dynamicColorSchemes(context: Context): ColorSchemes? =
             dark = dynamicDarkColorScheme(context),
             nameRes = R.string.label_color_scheme_dynamic
         )
-    } else null
+    } else {
+        null
+    }
