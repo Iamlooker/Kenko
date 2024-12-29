@@ -10,9 +10,17 @@ import kotlinx.datetime.toLocalDateTime
 @Immutable
 data class Plan(
     val name: String,
-    val exercisesPerDay: Map<DayOfWeek, List<Exercise>>,
     val isActive: Boolean,
+    val stat: PlanStat = PlanStat(0, 0),
     val id: Int? = null,
+)
+
+@Immutable
+data class PlanItem(
+    val dayOfWeek: DayOfWeek,
+    val exercise: Exercise,
+    val planId: Int,
+    val id: Long? = null,
 )
 
 val localDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date

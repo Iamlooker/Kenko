@@ -35,6 +35,7 @@ interface SessionDao {
     @Query("SELECT id FROM sessions WHERE date = :date")
     suspend fun getSessionId(date: LocalDate): Int?
 
+    @Transaction
     @Query("SELECT * FROM sessions")
     fun stream(): Flow<List<SessionEntity>>
 

@@ -2,6 +2,7 @@ package com.looker.kenko.data.repository.offline
 
 import com.looker.kenko.data.local.dao.ExerciseDao
 import com.looker.kenko.data.local.dao.PlanDao
+import com.looker.kenko.data.local.dao.PlanHistoryDao
 import com.looker.kenko.data.local.dao.SessionDao
 import com.looker.kenko.data.local.model.SessionDataEntity
 import com.looker.kenko.data.local.model.SetEntity
@@ -20,6 +21,7 @@ import javax.inject.Inject
 class OfflineSessionRepo @Inject constructor(
     private val dao: SessionDao,
     private val planDao: PlanDao,
+    private val historyDao: PlanHistoryDao,
     private val exerciseDao: ExerciseDao,
 ) : SessionRepo {
 
@@ -52,7 +54,7 @@ class OfflineSessionRepo @Inject constructor(
 
     override suspend fun createEmpty(date: LocalDate) {
         if (!date.isToday) error("Editing on old dates is not supported!")
-        val currentPlanId = requireNotNull(planDao.currentPlanId()) { "No plan active" }
+        val currentPlanId = requireNotNull(historyDao.getCurrentId()) { "No plan active" }
         dao.upsert(SessionDataEntity(localDate, currentPlanId))
     }
 

@@ -7,6 +7,8 @@ interface ExerciseRepo {
 
     val stream: Flow<List<Exercise>>
 
+    val numberOfExercise: Flow<Int>
+
     suspend fun get(id: Int): Exercise?
 
     suspend fun upsert(exercise: Exercise)

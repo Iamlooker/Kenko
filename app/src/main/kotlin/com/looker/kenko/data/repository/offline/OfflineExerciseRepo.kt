@@ -17,9 +17,10 @@ class OfflineExerciseRepo @Inject constructor(
     override val stream: Flow<List<Exercise>> =
         dao.stream().map { it.map(ExerciseEntity::toExternal) }
 
-    override suspend fun get(id: Int): Exercise? {
-        return dao.get(id)?.toExternal()
-    }
+    override val numberOfExercise: Flow<Int> = dao.number()
+
+    override suspend fun get(id: Int): Exercise? =
+        dao.get(id)?.toExternal()
 
     override suspend fun upsert(exercise: Exercise) {
         dao.upsert(exercise.toEntity())
@@ -29,8 +30,7 @@ class OfflineExerciseRepo @Inject constructor(
         dao.delete(id)
     }
 
-    override suspend fun isExerciseAvailable(name: String): Boolean {
-        return dao.exists(name)
-    }
+    override suspend fun isExerciseAvailable(name: String): Boolean =
+        dao.exists(name)
 
 }

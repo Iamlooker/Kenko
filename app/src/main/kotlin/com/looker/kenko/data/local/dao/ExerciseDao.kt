@@ -21,6 +21,9 @@ interface ExerciseDao {
     @Query("SELECT * FROM exercises WHERE id = :id")
     suspend fun get(id: Int): ExerciseEntity?
 
+    @Query("SELECT COUNT(*) FROM exercises")
+    fun number(): Flow<Int>
+
     @Query("SELECT EXISTS(SELECT * FROM exercises WHERE name = :name)")
     suspend fun exists(name: String): Boolean
 
