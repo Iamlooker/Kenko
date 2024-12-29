@@ -7,6 +7,7 @@ import com.looker.kenko.data.repository.PlanRepo
 import com.looker.kenko.data.repository.SettingsRepo
 import com.looker.kenko.utils.asStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,22 +17,22 @@ class PlanViewModel @Inject constructor(
     private val settingsRepo: SettingsRepo,
 ) : ViewModel() {
 
-    val plans = repo.stream.asStateFlow(emptyList())
+    val plans = repo.plans.asStateFlow(emptyList())
 
     fun removePlan(id: Int) {
         viewModelScope.launch {
-            repo.remove(id)
+            repo.deletePlan(id)
         }
     }
 
     fun switchPlan(plan: Plan) {
         viewModelScope.launch {
             if (!plan.isActive) {
-                repo.switchPlan(plan)
+                repo.setCurrent(plan.id!!)
             } else {
-                repo.upsert(plan.copy(isActive = false))
+                repo.updatePlan(plan.copy(isActive = false))
             }
-            if (repo.current() != null) {
+            if (repo.current.first() != null) {
                 settingsRepo.setOnboardingDone()
             }
         }

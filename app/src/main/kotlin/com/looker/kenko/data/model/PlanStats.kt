@@ -15,6 +15,9 @@ value class PlanStat(private val packedInt: Long) {
     @Stable
     val workDays: Int get() = unpackInt2(packedInt)
 
+    @Stable
+    val restDays: Int get() = 7 - workDays
+
 }
 
 fun PlanStat(exercises: Int, workDays: Int): PlanStat {
@@ -32,10 +35,3 @@ private inline fun unpackInt1(value: Long): Int {
 private inline fun unpackInt2(value: Long): Int {
     return (value and 0xFFFFFFFF).toInt()
 }
-
-@Stable
-val Plan.stats: PlanStat
-    get() = PlanStat(
-        exercises = exercisesPerDay.values.flatten().size,
-        workDays = exercisesPerDay.size,
-    )
