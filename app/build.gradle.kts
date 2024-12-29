@@ -45,7 +45,7 @@ android {
             isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -69,6 +69,9 @@ android {
         getByName("androidTest").assets.srcDir("$projectDir/schemas")
     }
 
+    lint {
+        disable += "MissingTranslation"
+    }
 
     composeCompiler {
         enableStrongSkippingMode = true
@@ -78,7 +81,7 @@ android {
 
     packaging {
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/{AL2.0,LGPL2.1,LICENSE*}"
         }
     }
 }
@@ -89,7 +92,6 @@ dependencies {
     implementation(libs.androidx.core.ktx)
 
     implementation(platform(libs.compose.bom))
-    androidTestImplementation(platform(libs.compose.bom))
 
     implementation(libs.bundles.lifecycle)
     implementation(libs.androidx.navigation.compose)
@@ -112,17 +114,19 @@ dependencies {
     implementation(libs.androidx.datastore)
 
     implementation(libs.bundles.room)
-    testImplementation(libs.androidx.room.test)
     ksp(libs.androidx.room.compiler)
 
-    // Rebugger
-    implementation(libs.rebugger)
+    testImplementation(kotlin("test-junit5"))
 
-    kspTest(libs.hilt.test)
+    androidTestImplementation(kotlin("test-junit5"))
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.bundles.instrumented.test)
+
+    testImplementation(libs.androidx.room.test)
     testImplementation(libs.bundles.test)
 
+    kspTest(libs.hilt.test)
     kspAndroidTest(libs.hilt.test)
-    androidTestImplementation(libs.bundles.instrumented.test)
 }
 
 fun DependencyHandlerScope.kotlin(name: String): Any = kotlin(name, libs.versions.kotlin.get())
