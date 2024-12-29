@@ -47,7 +47,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineBreak
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
@@ -123,7 +123,8 @@ private fun Home(
             HorizontalDivider(thickness = KenkoBorderWidth)
             AnimatedContent(
                 modifier = Modifier.align(CenterHorizontally),
-                targetState = state.isPlanSelected, label = "",
+                targetState = state.isPlanSelected,
+                label = "",
             ) {
                 if (it) {
                     Row(
@@ -150,10 +151,18 @@ private fun Home(
             HorizontalDivider(thickness = KenkoBorderWidth)
             if (state.isPlanSelected) {
                 StartSession(
-                    onStartSessionClick = onStartSessionClick,
+                    onStartSessionClick = {
+                        if (state.isTodayEmpty) {
+                            onCurrentPlanClick(state.currentPlanId!!)
+                        } else {
+                            onStartSessionClick()
+                        }
+                    },
                     content = {
-                        val heading = remember(state.isSessionStarted) {
-                            if (state.isSessionStarted) {
+                        val heading = remember(state.isSessionStarted, state.isTodayEmpty) {
+                            if (state.isTodayEmpty) {
+                                R.string.label_nothing_today
+                            } else if (state.isSessionStarted) {
                                 R.string.label_continue_session_heading
                             } else {
                                 if (state.isFirstSession) {
@@ -168,15 +177,18 @@ private fun Home(
                                 .align(CenterHorizontally)
                                 .padding(horizontal = 16.dp),
                             text = stringResource(heading),
-                            style = MaterialTheme.typography.header().copy(
-                                lineBreak = LineBreak.Heading
-                            ),
-                            color = MaterialTheme.colorScheme.primary,
+                            style = MaterialTheme.typography.header()
+                                .merge(
+                                    lineBreak = LineBreak.Heading,
+                                    color = MaterialTheme.colorScheme.primary
+                                ),
                         )
                     },
                     buttonText = {
-                        val stringRes = remember(state.isSessionStarted) {
-                            if (state.isSessionStarted) {
+                        val stringRes = remember(state.isSessionStarted, state.isTodayEmpty) {
+                            if (state.isTodayEmpty) {
+                                R.string.label_edit_plan
+                            } else if (state.isSessionStarted) {
                                 R.string.label_continue_session
                             } else {
                                 R.string.label_start_session
@@ -336,7 +348,7 @@ private fun HelperCards(
     }
 }
 
-@PreviewLightDark
+@Preview
 @Composable
 private fun HomePreview() {
     KenkoTheme {
@@ -344,14 +356,47 @@ private fun HomePreview() {
             state = HomeUiData(
                 isPlanSelected = true,
                 isSessionStarted = true,
-                isFirstSession = true,
+                isTodayEmpty = false,
+                isFirstSession = false,
                 currentPlanId = null,
             ),
         )
     }
 }
 
-@PreviewLightDark
+@Preview
+@Composable
+private fun StartTodayPreview() {
+    KenkoTheme {
+        Home(
+            state = HomeUiData(
+                isPlanSelected = true,
+                isSessionStarted = false,
+                isTodayEmpty = false,
+                isFirstSession = false,
+                currentPlanId = null,
+            ),
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun TodayEmptyPreview() {
+    KenkoTheme {
+        Home(
+            state = HomeUiData(
+                isPlanSelected = true,
+                isSessionStarted = false,
+                isTodayEmpty = true,
+                isFirstSession = false,
+                currentPlanId = null,
+            ),
+        )
+    }
+}
+
+@Preview
 @Composable
 private fun FirstStartHomePreview() {
     KenkoTheme {
@@ -359,7 +404,8 @@ private fun FirstStartHomePreview() {
             state = HomeUiData(
                 isPlanSelected = false,
                 isSessionStarted = false,
-                isFirstSession = false,
+                isTodayEmpty = false,
+                isFirstSession = true,
                 currentPlanId = null,
             ),
         )
