@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -20,6 +21,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,6 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
 import com.looker.kenko.data.model.MuscleGroups
+import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.components.ErrorSnackbar
 import com.looker.kenko.ui.components.FlowHorizontalChips
 import com.looker.kenko.ui.components.KenkoButton
@@ -45,7 +48,10 @@ import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 
 @Composable
-fun AddEditExercise(onDone: () -> Unit) {
+fun AddEditExercise(
+    onDone: () -> Unit,
+    onBackPress: () -> Unit,
+) {
     val viewModel: AddEditExerciseViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -58,10 +64,12 @@ fun AddEditExercise(onDone: () -> Unit) {
         onSelectIsometric = viewModel::setIsometric,
         onNameChange = viewModel::setName,
         onReferenceChange = viewModel::addReference,
+        onBackPress = onBackPress,
         onDone = { viewModel.addNewExercise(onDone) },
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AddEditExercise(
     exerciseName: String,
@@ -73,8 +81,24 @@ private fun AddEditExercise(
     onNameChange: (String) -> Unit,
     onReferenceChange: (String) -> Unit,
     onDone: () -> Unit,
+    onBackPress: () -> Unit,
 ) {
     Scaffold(
+        topBar = {
+            TopAppBar(
+                navigationIcon = {
+                    BackButton(onBackPress)
+                },
+                title = {
+                    Text(
+                        text = stringResource(
+                            if (exerciseName.isBlank()) R.string.label_new_exercise
+                            else R.string.label_edit_exercise
+                        ),
+                    )
+                }
+            )
+        },
         snackbarHost = {
             SnackbarHost(hostState = snackbarState) {
                 ErrorSnackbar(data = it)
@@ -86,13 +110,6 @@ private fun AddEditExercise(
                 .verticalScroll(rememberScrollState())
                 .padding(PaddingValues(horizontal = 16.dp) + innerPadding),
         ) {
-            Spacer(modifier = Modifier.height(32.dp))
-            Text(
-                text = stringResource(R.string.label_new_exercise),
-                style = MaterialTheme.typography.displayMedium,
-                color = MaterialTheme.colorScheme.tertiary
-            )
-            Spacer(modifier = Modifier.height(32.dp))
             ExerciseTextField(
                 exerciseName = exerciseName,
                 onNameChange = onNameChange,
@@ -100,13 +117,12 @@ private fun AddEditExercise(
                 isReadOnly = state.isReadOnly,
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(8.dp))
             Text(
+                modifier = Modifier.padding(vertical = 8.dp),
                 text = stringResource(R.string.label_target),
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.outline
             )
-            Spacer(modifier = Modifier.height(8.dp))
             FlowHorizontalChips(target = state.targetMuscle, onSet = onSelectTarget)
             Spacer(modifier = Modifier.height(12.dp))
             IsIsometricButton(isIsometric = state.isIsometric, onChange = onSelectIsometric)
@@ -284,9 +300,9 @@ private fun AddEditPreview() {
             onSelectTarget = {},
             onSelectIsometric = {},
             onNameChange = {},
-            onReferenceChange = {}
-        ) {
-
-        }
+            onReferenceChange = {},
+            onDone = {},
+            onBackPress = {}
+        )
     }
 }

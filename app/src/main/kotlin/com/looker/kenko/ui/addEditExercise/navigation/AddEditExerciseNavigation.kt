@@ -26,6 +26,6 @@ fun NavGraphBuilder.addEditExercise(
     onBackPress: () -> Unit,
 ) {
     composable<AddEditExerciseRoute> {
-        AddEditExercise(onBackPress)
+        AddEditExercise(onBackPress, onBackPress)
     }
 }

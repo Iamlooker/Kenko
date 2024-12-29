@@ -7,10 +7,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonColors
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.looker.kenko.ui.theme.KenkoIcons
 
 @Composable
 fun KenkoButton(
@@ -82,5 +87,20 @@ fun TertiaryKenkoButton(
         Box(Modifier.size(18.dp)) {
             icon()
         }
+    }
+}
+
+@Composable
+fun BackButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    colors: IconButtonColors = IconButtonDefaults.iconButtonColors(),
+) {
+    IconButton(
+        modifier = modifier,
+        colors = colors,
+        onClick = onClick,
+    ) {
+        Icon(imageVector = KenkoIcons.ArrowBack, contentDescription = null)
     }
 }
