@@ -49,11 +49,12 @@ class SessionDetailViewModel @Inject constructor(
     val previousSessionDate = sessionDate - week
 
     private val previousSessionExists: Flow<Boolean> = repo.getStream(previousSessionDate)
-            .map { it != null }
+        .map { it != null }
 
     private val sessionStream: Flow<Session?> = repo.getStream(sessionDate)
 
-    private val exercisesStream: Flow<List<Exercise>?> = planRepo.exercises(sessionDate)
+    private val exercisesStream: Flow<List<Exercise>?> =
+        planRepo.activeExercises(sessionDate.dayOfWeek)
 
     private val _currentExercise: MutableStateFlow<Exercise?> = MutableStateFlow(null)
     val current: StateFlow<Exercise?> = _currentExercise
