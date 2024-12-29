@@ -1,5 +1,6 @@
 package com.looker.kenko.data.local.model
 
+import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
@@ -32,6 +33,7 @@ data class SessionEntity(
 )
 data class SessionDataEntity(
     val date: LocalDate,
+    @ColumnInfo(index = true)
     val planId: Int,
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,

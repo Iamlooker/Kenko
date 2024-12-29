@@ -3,6 +3,7 @@ package com.looker.kenko.data.local.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.Set
@@ -23,7 +24,10 @@ import com.looker.kenko.data.model.SetType
             childColumns = ["sessionId"],
             onDelete = ForeignKey.CASCADE,
         )
-    ]
+    ],
+    indices = [
+        Index("sessionId", "exerciseId")
+    ],
 )
 data class SetEntity(
     @ColumnInfo("reps")
