@@ -22,7 +22,15 @@
 
     <!--Plans-->
     <string name="label_plans_title">Plans</string>
+    <string name="label_edit_plan">Edit Plan</string>
     <string name="no_exercises_yet">No exercises yet</string>
+
+    <string name="heading_select_plan_name">Select a plan name</string>
+    <string name="heading_select_plan_items">Select exercises</string>
+    <string name="desc_select_plan_name">
+        Plan name should be easy to remember and not too long. Ideally unique with no special symbols.\n
+        e.g: Push Pull Leg, Strength Cycle, etc.
+    </string>
 
     <!--Profile-->
     <string name="label_profile_greeting">hey there</string>
@@ -42,7 +50,8 @@
     <string name="label_create_exercise">Create</string>
 
     <!--Add Exercises-->
-    <string name="label_new_exercise">New Exercise?</string>
+    <string name="label_new_exercise">Add Exercise</string>
+    <string name="label_edit_exercise">Edit</string>
     <string name="label_target">Target</string>
     <string name="label_is_isometric">Isometric</string>
     <string name="label_reference">Reference</string>
@@ -88,6 +97,7 @@
     <string name="error_plan_name_empty">Enter a plan name</string>
     <string name="error_exercise_name_empty">Enter an exercise name</string>
     <string name="error_plan_empty">Plan is empty</string>
+    <string name="error_plan_empty_prompt">Discard Plan?. Press back again to go back.</string>
     <string name="error_cant_find_session">Can\'t Find Session</string>
     <string name="error_cant_find_exercise">Can\'t Find Exercise</string>
 
@@ -134,6 +144,7 @@
     <string name="label_start_first_session">Start your first session</string>
     <string name="label_start_session_heading">Start today\'s session</string>
     <string name="label_continue_session_heading">Continue today\'s session</string>
+    <string name="label_next">Next</string>
 
     <string-array name="label_health_quotes">
         <item>you can do it</item>
