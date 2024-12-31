@@ -170,8 +170,8 @@ private fun SetsList(
     LazyVerticalGrid(
         columns = GridCells.Adaptive(360.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
-        contentPadding = WindowInsets.navigationBars.asPaddingValues(LocalDensity.current)
-                + PaddingValues(bottom = 12.dp)
+        contentPadding = WindowInsets.navigationBars.asPaddingValues(LocalDensity.current) +
+            PaddingValues(bottom = 12.dp)
     ) {
         item(
             span = { GridItemSpan(maxLineSpan) }
@@ -235,12 +235,13 @@ private fun AnimatedSetIndex(
         transitionSpec = {
             if (targetState > initialState) {
                 (slideInVertically { height -> height } + fadeIn()) togetherWith
-                        (slideOutVertically { height -> -height } + fadeOut())
+                    (slideOutVertically { height -> -height } + fadeOut())
             } else {
                 slideInVertically { height -> -height } + fadeIn() togetherWith
-                        (slideOutVertically { height -> height } + fadeOut())
+                    (slideOutVertically { height -> height } + fadeOut())
             } using SizeTransform(clip = false)
-        }, label = ""
+        },
+        label = ""
     ) { targetCount ->
         Text(text = normalizeInt(targetCount + 1))
     }

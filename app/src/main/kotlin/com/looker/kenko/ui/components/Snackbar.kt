@@ -32,23 +32,24 @@ fun ErrorSnackbar(
 @Composable
 private fun SnackbarPreview() {
     KenkoTheme {
-        ErrorSnackbar(data = object : SnackbarData {
-            override val visuals: SnackbarVisuals
-                get() = object : SnackbarVisuals {
-                    override val actionLabel: String?
-                        get() = null
-                    override val duration: SnackbarDuration
-                        get() = SnackbarDuration.Long
-                    override val message: String
-                        get() = "Error"
-                    override val withDismissAction: Boolean
-                        get() = false
+        ErrorSnackbar(
+            data = object : SnackbarData {
+                override val visuals: SnackbarVisuals
+                    get() = object : SnackbarVisuals {
+                        override val actionLabel: String?
+                            get() = null
+                        override val duration: SnackbarDuration
+                            get() = SnackbarDuration.Long
+                        override val message: String
+                            get() = "Error"
+                        override val withDismissAction: Boolean
+                            get() = false
+                    }
 
-                }
+                override fun dismiss() {}
 
-            override fun dismiss() {}
-
-            override fun performAction() {}
-        })
+                override fun performAction() {}
+            }
+        )
     }
 }

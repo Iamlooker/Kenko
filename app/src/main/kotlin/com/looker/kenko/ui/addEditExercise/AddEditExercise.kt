@@ -92,8 +92,11 @@ private fun AddEditExercise(
                 title = {
                     Text(
                         text = stringResource(
-                            if (exerciseName.isBlank()) R.string.label_new_exercise
-                            else R.string.label_edit_exercise
+                            if (exerciseName.isBlank()) {
+                                R.string.label_new_exercise
+                            } else {
+                                R.string.label_edit_exercise
+                            }
                         ),
                     )
                 }

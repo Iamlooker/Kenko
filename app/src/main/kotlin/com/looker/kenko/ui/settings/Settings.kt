@@ -194,12 +194,18 @@ private fun ColorPaletteItem(
         if (it) 32.dp else 16.dp
     }
     val background by transition.animateColor(label = "") {
-        if (it) MaterialTheme.colorScheme.primaryContainer
-        else MaterialTheme.colorScheme.surfaceContainerHigh
+        if (it) {
+            MaterialTheme.colorScheme.primaryContainer
+        } else {
+            MaterialTheme.colorScheme.surfaceContainerHigh
+        }
     }
     val contentColor by transition.animateColor(label = "") {
-        if (it) MaterialTheme.colorScheme.onPrimaryContainer
-        else MaterialTheme.colorScheme.onSurface
+        if (it) {
+            MaterialTheme.colorScheme.onPrimaryContainer
+        } else {
+            MaterialTheme.colorScheme.onSurface
+        }
     }
     Column(
         modifier = Modifier

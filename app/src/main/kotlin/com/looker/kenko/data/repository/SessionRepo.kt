@@ -16,5 +16,4 @@ interface SessionRepo {
     suspend fun createEmpty(date: LocalDate)
 
     fun getStream(date: LocalDate): Flow<Session?>
-
 }

@@ -43,16 +43,56 @@ private fun MuscleGroups.exercise(block: MutableList<String>.() -> Unit): List<E
 
 val MuscleGroups.sampleExercises: List<Exercise>
     get() = when (this) {
-        Biceps -> exercise { add("Curls"); add("Barbell Curls"); add("Preacher Curls"); add("B-t-B Curls") }
-        Triceps -> exercise { add("Push-down"); add("Skull-Crushers"); add("Push-overs") }
-        Shoulders -> exercise { add("Lateral Raises"); add("Shoulder Press"); add("Face Pulls") }
-        Quads -> exercise { add("Squats"); add("Leg Press"); add("Hack Squats"); add("Leg Extensions") }
-        Hamstrings -> exercise { add("SDL"); add("Lying Leg Curls") }
+        Biceps -> exercise {
+            add("Curls");
+            add("Barbell Curls");
+            add("Preacher Curls");
+            add("B-t-B Curls")
+        }
+        Triceps -> exercise {
+            add("Push-down");
+            add("Skull-Crushers");
+            add("Push-overs")
+        }
+        Shoulders -> exercise {
+            add("Lateral Raises");
+            add("Shoulder Press");
+            add("Face Pulls")
+        }
+        Quads -> exercise {
+            add("Squats");
+            add("Leg Press");
+            add("Hack Squats");
+            add("Leg Extensions")
+        }
+        Hamstrings -> exercise {
+            add("SDL");
+            add("Lying Leg Curls")
+        }
         Calves -> exercise { add("Calve Raises") }
-        Glutes -> exercise { add("Hip Thrusts"); add("Lunges") }
-        Core -> exercise { add("Sit-ups"); add("Leg Raises") }
-        Chest -> exercise { add("Bench Press"); add("Incline Bench"); add("Pec Dec"); add("Chest Fly") }
+        Glutes -> exercise {
+            add("Hip Thrusts");
+            add("Lunges")
+        }
+        Core -> exercise {
+            add("Sit-ups");
+            add("Leg Raises")
+        }
+        Chest -> exercise {
+            add("Bench Press");
+            add("Incline Bench");
+            add("Pec Dec");
+            add("Chest Fly")
+        }
         Traps -> exercise { add("Shrugs") }
-        Lats -> exercise { add("Lat Pull-down"); add("Pull-ups"); add("Lat Prayers") }
-        UpperBack -> exercise { add("Bent-over Rows"); add("Chest-Supported Rows"); add("Rows") }
+        Lats -> exercise {
+            add("Lat Pull-down");
+            add("Pull-ups");
+            add("Lat Prayers")
+        }
+        UpperBack -> exercise {
+            add("Bent-over Rows");
+            add("Chest-Supported Rows");
+            add("Rows")
+        }
     }

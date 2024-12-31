@@ -36,5 +36,4 @@ abstract class RepositoryModule {
     abstract fun bindSettingsRepo(
         repo: DatastoreSettingsRepo,
     ): SettingsRepo
-
 }

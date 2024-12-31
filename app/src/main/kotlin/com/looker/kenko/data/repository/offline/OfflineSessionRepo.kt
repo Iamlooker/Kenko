@@ -71,5 +71,4 @@ class OfflineSessionRepo @Inject constructor(
         val exercise = exerciseDao.get(it.exerciseId) ?: return@mapNotNull null
         it.toExternal(exercise.toExternal())
     }
-
 }

@@ -112,5 +112,4 @@ interface DragEvents {
     fun onHold(isRight: Boolean)
 
     fun onStop()
-
 }

@@ -96,7 +96,6 @@ class SessionDetailViewModel @Inject constructor(
         }
     }
 
-
     fun showBottomSheet(exercise: Exercise) {
         viewModelScope.launch {
             _currentExercise.emit(exercise)

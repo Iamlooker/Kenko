@@ -46,7 +46,6 @@ class HomeViewModel @Inject constructor(
             currentPlanId = null,
         )
     )
-
 }
 
 data class HomeUiData(

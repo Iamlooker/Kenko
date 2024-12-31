@@ -16,5 +16,4 @@ interface SettingsRepo {
     suspend fun setColorPalette(colorPalette: ColorPalettes)
 
     suspend fun setTheme(theme: Theme)
-
 }

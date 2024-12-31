@@ -111,7 +111,6 @@ private fun ExerciseItemPreview() {
 private fun ExerciseButtonPreview() {
     KenkoTheme {
         KenkoAddButton {
-
         }
     }
 }

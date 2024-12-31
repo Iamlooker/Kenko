@@ -76,5 +76,4 @@ sealed interface SearchResult {
 
     @Stable
     data object NotFound : SearchResult
-
 }

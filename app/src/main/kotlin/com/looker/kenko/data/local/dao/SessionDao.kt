@@ -17,7 +17,14 @@ interface SessionDao {
     @Upsert
     suspend fun upsert(session: SessionDataEntity)
 
-    @Query("SELECT EXISTS(SELECT * FROM sessions WHERE date = :date)")
+    @Query(
+        """
+        SELECT EXISTS
+        (SELECT *
+        FROM sessions
+        WHERE date = :date)
+        """
+    )
     suspend fun sessionExistsOn(date: LocalDate): Boolean
 
     @Upsert
@@ -26,25 +33,60 @@ interface SessionDao {
     @Delete
     suspend fun removeSet(set: SetEntity)
 
-    @Query("SELECT * FROM sets WHERE sessionId = :sessionId ORDER BY `order`")
+    @Query(
+        """
+        SELECT *
+        FROM sets
+        WHERE sessionId = :sessionId
+        ORDER BY `order`
+        """
+    )
     suspend fun getSets(sessionId: Int): List<SetEntity>
 
-    @Query("SELECT COUNT(*) FROM sets WHERE sessionId = :sessionId")
+    @Query(
+        """
+        SELECT COUNT(*)
+        FROM sets
+        WHERE sessionId = :sessionId
+        """
+    )
     suspend fun getSetCount(sessionId: Int): Int
 
-    @Query("SELECT id FROM sessions WHERE date = :date")
+    @Query(
+        """
+        SELECT id
+        FROM sessions
+        WHERE date = :date
+        """
+    )
     suspend fun getSessionId(date: LocalDate): Int?
 
     @Transaction
-    @Query("SELECT * FROM sessions")
+    @Query(
+        """
+        SELECT *
+        FROM sessions
+        """
+    )
     fun stream(): Flow<List<SessionEntity>>
 
     @Transaction
-    @Query("SELECT * FROM sessions WHERE date = :date")
+    @Query(
+        """
+        SELECT *
+        FROM sessions
+        WHERE date = :date
+        """
+    )
     fun session(date: LocalDate): Flow<SessionEntity?>
 
     @Transaction
-    @Query("SELECT * FROM sessions WHERE date = :date")
+    @Query(
+        """
+        SELECT *
+        FROM sessions
+        WHERE date = :date
+        """
+    )
     suspend fun getSession(date: LocalDate): SessionEntity?
-
 }

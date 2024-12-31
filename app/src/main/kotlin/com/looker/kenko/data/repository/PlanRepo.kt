@@ -41,5 +41,4 @@ interface PlanRepo {
     suspend fun removeItem(id: Long)
 
     suspend fun removeItemById(exerciseId: Int)
-
 }

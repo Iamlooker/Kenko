@@ -30,8 +30,11 @@ fun KenkoTheme(
             Theme.Dark -> true
         }
     }
-    val colorScheme = if (isDarkTheme) colorSchemes.dark
-    else colorSchemes.light
+    val colorScheme = if (isDarkTheme) {
+        colorSchemes.dark
+    } else {
+        colorSchemes.light
+    }
 
     SetupInsets(isDarkTheme = isDarkTheme)
 

@@ -72,8 +72,11 @@ fun SwipeToDeleteBox(
         }
     }
     val background by animateColorAsState(
-        targetValue = if (isOutsideBound) MaterialTheme.colorScheme.errorContainer
-        else MaterialTheme.colorScheme.surfaceContainer,
+        targetValue = if (isOutsideBound) {
+            MaterialTheme.colorScheme.errorContainer
+        } else {
+            MaterialTheme.colorScheme.surfaceContainer
+        },
         label = "",
     )
     Box(

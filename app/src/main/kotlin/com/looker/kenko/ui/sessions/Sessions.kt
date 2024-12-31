@@ -82,8 +82,11 @@ private fun Sessions(
                 label = {
                     val isCurrentSessionActive = state.isCurrentSessionActive
                     val text = remember(isCurrentSessionActive) {
-                        if (isCurrentSessionActive) R.string.label_continue_session
-                        else R.string.label_start_session
+                        if (isCurrentSessionActive) {
+                            R.string.label_continue_session
+                        } else {
+                            R.string.label_start_session
+                        }
                     }
                     Text(text = stringResource(id = text))
                 },
@@ -127,7 +130,6 @@ private fun Sessions(
             }
         }
     }
-
 }
 
 @Composable
@@ -212,7 +214,7 @@ private fun SessionsPreview() {
         Sessions(
             state = SessionsUiData(listOf(Session.SAMPLE), false),
             onBackPress = {},
-            onSessionClick = {})
+            onSessionClick = {}
+        )
     }
 }
-

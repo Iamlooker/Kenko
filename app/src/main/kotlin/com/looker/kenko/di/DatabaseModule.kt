@@ -46,5 +46,4 @@ object DatabaseModule {
     fun providePlanHistoryDao(
         database: KenkoDatabase,
     ): PlanHistoryDao = database.historyDao
-
 }

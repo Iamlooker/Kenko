@@ -52,7 +52,6 @@ class ProfileViewModel @Inject constructor(
                 planStat = null,
             ),
         )
-
 }
 
 @Stable

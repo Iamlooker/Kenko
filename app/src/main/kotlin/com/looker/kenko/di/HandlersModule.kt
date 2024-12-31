@@ -32,5 +32,4 @@ object HandlersModule {
     fun provideStringHandler(
         @ApplicationContext context: Context
     ): StringHandler = StringHandler(context)
-
 }

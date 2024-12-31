@@ -41,12 +41,18 @@ fun PlanItem(
 ) {
     val transition = updateTransition(targetState = plan.isActive, label = null)
     val background by transition.animateColor(label = "background") {
-        if (it) MaterialTheme.colorScheme.secondaryContainer
-        else MaterialTheme.colorScheme.surfaceContainer
+        if (it) {
+            MaterialTheme.colorScheme.secondaryContainer
+        } else {
+            MaterialTheme.colorScheme.surfaceContainer
+        }
     }
     val contentColor by transition.animateColor(label = "foreground") {
-        if (it) MaterialTheme.colorScheme.onSecondaryContainer
-        else MaterialTheme.colorScheme.onSurface
+        if (it) {
+            MaterialTheme.colorScheme.onSecondaryContainer
+        } else {
+            MaterialTheme.colorScheme.onSurface
+        }
     }
 
     Surface(
@@ -114,10 +120,13 @@ private fun PlanItemPreview() {
 @Composable
 private fun PlanItemInActivePreview() {
     KenkoTheme {
-        PlanItem(plan = Plan(
-            name = "Push Pull Leg",
-            stat = PlanStat(10, 5),
-            isActive = true
-        ), {}, {})
+        PlanItem(
+            plan = Plan(
+                name = "Push Pull Leg",
+                stat = PlanStat(10, 5),
+                isActive = true
+            ),
+            {}, {}
+        )
     }
 }

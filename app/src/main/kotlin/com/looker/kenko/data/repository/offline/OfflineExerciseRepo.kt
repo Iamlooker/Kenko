@@ -32,5 +32,4 @@ class OfflineExerciseRepo @Inject constructor(
 
     override suspend fun isExerciseAvailable(name: String): Boolean =
         dao.exists(name)
-
 }

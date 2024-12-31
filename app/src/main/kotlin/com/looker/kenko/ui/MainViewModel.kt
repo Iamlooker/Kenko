@@ -29,5 +29,4 @@ class MainViewModel @Inject constructor(
         .asStateFlow(defaultColorSchemes)
 
     val isOnboardingDone: Boolean = runBlocking { repo.get { isOnboardingDone }.first() }
-
 }

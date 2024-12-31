@@ -12,19 +12,45 @@ interface ExerciseDao {
     @Upsert
     suspend fun upsert(exercise: ExerciseEntity)
 
-    @Query("DELETE FROM exercises WHERE id = :id ")
+    @Query(
+        """
+        DELETE
+        FROM exercises
+        WHERE id = :id
+        """
+    )
     suspend fun delete(id: Int)
 
-    @Query("SELECT * FROM exercises")
+    @Query(
+        """
+        SELECT *
+        FROM exercises
+        """
+    )
     fun stream(): Flow<List<ExerciseEntity>>
 
-    @Query("SELECT * FROM exercises WHERE id = :id")
+    @Query(
+        """
+        SELECT *
+        FROM exercises
+        WHERE id = :id"""
+    )
     suspend fun get(id: Int): ExerciseEntity?
 
-    @Query("SELECT COUNT(*) FROM exercises")
+    @Query(
+        """
+        SELECT COUNT(*)
+        FROM exercises"""
+    )
     fun number(): Flow<Int>
 
-    @Query("SELECT EXISTS(SELECT * FROM exercises WHERE name = :name)")
+    @Query(
+        """
+        SELECT EXISTS
+        (SELECT *
+        FROM exercises
+        WHERE name = :name)
+        """
+    )
     suspend fun exists(name: String): Boolean
-
 }

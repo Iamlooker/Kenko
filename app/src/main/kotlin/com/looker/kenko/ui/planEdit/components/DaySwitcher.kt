@@ -94,7 +94,7 @@ fun DaySwitcher(
                     transitionSpec = {
                         fadeAndSlideHorizontally(
                             (initialState == SUNDAY && targetState == MONDAY) ||
-                                    (targetState > initialState && !(initialState == MONDAY && targetState == SUNDAY))
+                                (targetState > initialState && !(initialState == MONDAY && targetState == SUNDAY))
                         ) using SizeTransform(clip = false)
                     },
                 ) { day ->
@@ -122,7 +122,7 @@ fun DaySwitcher(
 
 fun fadeAndSlideHorizontally(rightToLeft: Boolean = true): ContentTransform {
     return slideInHorizontally { it * if (rightToLeft) 1 else -1 } + fadeIn() togetherWith
-            slideOutHorizontally { -it * if (rightToLeft) 1 else -1 } + fadeOut()
+        slideOutHorizontally { -it * if (rightToLeft) 1 else -1 } + fadeOut()
 }
 
 @Composable
@@ -163,7 +163,6 @@ private fun DaySelectorPreview() {
                 isSelected -= 1
             },
             onClick = {
-
             },
             selected = isSelected,
         )

@@ -29,5 +29,4 @@ private const val DROP_SET_RATING_MODIFIER: Double = 1.35
 private const val REST_PAUSE_SET_RATING_MODIFIER: Double = 1.2
 
 val Set.Companion.Samples: List<Set>
-    get() = listOf(
-    )
+    get() = listOf()

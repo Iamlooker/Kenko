@@ -75,5 +75,4 @@ object KenkoIcons {
     val QuarterCircles: ImageVector = com.looker.kenko.ui.components.icons.QuarterCircles
 
     val Wireframe: ImageVector = com.looker.kenko.ui.components.icons.Wireframe
-
 }

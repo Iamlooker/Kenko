@@ -47,5 +47,4 @@ class SystemUiController(
         isLightNavigationBar(value)
         isLightStatusBar(value)
     }
-
 }

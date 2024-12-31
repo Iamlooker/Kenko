@@ -141,7 +141,6 @@ fun KenkoNavHost(
         addEditExercise(navController::popBackStackOnResume)
 
         performance()
-
     }
 }
 

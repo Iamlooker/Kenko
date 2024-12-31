@@ -374,7 +374,6 @@ private fun ExerciseItemPreview() {
     KenkoTheme {
         ExerciseItem(exercise = MuscleGroups.Chest.sampleExercises.first()) {
             ExerciseItemActions(index = 1) {
-
             }
         }
     }

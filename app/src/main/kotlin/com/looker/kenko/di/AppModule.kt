@@ -41,5 +41,4 @@ object AppModule {
     fun providesCoroutineScope(
         @DefaultDispatcher dispatcher: CoroutineDispatcher,
     ): CoroutineScope = CoroutineScope(SupervisorJob() + dispatcher)
-
 }

@@ -48,8 +48,11 @@ class MainActivity : ComponentActivity() {
                 Kenko(appState) {
                     KenkoNavHost(
                         appState = appState,
-                        startDestination = if (viewModel.isOnboardingDone) HomeRoute
-                        else GetStartedRoute
+                        startDestination = if (viewModel.isOnboardingDone) {
+                            HomeRoute
+                        } else {
+                            GetStartedRoute
+                        }
                     )
                 }
             }

@@ -154,4 +154,3 @@ data class AddEditExerciseUiState(
     val isReadOnly: Boolean,
     val isReferenceInvalid: Boolean,
 )
-
