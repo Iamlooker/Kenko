@@ -69,7 +69,7 @@ class SessionDetailViewModel @Inject constructor(
                 return@combine SessionDetailState.Error.InvalidSession
             }
 
-            val currentSession = session ?: Session.create(emptyList())
+            val currentSession = session ?: Session(emptyList())
 
             if (exercises == null && session == null) {
                 return@combine SessionDetailState.Error.EmptyPlan

@@ -51,7 +51,6 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.data.model.Exercise
-import com.looker.kenko.data.model.Samples
 import com.looker.kenko.data.model.Session
 import com.looker.kenko.data.model.Set
 import com.looker.kenko.ui.addSet.AddSet
@@ -89,7 +88,7 @@ fun SessionDetails(
     if (exercise != null) {
         AddSetSheet(
             exercise = exercise!!,
-            onDismiss = viewModel::hideSheet
+            onDismiss = viewModel::hideSheet,
         )
     }
 }
@@ -116,7 +115,7 @@ private fun SessionDetail(
                 SessionError(
                     title = stringResource(state.title),
                     message = stringResource(state.errorMessage),
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
                 )
             }
         }
@@ -131,7 +130,7 @@ private fun SessionDetail(
                 )
                 Box(
                     modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.Center,
                 ) {
                     CircularProgressIndicator()
                 }
@@ -171,10 +170,10 @@ private fun SetsList(
         columns = GridCells.Adaptive(360.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
         contentPadding = WindowInsets.navigationBars.asPaddingValues(LocalDensity.current) +
-            PaddingValues(bottom = 12.dp)
+            PaddingValues(bottom = 12.dp),
     ) {
         item(
-            span = { GridItemSpan(maxLineSpan) }
+            span = { GridItemSpan(maxLineSpan) },
         ) {
             Header(
                 performedOn = session.date,
@@ -188,7 +187,7 @@ private fun SetsList(
                             )
                         }
                     }
-                }
+                },
             )
         }
         exerciseSets?.forEach { (exercise, sets) ->
@@ -241,7 +240,7 @@ private fun AnimatedSetIndex(
                     (slideOutVertically { height -> height } + fadeOut())
             } using SizeTransform(clip = false)
         },
-        label = ""
+        label = "",
     ) { targetCount ->
         Text(text = normalizeInt(targetCount + 1))
     }
@@ -274,7 +273,7 @@ private fun Header(
                     text = dayName(performedOn.dayOfWeek),
                     onCompleteListener = {
                         startAnimatingDate = true
-                    }
+                    },
                 )
                 TypingText(
                     text = date,
@@ -295,7 +294,7 @@ private fun StickyHeader(
     actions: (@Composable RowScope.() -> Unit)? = null,
 ) {
     Surface(
-        color = MaterialTheme.colorScheme.surfaceContainerLow
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
     ) {
         Row(
             modifier = Modifier
@@ -307,7 +306,7 @@ private fun StickyHeader(
             Text(
                 text = name,
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.primary
+                color = MaterialTheme.colorScheme.primary,
             )
             Spacer(modifier = Modifier.weight(1F))
             if (actions != null) {
@@ -354,7 +353,7 @@ private fun AddSetSheet(
                 scope.launch { state.hide() }.invokeOnCompletion {
                     if (!state.isVisible) onDismiss()
                 }
-            }
+            },
         )
     }
 }
@@ -366,10 +365,13 @@ private fun SessionDetailPreview() {
         val data = remember {
             SessionDetailState.Success(
                 SessionUiData(
-                    session = Session.SAMPLE,
-                    sets = Set.Samples.groupBy { it.exercise },
-                    isToday = true
-                )
+                    session = Session(
+                        LocalDate(2024, 4, 15),
+                        sets = emptyList()
+                    ),
+                    sets = emptyMap(),
+                    isToday = true,
+                ),
             )
         }
         Surface(modifier = Modifier.fillMaxSize()) {

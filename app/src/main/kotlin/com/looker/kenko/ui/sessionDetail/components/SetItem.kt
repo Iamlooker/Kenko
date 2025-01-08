@@ -20,9 +20,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import com.looker.kenko.R
+import com.looker.kenko.data.model.Exercise
+import com.looker.kenko.data.model.ExercisesPreviewParameter
 import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.data.model.Set
 import com.looker.kenko.data.model.SetType
@@ -95,10 +98,12 @@ private fun PerformedItem(
 
 @PreviewScreenSizes
 @Composable
-private fun SetItemPreview() {
+private fun SetItemPreview(
+    @PreviewParameter(ExercisesPreviewParameter::class, limit = 2) exercises: List<Exercise>
+) {
     KenkoTheme {
         SetItem(
-            Set(12, 40F, SetType.Drop, MuscleGroups.Chest.sampleExercises.first())
+            Set(12, 40F, SetType.Drop, exercises.first())
         ) {
             Text(text = "01")
         }

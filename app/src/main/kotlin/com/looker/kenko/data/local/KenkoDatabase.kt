@@ -33,19 +33,15 @@ abstract class KenkoDatabase : RoomDatabase() {
     abstract val exerciseDao: ExerciseDao
     abstract val planDao: PlanDao
     abstract val historyDao: PlanHistoryDao
-
-    companion object {
-        fun create(context: Context): KenkoDatabase {
-            return Room.databaseBuilder(
-                context = context,
-                klass = KenkoDatabase::class.java,
-                name = "kenko_database",
-            )
-                .createFromAsset("kenko.db")
-                .addMigrations(
-                    MIGRATION_1_2,
-                )
-                .build()
-        }
-    }
 }
+
+fun kenkoDatabase(context: Context) = Room.databaseBuilder(
+    context = context,
+    klass = KenkoDatabase::class.java,
+    name = "kenko_database",
+)
+    .createFromAsset("kenko.db")
+    .addMigrations(
+        MIGRATION_1_2,
+    )
+    .build()

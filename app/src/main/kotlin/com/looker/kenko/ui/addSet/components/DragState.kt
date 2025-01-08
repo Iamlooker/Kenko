@@ -20,6 +20,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectIndexed
 import kotlinx.coroutines.launch
 
+private const val OFFSET_DAMPING = 0.998F
+
 @Stable
 class DragState(
     val events: DragEvents,
@@ -47,7 +49,7 @@ class DragState(
         offset.animateTo(
             targetValue = 0F,
             animationSpec = spring(Spring.DampingRatioMediumBouncy),
-            initialVelocity = it
+            initialVelocity = it,
         )
     }
 
@@ -65,12 +67,8 @@ class DragState(
         }
         offset.updateBounds(
             constraints.containerBounds.start,
-            constraints.containerBounds.endInclusive
+            constraints.containerBounds.endInclusive,
         )
-    }
-
-    private companion object {
-        const val OFFSET_DAMPING = 0.998F
     }
 }
 

@@ -73,7 +73,7 @@ private fun Sessions(
                 },
                 title = {
                     Text(text = stringResource(id = R.string.label_session))
-                }
+                },
             )
         },
         floatingActionButton = {
@@ -94,9 +94,9 @@ private fun Sessions(
                     Icon(
                         modifier = Modifier.size(18.dp),
                         imageVector = KenkoIcons.ArrowOutward,
-                        contentDescription = null
+                        contentDescription = null,
                     )
-                }
+                },
             )
         },
         floatingActionButtonPosition = FabPosition.Center,
@@ -105,7 +105,7 @@ private fun Sessions(
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             contentPadding = padding + PaddingValues(bottom = 80.dp),
-            verticalArrangement = Arrangement.spacedBy(2.dp)
+            verticalArrangement = Arrangement.spacedBy(2.dp),
         ) {
             items(
                 items = state.sessions,
@@ -125,7 +125,7 @@ private fun Sessions(
                             IsTodayLabel()
                         }
                     },
-                    onClick = { onSessionClick(session.date) }
+                    onClick = { onSessionClick(session.date) },
                 )
             }
         }
@@ -143,7 +143,7 @@ private fun IsTodayLabel() {
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
             text = stringResource(R.string.label_today),
             style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.onSecondaryContainer
+            color = MaterialTheme.colorScheme.onSecondaryContainer,
         )
     }
 }
@@ -159,7 +159,7 @@ fun SessionCard(
         modifier = modifier,
         color = MaterialTheme.colorScheme.surfaceContainer,
         shape = MaterialTheme.shapes.large,
-        onClick = onClick
+        onClick = onClick,
     ) {
         Column(
             modifier = Modifier
@@ -175,7 +175,7 @@ fun SessionCard(
             Text(
                 text = session.formattedDate(),
                 style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.outline
+                color = MaterialTheme.colorScheme.outline,
             )
         }
     }
@@ -200,9 +200,12 @@ private fun TodayLabelPreview() {
 private fun SessionCardPreview() {
     KenkoTheme {
         SessionCard(
-            session = Session.SAMPLE,
+            session = Session(
+                LocalDate(2024, 4, 15),
+                sets = emptyList(),
+            ),
             isTodayLabel = { IsTodayLabel() },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
     }
 }
@@ -212,9 +215,9 @@ private fun SessionCardPreview() {
 private fun SessionsPreview() {
     KenkoTheme {
         Sessions(
-            state = SessionsUiData(listOf(Session.SAMPLE), false),
+            state = SessionsUiData(listOf(Session(LocalDate(2024, 4, 15), emptyList())), false),
             onBackPress = {},
-            onSessionClick = {}
+            onSessionClick = {},
         )
     }
 }

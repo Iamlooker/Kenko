@@ -6,6 +6,7 @@ import com.looker.kenko.data.local.dao.ExerciseDao
 import com.looker.kenko.data.local.dao.PlanDao
 import com.looker.kenko.data.local.dao.PlanHistoryDao
 import com.looker.kenko.data.local.dao.SessionDao
+import com.looker.kenko.data.local.kenkoDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,7 +22,7 @@ object DatabaseModule {
     @Singleton
     fun provideDatabase(
         @ApplicationContext context: Context,
-    ): KenkoDatabase = KenkoDatabase.create(context)
+    ): KenkoDatabase = kenkoDatabase(context)
 
     @Provides
     @Singleton

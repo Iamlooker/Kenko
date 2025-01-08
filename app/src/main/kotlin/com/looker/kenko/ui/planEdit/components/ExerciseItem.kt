@@ -25,11 +25,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.looker.kenko.R
 import com.looker.kenko.data.model.Exercise
-import com.looker.kenko.data.model.MuscleGroups
-import com.looker.kenko.data.model.sampleExercises
+import com.looker.kenko.data.model.ExercisesPreviewParameter
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 
@@ -56,13 +56,13 @@ fun ExerciseItem(
         ) {
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.SpaceAround
+                verticalArrangement = Arrangement.SpaceAround,
             ) {
                 Text(
                     text = exercise.name,
                     maxLines = 2,
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
                     text = stringResource(exercise.target.stringRes),
@@ -98,9 +98,11 @@ fun KenkoAddButton(onClick: () -> Unit) {
 
 @Preview(showBackground = true)
 @Composable
-private fun ExerciseItemPreview() {
+private fun ExerciseItemPreview(
+    @PreviewParameter(ExercisesPreviewParameter::class, limit = 2) exercises: List<Exercise>,
+) {
     KenkoTheme {
-        ExerciseItem(exercise = MuscleGroups.Chest.sampleExercises.first()) {
+        ExerciseItem(exercise = exercises.first()) {
             Text(text = "01")
         }
     }
