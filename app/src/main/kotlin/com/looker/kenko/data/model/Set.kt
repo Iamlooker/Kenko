@@ -1,7 +1,9 @@
 package com.looker.kenko.data.model
 
 import androidx.compose.runtime.Immutable
+import kotlinx.serialization.Serializable
 
+@Serializable
 @Immutable
 data class Set(
     val repsOrDuration: Int,

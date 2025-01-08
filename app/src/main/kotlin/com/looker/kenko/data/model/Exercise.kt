@@ -17,8 +17,12 @@ import com.looker.kenko.data.model.MuscleGroups.Shoulders
 import com.looker.kenko.data.model.MuscleGroups.Traps
 import com.looker.kenko.data.model.MuscleGroups.Triceps
 import com.looker.kenko.data.model.MuscleGroups.UpperBack
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 @Immutable
+@Serializable
+@SerialName("exercise")
 data class Exercise(
     val name: String,
     val target: MuscleGroups,
