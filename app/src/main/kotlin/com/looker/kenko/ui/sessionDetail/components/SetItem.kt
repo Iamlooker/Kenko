@@ -26,11 +26,9 @@ import androidx.compose.ui.unit.dp
 import com.looker.kenko.R
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.ExercisesPreviewParameter
-import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.data.model.Set
 import com.looker.kenko.data.model.SetType
 import com.looker.kenko.data.model.repDurationStringRes
-import com.looker.kenko.data.model.sampleExercises
 import com.looker.kenko.ui.theme.KenkoTheme
 import com.looker.kenko.ui.theme.numbers
 
@@ -46,11 +44,11 @@ fun SetItem(
             .widthIn(240.dp, 420.dp)
             .background(MaterialTheme.colorScheme.surface)
             .then(modifier),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         CompositionLocalProvider(
             LocalContentColor provides MaterialTheme.colorScheme.outline,
-            LocalTextStyle provides MaterialTheme.typography.displayMedium.numbers()
+            LocalTextStyle provides MaterialTheme.typography.displayMedium.numbers(),
         ) {
             Box(modifier = Modifier.padding(horizontal = 16.dp)) {
                 title()
@@ -63,15 +61,15 @@ fun SetItem(
                 .clip(MaterialTheme.shapes.large)
                 .background(MaterialTheme.colorScheme.surfaceContainerHigh)
                 .padding(vertical = 16.dp, horizontal = 24.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             PerformedItem(
                 title = stringResource(set.exercise.repDurationStringRes),
-                performance = "${set.repsOrDuration}"
+                performance = "${set.repsOrDuration}",
             )
             PerformedItem(
                 title = stringResource(R.string.label_weight),
-                performance = "${set.weight} KG"
+                performance = "${set.weight} KG",
             )
         }
     }
@@ -87,11 +85,11 @@ private fun PerformedItem(
         Text(
             text = title,
             style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.outline
+            color = MaterialTheme.colorScheme.outline,
         )
         Text(
             text = performance,
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.titleMedium,
         )
     }
 }
@@ -99,11 +97,11 @@ private fun PerformedItem(
 @PreviewScreenSizes
 @Composable
 private fun SetItemPreview(
-    @PreviewParameter(ExercisesPreviewParameter::class, limit = 2) exercises: List<Exercise>
+    @PreviewParameter(ExercisesPreviewParameter::class, limit = 2) exercises: List<Exercise>,
 ) {
     KenkoTheme {
         SetItem(
-            Set(12, 40F, SetType.Drop, exercises.first())
+            Set(12, 40F, SetType.Drop, exercises.first()),
         ) {
             Text(text = "01")
         }

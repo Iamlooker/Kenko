@@ -84,8 +84,8 @@ class SessionDetailViewModel @Inject constructor(
                     session = currentSession,
                     sets = setsExerciseMap,
                     isToday = currentSession.date.isToday,
-                    hasPreviousSession = previousSession
-                )
+                    hasPreviousSession = previousSession,
+                ),
             )
         }.onStart { emit(SessionDetailState.Loading) }
             .asStateFlow(SessionDetailState.Loading)
@@ -113,7 +113,7 @@ class SessionDetailViewModel @Inject constructor(
             try {
                 uriHandler.openUri(reference)
             } catch (e: IllegalStateException) {
-                // do nothing
+                e.printStackTrace()
             }
         }
     }
