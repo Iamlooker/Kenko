@@ -1,7 +1,9 @@
 package com.looker.kenko.ui.theme
 
+import android.app.Activity
 import android.content.Context
 import android.os.Build
+import android.view.View
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -9,8 +11,8 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
 import com.looker.kenko.R
 import com.looker.kenko.data.model.settings.Theme
 import com.looker.kenko.ui.theme.colorSchemes.ColorSchemes
@@ -36,26 +38,23 @@ fun KenkoTheme(
         colorSchemes.light
     }
 
-    SetupInsets(isDarkTheme = isDarkTheme)
+    val localView = LocalView.current
+    SideEffect { setupSystemBar(localView, isDarkTheme) }
 
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
         shapes = Shapes,
-        content = content
+        content = content,
     )
 }
 
-@Composable
-private fun SetupInsets(
-    isDarkTheme: Boolean,
-    insetColor: Color = Color.Transparent,
-) {
-    val controller = rememberSystemUiController()
-    SideEffect {
-        controller?.colors(insetColor.toArgb())
-        controller?.isLightSystemBar(!isDarkTheme)
-    }
+fun setupSystemBar(view: View, isDarkTheme: Boolean) {
+    if (view.isInEditMode) return
+    val window = (view.context as Activity).window
+    val controller = WindowCompat.getInsetsController(window, view)
+    controller.isAppearanceLightStatusBars = !isDarkTheme
+    controller.isAppearanceLightNavigationBars = !isDarkTheme
 }
 
 fun dynamicColorSchemes(context: Context): ColorSchemes? =
@@ -63,7 +62,7 @@ fun dynamicColorSchemes(context: Context): ColorSchemes? =
         ColorSchemes(
             light = dynamicLightColorScheme(context),
             dark = dynamicDarkColorScheme(context),
-            nameRes = R.string.label_color_scheme_dynamic
+            nameRes = R.string.label_color_scheme_dynamic,
         )
     } else {
         null
