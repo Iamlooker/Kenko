@@ -20,7 +20,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DayOfWeek
@@ -40,6 +39,8 @@ class PlanEditViewModel @Inject constructor(
     // if null show name edit else plan edit
     private val _planId = MutableStateFlow(planId)
 
+    private val _planItemsStream get() = repo.planItems(planId!!)
+
     val planNameState: TextFieldState = TextFieldState("")
 
     val snackbarState = SnackbarHostState()
@@ -57,16 +58,16 @@ class PlanEditViewModel @Inject constructor(
     }.asStateFlow(PlanEditStage.NameEdit)
 
     val state: StateFlow<PlanEditState> = combine(
-        _planId.filterNotNull(),
+        _planItemsStream,
         _dayOfWeek,
         _fullDaySelection,
         _isSheetVisible,
-    ) { id, day, daySelection, sheetVisible ->
+    ) { items, day, daySelection, sheetVisible ->
         PlanEditState(
             currentDay = day,
             selectionMode = daySelection,
             exerciseSheetVisible = sheetVisible,
-            exercises = repo.getPlanItems(id, day).map(PlanItem::exercise),
+            exercises = items.filter { it.dayOfWeek == day }.map(PlanItem::exercise),
         )
     }.asStateFlow(
         PlanEditState(
