@@ -16,6 +16,7 @@ import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.data.repository.ExerciseRepo
 import com.looker.kenko.ui.addEditExercise.navigation.AddEditExerciseRoute
 import com.looker.kenko.utils.asStateFlow
+import com.looker.kenko.utils.isValidUrl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -24,7 +25,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
-import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import javax.inject.Inject
 
 @HiltViewModel
@@ -57,7 +57,7 @@ class AddEditExerciseViewModel @Inject constructor(
 
     private val isReferenceInvalid: Flow<Boolean> =
         snapshotFlow { reference }
-            .mapLatest { it.toHttpUrlOrNull() == null && it.isNotBlank() }
+            .mapLatest { it.isValidUrl() && it.isNotBlank() }
 
     private val exerciseAlreadyExistError: Flow<Boolean> =
         snapshotFlow { exerciseName }
@@ -84,7 +84,7 @@ class AddEditExerciseViewModel @Inject constructor(
             isError = false,
             isReadOnly = false,
             isReferenceInvalid = false,
-        )
+        ),
     )
 
     fun setName(value: String) {
@@ -124,7 +124,7 @@ class AddEditExerciseViewModel @Inject constructor(
                     reference = reference.ifBlank { null },
                     isIsometric = isIsometric.value,
                     id = exerciseId,
-                )
+                ),
             )
             onDone()
         }
