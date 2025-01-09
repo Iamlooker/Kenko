@@ -28,6 +28,7 @@ interface PlanDao {
         FROM plan_history
         WHERE `end` IS NULL
         AND start IS NOT NULL)
+        ORDER BY id ASC
         """,
     )
     fun currentPlanItemsFlow(): Flow<List<PlanDayEntity>>
@@ -42,6 +43,7 @@ interface PlanDao {
         WHERE `end` IS NULL
         AND start IS NOT NULL)
         AND dayOfWeek = :day
+        ORDER BY id ASC
         """,
     )
     fun currentPlanItemsByDayFlow(day: Int): Flow<List<PlanDayEntity>>
@@ -70,6 +72,7 @@ interface PlanDao {
         SELECT *
         FROM plan_day
         WHERE planId = :planId
+        ORDER BY id ASC
         """,
     )
     fun planItemsByPlanIdFlow(planId: Int): Flow<List<PlanDayEntity>>
@@ -79,6 +82,7 @@ interface PlanDao {
         SELECT *
         FROM plan_day
         WHERE planId = :planId
+        ORDER BY id ASC
         """,
     )
     suspend fun getPlanItemsByPlanId(planId: Int): List<PlanDayEntity>
@@ -90,6 +94,7 @@ interface PlanDao {
         INNER JOIN plan_day
         ON exercises.id = plan_day.exerciseId
         WHERE plan_day.planId = :planId
+        ORDER BY plan_day.id ASC
         """,
     )
     fun exerciseByPlanIdFlow(planId: Int): Flow<List<ExerciseEntity>>
@@ -101,6 +106,7 @@ interface PlanDao {
         INNER JOIN plan_day
         ON exercises.id = plan_day.exerciseId
         WHERE plan_day.planId = :planId
+        ORDER BY plan_day.id ASC
         """,
     )
     suspend fun getExerciseByPlanId(planId: Int): List<ExerciseEntity>
@@ -111,6 +117,7 @@ interface PlanDao {
         FROM plan_day
         WHERE planId = :planId
         AND dayOfWeek = :day
+        ORDER BY id ASC
         """,
     )
     fun planItemsByPlanIdAndDayFlow(planId: Int, day: Int): Flow<List<PlanDayEntity>>
@@ -121,6 +128,7 @@ interface PlanDao {
         FROM plan_day
         WHERE planId = :planId
         AND dayOfWeek = :day
+        ORDER BY id ASC
         """,
     )
     suspend fun getPlanItemsByPlanIdAndDay(planId: Int, day: Int): List<PlanDayEntity>
