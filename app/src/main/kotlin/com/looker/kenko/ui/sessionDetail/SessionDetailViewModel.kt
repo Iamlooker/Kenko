@@ -62,8 +62,12 @@ class SessionDetailViewModel @Inject constructor(
         if (sessionDate.isToday) {
             planRepo.activeExercises(sessionDate.dayOfWeek)
         } else if (session != null) {
-            planRepo.planItems(session.planId, sessionDate.dayOfWeek)
-                .map { it.map(PlanItem::exercise) }
+            if (session.planId != null) {
+                planRepo.planItems(session.planId, sessionDate.dayOfWeek)
+                    .map { it.map(PlanItem::exercise) }
+            } else {
+                flowOf(session.sets.map { it.exercise })
+            }
         } else {
             flowOf(emptyList())
         }

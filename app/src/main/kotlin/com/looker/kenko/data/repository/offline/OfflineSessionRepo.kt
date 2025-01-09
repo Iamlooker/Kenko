@@ -67,6 +67,9 @@ class OfflineSessionRepo @Inject constructor(
             }
     }
 
+    override suspend fun getSets(sessionId: Int): List<Set> =
+        dao.getSets(sessionId).toExternal()
+
     private suspend fun List<SetEntity>.toExternal(): List<Set> = mapNotNull {
         val exercise = exerciseDao.get(it.exerciseId) ?: return@mapNotNull null
         it.toExternal(exercise.toExternal())

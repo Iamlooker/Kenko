@@ -50,7 +50,7 @@ fun Session.sets(): List<SetEntity> = sets.map { it.toEntity(id!!, sets.indexOf(
 fun SessionEntity.toExternal(
     setsMap: List<Set>
 ): Session = Session(
-    planId = data.id,
+    planId = data.planId,
     date = data.date,
     sets = setsMap,
     id = data.id,
