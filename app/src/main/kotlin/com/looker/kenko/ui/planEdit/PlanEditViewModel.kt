@@ -17,9 +17,11 @@ import com.looker.kenko.data.repository.PlanRepo
 import com.looker.kenko.ui.planEdit.navigation.PlanEditRoute
 import com.looker.kenko.utils.asStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DayOfWeek
@@ -44,6 +46,9 @@ class PlanEditViewModel @Inject constructor(
     val snackbarState = SnackbarHostState()
 
     private val _isBackAlreadyPressedOnce = MutableStateFlow(false)
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val _planItemsStream = planIdStream.flatMapLatest { repo.planItems(it) }
 
     private val _dayOfWeek: MutableStateFlow<DayOfWeek> = MutableStateFlow(localDate.dayOfWeek)
 
@@ -84,7 +89,7 @@ class PlanEditViewModel @Inject constructor(
         viewModelScope.launch {
             if (planNameState.text.isNotBlank()) {
                 val createId = repo.createPlan(planNameState.text.toString())
-                _planId.emit(createId)
+                planIdStream.emit(createId)
             } else {
                 snackbarState.showSnackbar(stringHandler.getString(R.string.error_plan_name_empty))
             }
