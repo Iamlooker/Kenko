@@ -2,6 +2,7 @@ package com.looker.kenko.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Upsert
 import com.looker.kenko.data.local.model.ExerciseEntity
 import com.looker.kenko.data.local.model.PlanDayEntity
@@ -19,6 +20,7 @@ interface PlanDao {
     )
     fun plansFlow(): Flow<List<PlanEntity>>
 
+    @Transaction
     @Query(
         """
         SELECT *
@@ -33,6 +35,7 @@ interface PlanDao {
     )
     fun currentPlanItemsFlow(): Flow<List<PlanDayEntity>>
 
+    @Transaction
     @Query(
         """
         SELECT *
@@ -87,6 +90,7 @@ interface PlanDao {
     )
     suspend fun getPlanItemsByPlanId(planId: Int): List<PlanDayEntity>
 
+    @Transaction
     @Query(
         """
         SELECT exercises.*
@@ -99,6 +103,7 @@ interface PlanDao {
     )
     fun exerciseByPlanIdFlow(planId: Int): Flow<List<ExerciseEntity>>
 
+    @Transaction
     @Query(
         """
         SELECT exercises.*
@@ -154,6 +159,7 @@ interface PlanDao {
     @Upsert
     suspend fun upsertPlan(plan: PlanEntity): Long
 
+    @Transaction
     @Query("DELETE FROM plans WHERE id = :planId")
     suspend fun deletePlan(planId: Int)
 

@@ -14,6 +14,7 @@ import kotlinx.datetime.LocalDate
             entity = PlanEntity::class,
             parentColumns = ["id"],
             childColumns = ["planId"],
+            onDelete = ForeignKey.Companion.SET_NULL
         )
     ],
     indices = [
@@ -21,7 +22,7 @@ import kotlinx.datetime.LocalDate
     ]
 )
 data class PlanHistoryEntity(
-    val planId: Int,
+    val planId: Int?,
     val start: LocalDate,
     @ColumnInfo(defaultValue = "NULL")
     val end: LocalDate? = null,

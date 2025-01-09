@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "3a989a654abcaabe914acf3f121a96dc",
+    "identityHash": "3d571a117811b2e79087ba0cd4559c12",
     "entities": [
       {
         "tableName": "sessions",
@@ -130,13 +130,13 @@
       },
       {
         "tableName": "plan_history",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`planId` INTEGER NOT NULL, `start` INTEGER NOT NULL, `end` INTEGER DEFAULT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, FOREIGN KEY(`planId`) REFERENCES `plans`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`planId` INTEGER, `start` INTEGER NOT NULL, `end` INTEGER DEFAULT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, FOREIGN KEY(`planId`) REFERENCES `plans`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
         "fields": [
           {
             "fieldPath": "planId",
             "columnName": "planId",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "start",
@@ -180,7 +180,7 @@
         "foreignKeys": [
           {
             "table": "plans",
-            "onDelete": "NO ACTION",
+            "onDelete": "SET NULL",
             "onUpdate": "NO ACTION",
             "columns": [
               "planId"
@@ -357,7 +357,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3a989a654abcaabe914acf3f121a96dc')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3d571a117811b2e79087ba0cd4559c12')"
     ]
   }
 }

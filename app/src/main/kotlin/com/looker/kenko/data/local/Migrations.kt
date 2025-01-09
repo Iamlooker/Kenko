@@ -41,7 +41,7 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
         execSQL(
             """
             CREATE TABLE plan_history (
-            `planId` INTEGER NOT NULL CONSTRAINT `fk_sessions_plans_id` REFERENCES `plans` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION,
+            `planId` INTEGER CONSTRAINT `fk_sessions_plans_id` REFERENCES `plans` (`id`) ON UPDATE NO ACTION ON DELETE SET NULL
             `start` INTEGER NOT NULL,
             `end` INTEGER DEFAULT NULL,
             `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT)
