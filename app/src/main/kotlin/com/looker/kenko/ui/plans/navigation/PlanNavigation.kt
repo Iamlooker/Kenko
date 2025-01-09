@@ -16,7 +16,7 @@ fun NavController.navigateToPlans(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.plans(
-    onPlanClick: (Int?) -> Unit,
+    onPlanClick: (Int) -> Unit,
     onBackPress: () -> Unit,
 ) {
     composable<PlanRoute> {

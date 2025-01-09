@@ -33,7 +33,7 @@ import com.looker.kenko.ui.theme.KenkoTheme
 fun Plan(
     viewModel: PlanViewModel,
     onBackPress: () -> Unit,
-    onPlanClick: (Int?) -> Unit,
+    onPlanClick: (Int) -> Unit,
 ) {
     val plans: List<Plan> by viewModel.plans.collectAsStateWithLifecycle()
 
@@ -53,7 +53,7 @@ private fun Plan(
     onBackPress: () -> Unit,
     onSelectPlan: (Plan) -> Unit,
     onRemove: (Int) -> Unit,
-    onPlanClick: (Int?) -> Unit,
+    onPlanClick: (Int) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -68,7 +68,7 @@ private fun Plan(
         },
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
-            KenkoAddButton(onClick = { onPlanClick(null) })
+            KenkoAddButton(onClick = { onPlanClick(-1) })
         },
         containerColor = MaterialTheme.colorScheme.surface,
     ) {

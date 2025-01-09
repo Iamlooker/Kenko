@@ -34,12 +34,10 @@ class PlanEditViewModel @Inject constructor(
 
     private val routeData: PlanEditRoute = savedStateHandle.toRoute<PlanEditRoute>()
 
-    private val planId: Int? = routeData.id.takeIf { it != -1 }
+    private val _planId: Int = routeData.id
 
     // if null show name edit else plan edit
-    private val _planId = MutableStateFlow(planId)
-
-    private val _planItemsStream get() = repo.planItems(planId!!)
+    private val planIdStream = MutableStateFlow(_planId)
 
     val planNameState: TextFieldState = TextFieldState("")
 
@@ -53,8 +51,8 @@ class PlanEditViewModel @Inject constructor(
 
     private val _fullDaySelection: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
-    val pageState: StateFlow<PlanEditStage> = _planId.map { id ->
-        if (id == null) PlanEditStage.NameEdit else PlanEditStage.PlanEdit
+    val pageState: StateFlow<PlanEditStage> = planIdStream.map { id ->
+        if (id == -1) PlanEditStage.NameEdit else PlanEditStage.PlanEdit
     }.asStateFlow(PlanEditStage.NameEdit)
 
     val state: StateFlow<PlanEditState> = combine(
@@ -122,15 +120,13 @@ class PlanEditViewModel @Inject constructor(
 
     fun addExercise(exercise: Exercise) {
         viewModelScope.launch {
-            _planId.value?.let { id ->
-                repo.addItem(
-                    PlanItem(
-                        dayOfWeek = _dayOfWeek.value,
-                        exercise = exercise,
-                        planId = id,
-                    ),
-                )
-            }
+            repo.addItem(
+                PlanItem(
+                    dayOfWeek = _dayOfWeek.value,
+                    exercise = exercise,
+                    planId = planIdStream.value,
+                ),
+            )
         }
     }
 
@@ -147,11 +143,11 @@ class PlanEditViewModel @Inject constructor(
                 return@launch
             }
             if (_isBackAlreadyPressedOnce.value) {
-                repo.deletePlan(_planId.value!!)
+                repo.deletePlan(planIdStream.value)
                 onBackPress()
                 return@launch
             }
-            if (repo.getPlanItems(_planId.value!!).isEmpty()) {
+            if (repo.getPlanItems(planIdStream.value).isEmpty()) {
                 _isBackAlreadyPressedOnce.emit(true)
                 snackbarState.showSnackbar(stringHandler.getString(R.string.error_plan_empty_prompt))
                 return@launch

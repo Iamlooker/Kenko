@@ -13,8 +13,8 @@ data class PlanEditRoute(
     val id: Int,
 )
 
-fun NavController.navigateToPlanEdit(id: Int? = null, navOptions: NavOptions? = null) {
-    navigate(PlanEditRoute(id ?: -1), navOptions)
+fun NavController.navigateToPlanEdit(id: Int = -1, navOptions: NavOptions? = null) {
+    navigate(PlanEditRoute(id), navOptions)
 }
 
 fun NavGraphBuilder.planEdit(
