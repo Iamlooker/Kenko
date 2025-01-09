@@ -9,17 +9,23 @@ import com.looker.kenko.data.local.KenkoDatabase
 import com.looker.kenko.data.local.MIGRATION_1_2
 import com.looker.kenko.data.local.model.ExerciseEntity
 import com.looker.kenko.data.model.MuscleGroups
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.LocalDate
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import javax.inject.Inject
 import kotlin.test.assertContains
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
+@HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
 class RoomDatabaseTesting {
 
@@ -30,6 +36,17 @@ class RoomDatabaseTesting {
         InstrumentationRegistry.getInstrumentation(),
         KenkoDatabase::class.java,
     )
+
+    @get:Rule
+    val hiltRule = HiltAndroidRule(this)
+
+    @Inject
+    lateinit var database: KenkoDatabase
+
+    @Before
+    fun setup() {
+        hiltRule.inject()
+    }
 
     @Test
     fun schemaMigration1To2() = runTest {
@@ -49,6 +66,7 @@ class RoomDatabaseTesting {
         ).addMigrations(MIGRATION_1_2).build()
         val exercises = updatedDb.exerciseDao.stream().first()
         val planHistory = updatedDb.historyDao.getCurrent()
+        assertNotNull(planHistory)
         val fullHistory = updatedDb.historyDao.getAll()
         val session = updatedDb.sessionDao.getSession(LocalDate.fromEpochDays(412))
         val emptySession = updatedDb.sessionDao.getSession(LocalDate.fromEpochDays(413))
@@ -65,6 +83,15 @@ class RoomDatabaseTesting {
         println("Current plan id: ${planHistory.planId}")
         println("Full history: $fullHistory")
         println("Current Plan: $currentPlan")
+    }
+
+    @Test
+    fun prepopulatedData() = runTest {
+        val plans = database.planDao.plansFlow().first()
+        assertTrue(plans.isNotEmpty())
+        assertTrue(database.exerciseDao.stream().first().isNotEmpty())
+        val plan = plans.first()
+        assertTrue(database.planDao.getPlanItemsByPlanId(plan.id).isNotEmpty())
     }
 
     private fun SupportSQLiteDatabase.addV1Data() = use { db ->

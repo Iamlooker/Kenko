@@ -4,7 +4,8 @@ agp = "8.7.3"
 coil = "2.7.0"
 composeBom = "2024.12.01"
 core = "1.15.0"
-core-test = "1.6.2"
+core-test = "1.6.1"
+test-runner = "1.6.2"
 coroutines = "1.10.1"
 datastore = "1.1.1"
 dateTime = "0.6.1"
@@ -41,7 +42,7 @@ androidx-room-runtime = { group = "androidx.room", name = "room-runtime", versio
 androidx-room-test = { group = "androidx.room", name = "room-testing", version.ref = "room" }
 androidx-test-core = { group = "androidx.test", name = "core", version.ref = "core-test" }
 androidx-test-core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "core-test" }
-androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "core-test" }
+androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "test-runner" }
 androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "core-test" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
