@@ -98,18 +98,15 @@ dependencies {
     implementation(platform(libs.compose.bom))
 
     implementation(libs.bundles.lifecycle)
-    implementation(libs.androidx.navigation.compose)
-
     implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.graphics.shapes)
+    implementation(libs.androidx.navigation.compose)
 
     implementation(libs.kotlinx.datetime)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.bundles.coroutines)
+
     implementation(libs.bundles.compose)
     debugImplementation(libs.bundles.compose.debug)
-
-    implementation(libs.bundles.coil)
 
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)

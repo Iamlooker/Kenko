@@ -19,7 +19,7 @@ lifecycle = "2.8.7"
 navigation = "2.8.5"
 rebugger = "1.0.0-rc03"
 room = "2.6.1"
-serialization = "1.7.2"
+serialization = "1.8.0"
 shapes = "1.0.1"
 
 [libraries]
