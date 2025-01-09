@@ -201,7 +201,8 @@ private fun SessionCardPreview() {
     KenkoTheme {
         SessionCard(
             session = Session(
-                LocalDate(2024, 4, 15),
+                planId = 1,
+                date = LocalDate(2024, 4, 15),
                 sets = emptyList(),
             ),
             isTodayLabel = { IsTodayLabel() },
@@ -215,7 +216,7 @@ private fun SessionCardPreview() {
 private fun SessionsPreview() {
     KenkoTheme {
         Sessions(
-            state = SessionsUiData(listOf(Session(LocalDate(2024, 4, 15), emptyList())), false),
+            state = SessionsUiData(listOf(Session(1, emptyList())), false),
             onBackPress = {},
             onSessionClick = {},
         )

@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.looker.kenko.R
 import com.looker.kenko.data.model.Exercise
+import com.looker.kenko.data.model.PlanItem
 import com.looker.kenko.data.model.Session
 import com.looker.kenko.data.model.Set
 import com.looker.kenko.data.model.localDate
@@ -19,10 +20,13 @@ import com.looker.kenko.ui.sessionDetail.navigation.SessionDetailRoute
 import com.looker.kenko.utils.asStateFlow
 import com.looker.kenko.utils.isToday
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -33,7 +37,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SessionDetailViewModel @Inject constructor(
     private val repo: SessionRepo,
-    planRepo: PlanRepo,
+    private val planRepo: PlanRepo,
     savedStateHandle: SavedStateHandle,
     private val uriHandler: UriHandler,
 ) : ViewModel() {
@@ -53,8 +57,17 @@ class SessionDetailViewModel @Inject constructor(
 
     private val sessionStream: Flow<Session?> = repo.getStream(sessionDate)
 
-    private val exercisesStream: Flow<List<Exercise>?> =
-        planRepo.activeExercises(sessionDate.dayOfWeek)
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val exercisesToday: Flow<List<Exercise>> = sessionStream.flatMapLatest { session ->
+        if (sessionDate.isToday) {
+            planRepo.activeExercises(sessionDate.dayOfWeek)
+        } else if (session != null) {
+            planRepo.planItems(session.planId, sessionDate.dayOfWeek)
+                .map { it.map(PlanItem::exercise) }
+        } else {
+            flowOf(emptyList())
+        }
+    }
 
     private val _currentExercise: MutableStateFlow<Exercise?> = MutableStateFlow(null)
     val current: StateFlow<Exercise?> = _currentExercise
@@ -62,27 +75,28 @@ class SessionDetailViewModel @Inject constructor(
     val state: StateFlow<SessionDetailState> =
         combine(
             sessionStream,
-            exercisesStream,
+            exercisesToday,
             previousSessionExists,
         ) { session, exercises, previousSession ->
             if (session == null && epochDays != null) {
                 return@combine SessionDetailState.Error.InvalidSession
             }
 
-            val currentSession = session ?: Session(emptyList())
-
-            if (exercises == null && session == null) {
+            if (exercises.isEmpty() && sessionDate.isToday) {
                 return@combine SessionDetailState.Error.EmptyPlan
             }
 
-            val setsExerciseMap = exercises?.associateWith { exercise ->
-                currentSession.sets.filter { exercise == it.exercise }
-            } ?: currentSession.sets.groupBy { it.exercise }
+            val currentSession = session ?: Session(-1, emptyList())
+
+            val exerciseMap = exercises
+                .associateWith { exercise ->
+                    currentSession.sets.filter { it.exercise.id == exercise.id }
+                }
 
             SessionDetailState.Success(
                 SessionUiData(
-                    session = currentSession,
-                    sets = setsExerciseMap,
+                    date = currentSession.date,
+                    sets = exerciseMap,
                     isToday = currentSession.date.isToday,
                     hasPreviousSession = previousSession,
                 ),
@@ -121,8 +135,8 @@ class SessionDetailViewModel @Inject constructor(
 
 @Stable
 data class SessionUiData(
-    val session: Session,
-    val sets: Map<Exercise, List<Set>>?,
+    val date: LocalDate,
+    val sets: Map<Exercise, List<Set>>,
     val isToday: Boolean = false,
     val hasPreviousSession: Boolean = false,
 )

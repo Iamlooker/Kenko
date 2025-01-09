@@ -27,19 +27,19 @@ data class SessionEntity(
             entity = PlanEntity::class,
             parentColumns = ["id"],
             childColumns = ["planId"],
-            onDelete = ForeignKey.CASCADE,
+            onDelete = ForeignKey.SET_NULL,
         ),
     ],
 )
 data class SessionDataEntity(
     val date: LocalDate,
     @ColumnInfo(index = true)
-    val planId: Int,
+    val planId: Int?,
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
 )
 
-fun Session.data(planId: Int): SessionDataEntity = SessionDataEntity(
+fun Session.data(): SessionDataEntity = SessionDataEntity(
     date = date,
     planId = planId,
     id = id ?: 0,
@@ -50,6 +50,7 @@ fun Session.sets(): List<SetEntity> = sets.map { it.toEntity(id!!, sets.indexOf(
 fun SessionEntity.toExternal(
     setsMap: List<Set>
 ): Session = Session(
+    planId = data.id,
     date = data.date,
     sets = setsMap,
     id = data.id,

@@ -7,6 +7,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.looker.kenko.data.local.KenkoDatabase
 import com.looker.kenko.data.local.MIGRATION_1_2
+import com.looker.kenko.data.local.dao.ExerciseDao
+import com.looker.kenko.data.local.dao.PlanDao
 import com.looker.kenko.data.local.model.ExerciseEntity
 import com.looker.kenko.data.model.MuscleGroups
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -41,7 +43,10 @@ class RoomDatabaseTesting {
     val hiltRule = HiltAndroidRule(this)
 
     @Inject
-    lateinit var database: KenkoDatabase
+    lateinit var exerciseDao: ExerciseDao
+
+    @Inject
+    lateinit var planDao: PlanDao
 
     @Before
     fun setup() {
@@ -67,17 +72,29 @@ class RoomDatabaseTesting {
         val exercises = updatedDb.exerciseDao.stream().first()
         val planHistory = updatedDb.historyDao.getCurrent()
         assertNotNull(planHistory)
+        assertNotNull(planHistory.planId)
         val fullHistory = updatedDb.historyDao.getAll()
         val session = updatedDb.sessionDao.getSession(LocalDate.fromEpochDays(412))
         val emptySession = updatedDb.sessionDao.getSession(LocalDate.fromEpochDays(413))
         val currentPlan = updatedDb.planDao.getPlanById(planHistory.planId)
+        val currentPlanItems = updatedDb.planDao.getPlanItemsByPlanId(planHistory.planId)
         assertNotNull(session)
         assertNotNull(emptySession)
         assertNotNull(currentPlan)
         assertEquals(session.sets.size, 6)
+        assertContentEquals(
+            session.sets.map {
+                updatedDb.exerciseDao.get(it.exerciseId)?.name ?: ""
+            },
+            listOf("Pullups", "Rows", "Press", "Shrugs", "Curls", "Plank"),
+        )
         assertEquals(emptySession.sets.size, 0)
         assertEquals(exercises.size, 6)
-        assertContains(exercises, ExerciseEntity("Pullups", MuscleGroups.Lats, isIsometric = false, id = 1))
+        assertTrue(currentPlanItems.all { it.exerciseId != 0 })
+        assertContains(
+            exercises,
+            ExerciseEntity("Pullups", MuscleGroups.Lats, isIsometric = false, id = 1),
+        )
         assertEquals(planHistory.planId, 1)
         assertEquals(fullHistory.size, 1)
         println("Current plan id: ${planHistory.planId}")
@@ -87,11 +104,11 @@ class RoomDatabaseTesting {
 
     @Test
     fun prepopulatedData() = runTest {
-        val plans = database.planDao.plansFlow().first()
+        val plans = planDao.plansFlow().first()
         assertTrue(plans.isNotEmpty())
-        assertTrue(database.exerciseDao.stream().first().isNotEmpty())
+        assertTrue(exerciseDao.stream().first().isNotEmpty())
         val plan = plans.first()
-        assertTrue(database.planDao.getPlanItemsByPlanId(plan.id).isNotEmpty())
+        assertTrue(planDao.getPlanItemsByPlanId(plan.id).isNotEmpty())
     }
 
     private fun SupportSQLiteDatabase.addV1Data() = use { db ->
@@ -109,8 +126,10 @@ class RoomDatabaseTesting {
         db.execSQL("""INSERT INTO Exercise (name, target, isIsometric) VALUES('Shrugs', 'Traps', 0)""")
         db.execSQL("""INSERT INTO Exercise (name, target, isIsometric) VALUES('Curls', 'Biceps', 0)""")
         db.execSQL("""INSERT INTO Exercise (name, target, isIsometric) VALUES('Plank', 'Core', 1)""")
-        val plan = "{\"MONDAY\":[{\"name\":\"Pullups\",\"target\":\"Lats\",\"reference\":null,\"isIsometric\":false}],\"TUESDAY\":[{\"name\":\"Rows\",\"target\":\"UpperBack\",\"reference\":null,\"isIsometric\":false}],\"WEDNESDAY\":[{\"name\":\"Press\",\"target\":\"Chest\",\"reference\":null,\"isIsometric\":false}],\"THURSDAY\":[{\"name\":\"Shrugs\",\"target\":\"Traps\",\"reference\":null,\"isIsometric\":false}],\"FRIDAY\":[{\"name\":\"Curls\",\"target\":\"Biceps\",\"reference\":null,\"isIsometric\":false}],\"SUNDAY\":[{\"name\":\"Plank\",\"target\":\"Core\",\"reference\":null,\"isIsometric\":true}]}"
-        val inactivePlan = "{\"MONDAY\":[{\"name\":\"Pullups\",\"target\":\"Lats\",\"reference\":null,\"isIsometric\":false}],\"TUESDAY\":[{\"name\":\"Rows\",\"target\":\"UpperBack\",\"reference\":null,\"isIsometric\":false}],\"WEDNESDAY\":[{\"name\":\"Press\",\"target\":\"Chest\",\"reference\":null,\"isIsometric\":false}],\"THURSDAY\":[{\"name\":\"Shrugs\",\"target\":\"Traps\",\"reference\":null,\"isIsometric\":false}],\"FRIDAY\":[{\"name\":\"Curls\",\"target\":\"Biceps\",\"reference\":null,\"isIsometric\":false}],\"SUNDAY\":[{\"name\":\"Plank\",\"target\":\"Core\",\"reference\":null,\"isIsometric\":true}]}"
+        val plan =
+            "{\"MONDAY\":[{\"name\":\"Pullups\",\"target\":\"Lats\",\"reference\":null,\"isIsometric\":false}],\"TUESDAY\":[{\"name\":\"Rows\",\"target\":\"UpperBack\",\"reference\":null,\"isIsometric\":false}],\"WEDNESDAY\":[{\"name\":\"Press\",\"target\":\"Chest\",\"reference\":null,\"isIsometric\":false}],\"THURSDAY\":[{\"name\":\"Shrugs\",\"target\":\"Traps\",\"reference\":null,\"isIsometric\":false}],\"FRIDAY\":[{\"name\":\"Curls\",\"target\":\"Biceps\",\"reference\":null,\"isIsometric\":false}],\"SUNDAY\":[{\"name\":\"Plank\",\"target\":\"Core\",\"reference\":null,\"isIsometric\":true}]}"
+        val inactivePlan =
+            "{\"MONDAY\":[{\"name\":\"Pullups\",\"target\":\"Lats\",\"reference\":null,\"isIsometric\":false}],\"TUESDAY\":[{\"name\":\"Rows\",\"target\":\"UpperBack\",\"reference\":null,\"isIsometric\":false}],\"WEDNESDAY\":[{\"name\":\"Press\",\"target\":\"Chest\",\"reference\":null,\"isIsometric\":false}],\"THURSDAY\":[{\"name\":\"Shrugs\",\"target\":\"Traps\",\"reference\":null,\"isIsometric\":false}],\"FRIDAY\":[{\"name\":\"Curls\",\"target\":\"Biceps\",\"reference\":null,\"isIsometric\":false}],\"SUNDAY\":[{\"name\":\"Plank\",\"target\":\"Core\",\"reference\":null,\"isIsometric\":true}]}"
         db.execSQL("""INSERT INTO plan_table (name, exercisesPerDay, isActive) VALUES ('PPL', '$plan', 1)""")
         db.execSQL("""INSERT INTO plan_table (name, exercisesPerDay, isActive) VALUES ('SAME', '$inactivePlan', 0)""")
         db.execSQL("""INSERT INTO Session (date, sets) VALUES (412, '[$setJson]')""")

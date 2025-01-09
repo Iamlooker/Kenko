@@ -41,7 +41,7 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
         execSQL(
             """
             CREATE TABLE plan_history (
-            `planId` INTEGER CONSTRAINT `fk_sessions_plans_id` REFERENCES `plans` (`id`) ON UPDATE NO ACTION ON DELETE SET NULL
+            `planId` INTEGER CONSTRAINT `fk_sessions_plans_id` REFERENCES `plans` (`id`) ON UPDATE NO ACTION ON DELETE SET NULL,
             `start` INTEGER NOT NULL,
             `end` INTEGER DEFAULT NULL,
             `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT)
@@ -69,7 +69,7 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
             """.trimIndent(),
         )
         planHistorySelectStatement.toPlanHistory(planHistoryInsertStatement)
-        selectStatement.toPlanDay(insertStatement)
+        selectStatement.toPlanDay(this, insertStatement)
         execSQL("DROP TABLE `plan_table`")
     }
 
@@ -117,7 +117,7 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
             """
             CREATE TABLE IF NOT EXISTS sessions (
             `date` INTEGER NOT NULL,
-            `planId` INTEGER NOT NULL CONSTRAINT `fk_sessions_plans_id` REFERENCES `plans` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE,
+            `planId` INTEGER CONSTRAINT `fk_sessions_plans_id` REFERENCES `plans` (`id`) ON UPDATE NO ACTION ON DELETE SET NULL,
             `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT)
             """.trimIndent(),
         )
@@ -152,7 +152,7 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
             VALUES (?, ?, ?, ?, ?, ?)
             """.trimIndent(),
         )
-        selectStatement.toSetEntity(insertStatement)
+        selectStatement.toSetEntity(this, insertStatement)
         execSQL("DROP TABLE `Session`")
         execSQL("DROP TABLE `_tmp_session`")
     }
@@ -169,7 +169,7 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
         }
     }
 
-    private fun Cursor.toPlanDay(insert: SupportSQLiteStatement) {
+    private fun Cursor.toPlanDay(db: SupportSQLiteDatabase, insert: SupportSQLiteStatement) {
         if (moveToFirst()) {
             val idIndex = getColumnIndex("id")
             val exerciseMapIndex = getColumnIndex("exercisesPerDay")
@@ -179,7 +179,7 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
                 val exerciseMap = Json.decodeFromString(exerciseMapSerializer, exerciseMapString)
                 exerciseMap.forEach { (day, exercises) ->
                     exercises.forEach { exercise ->
-                        insert.insertPlanDays(day, id, exercise.id)
+                        insert.insertPlanDays(day, id, db.exerciseId(exercise.name))
                     }
                 }
             } while (moveToNext())
@@ -199,7 +199,13 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
         executeInsert()
     }
 
-    private fun Cursor.toSetEntity(insert: SupportSQLiteStatement) {
+    private fun SupportSQLiteDatabase.exerciseId(name: String): Int {
+        val getId = query("SELECT id FROM exercises WHERE name = ?", arrayOf(name))
+        getId.moveToFirst()
+        return getId.getInt(getId.getColumnIndexOrThrow("id"))
+    }
+
+    private fun Cursor.toSetEntity(db: SupportSQLiteDatabase, insert: SupportSQLiteStatement) {
         if (moveToFirst()) {
             val idIndex = getColumnIndex("id")
             val setsIndex = getColumnIndex("sets")
@@ -208,21 +214,27 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
                 val setsString = getString(setsIndex)
                 val sets = Json.decodeFromString(setsSerializer, setsString)
                 for (i in sets.indices) {
-                    insert.insertSet(sets[i], sessionId, i)
+                    insert.insertSet(db, sets[i], sessionId, i)
                 }
             } while (moveToNext())
         }
     }
 
     @Suppress("NOTHING_TO_INLINE")
-    private inline fun SupportSQLiteStatement.insertSet(set: Set, sessionId: Int, order: Int) {
+    private inline fun SupportSQLiteStatement.insertSet(
+        db: SupportSQLiteDatabase,
+        set: Set,
+        sessionId: Int,
+        order: Int
+    ) {
         clearBindings()
         bindLong(1, set.repsOrDuration.toLong())
         bindDouble(2, set.weight.toDouble())
         bindString(3, set.type.name)
         bindLong(4, order.toLong())
         bindLong(5, sessionId.toLong())
-        bindLong(6, set.exercise.id?.toLong() ?: 1L)
+        val exerciseId = db.exerciseId(set.exercise.name)
+        bindLong(6, exerciseId.toLong())
         executeInsert()
     }
 

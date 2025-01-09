@@ -7,10 +7,11 @@ import kotlinx.datetime.LocalDate
 data class Session(
     val date: LocalDate,
     val sets: List<Set>,
+    val planId: Int,
     val id: Int? = null,
 )
 
-fun Session(sets: List<Set>) = Session(date = localDate, sets = sets)
+fun Session(planId: Int, sets: List<Set>) = Session(planId = planId, date = localDate, sets = sets)
 
 val Session.currentRating: Double
     get() = sets.sumOf { it.rating }

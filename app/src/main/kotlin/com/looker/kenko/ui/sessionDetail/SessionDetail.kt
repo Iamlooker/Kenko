@@ -51,7 +51,6 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.data.model.Exercise
-import com.looker.kenko.data.model.Session
 import com.looker.kenko.data.model.Set
 import com.looker.kenko.ui.addSet.AddSet
 import com.looker.kenko.ui.components.BackButton
@@ -140,7 +139,7 @@ private fun SessionDetail(
         is SessionDetailState.Success -> {
             val data = state.data
             SetsList(
-                session = data.session,
+                date = data.date,
                 exerciseSets = data.sets,
                 isEditable = data.isToday,
                 hasPreviousSession = data.hasPreviousSession,
@@ -156,8 +155,8 @@ private fun SessionDetail(
 
 @Composable
 private fun SetsList(
-    session: Session,
-    exerciseSets: Map<Exercise, List<Set>>?,
+    date: LocalDate,
+    exerciseSets: Map<Exercise, List<Set>>,
     isEditable: Boolean,
     hasPreviousSession: Boolean,
     onBackPress: () -> Unit,
@@ -176,7 +175,7 @@ private fun SetsList(
             span = { GridItemSpan(maxLineSpan) },
         ) {
             Header(
-                performedOn = session.date,
+                performedOn = date,
                 onBackPress = onBackPress,
                 actions = {
                     if (hasPreviousSession) {
@@ -190,7 +189,7 @@ private fun SetsList(
                 },
             )
         }
-        exerciseSets?.forEach { (exercise, sets) ->
+        exerciseSets.forEach { (exercise, sets) ->
             item(
                 span = { GridItemSpan(maxLineSpan) },
             ) {
@@ -365,10 +364,7 @@ private fun SessionDetailPreview() {
         val data = remember {
             SessionDetailState.Success(
                 SessionUiData(
-                    session = Session(
-                        LocalDate(2024, 4, 15),
-                        sets = emptyList()
-                    ),
+                    date = LocalDate(2024, 4, 15),
                     sets = emptyMap(),
                     isToday = true,
                 ),
