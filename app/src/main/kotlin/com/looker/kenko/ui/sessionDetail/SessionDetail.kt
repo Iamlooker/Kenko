@@ -1,12 +1,5 @@
 package com.looker.kenko.ui.sessionDetail
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.SizeTransform
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -215,33 +208,12 @@ private fun SetsList(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
                         set = set,
                         title = {
-                            AnimatedSetIndex(index = index)
+                            Text(normalizeInt(index + 1))
                         },
                     )
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun AnimatedSetIndex(
-    index: Int,
-) {
-    AnimatedContent(
-        targetState = index,
-        transitionSpec = {
-            if (targetState > initialState) {
-                (slideInVertically { height -> height } + fadeIn()) togetherWith
-                    (slideOutVertically { height -> -height } + fadeOut())
-            } else {
-                slideInVertically { height -> -height } + fadeIn() togetherWith
-                    (slideOutVertically { height -> height } + fadeOut())
-            } using SizeTransform(clip = false)
-        },
-        label = "",
-    ) { targetCount ->
-        Text(text = normalizeInt(targetCount + 1))
     }
 }
 
