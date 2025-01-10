@@ -27,14 +27,14 @@ fun TypingText(
     typingDelay: Duration = 50.milliseconds,
     onCompleteListener: (() -> Unit)? = null,
 ) {
-    var substringText by remember {
-        mutableStateOf("")
-    }
+    var substringText by remember { mutableStateOf("") }
+    val textArray = remember(text) { CharArray(text.length) }
     LaunchedEffect(text, startTyping) {
         if (startTyping) {
             delay(initialDelay)
-            for (i in text.indices) {
-                substringText = text.subSequence(0, i + 1).toString()
+            for (i in textArray.indices) {
+                textArray[i] = text[i]
+                substringText = textArray.concatToString()
                 delay(typingDelay)
             }
             onCompleteListener?.invoke()
