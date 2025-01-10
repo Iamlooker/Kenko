@@ -15,7 +15,7 @@ fun kenkoTextDecorator(supportingText: String) = TextFieldDecorator {
         Text(
             text = supportingText,
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.outline
+            color = MaterialTheme.colorScheme.outline,
         )
         it()
     }
@@ -27,5 +27,5 @@ fun kenkoTextFieldColor(): TextFieldColors = TextFieldDefaults.colors(
     errorIndicatorColor = Color.Transparent,
     focusedIndicatorColor = Color.Transparent,
     unfocusedIndicatorColor = Color.Transparent,
-    errorContainerColor = MaterialTheme.colorScheme.errorContainer
+    errorContainerColor = MaterialTheme.colorScheme.errorContainer,
 )
