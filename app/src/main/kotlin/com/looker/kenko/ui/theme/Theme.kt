@@ -16,12 +16,12 @@ import androidx.core.view.WindowCompat
 import com.looker.kenko.R
 import com.looker.kenko.data.model.settings.Theme
 import com.looker.kenko.ui.theme.colorSchemes.ColorSchemes
-import com.looker.kenko.ui.theme.colorSchemes.defaultColorSchemes
+import com.looker.kenko.ui.theme.colorSchemes.zestfulColorSchemes
 
 @Composable
 fun KenkoTheme(
     theme: Theme = Theme.System,
-    colorSchemes: ColorSchemes = defaultColorSchemes,
+    colorSchemes: ColorSchemes = zestfulColorSchemes,
     content: @Composable () -> Unit,
 ) {
     val systemTheme = isSystemInDarkTheme()
