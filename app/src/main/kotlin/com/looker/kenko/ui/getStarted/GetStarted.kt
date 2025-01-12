@@ -4,10 +4,13 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -27,17 +30,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.layout.Measurable
-import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import com.looker.kenko.R
 import com.looker.kenko.ui.components.HealthQuotes
+import com.looker.kenko.ui.components.TickerText
 import com.looker.kenko.ui.components.TypingText
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
@@ -63,15 +67,15 @@ private fun GetStarted(
         LaunchedEffect(true) {
             buttonVisibility.animateTo(
                 targetValue = 0.85F,
-                animationSpec = spring()
+                animationSpec = spring(),
             )
             launch {
                 iconVisibility.animateTo(
                     targetValue = 0F,
                     animationSpec = spring(
                         stiffness = Spring.StiffnessVeryLow,
-                        dampingRatio = Spring.DampingRatioMediumBouncy
-                    )
+                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                    ),
                 )
             }
             launch {
@@ -79,15 +83,14 @@ private fun GetStarted(
                     targetValue = 1F,
                     animationSpec = spring(
                         stiffness = Spring.StiffnessVeryLow,
-                        dampingRatio = Spring.DampingRatioMediumBouncy
-                    )
+                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                    ),
                 )
             }
         }
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .navigationBarsPadding(),
+                .fillMaxSize(),
         ) {
             var startShowingFirstMeaning by remember { mutableStateOf(false) }
             var startShowingSecondMeaning by remember { mutableStateOf(false) }
@@ -126,132 +129,77 @@ private fun GetStarted(
                 modifier = Modifier.padding(horizontal = 18.dp),
             )
             Spacer(modifier = Modifier.weight(1F))
-            ButtonGroup(
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                content = {
-                    Button(
+            TickerText(
+                texts = stringArrayResource(R.array.label_features),
+                color = MaterialTheme.colorScheme.onTertiaryContainer,
+                modifier = Modifier.background(MaterialTheme.colorScheme.tertiaryContainer),
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.6F)
+                    .background(MaterialTheme.colorScheme.primaryContainer)
+                    .navigationBarsPadding(),
+                verticalArrangement = Arrangement.Bottom,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Spacer(modifier = Modifier.weight(1F))
+                Text(
+                    text = stringResource(R.string.label_boarding_quote),
+                    style = MaterialTheme.typography.displaySmall,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    textAlign = TextAlign.Center,
+                )
+                Spacer(modifier = Modifier.weight(1F))
+                Button(
+                    modifier = Modifier
+                        .graphicsLayer {
+                            scaleX = buttonVisibility.value
+                            scaleY = buttonVisibility.value
+                            translationY = (1F - buttonVisibility.value) * 15F
+                        },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.inverseSurface,
+                        contentColor = MaterialTheme.colorScheme.inverseOnSurface,
+                    ),
+                    onClick = onNextClick,
+                    contentPadding = PaddingValues(
+                        vertical = 24.dp,
+                        horizontal = 40.dp,
+                    ),
+                ) {
+                    ButtonIcon(
                         modifier = Modifier
-                            .layoutId(ButtonID.Button)
                             .graphicsLayer {
-                                scaleX = buttonVisibility.value
-                                scaleY = buttonVisibility.value
-                                translationY = (1F - buttonVisibility.value) * 15F
+                                translationX = iconVisibility.value
+                                rotationZ = iconVisibility.value
                             },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.tertiary,
-                            contentColor = MaterialTheme.colorScheme.onTertiary,
-                        ),
-                        onClick = onNextClick,
-                        contentPadding = PaddingValues(
-                            vertical = 24.dp,
-                            horizontal = 40.dp
-                        )
-                    ) {
-                        ButtonIcon(
-                            modifier = Modifier
-                                .graphicsLayer {
-                                    translationX = iconVisibility.value
-                                    rotationZ = iconVisibility.value
-                                }
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(text = stringResource(R.string.label_lets_go))
-                    }
-                },
-            )
-            HealthQuotes(modifier = Modifier.align(Alignment.CenterHorizontally))
-        }
-    }
-}
-
-@Composable
-private fun ButtonGroup(
-    content: @Composable () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Layout(
-        modifier = modifier,
-        content = {
-            Icon(
-                modifier = Modifier.layoutId(ButtonID.Cloud),
-                imageVector = KenkoIcons.Cloud,
-                contentDescription = null
-            )
-            Icon(
-                modifier = Modifier.layoutId(ButtonID.Arrow1),
-                imageVector = KenkoIcons.Arrow1,
-                contentDescription = null
-            )
-            Icon(
-                modifier = Modifier.layoutId(ButtonID.Arrow2),
-                imageVector = KenkoIcons.Arrow2,
-                contentDescription = null
-            )
-            Icon(
-                modifier = Modifier.layoutId(ButtonID.Arrow3),
-                imageVector = KenkoIcons.Arrow3,
-                contentDescription = null
-            )
-            Icon(
-                modifier = Modifier.layoutId(ButtonID.Arrow4),
-                imageVector = KenkoIcons.Arrow4,
-                contentDescription = null
-            )
-            content()
-        }
-    ) { measurables, constraints ->
-        lateinit var cloud: Measurable
-        lateinit var arrow1: Measurable
-        lateinit var arrow2: Measurable
-        lateinit var arrow3: Measurable
-        lateinit var arrow4: Measurable
-        lateinit var button: Measurable
-        measurables.forEach { measurable ->
-            when (measurable.layoutId) {
-                ButtonID.Button -> button = measurable
-                ButtonID.Cloud -> cloud = measurable
-                ButtonID.Arrow1 -> arrow1 = measurable
-                ButtonID.Arrow2 -> arrow2 = measurable
-                ButtonID.Arrow3 -> arrow3 = measurable
-                ButtonID.Arrow4 -> arrow4 = measurable
-                else -> error("Unknown Element")
+                        backgroundColor = MaterialTheme.colorScheme.primaryContainer,
+                        iconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(text = stringResource(R.string.label_lets_go))
+                }
+                HealthQuotes(modifier = Modifier.align(Alignment.CenterHorizontally))
             }
         }
-        val cloudPlaceable = cloud.measure(constraints)
-        val arrow1Placeable = arrow1.measure(constraints)
-        val arrow2Placeable = arrow2.measure(constraints)
-        val arrow3Placeable = arrow3.measure(constraints)
-        val arrow4Placeable = arrow4.measure(constraints)
-        val buttonPlaceable = button.measure(constraints)
-        val width = 360.dp.toPx().toInt()
-        layout(width, 162.dp.toPx().toInt()) {
-            val x = (width / 2) - (buttonPlaceable.width / 2)
-            cloudPlaceable.placeRelative(16.dp.toPx().toInt(), 31.dp.toPx().toInt())
-            arrow1Placeable.placeRelative(148.dp.toPx().toInt(), 2.dp.toPx().toInt())
-            arrow2Placeable.placeRelative(200.dp.toPx().toInt(), 0.dp.toPx().toInt())
-            arrow3Placeable.placeRelative(270.dp.toPx().toInt(), 26.dp.toPx().toInt())
-            arrow4Placeable.placeRelative(290.dp.toPx().toInt(), 100.dp.toPx().toInt())
-            buttonPlaceable.placeRelative(x, 68.dp.toPx().toInt())
-        }
     }
-}
-
-private enum class ButtonID {
-    Cloud, Arrow1, Arrow2, Arrow3, Arrow4, Button
 }
 
 @Composable
 private fun ButtonIcon(
+    iconColor: Color,
+    backgroundColor: Color,
     modifier: Modifier = Modifier,
     icon: ImageVector = KenkoIcons.ArrowForward,
 ) {
     Icon(
         modifier = modifier
-            .background(MaterialTheme.colorScheme.onTertiary, CircleShape)
+            .background(backgroundColor, CircleShape)
             .padding(8.dp),
         imageVector = icon,
-        tint = MaterialTheme.colorScheme.tertiary,
-        contentDescription = ""
+        tint = iconColor,
+        contentDescription = "",
     )
 }
 

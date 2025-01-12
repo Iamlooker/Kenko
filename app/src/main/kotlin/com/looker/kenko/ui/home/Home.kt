@@ -1,9 +1,7 @@
 package com.looker.kenko.ui.home
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -54,6 +52,7 @@ import com.looker.kenko.R
 import com.looker.kenko.ui.components.KenkoBorderWidth
 import com.looker.kenko.ui.components.LiftingQuotes
 import com.looker.kenko.ui.components.TertiaryKenkoButton
+import com.looker.kenko.ui.components.TickerText
 import com.looker.kenko.ui.components.icons.symbols.Add
 import com.looker.kenko.ui.components.icons.symbols.ArrowOutward
 import com.looker.kenko.ui.extensions.plus
@@ -112,7 +111,7 @@ private fun Home(
                     }
                 },
             )
-        }
+        },
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -145,7 +144,10 @@ private fun Home(
                         )
                     }
                 } else {
-                    SelectPlanTicker()
+                    TickerText(
+                        text = stringResource(R.string.label_select_a_plan),
+                        color = MaterialTheme.colorScheme.outline,
+                    )
                 }
             }
             HorizontalDivider(thickness = KenkoBorderWidth)
@@ -180,7 +182,7 @@ private fun Home(
                             style = MaterialTheme.typography.header()
                                 .merge(
                                     lineBreak = LineBreak.Heading,
-                                    color = MaterialTheme.colorScheme.primary
+                                    color = MaterialTheme.colorScheme.primary,
                                 ),
                         )
                     },
@@ -195,7 +197,7 @@ private fun Home(
                             }
                         }
                         Text(text = stringResource(stringRes))
-                    }
+                    },
                 )
             } else {
                 SelectPlan(onSelectPlanClick = onSelectPlanClick)
@@ -209,7 +211,7 @@ private fun Home(
 private fun ColumnScope.StartSession(
     onStartSessionClick: () -> Unit,
     content: @Composable () -> Unit,
-    buttonText: @Composable () -> Unit
+    buttonText: @Composable () -> Unit,
 ) {
     Spacer(modifier = Modifier.weight(1F))
     content()
@@ -222,9 +224,9 @@ private fun ColumnScope.StartSession(
             Icon(
                 modifier = Modifier.size(18.dp),
                 imageVector = KenkoIcons.ArrowOutward,
-                contentDescription = null
+                contentDescription = null,
             )
-        }
+        },
     )
 }
 
@@ -239,7 +241,7 @@ private fun ColumnScope.SelectPlan(
             .padding(horizontal = 16.dp),
         text = stringResource(R.string.label_selecting_a_plan),
         style = MaterialTheme.typography.header().copy(
-            lineBreak = LineBreak.Heading
+            lineBreak = LineBreak.Heading,
         ),
         color = MaterialTheme.colorScheme.primary,
     )
@@ -253,42 +255,14 @@ private fun ColumnScope.SelectPlan(
         ),
         contentPadding = PaddingValues(
             vertical = 24.dp,
-            horizontal = 40.dp
-        )
+            horizontal = 40.dp,
+        ),
     ) {
         Text(text = stringResource(R.string.label_select_plan_one))
         Spacer(modifier = Modifier.width(12.dp))
         Icon(
             imageVector = KenkoIcons.ArrowOutward,
-            contentDescription = null
-        )
-    }
-}
-
-@Composable
-private fun SelectPlanTicker(
-    modifier: Modifier = Modifier
-) {
-    val tickerText = stringResource(R.string.label_select_a_plan)
-    val tickerMarquee = remember {
-        List(10) {
-            tickerText
-        }.joinToString(
-            separator = " ${Typography.bullet} ",
-            postfix = " ${Typography.bullet} ",
-        )
-    }
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.Center,
-    ) {
-        Text(
-            modifier = Modifier
-                .padding(vertical = 4.dp)
-                .basicMarquee(initialDelayMillis = 0),
-            text = tickerMarquee,
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.outline,
+            contentDescription = null,
         )
     }
 }
@@ -302,7 +276,7 @@ private fun ExploreExerciseCard(modifier: Modifier = Modifier) {
                 .padding(16.dp)
                 .align(TopEnd),
             imageVector = ArrowOutward,
-            contentDescription = null
+            contentDescription = null,
         )
     }
 }
@@ -316,7 +290,7 @@ private fun AddExerciseCard(modifier: Modifier = Modifier) {
                 .padding(16.dp)
                 .align(TopEnd),
             imageVector = Add,
-            contentDescription = null
+            contentDescription = null,
         )
     }
 }
@@ -340,7 +314,7 @@ private fun HelperCards(
             contentAlignment = Alignment.Center,
         ) {
             CompositionLocalProvider(
-                LocalTextStyle provides textStyle
+                LocalTextStyle provides textStyle,
             ) {
                 content()
             }
