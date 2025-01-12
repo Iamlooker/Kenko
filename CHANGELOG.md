@@ -8,15 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Drag text field in "Add Set"
+- Double tap to edit text
 - History Icon (You can check last week's session if it exists)
-- Support for Monochrome icon on Android 12+ 
+- Support for Monochrome icon on Android 12+
 - Text animation on Onboarding
 - Safer way to delete Sets / Exercises / Plans
 - New Font for headings
 
 ### Changed
 - Targets Android 15
-- Remove Drag in counter
+- Onboarding screen
+- Default theme for new users
 - Sorting of muscle groups chips
 - Always save plan on going back
 - Color in Profile
@@ -25,11 +28,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Save button not visible
+- Two `Default` theme in Settings
 - Scrolling on `Select Exercise` Sheet
 - Performance issues on `Add Set` Sheet
 - Weird line in the setting wave
 - Crash on deleting plan
 - On boarding not completing
+
+### Removed
+- Gradient in settings
 
 ## [1.2.0] - 2024-05-26
 
