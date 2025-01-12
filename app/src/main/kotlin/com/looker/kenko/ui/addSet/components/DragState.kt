@@ -31,27 +31,20 @@ class DragState(
 
     val offset: Animatable<Float, AnimationVector1D> = Animatable(0F)
 
+    private val highBouncySpring = spring<Float>(Spring.DampingRatioHighBouncy)
+    val mediumBouncySpring = spring<Float>(Spring.DampingRatioMediumBouncy)
+
     @Stable
     val state: DraggableState = DraggableState { delta ->
         val targetOffset = offset.value + delta
         val adjustedOffset = OFFSET_DAMPING * targetOffset
         scope.launch {
-            offset.animateTo(adjustedOffset, spring(Spring.DampingRatioHighBouncy))
+            offset.animateTo(adjustedOffset, highBouncySpring)
         }
     }
 
     private val isOutside: Flow<Boolean> =
         snapshotFlow { offset.value !in constraints.noIncrementZone }
-
-    @Stable
-    val onDragStopped: suspend CoroutineScope.(velocity: Float) -> Unit = {
-        events.onStop()
-        offset.animateTo(
-            targetValue = 0F,
-            animationSpec = spring(Spring.DampingRatioMediumBouncy),
-            initialVelocity = it,
-        )
-    }
 
     init {
         scope.launch {
@@ -80,13 +73,11 @@ fun rememberDraggableTextFieldState(
         swipeRange = (-48).dp..96.dp,
         noIncrementRange = (-36).dp..42.dp,
     ),
-): DragState {
-    return DragState(
-        events = events,
-        constraints = constraints,
-        scope = rememberCoroutineScope(),
-    )
-}
+) = DragState(
+    events = events,
+    constraints = constraints,
+    scope = rememberCoroutineScope(),
+)
 
 @Immutable
 class DragConstraints(
