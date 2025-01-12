@@ -187,8 +187,9 @@ private fun ColorPaletteItem(
 ) {
     val context = LocalContext.current
     val colorSchemes = remember(colorPalette) {
-        colorPalette.scheme ?: dynamicColorSchemes(context) ?: defaultColorSchemes
+        colorPalette.scheme ?: dynamicColorSchemes(context)
     }
+    if (colorSchemes == null) return
     val transition = updateTransition(targetState = isSelected, label = null)
     val corner by transition.animateDp(label = "") {
         if (it) 32.dp else 16.dp
