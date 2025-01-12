@@ -180,7 +180,10 @@ private fun GetStarted(
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(text = stringResource(R.string.label_lets_go))
                 }
-                HealthQuotes(modifier = Modifier.align(Alignment.CenterHorizontally))
+                HealthQuotes(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    color = MaterialTheme.colorScheme.outline,
+                )
             }
         }
     }
