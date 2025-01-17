@@ -6,6 +6,7 @@ import com.looker.kenko.data.local.dao.ExerciseDao
 import com.looker.kenko.data.local.dao.PlanDao
 import com.looker.kenko.data.local.dao.PlanHistoryDao
 import com.looker.kenko.data.local.dao.SessionDao
+import com.looker.kenko.data.local.dao.SetsDao
 import com.looker.kenko.data.local.kenkoDatabase
 import dagger.Module
 import dagger.Provides
@@ -41,6 +42,12 @@ object DatabaseModule {
     fun providePlanDao(
         database: KenkoDatabase,
     ): PlanDao = database.planDao
+
+    @Provides
+    @Singleton
+    fun provideSetsDao(
+        database: KenkoDatabase,
+    ): SetsDao = database.setsDao
 
     @Provides
     @Singleton

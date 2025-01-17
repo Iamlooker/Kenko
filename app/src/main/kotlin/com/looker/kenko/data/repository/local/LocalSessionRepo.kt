@@ -1,9 +1,9 @@
-package com.looker.kenko.data.repository.offline
+package com.looker.kenko.data.repository.local
 
 import com.looker.kenko.data.local.dao.ExerciseDao
-import com.looker.kenko.data.local.dao.PlanDao
 import com.looker.kenko.data.local.dao.PlanHistoryDao
 import com.looker.kenko.data.local.dao.SessionDao
+import com.looker.kenko.data.local.dao.SetsDao
 import com.looker.kenko.data.local.model.SessionDataEntity
 import com.looker.kenko.data.local.model.SetEntity
 import com.looker.kenko.data.local.model.toEntity
@@ -18,9 +18,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.datetime.LocalDate
 import javax.inject.Inject
 
-class OfflineSessionRepo @Inject constructor(
+class LocalSessionRepo @Inject constructor(
     private val dao: SessionDao,
-    private val planDao: PlanDao,
+    private val setsDao: SetsDao,
     private val historyDao: PlanHistoryDao,
     private val exerciseDao: ExerciseDao,
 ) : SessionRepo {
@@ -39,7 +39,7 @@ class OfflineSessionRepo @Inject constructor(
         val currentSessionId = requireNotNull(dao.getSessionId(localDate)) {
             "Session does not exist"
         }
-        dao.addSet(set.toEntity(currentSessionId, dao.getSetCount(currentSessionId)))
+        setsDao.insert(set.toEntity(currentSessionId, dao.getSetCount(currentSessionId)))
     }
 
     override suspend fun removeSet(set: Set) {
@@ -49,7 +49,7 @@ class OfflineSessionRepo @Inject constructor(
         val currentSessionId = requireNotNull(dao.getSessionId(localDate)) {
             "Session does not exist"
         }
-        dao.removeSet(set.toEntity(currentSessionId, dao.getSetCount(currentSessionId)))
+        setsDao.delete(set.toEntity(currentSessionId, dao.getSetCount(currentSessionId)))
     }
 
     override suspend fun createEmpty(date: LocalDate) {
@@ -68,7 +68,7 @@ class OfflineSessionRepo @Inject constructor(
     }
 
     override suspend fun getSets(sessionId: Int): List<Set> =
-        dao.getSets(sessionId).toExternal()
+        setsDao.getSetsBySessionId(sessionId).toExternal()
 
     private suspend fun List<SetEntity>.toExternal(): List<Set> = mapNotNull {
         val exercise = exerciseDao.get(it.exerciseId) ?: return@mapNotNull null

@@ -13,8 +13,8 @@ data class Set(
     val id: Int? = null,
 )
 
-val Set.rating: Double
-    get() = repsOrDuration * weight * type.ratingModifier
+val Set.rating: Rating
+    get() = Rating(repsOrDuration * weight * type.ratingModifier)
 
 enum class SetType(val ratingModifier: Double) {
     Standard(STANDARD_SET_RATING_MODIFIER),

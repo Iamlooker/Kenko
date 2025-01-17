@@ -1,4 +1,4 @@
-package com.looker.kenko.data.repository.offline
+package com.looker.kenko.data.repository.local
 
 import com.looker.kenko.data.local.dao.ExerciseDao
 import com.looker.kenko.data.local.dao.PlanDao
@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.datetime.DayOfWeek
 import javax.inject.Inject
 
-class OfflinePlanRepo @Inject constructor(
+class LocalPlanRepo @Inject constructor(
     private val dao: PlanDao,
     private val exerciseDao: ExerciseDao,
     private val historyDao: PlanHistoryDao,

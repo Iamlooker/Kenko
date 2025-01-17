@@ -1,4 +1,4 @@
-package com.looker.kenko.data.repository.offline
+package com.looker.kenko.data.repository.local
 
 import com.looker.kenko.data.local.dao.ExerciseDao
 import com.looker.kenko.data.local.model.ExerciseEntity
@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class OfflineExerciseRepo @Inject constructor(
+class LocalExerciseRepo @Inject constructor(
     private val dao: ExerciseDao,
 ) : ExerciseRepo {
 

@@ -9,6 +9,7 @@ import com.looker.kenko.data.local.dao.ExerciseDao
 import com.looker.kenko.data.local.dao.PlanDao
 import com.looker.kenko.data.local.dao.PlanHistoryDao
 import com.looker.kenko.data.local.dao.SessionDao
+import com.looker.kenko.data.local.dao.SetsDao
 import com.looker.kenko.data.local.model.ExerciseEntity
 import com.looker.kenko.data.local.model.PlanDayEntity
 import com.looker.kenko.data.local.model.PlanEntity
@@ -32,6 +33,7 @@ abstract class KenkoDatabase : RoomDatabase() {
     abstract val sessionDao: SessionDao
     abstract val exerciseDao: ExerciseDao
     abstract val planDao: PlanDao
+    abstract val setsDao: SetsDao
     abstract val historyDao: PlanHistoryDao
 }
 

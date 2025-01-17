@@ -13,5 +13,5 @@ data class Session(
 
 fun Session(planId: Int, sets: List<Set>) = Session(planId = planId, date = localDate, sets = sets)
 
-val Session.currentRating: Double
-    get() = sets.sumOf { it.rating }
+val Session.currentRating: Rating
+    get() = Rating(sets.sumOf { it.rating.value })

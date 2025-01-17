@@ -5,9 +5,9 @@ import com.looker.kenko.data.repository.ExerciseRepo
 import com.looker.kenko.data.repository.PlanRepo
 import com.looker.kenko.data.repository.SessionRepo
 import com.looker.kenko.data.repository.SettingsRepo
-import com.looker.kenko.data.repository.offline.OfflineExerciseRepo
-import com.looker.kenko.data.repository.offline.OfflinePlanRepo
-import com.looker.kenko.data.repository.offline.OfflineSessionRepo
+import com.looker.kenko.data.repository.local.LocalExerciseRepo
+import com.looker.kenko.data.repository.local.LocalPlanRepo
+import com.looker.kenko.data.repository.local.LocalSessionRepo
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -19,17 +19,17 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun bindSessionRepo(
-        repo: OfflineSessionRepo,
+        repo: LocalSessionRepo,
     ): SessionRepo
 
     @Binds
     abstract fun bindPlanRepo(
-        repo: OfflinePlanRepo,
+        repo: LocalPlanRepo,
     ): PlanRepo
 
     @Binds
     abstract fun bindExerciseRepo(
-        repo: OfflineExerciseRepo,
+        repo: LocalExerciseRepo,
     ): ExerciseRepo
 
     @Binds
