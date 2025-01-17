@@ -8,8 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+### Changed
+### Fixed
+
+## [1.3.0] - 2025-01-17
+
+### Added
 - Drag text field in "Add Set"
-- Double tap to edit text
+- Double tap to edit "set info"
 - History Icon (You can check last week's session if it exists)
 - Support for Monochrome icon on Android 12+
 - Text animation on Onboarding
