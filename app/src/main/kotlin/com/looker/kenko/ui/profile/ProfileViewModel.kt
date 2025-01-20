@@ -12,7 +12,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,16 +23,10 @@ class ProfileViewModel @Inject constructor(
 
     private val currentPlan: Flow<Plan?> = planRepo.current
 
-    private val sets: Flow<Int> = sessionRepo.stream.map {
-        it.flatMap { session -> session.sets }
-    }.map { it.size }
-
-    private val numberOfExercises: Flow<Int> = exerciseRepo.numberOfExercise
-
     val state: StateFlow<ProfileUiState> = combine(
         currentPlan,
-        sets,
-        numberOfExercises,
+        sessionRepo.setsCount,
+        exerciseRepo.numberOfExercise,
     ) { plan, sets, number ->
         ProfileUiState(
             numberOfExercises = number,

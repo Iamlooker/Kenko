@@ -17,7 +17,7 @@ interface ExerciseDao {
         DELETE
         FROM exercises
         WHERE id = :id
-        """
+        """,
     )
     suspend fun delete(id: Int)
 
@@ -25,7 +25,7 @@ interface ExerciseDao {
         """
         SELECT *
         FROM exercises
-        """
+        """,
     )
     fun stream(): Flow<List<ExerciseEntity>>
 
@@ -33,14 +33,16 @@ interface ExerciseDao {
         """
         SELECT *
         FROM exercises
-        WHERE id = :id"""
+        WHERE id = :id
+        """,
     )
     suspend fun get(id: Int): ExerciseEntity?
 
     @Query(
         """
         SELECT COUNT(*)
-        FROM exercises"""
+        FROM exercises
+        """,
     )
     fun number(): Flow<Int>
 
@@ -50,7 +52,7 @@ interface ExerciseDao {
         (SELECT *
         FROM exercises
         WHERE name = :name)
-        """
+        """,
     )
     suspend fun exists(name: String): Boolean
 }
