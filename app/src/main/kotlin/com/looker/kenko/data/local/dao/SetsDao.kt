@@ -32,6 +32,15 @@ interface SetsDao {
 
     @Query(
         """
+        SELECT COUNT(*)
+        FROM sets
+        WHERE sessionId = :sessionId
+        """,
+    )
+    suspend fun getSetsCountBySessionId(sessionId: Int): Int?
+
+    @Query(
+        """
         SELECT *
         FROM sets
         WHERE exerciseId = :exerciseId
@@ -104,9 +113,23 @@ interface SetsDao {
     )
     suspend fun getSetsByPlanId(planId: Int): List<SetEntity>
 
+    @Query(
+        """
+        SELECT COUNT (*)
+        FROM sets
+        """,
+    )
+    fun totalSetCount(): Flow<Int>
+
     @Insert
     suspend fun insert(set: SetEntity)
 
-    @Delete
-    suspend fun delete(set: SetEntity)
+    @Query(
+        """
+        DELETE
+        FROM sets
+        WHERE id = :setId
+        """
+    )
+    suspend fun delete(setId: Int)
 }

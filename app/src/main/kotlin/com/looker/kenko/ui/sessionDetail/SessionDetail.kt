@@ -90,7 +90,7 @@ fun SessionDetails(
 private fun SessionDetail(
     state: SessionDetailState,
     onBackPress: () -> Unit = {},
-    onRemoveSet: (Set) -> Unit = {},
+    onRemoveSet: (Int?) -> Unit = {},
     onReferenceClick: (String) -> Unit = {},
     onSelectBottomSheet: (Exercise) -> Unit = {},
     onHistoryClick: () -> Unit = {},
@@ -153,7 +153,7 @@ private fun SetsList(
     isEditable: Boolean,
     hasPreviousSession: Boolean,
     onBackPress: () -> Unit,
-    onRemoveSet: (Set) -> Unit,
+    onRemoveSet: (Int?) -> Unit,
     onReferenceClick: (String) -> Unit,
     onSelectBottomSheet: (Exercise) -> Unit,
     onHistoryClick: () -> Unit,
@@ -202,7 +202,7 @@ private fun SetsList(
             itemsIndexed(items = sets) { index, set ->
                 SwipeToDeleteBox(
                     modifier = Modifier.animateItem(),
-                    onDismiss = { onRemoveSet(set) },
+                    onDismiss = { onRemoveSet(set.id) },
                 ) {
                     SetItem(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),

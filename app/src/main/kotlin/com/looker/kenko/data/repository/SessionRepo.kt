@@ -9,9 +9,11 @@ interface SessionRepo {
 
     val stream: Flow<List<Session>>
 
+    val setsCount: Flow<Int>
+
     suspend fun addSet(set: Set)
 
-    suspend fun removeSet(set: Set)
+    suspend fun removeSet(setId: Int)
 
     suspend fun createEmpty(date: LocalDate)
 

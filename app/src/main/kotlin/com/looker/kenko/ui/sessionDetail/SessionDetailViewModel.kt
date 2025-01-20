@@ -108,9 +108,10 @@ class SessionDetailViewModel @Inject constructor(
         }.onStart { emit(SessionDetailState.Loading) }
             .asStateFlow(SessionDetailState.Loading)
 
-    fun removeSet(set: Set) {
+    fun removeSet(setId: Int?) {
+        if (setId == null) return
         viewModelScope.launch {
-            repo.removeSet(set)
+            repo.removeSet(setId)
         }
     }
 

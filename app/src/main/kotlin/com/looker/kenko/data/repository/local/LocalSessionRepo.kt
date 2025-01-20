@@ -31,6 +31,8 @@ class LocalSessionRepo @Inject constructor(
                 session.toExternal(session.sets.toExternal())
             }
         }
+    override val setsCount: Flow<Int> =
+        setsDao.totalSetCount()
 
     override suspend fun addSet(set: Set) {
         if (!dao.sessionExistsOn(localDate)) {
@@ -39,23 +41,25 @@ class LocalSessionRepo @Inject constructor(
         val currentSessionId = requireNotNull(dao.getSessionId(localDate)) {
             "Session does not exist"
         }
-        setsDao.insert(set.toEntity(currentSessionId, dao.getSetCount(currentSessionId)))
+        setsDao.insert(
+            set.toEntity(
+                currentSessionId,
+                setsDao.getSetsCountBySessionId(currentSessionId) ?: 0,
+            ),
+        )
     }
 
-    override suspend fun removeSet(set: Set) {
+    override suspend fun removeSet(setId: Int) {
         if (!dao.sessionExistsOn(localDate)) {
-            createEmpty(localDate)
+            error("Session does not exist so set cannot be removed")
         }
-        val currentSessionId = requireNotNull(dao.getSessionId(localDate)) {
-            "Session does not exist"
-        }
-        setsDao.delete(set.toEntity(currentSessionId, dao.getSetCount(currentSessionId)))
+        setsDao.delete(setId)
     }
 
     override suspend fun createEmpty(date: LocalDate) {
         if (!date.isToday) error("Editing on old dates is not supported!")
         val currentPlanId = requireNotNull(historyDao.getCurrentId()) { "No plan active" }
-        dao.upsert(SessionDataEntity(localDate, currentPlanId))
+        dao.insert(SessionDataEntity(localDate, currentPlanId))
     }
 
     override fun getStream(date: LocalDate): Flow<Session?> {
