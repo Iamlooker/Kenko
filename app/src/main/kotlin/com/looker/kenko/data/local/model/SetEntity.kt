@@ -6,6 +6,7 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.looker.kenko.data.model.Exercise
+import com.looker.kenko.data.model.Rating
 import com.looker.kenko.data.model.Set
 import com.looker.kenko.data.model.SetType
 
@@ -23,10 +24,10 @@ import com.looker.kenko.data.model.SetType
             parentColumns = ["id"],
             childColumns = ["sessionId"],
             onDelete = ForeignKey.CASCADE,
-        )
+        ),
     ],
     indices = [
-        Index("sessionId", "exerciseId")
+        Index("sessionId", "exerciseId"),
     ],
 )
 data class SetEntity(
@@ -40,6 +41,9 @@ data class SetEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
 )
+
+val SetEntity.rating: Rating
+    get() = Rating(repsOrDuration * weight * type.ratingModifier)
 
 fun SetEntity.toExternal(exercise: Exercise): Set = Set(
     repsOrDuration = repsOrDuration,

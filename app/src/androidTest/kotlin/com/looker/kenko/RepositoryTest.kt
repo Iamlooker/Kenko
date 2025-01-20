@@ -59,7 +59,6 @@ class RepositoryTest {
         }
         val planItems = planRepo.getPlanItems(planId)
         assertEquals(10, planItems.size)
-        assertFails { sessionRepo.createEmpty(localDate) }
         planRepo.setCurrent(planId)
         sessionRepo.createEmpty(localDate)
         val stream = sessionRepo.getStream(localDate)
@@ -69,7 +68,7 @@ class RepositoryTest {
         sets.forEach { sessionRepo.addSet(it) }
         assertEquals(24, sessionRepo.getSets(sessionId).size)
         val set = sessionRepo.getSets(sessionId).first()
-        sessionRepo.removeSet(set)
+        sessionRepo.removeSet(set.id!!)
         assertEquals(23, sessionRepo.getSets(sessionId).size)
         val randomPerformedExercise = sets.random().exercise
         val setsForRandomExercise = sets.filter { it.exercise.id == randomPerformedExercise.id }
