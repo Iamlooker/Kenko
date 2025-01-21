@@ -14,12 +14,16 @@
 
 package com.looker.kenko.data.repository
 
-import com.looker.kenko.data.model.Rating
-import com.looker.kenko.utils.EpochDays
 import kotlinx.coroutines.flow.Flow
 
 interface PerformanceRepo {
-
-    fun exerciseBySessions(exerciseId: Int): Flow<Pair<Array<EpochDays>, Array<Rating>>>
-
+    fun exerciseBySessions(
+        exerciseId: Int?,
+        planId: Int?,
+    ): Flow<Performance?>
 }
+
+data class Performance(
+    val days: IntArray,
+    val ratings: DoubleArray,
+)

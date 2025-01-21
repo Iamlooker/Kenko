@@ -14,22 +14,52 @@
 
 package com.looker.kenko.data.repository.local
 
+import com.looker.kenko.data.local.dao.PlanHistoryDao
 import com.looker.kenko.data.local.dao.SessionDao
 import com.looker.kenko.data.local.dao.SetsDao
+import com.looker.kenko.data.local.model.SetEntity
 import com.looker.kenko.data.local.model.rating
-import com.looker.kenko.data.model.Rating
-import com.looker.kenko.data.model.plus
+import com.looker.kenko.data.repository.Performance
 import com.looker.kenko.data.repository.PerformanceRepo
-import com.looker.kenko.utils.EpochDays
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.datetime.LocalDate
 import javax.inject.Inject
+import kotlin.collections.component1
+import kotlin.collections.component2
 
 class LocalPerformanceRepo @Inject constructor(
     private val sessionDao: SessionDao,
     private val setsDao: SetsDao,
+    private val planHistoryDao: PlanHistoryDao,
 ) : PerformanceRepo {
-    override fun exerciseBySessions(exerciseId: Int): Flow<Pair<Array<EpochDays>, Array<Rating>>> =
-        TODO("Not implemented")
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun exerciseBySessions(
+        exerciseId: Int?,
+        planId: Int?,
+    ): Flow<Performance?> {
+        if (exerciseId == null && planId == null) {
+            return planHistoryDao.currentIdFlow().map { currentId ->
+                if (currentId == null) return@map null
+                performanceOf(setsDao.getSetsByExerciseIdPerPlan(planId = currentId))
+            }
+        }
+        return setsDao.setsByExerciseIdPerPlan(planId, exerciseId).map { sets ->
+            performanceOf(sets)
+        }
+    }
+
+    private suspend fun performanceOf(sets: List<SetEntity>): Performance {
+        val bySessionId = sets.groupBy { it.sessionId }
+        val days = IntArray(bySessionId.size)
+        val ratings = DoubleArray(bySessionId.size)
+        var index = 0
+        bySessionId.forEach { (sessionId, sets) ->
+            days[index] = sessionDao.getDatePerformedOn(sessionId).value
+            ratings[index] = sets.rating.value
+            index++
+        }
+        return Performance(days, ratings)
+    }
 }
