@@ -14,11 +14,13 @@
 
 package com.looker.kenko.data.repository.local
 
+import com.looker.kenko.data.local.dao.ExerciseDao
 import com.looker.kenko.data.local.dao.PlanHistoryDao
 import com.looker.kenko.data.local.dao.SessionDao
 import com.looker.kenko.data.local.dao.SetsDao
 import com.looker.kenko.data.local.model.SetEntity
 import com.looker.kenko.data.local.model.rating
+import com.looker.kenko.data.local.model.toExternal
 import com.looker.kenko.data.repository.Performance
 import com.looker.kenko.data.repository.PerformanceRepo
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -30,12 +32,13 @@ import kotlin.collections.component2
 
 class LocalPerformanceRepo @Inject constructor(
     private val sessionDao: SessionDao,
+    private val exerciseDao: ExerciseDao,
     private val setsDao: SetsDao,
     private val planHistoryDao: PlanHistoryDao,
 ) : PerformanceRepo {
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun exerciseBySessions(
+    override fun performance(
         exerciseId: Int?,
         planId: Int?,
     ): Flow<Performance?> {
@@ -50,6 +53,18 @@ class LocalPerformanceRepo @Inject constructor(
         }
     }
 
+    override suspend fun getPerformance(
+        exerciseId: Int?,
+        planId: Int?,
+    ): Performance? {
+        val adjustedPlanId = if (exerciseId == null && planId == null) {
+            planHistoryDao.getCurrentId() ?: return null
+        } else {
+            planId
+        }
+        return performanceOf(setsDao.getSetsByExerciseIdPerPlan(adjustedPlanId, exerciseId))
+    }
+
     private suspend fun performanceOf(sets: List<SetEntity>): Performance {
         val bySessionId = sets.groupBy { it.sessionId }
         val days = IntArray(bySessionId.size)
@@ -60,6 +75,13 @@ class LocalPerformanceRepo @Inject constructor(
             ratings[index] = sets.rating.value
             index++
         }
-        return Performance(days, ratings)
+        val (first, last) = run {
+            val firstSet = sets.first()
+            val lastSet = sets.last()
+            val firstExercise = exerciseDao.get(firstSet.exerciseId)!!.toExternal()
+            val lastExercise = exerciseDao.get(lastSet.exerciseId)!!.toExternal()
+            firstSet.toExternal(firstExercise) to lastSet.toExternal(lastExercise)
+        }
+        return Performance(days, ratings, first, last)
     }
 }

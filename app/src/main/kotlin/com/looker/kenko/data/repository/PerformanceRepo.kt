@@ -14,16 +14,19 @@
 
 package com.looker.kenko.data.repository
 
+import androidx.compose.runtime.Immutable
+import com.looker.kenko.data.model.Set
 import kotlinx.coroutines.flow.Flow
 
 interface PerformanceRepo {
-    fun exerciseBySessions(
-        exerciseId: Int?,
-        planId: Int?,
-    ): Flow<Performance?>
+    fun performance(exerciseId: Int?, planId: Int?): Flow<Performance?>
+    suspend fun getPerformance(exerciseId: Int?, planId: Int?): Performance?
 }
 
+@Immutable
 data class Performance(
     val days: IntArray,
     val ratings: DoubleArray,
+    val starting: Set,
+    val current: Set,
 )
