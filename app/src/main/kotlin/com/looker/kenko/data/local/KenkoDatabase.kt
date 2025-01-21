@@ -1,10 +1,23 @@
+/*
+ * Copyright (C) 2025 LooKeR & Contributors
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.looker.kenko.data.local
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
 import com.looker.kenko.data.local.dao.ExerciseDao
 import com.looker.kenko.data.local.dao.PlanDao
 import com.looker.kenko.data.local.dao.PlanHistoryDao
@@ -28,13 +41,12 @@ import com.looker.kenko.data.local.model.SetEntity
         SetEntity::class,
     ],
 )
-@TypeConverters(Converters::class)
 abstract class KenkoDatabase : RoomDatabase() {
-    abstract val sessionDao: SessionDao
-    abstract val exerciseDao: ExerciseDao
-    abstract val planDao: PlanDao
-    abstract val setsDao: SetsDao
-    abstract val historyDao: PlanHistoryDao
+    abstract fun sessionDao(): SessionDao
+    abstract fun exerciseDao(): ExerciseDao
+    abstract fun planDao(): PlanDao
+    abstract fun setsDao(): SetsDao
+    abstract fun historyDao(): PlanHistoryDao
 }
 
 fun kenkoDatabase(context: Context) = Room.databaseBuilder(

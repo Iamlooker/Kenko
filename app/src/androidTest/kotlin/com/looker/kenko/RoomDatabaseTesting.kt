@@ -1,3 +1,17 @@
+/*
+ * Copyright (C) 2025 LooKeR & Contributors
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.looker.kenko
 
 import androidx.room.Room
@@ -11,11 +25,11 @@ import com.looker.kenko.data.local.dao.ExerciseDao
 import com.looker.kenko.data.local.dao.PlanDao
 import com.looker.kenko.data.local.model.ExerciseEntity
 import com.looker.kenko.data.model.MuscleGroups
+import com.looker.kenko.utils.EpochDays
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.LocalDate
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -69,22 +83,22 @@ class RoomDatabaseTesting {
             KenkoDatabase::class.java,
             DB_NAME,
         ).addMigrations(MIGRATION_1_2).build()
-        val exercises = updatedDb.exerciseDao.stream().first()
-        val planHistory = updatedDb.historyDao.getCurrent()
+        val exercises = updatedDb.exerciseDao().stream().first()
+        val planHistory = updatedDb.historyDao().getCurrent()
         assertNotNull(planHistory)
         assertNotNull(planHistory.planId)
-        val fullHistory = updatedDb.historyDao.getAll()
-        val session = updatedDb.sessionDao.getSession(LocalDate.fromEpochDays(412))
-        val emptySession = updatedDb.sessionDao.getSession(LocalDate.fromEpochDays(413))
-        val currentPlan = updatedDb.planDao.getPlanById(planHistory.planId)
-        val currentPlanItems = updatedDb.planDao.getPlanItemsByPlanId(planHistory.planId)
+        val fullHistory = updatedDb.historyDao().getAll()
+        val session = updatedDb.sessionDao().getSession(EpochDays(412))
+        val emptySession = updatedDb.sessionDao().getSession(EpochDays(413))
+        val currentPlan = updatedDb.planDao().getPlanById(planHistory.planId)
+        val currentPlanItems = updatedDb.planDao().getPlanItemsByPlanId(planHistory.planId)
         assertNotNull(session)
         assertNotNull(emptySession)
         assertNotNull(currentPlan)
         assertEquals(session.sets.size, 6)
         assertContentEquals(
             session.sets.map {
-                updatedDb.exerciseDao.get(it.exerciseId)?.name ?: ""
+                updatedDb.exerciseDao().get(it.exerciseId)?.name ?: ""
             },
             listOf("Pullups", "Rows", "Press", "Shrugs", "Curls", "Plank"),
         )
