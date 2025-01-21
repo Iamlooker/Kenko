@@ -77,7 +77,7 @@ interface PlanDao {
     @Query(
         """
         SELECT EXISTS
-        (SELECT name
+        (SELECT *
         FROM plans
         WHERE name = :planName)
         """

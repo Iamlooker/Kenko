@@ -1,5 +1,21 @@
+/*
+ * Copyright (C) 2025 LooKeR & Contributors
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.looker.kenko.ui.planEdit
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,8 +28,11 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
@@ -32,6 +51,7 @@ fun PlanName(
     planName: TextFieldState,
     onNext: KeyboardActionHandler,
     modifier: Modifier = Modifier,
+    error: Boolean = false,
 ) {
     Column(
         modifier = modifier,
@@ -44,28 +64,42 @@ fun PlanName(
             color = MaterialTheme.colorScheme.secondary,
         )
         PlanNameField(state = planName, onNext = onNext)
-        PlanNameSuggestion()
+        val contentColor by animateColorAsState(
+            targetValue = if (error) {
+                MaterialTheme.colorScheme.error
+            } else {
+                MaterialTheme.colorScheme.outline
+            },
+        )
+        CompositionLocalProvider(LocalContentColor provides contentColor) {
+            PlanNameSuggestion {
+                if (error) {
+                    Text(text = stringResource(R.string.error_plan_name_exists))
+                } else {
+                    Text(text = stringResource(R.string.desc_select_plan_name))
+                }
+            }
+        }
     }
 }
 
 @Composable
-private fun PlanNameSuggestion(modifier: Modifier = Modifier) {
+private fun PlanNameSuggestion(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
+) {
     Row(
-        modifier = modifier,
+        modifier = modifier.animateContentSize(),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.Top,
     ) {
         Icon(
             imageVector = KenkoIcons.Info,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.outline,
         )
-        Text(
-            text = stringResource(R.string.desc_select_plan_name),
-            style = MaterialTheme.typography.labelLarge.merge(
-                lineBreak = LineBreak.Paragraph,
-                color = MaterialTheme.colorScheme.outline,
-            ),
+        ProvideTextStyle(
+            value = MaterialTheme.typography.labelLarge.copy(lineBreak = LineBreak.Paragraph),
+            content = content,
         )
     }
 }
@@ -94,7 +128,7 @@ private fun PlanNameField(
                 it()
                 HorizontalDivider()
             }
-        }
+        },
     )
 }
 
@@ -104,7 +138,8 @@ private fun FieldPreview() {
     KenkoTheme {
         PlanName(
             planName = TextFieldState("Winter Arc"),
-            onNext = {}
+            error = false,
+            onNext = {},
         )
     }
 }

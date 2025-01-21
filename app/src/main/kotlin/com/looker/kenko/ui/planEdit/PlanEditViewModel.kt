@@ -1,3 +1,17 @@
+/*
+ * Copyright (C) 2025 LooKeR & Contributors
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.looker.kenko.ui.planEdit
 
 import androidx.compose.foundation.text.input.TextFieldState
@@ -56,6 +70,10 @@ class PlanEditViewModel @Inject constructor(
 
     private val _fullDaySelection: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
+    val isNameAlreadyUsed = snapshotFlow { planNameState.text.trim().toString() }.map {
+        repo.planNameExists(it)
+    }.asStateFlow(false)
+
     val pageState: StateFlow<PlanEditStage> = planIdStream.map { id ->
         if (id == -1) PlanEditStage.NameEdit else PlanEditStage.PlanEdit
     }.asStateFlow(PlanEditStage.NameEdit)
@@ -81,18 +99,18 @@ class PlanEditViewModel @Inject constructor(
         ),
     )
 
-    val isNameAlreadyUsed = snapshotFlow { planNameState }.map {
-        repo.planNameExists(it.text.toString())
-    }.asStateFlow(false)
-
     fun saveName() {
         viewModelScope.launch {
-            if (planNameState.text.isNotBlank()) {
-                val createId = repo.createPlan(planNameState.text.toString())
-                planIdStream.emit(createId)
-            } else {
+            if (planNameState.text.isBlank()) {
                 snackbarState.showSnackbar(stringHandler.getString(R.string.error_plan_name_empty))
+                return@launch
             }
+            if (isNameAlreadyUsed.value) {
+                snackbarState.showSnackbar(stringHandler.getString(R.string.error_plan_name_exists))
+                return@launch
+            }
+            val createId = repo.createPlan(planNameState.text.toString())
+            planIdStream.emit(createId)
         }
     }
 
