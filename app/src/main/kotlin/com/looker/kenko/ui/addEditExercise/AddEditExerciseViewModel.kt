@@ -34,16 +34,18 @@ import com.looker.kenko.utils.asStateFlow
 import com.looker.kenko.utils.isValidUrl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 
 @HiltViewModel
-@OptIn(ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class AddEditExerciseViewModel @Inject constructor(
     private val repo: ExerciseRepo,
     private val stringHandler: StringHandler,
@@ -70,13 +72,13 @@ class AddEditExerciseViewModel @Inject constructor(
     var reference: String by mutableStateOf("")
         private set
 
-    private val isReferenceInvalid: Flow<Boolean> =
-        snapshotFlow { reference }
-            .mapLatest { it.isValidUrl() && it.isNotBlank() }
+    private val isReferenceInvalid = snapshotFlow { reference }
+        .debounce(200.milliseconds)
+        .mapLatest { it.isValidUrl() && it.isNotBlank() }
 
-    private val exerciseAlreadyExistError: Flow<Boolean> =
-        snapshotFlow { exerciseName }
-            .mapLatest { repo.isExerciseAvailable(it) && !isReadOnly }
+    private val exerciseAlreadyExistError = snapshotFlow { exerciseName }
+        .debounce(200.milliseconds)
+        .mapLatest { repo.isExerciseAvailable(it) && !isReadOnly }
 
     val state = combine(
         targetMuscle,

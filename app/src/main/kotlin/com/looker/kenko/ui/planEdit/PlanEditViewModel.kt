@@ -32,14 +32,17 @@ import com.looker.kenko.ui.planEdit.navigation.PlanEditRoute
 import com.looker.kenko.utils.asStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DayOfWeek
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 
 @HiltViewModel
 class PlanEditViewModel @Inject constructor(
@@ -70,9 +73,11 @@ class PlanEditViewModel @Inject constructor(
 
     private val _fullDaySelection: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
-    val isNameAlreadyUsed = snapshotFlow { planNameState.text.trim().toString() }.map {
-        repo.planNameExists(it)
-    }.asStateFlow(false)
+    @OptIn(FlowPreview::class)
+    val isNameAlreadyUsed = snapshotFlow { planNameState.text.trim().toString() }
+        .debounce(200.milliseconds)
+        .map { repo.planNameExists(it) }
+        .asStateFlow(false)
 
     val pageState: StateFlow<PlanEditStage> = planIdStream.map { id ->
         if (id == -1) PlanEditStage.NameEdit else PlanEditStage.PlanEdit
