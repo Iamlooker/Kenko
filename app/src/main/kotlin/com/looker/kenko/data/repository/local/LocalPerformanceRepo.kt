@@ -68,7 +68,7 @@ class LocalPerformanceRepo @Inject constructor(
     private suspend fun performanceOf(sets: List<SetEntity>): Performance {
         val bySessionId = sets.groupBy { it.sessionId }
         val days = IntArray(bySessionId.size)
-        val ratings = DoubleArray(bySessionId.size)
+        val ratings = FloatArray(bySessionId.size)
         var index = 0
         bySessionId.forEach { (sessionId, sets) ->
             days[index] = sessionDao.getDatePerformedOn(sessionId).value

@@ -1,3 +1,17 @@
+/*
+ * Copyright (C) 2025 LooKeR & Contributors
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.looker.kenko.ui.addSet
 
 import androidx.compose.foundation.text.KeyboardOptions
@@ -39,7 +53,7 @@ class AddSetViewModel @AssistedInject constructor(
     }
 
     fun addWeight(value: Float) {
-        weights.setTextAndPlaceCursorAtEnd((weightDouble + value).toString())
+        weights.setTextAndPlaceCursorAtEnd((weightFloat + value).toString())
     }
 
     val repsDragEvents: DragEvents = object : DragEvents {
@@ -83,7 +97,7 @@ class AddSetViewModel @AssistedInject constructor(
             val exercise = exerciseRepo.get(id) ?: return@launch
             val set = Set(
                 repsOrDuration = repInt,
-                weight = weightDouble,
+                weight = weightFloat,
                 exercise = exercise,
                 type = SetType.Standard,
             )
@@ -94,7 +108,7 @@ class AddSetViewModel @AssistedInject constructor(
     private inline val repInt: Int
         get() = reps.text.toString().toIntOrNull() ?: 0
 
-    private inline val weightDouble: Float
+    private inline val weightFloat: Float
         get() = weights.text.toString().toFloatOrNull() ?: 0F
 
     @AssistedFactory

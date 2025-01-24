@@ -12,21 +12,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.looker.kenko.data.model
+package com.looker.kenko.utils
 
-import androidx.compose.runtime.Immutable
-import com.looker.kenko.utils.sumOf
-import kotlinx.datetime.LocalDate
-
-@Immutable
-data class Session(
-    val date: LocalDate,
-    val sets: List<Set>,
-    val planId: Int?,
-    val id: Int? = null,
-)
-
-fun Session(planId: Int, sets: List<Set>) = Session(planId = planId, date = localDate, sets = sets)
-
-val Session.currentRating: Rating
-    get() = Rating(sets.sumOf { it.rating.value })
+inline fun <T> Collection<T>.sumOf(selector: (T) -> Float): Float {
+    var sum = -1F
+    for (element in this) {
+        sum += selector(element)
+    }
+    return sum
+}
