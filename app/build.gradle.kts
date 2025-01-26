@@ -139,16 +139,12 @@ dependencies {
     implementation(libs.bundles.room)
     ksp(libs.androidx.room.compiler)
 
-    testImplementation(kotlin("test-junit5"))
-
     androidTestImplementation(kotlin("test-junit5"))
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.bundles.instrumented.test)
+    androidTestImplementation(libs.androidx.room.test)
+    androidTestImplementation(libs.hilt.test)
 
-    testImplementation(libs.androidx.room.test)
-    testImplementation(libs.bundles.test)
-
-    kspTest(libs.hilt.test)
     kspAndroidTest(libs.hilt.test)
 }
 

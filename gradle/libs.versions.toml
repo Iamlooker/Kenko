@@ -13,7 +13,6 @@ espresso = "3.6.1"
 hilt = "2.54"
 hiltNavigation = "1.2.0"
 jUnitExt = "1.2.1"
-junitJupiter = "5.11.4"
 kotlin = "2.1.0"
 ksp = "2.1.0-1.0.29"
 lifecycle = "2.8.7"
@@ -59,7 +58,6 @@ compose-ui-test = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 hilt-test = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
-junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiter" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
@@ -85,6 +83,6 @@ coroutines = ["kotlinx-coroutines-core", "kotlinx-coroutines-android"]
 lifecycle = ["androidx-lifecycle-runtime-compose", "androidx-lifecycle-runtime-ktx", "androidx-lifecycle-viewmodel-compose", "androidx-lifecycle-viewmodel-ktx"]
 compose = ["compose-foundation", "compose-ui", "compose-ui-graphics", "compose-ui-material3", "compose-ui-tooling-preview", "compose-runtime"]
 compose-debug = ["compose-ui-tooling", "compose-ui-test-manifest"]
-test = ["junit-jupiter", "kotlinx-coroutines-test", "androidx-test-core", "androidx-test-core-ktx", "androidx-test-runner", "androidx-test-rules", "hilt-test"]
-instrumented-test = ["kotlinx-coroutines-test", "compose-ui-test", "androidx-espresso-core", "androidx-junit-ext", "androidx-room-test", "androidx-test-core", "androidx-test-core-ktx", "androidx-test-runner", "androidx-test-rules", "hilt-test"]
+test = ["kotlinx-coroutines-test", "androidx-test-core", "androidx-test-core-ktx", "androidx-test-runner", "androidx-test-rules"]
+instrumented-test = ["kotlinx-coroutines-test", "androidx-test-core", "androidx-test-core-ktx", "androidx-test-runner", "androidx-test-rules", "androidx-junit-ext"]
 vico = ["vico-compose", "vico-compose-m3"]
