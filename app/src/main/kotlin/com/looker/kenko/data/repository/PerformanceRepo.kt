@@ -26,7 +26,7 @@ interface PerformanceRepo {
 @Immutable
 data class Performance(
     val days: IntArray,
-    val ratings: DoubleArray,
+    val ratings: FloatArray,
     val starting: Set,
     val current: Set,
 )
