@@ -5,6 +5,7 @@ coil = "2.7.0"
 composeBom = "2025.02.00"
 core = "1.15.0"
 core-test = "1.6.1"
+koalaplotCore = "0.7.1"
 test-runner = "1.6.2"
 coroutines = "1.10.1"
 datastore = "1.1.2"
@@ -16,56 +17,55 @@ jUnitExt = "1.2.1"
 kotlin = "2.1.0"
 ksp = "2.1.0-1.0.29"
 lifecycle = "2.8.7"
-navigation = "2.8.5"
-rebugger = "1.0.0-rc03"
+navigation = "2.8.7"
 room = "2.6.1"
 serialization = "1.8.0"
 shapes = "1.0.1"
 vico = "2.0.0-beta.7"
 
 [libraries]
-androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity" }
-androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core" }
-androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
-androidx-graphics-shapes = { group = "androidx.graphics", name = "graphics-shapes", version.ref = "shapes" }
-androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigation" }
-androidx-junit-ext = { group = "androidx.test.ext", name = "junit", version.ref = "jUnitExt" }
-androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle" }
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
-androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
-androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
-androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
-androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
-androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
-androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
-androidx-room-test = { group = "androidx.room", name = "room-testing", version.ref = "room" }
-androidx-test-core = { group = "androidx.test", name = "core", version.ref = "core-test" }
-androidx-test-core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "core-test" }
-androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "test-runner" }
-androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "core-test" }
-coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
-compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
-compose-ui = { group = "androidx.compose.ui", name = "ui" }
-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-compose-ui-material3 = { group = "androidx.compose.material3", name = "material3" }
-compose-ui-test = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
-hilt-test = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
-kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
-kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
-kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
-kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "dateTime" }
-kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
-rebugger = { group = "io.github.theapache64", name = "rebugger", version.ref = "rebugger" }
-vico-compose = { group = "com.patrykandpatrick.vico", name = "compose", version.ref = "vico" }
-vico-compose-m3 = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
+activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
+core-ktx = { module = "androidx.core:core-ktx", version.ref = "core" }
+datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso" }
+androidx-graphics-shapes = { module = "androidx.graphics:graphics-shapes", version.ref = "shapes" }
+hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigation" }
+junit-ext = { module = "androidx.test.ext:junit", version.ref = "jUnitExt" }
+koalaplot-core = { module = "io.github.koalaplot:koalaplot-core", version.ref = "koalaplotCore" }
+lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
+lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
+lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
+navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-test = { module = "androidx.room:room-testing", version.ref = "room" }
+test-core = { module = "androidx.test:core", version.ref = "core-test" }
+test-core-ktx = { module = "androidx.test:core-ktx", version.ref = "core-test" }
+test-runner = { module = "androidx.test:runner", version.ref = "test-runner" }
+test-rules = { module = "androidx.test:rules", version.ref = "core-test" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+compose-foundation = { module = "androidx.compose.foundation:foundation" }
+compose-runtime = { module = "androidx.compose.runtime:runtime" }
+compose-ui = { module = "androidx.compose.ui:ui" }
+compose-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
+compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+compose-ui-material3 = { module = "androidx.compose.material3:material3" }
+compose-ui-test = { module = "androidx.compose.ui:ui-test-junit4" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
+hilt-test = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "dateTime" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+vico-compose = { module = "com.patrykandpatrick.vico:compose", version.ref = "vico" }
+vico-compose-m3 = { module = "com.patrykandpatrick.vico:compose-m3", version.ref = "vico" }
 
 [plugins]
 android-app = { id = "com.android.application", version.ref = "agp" }
@@ -78,11 +78,11 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 
 [bundles]
 coil = ["coil-compose"]
-room = ["androidx-room-ktx", "androidx-room-runtime"]
+room = ["room-ktx", "room-runtime"]
 coroutines = ["kotlinx-coroutines-core", "kotlinx-coroutines-android"]
-lifecycle = ["androidx-lifecycle-runtime-compose", "androidx-lifecycle-runtime-ktx", "androidx-lifecycle-viewmodel-compose", "androidx-lifecycle-viewmodel-ktx"]
+lifecycle = ["lifecycle-runtime-compose", "lifecycle-runtime-ktx", "lifecycle-viewmodel-compose", "lifecycle-viewmodel-ktx"]
 compose = ["compose-foundation", "compose-ui", "compose-ui-graphics", "compose-ui-material3", "compose-ui-tooling-preview", "compose-runtime"]
 compose-debug = ["compose-ui-tooling", "compose-ui-test-manifest"]
-test = ["kotlinx-coroutines-test", "androidx-test-core", "androidx-test-core-ktx", "androidx-test-runner", "androidx-test-rules"]
-instrumented-test = ["kotlinx-coroutines-test", "androidx-test-core", "androidx-test-core-ktx", "androidx-test-runner", "androidx-test-rules", "androidx-junit-ext"]
+test = ["kotlinx-coroutines-test", "test-core", "test-core-ktx", "test-runner", "test-rules"]
+instrumented-test = ["kotlinx-coroutines-test", "test-core", "test-core-ktx", "test-runner", "test-rules", "junit-ext"]
 vico = ["vico-compose", "vico-compose-m3"]

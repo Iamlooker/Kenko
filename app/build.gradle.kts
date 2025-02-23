@@ -113,13 +113,13 @@ android {
 dependencies {
 
     kotlin("stdlib")
-    implementation(libs.androidx.core.ktx)
+    implementation(libs.core.ktx)
 
     implementation(platform(libs.compose.bom))
 
     implementation(libs.bundles.lifecycle)
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.navigation.compose)
+    implementation(libs.activity.compose)
+    implementation(libs.navigation.compose)
 
     implementation(libs.kotlinx.datetime)
     implementation(libs.kotlinx.serialization.json)
@@ -128,21 +128,21 @@ dependencies {
     implementation(libs.bundles.compose)
     debugImplementation(libs.bundles.compose.debug)
 
-    implementation("io.github.koalaplot:koalaplot-core:0.7.1")
+    implementation(libs.koalaplot.core)
 
     implementation(libs.hilt.android)
-    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.hilt.navigation.compose)
     ksp(libs.hilt.compiler)
 
-    implementation(libs.androidx.datastore)
+    implementation(libs.datastore)
 
     implementation(libs.bundles.room)
-    ksp(libs.androidx.room.compiler)
+    ksp(libs.room.compiler)
 
     androidTestImplementation(kotlin("test-junit5"))
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.bundles.instrumented.test)
-    androidTestImplementation(libs.androidx.room.test)
+    androidTestImplementation(libs.room.test)
     androidTestImplementation(libs.hilt.test)
 
     kspAndroidTest(libs.hilt.test)
