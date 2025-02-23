@@ -2,27 +2,28 @@
 
 <img width="" src="metadata/en-US/images/featureGraphic.png" alt="Kenko" align="center">
 
+Kenko is a workout journal which will provide you with appropriate progressive-overload and well
+thought-out plans
 
-### 
-###
-###
-Kenko is a workout journal which will provide you with appropriate progressive-overload and well thought-out plans
-##
+</div>
 
 <div align="left">
 
 ## Screenshots
+
 <img src="metadata/en-US/images/phoneScreenshots/1.png" width="25%" /><img src="metadata/en-US/images/phoneScreenshots/2.png" width="25%" /><img src="metadata/en-US/images/phoneScreenshots/3.png" width="25%" /><img src="metadata/en-US/images/phoneScreenshots/4.png" width="25%" />
 
 ## TODO
+
 - [ ] Add Rating System
-- [ ] Provide Targeted Overload 
+- [ ] Provide Targeted Overload
 - [ ] Add Import/Export
 - [x] Add Support for Isometric exercises
 
 ## CONTRIBUTIONS
 
 ## LICENSE
+
 ```
 Kenko
 
@@ -38,3 +39,5 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ```
+
+</div>
