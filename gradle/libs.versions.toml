@@ -1,8 +1,8 @@
 [versions]
 activity = "1.10.0"
-agp = "8.8.0"
+agp = "8.8.1"
 coil = "2.7.0"
-composeBom = "2024.12.01"
+composeBom = "2025.02.00"
 core = "1.15.0"
 core-test = "1.6.1"
 test-runner = "1.6.2"
