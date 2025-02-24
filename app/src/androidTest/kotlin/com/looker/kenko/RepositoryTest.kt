@@ -65,7 +65,7 @@ class RepositoryTest {
         assertNotNull(stream.first())
         val sessionId = stream.first()!!.id!!
         val sets = (1..24).map { Set(12, 12F, SetType.entries.random(), exercises.random()) }
-        sets.forEach { sessionRepo.addSet(it) }
+        sets.forEach { sessionRepo.addSet(localDate, it) }
         assertEquals(24, sessionRepo.getSets(sessionId).size)
         val set = sessionRepo.getSets(sessionId).first()
         sessionRepo.removeSet(set.id!!)

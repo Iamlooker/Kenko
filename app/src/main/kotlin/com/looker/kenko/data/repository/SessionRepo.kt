@@ -11,7 +11,7 @@ interface SessionRepo {
 
     val setsCount: Flow<Int>
 
-    suspend fun addSet(set: Set)
+    suspend fun addSet(date: LocalDate, set: Set)
 
     suspend fun removeSet(setId: Int)
 

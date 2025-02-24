@@ -25,6 +25,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.looker.kenko.data.model.Set
 import com.looker.kenko.data.model.SetType
+import com.looker.kenko.data.model.localDate
 import com.looker.kenko.data.repository.ExerciseRepo
 import com.looker.kenko.data.repository.SessionRepo
 import com.looker.kenko.ui.addSet.components.DragEvents
@@ -101,7 +102,7 @@ class AddSetViewModel @AssistedInject constructor(
                 exercise = exercise,
                 type = SetType.Standard,
             )
-            sessionRepo.addSet(set)
+            sessionRepo.addSet(localDate, set)
         }
     }
 

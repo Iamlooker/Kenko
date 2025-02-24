@@ -26,7 +26,6 @@ import com.looker.kenko.data.model.Session
 import com.looker.kenko.data.model.Set
 import com.looker.kenko.data.model.localDate
 import com.looker.kenko.data.repository.SessionRepo
-import com.looker.kenko.utils.isToday
 import com.looker.kenko.utils.toLocalEpochDays
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -49,11 +48,11 @@ class LocalSessionRepo @Inject constructor(
     override val setsCount: Flow<Int> =
         setsDao.totalSetCount()
 
-    override suspend fun addSet(set: Set) {
-        if (!dao.sessionExistsOn(localDate.toLocalEpochDays())) {
-            createEmpty(localDate)
+    override suspend fun addSet(date: LocalDate, set: Set) {
+        if (!dao.sessionExistsOn(date.toLocalEpochDays())) {
+            createEmpty(date)
         }
-        val currentSessionId = requireNotNull(dao.getSessionId(localDate.toLocalEpochDays())) {
+        val currentSessionId = requireNotNull(dao.getSessionId(date.toLocalEpochDays())) {
             "Session does not exist"
         }
         setsDao.insert(
@@ -72,7 +71,6 @@ class LocalSessionRepo @Inject constructor(
     }
 
     override suspend fun createEmpty(date: LocalDate) {
-        if (!date.isToday) error("Editing on old dates is not supported!")
         val currentPlanId = requireNotNull(historyDao.getCurrentId()) { "No plan active" }
         dao.insert(SessionDataEntity(localDate.toLocalEpochDays(), currentPlanId))
     }
