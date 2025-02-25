@@ -48,17 +48,11 @@ class LocalSessionRepo @Inject constructor(
     override val setsCount: Flow<Int> =
         setsDao.totalSetCount()
 
-    override suspend fun addSet(date: LocalDate, set: Set) {
-        if (!dao.sessionExistsOn(date.toLocalEpochDays())) {
-            createEmpty(date)
-        }
-        val currentSessionId = requireNotNull(dao.getSessionId(date.toLocalEpochDays())) {
-            "Session does not exist"
-        }
+    override suspend fun addSet(sessionId: Int, set: Set) {
         setsDao.insert(
             set.toEntity(
-                currentSessionId,
-                setsDao.getSetsCountBySessionId(currentSessionId) ?: 0,
+                sessionId,
+                setsDao.getSetsCountBySessionId(sessionId) ?: 0,
             ),
         )
     }
@@ -70,12 +64,16 @@ class LocalSessionRepo @Inject constructor(
         setsDao.delete(setId)
     }
 
-    override suspend fun createEmpty(date: LocalDate) {
+    override suspend fun getSessionIdOrCreate(date: LocalDate): Int {
         val currentPlanId = requireNotNull(historyDao.getCurrentId()) { "No plan active" }
-        dao.insert(SessionDataEntity(localDate.toLocalEpochDays(), currentPlanId))
+        val existingId = dao.getSessionId(date.toLocalEpochDays())
+        if (existingId != null) {
+            return existingId
+        }
+        return dao.insert(SessionDataEntity(date.toLocalEpochDays(), currentPlanId)).toInt()
     }
 
-    override fun getStream(date: LocalDate): Flow<Session?> {
+    override fun streamByDate(date: LocalDate): Flow<Session?> {
         return dao
             .session(date.toLocalEpochDays())
             .map { session ->

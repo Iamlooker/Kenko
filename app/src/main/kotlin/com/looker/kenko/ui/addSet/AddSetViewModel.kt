@@ -102,7 +102,8 @@ class AddSetViewModel @AssistedInject constructor(
                 exercise = exercise,
                 type = SetType.Standard,
             )
-            sessionRepo.addSet(localDate, set)
+            val sessionId = sessionRepo.getSessionIdOrCreate(localDate)
+            sessionRepo.addSet(sessionId, set)
         }
     }
 

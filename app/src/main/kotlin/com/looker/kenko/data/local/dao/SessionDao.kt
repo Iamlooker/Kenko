@@ -16,6 +16,7 @@ package com.looker.kenko.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.looker.kenko.data.local.model.SessionDataEntity
@@ -26,8 +27,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface SessionDao {
 
-    @Insert
-    suspend fun insert(session: SessionDataEntity)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(session: SessionDataEntity): Long
 
     @Query(
         """
