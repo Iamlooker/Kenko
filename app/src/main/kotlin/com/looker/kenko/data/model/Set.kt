@@ -15,6 +15,7 @@
 package com.looker.kenko.data.model
 
 import androidx.compose.runtime.Immutable
+import com.looker.kenko.data.local.model.SetType
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -30,12 +31,3 @@ data class Set(
 val Set.rating: Rating
     get() = Rating(repsOrDuration * weight * type.ratingModifier)
 
-enum class SetType(val ratingModifier: Float) {
-    Standard(STANDARD_SET_RATING_MODIFIER),
-    Drop(DROP_SET_RATING_MODIFIER),
-    RestPause(REST_PAUSE_SET_RATING_MODIFIER),
-}
-
-private const val STANDARD_SET_RATING_MODIFIER: Float = 1.0F
-private const val DROP_SET_RATING_MODIFIER: Float = 1.35F
-private const val REST_PAUSE_SET_RATING_MODIFIER: Float = 1.2F

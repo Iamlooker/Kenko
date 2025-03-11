@@ -22,7 +22,6 @@ import androidx.room.PrimaryKey
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.Rating
 import com.looker.kenko.data.model.Set
-import com.looker.kenko.data.model.SetType
 import com.looker.kenko.utils.sumOf
 
 @Entity(

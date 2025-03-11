@@ -23,8 +23,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.looker.kenko.data.local.model.SetType
 import com.looker.kenko.data.model.Set
-import com.looker.kenko.data.model.SetType
 import com.looker.kenko.data.model.localDate
 import com.looker.kenko.data.repository.ExerciseRepo
 import com.looker.kenko.data.repository.SessionRepo
@@ -63,7 +63,7 @@ class AddSetViewModel @AssistedInject constructor(
             timer = fixedRateTimer(
                 name = "Rep Increment",
                 initialDelay = 100L,
-                period = 200L
+                period = 200L,
             ) {
                 addRep(if (isRight) 1 else -1)
             }
@@ -81,7 +81,7 @@ class AddSetViewModel @AssistedInject constructor(
             timer = fixedRateTimer(
                 name = "Weight Increment",
                 initialDelay = 100L,
-                period = 200L
+                period = 200L,
             ) {
                 addWeight(if (isRight) 1F else -1F)
             }
