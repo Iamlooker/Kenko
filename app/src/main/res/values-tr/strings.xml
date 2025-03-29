@@ -1,147 +1,173 @@
 <resources>
     <string name="app_name" translatable="false">Kenko</string>
 
-    <!--Onboarding-->
+    <!--Başlangıç Ekranı-->
     <string name="label_kenko" translatable="false">Kenko</string>
     <string name="label_kenko_jp" translatable="false">ケンコウ</string>
     <string name="label_kenko_meaning">○ sağlıklı</string>
     <string name="label_kenko_meaning_ALT">○ güçlü</string>
-    <string name="label_lets_go">Başlayalım</string>
+    <string name="label_lets_go">Başla</string>
 
-    <!--Home-->
-    <string name="label_continue_session">Devam Et\nSeans</string>
-    <string name="label_start_session">Başlat\nSeans</string>
-    <string name="label_explore_sessions">Keşfet\nSeanslar</string>
-    <string name="label_explore_exercises">Keşfet\nEgzersizler</string>
-    <string name="label_add_new_exercises_home">Ekle\nEgzersiz</string>
+    <!--Ana Sayfa-->
+    <string name="label_continue_session">Devam Et</string>
+    <string name="label_start_session">Başlat</string>
+    <string name="label_explore_sessions">Seansları\nKeşfet</string>
+    <string name="label_explore_exercises">Egzersizleri\nKeşfet</string>
+    <string name="label_add_new_exercises_home">Egzersiz\nEkle</string>
     <string name="label_current_plan_home">Mevcut\nPlan</string>
 
-    <!--Session Details-->
+    <!--Seans Detayları-->
     <string name="label_nothing_today">Bugün bir şey yok</string>
-    <string name="label_missed_day">Günü kaçırdınız mı?</string>
+    <string name="label_missed_day">Günü kaçırdın mı?</string>
 
-    <!--Plans-->
+    <!--Planlar-->
     <string name="label_plans_title">Planlar</string>
+    <string name="label_edit_plan">Planı Düzenle</string>
     <string name="no_exercises_yet">Henüz egzersiz yok</string>
 
-    <!--Profile-->
-    <string name="label_profile_greeting">merhaba</string>
-    <string name="label_select_plan">Plan Seç\nPlan</string>
-    <string name="label_select_plan_one">Plan Seç Plan</string>
+    <string name="heading_select_plan_name">Bir plan adı seç</string>
+    <string name="heading_select_plan_items">Egzersizleri seç</string>
+    <string name="desc_select_plan_name">
+        Plan adı kolay hatırlanabilir ve çok uzun olmamalıdır. İdeal olarak benzersiz olmalı ve özel semboller içermemelidir.\n
+        örneğin: Push Pull Leg, Güç Döngüsü, vb.
+    </string>
+
+    <!--Profil-->
+    <string name="label_profile_greeting">Merhaba</string>
+    <string name="label_select_plan">Plan\nSeç</string>
+    <string name="label_select_plan_one">Plan Seç</string>
     <string name="label_current_plan">Mevcut Plan</string>
     <string name="label_lifts">Kaldırmalar</string>
     <string name="label_plan_description">
         <ul>%1$s egzersiz</ul>\n
         <ul>%2$s gün</ul>\n
-        <ul>%3$s dinlenme günleri</ul>
+        <ul>%3$s dinlenme günü</ul>
     </string>
 
-    <!--Exercises-->
+    <!--Egzersizler-->
     <string name="label_browse_exercises">Egzersizlere Göz At</string>
     <string name="label_all_muscle_groups">Tümü</string>
     <string name="label_create_exercise">Oluştur</string>
 
-    <!--Add Exercises-->
-    <string name="label_new_exercise">Yeni Egzersiz?</string>
+    <!--Egzersiz Ekle-->
+    <string name="label_new_exercise">Egzersiz Ekle</string>
+    <string name="label_edit_exercise">Düzenle</string>
     <string name="label_target">Hedef</string>
     <string name="label_is_isometric">İzometrik</string>
     <string name="label_reference">Referans</string>
-    <string name="label_is_isometric_DESC">Egzersiz statik tutuşlar gerektirir</string>
-    <string name="label_reference_optional">opsiyonel*</string>
+    <string name="label_is_isometric_DESC">Egzersiz statik tutuş gerektirir</string>
+    <string name="label_reference_optional">isteğe bağlı*</string>
     <string name="label_exercise_exists">Egzersiz Zaten Var</string>
 
-    <!--Select Exercises-->
+    <!--Egzersiz Seç-->
     <string name="label_add_exercise_header">Egzersiz Ekle</string>
     <string name="label_search_exercise">Egzersiz Ara</string>
     <string name="label_no_exercise_today">Bugün planlanmış egzersiz yok</string>
 
-    <!--Add Sets-->
-    <string name="label_add_set_for">Set Ekle</string>
+    <!--Set Ekle-->
+    <string name="label_add_set_for">Şunun için Set Ekle</string>
     <string name="label_plus_int">+%s</string>
     <string name="label_minus_int">-%s</string>
 
     <string name="label_settings">Ayarlar</string>
 
-    <!--Common-->
+    <!--Genel-->
     <string name="label_name">Ad</string>
     <string name="label_add">Ekle</string>
     <string name="label_save">Kaydet</string>
 
-    <!--Project Specific-->
+    <!--Projeye Özel-->
     <string name="label_session">Seans</string>
     <string name="label_exercise">Egzersiz</string>
     <string name="label_reps">.tekrar</string>
     <string name="label_duration">.süre</string>
     <string name="label_weight">.ağırlık</string>
-    <string name="label_coming_soon">Çok Yakında</string>
+    <string name="label_coming_soon">Yakında Geliyor</string>
 
-    <!--Navigation-->
+    <!--Navigasyon-->
     <string name="label_home">Ana Sayfa</string>
     <string name="label_performance">Performans</string>
-    <string name="label_profile">Profil</string>
+    <string name="label_profile">Sen</string>
 
-    <!--Error-->
+    <!--Hata-->
     <string name="error_invalid_reference">Geçersiz Referans</string>
     <string name="error_invalid_reference_format">Geçersiz referans formatı</string>
     <string name="error_invalid_url">Geçersiz URL</string>
-    <string name="error_plan_name_empty">Plan adını girin</string>
-    <string name="error_exercise_name_empty">Egzersiz adını girin</string>
+    <string name="error_unknown">Bilinmeyen Hata</string>
+    <string name="error_plan_name_empty">Bir plan adı gir</string>
+    <string name="error_plan_name_exists">Plan adı zaten kullanılıyor</string>
+    <string name="error_exercise_name_empty">Bir egzersiz adı gir</string>
     <string name="error_plan_empty">Plan boş</string>
-    <string name="error_cant_find_session">Seans Bulunamıyor</string>
-    <string name="error_cant_find_exercise">Egzersiz Bulunamıyor</string>
+    <string name="error_plan_empty_prompt">Planı İptal Et?. Geri dönmek için tekrar geri tuşuna bas.</string>
+    <string name="error_cant_find_session">Seans Bulunamadı</string>
+    <string name="error_cant_find_exercise">Egzersiz Bulunamadı</string>
 
-    <!--Themes-->
+    <!--Temalar-->
     <string name="label_theme">Tema</string>
     <string name="label_theme_system">Sistem</string>
     <string name="label_theme_light">Açık</string>
     <string name="label_theme_dark">Koyu</string>
 
-    <!--Color Schemes-->
+    <!--Renk Şemaları-->
     <string name="label_color_palettes">Renk Paletleri</string>
     <string name="label_color_scheme_default">Varsayılan</string>
     <string name="label_color_scheme_dynamic">Dinamik</string>
-    <string name="label_color_scheme_serene">Sakin</string>
+    <string name="label_color_scheme_serene">Huzurlu</string>
     <string name="label_color_scheme_zestful">Canlı</string>
     <string name="label_color_scheme_twilight">Alacakaranlık</string>
 
-    <!--Muscle Groups-->
+    <!--Kas Grupları-->
     <string name="label_muscle_biceps">Biseps</string>
     <string name="label_muscle_triceps">Triseps</string>
     <string name="label_muscle_back">Sırt</string>
     <string name="label_muscle_lats">Latissimus Dorsi</string>
-    <string name="label_muscle_traps">Trapez</string>
+    <string name="label_muscle_traps">Trapezius</string>
     <string name="label_muscle_chest">Göğüs</string>
     <string name="label_muscle_core">Merkez</string>
-    <string name="label_muscle_glutes">Gluteus</string>
-    <string name="label_muscle_calves">Baldırlar</string>
-    <string name="label_muscle_hamstrings">Hamstring</string>
-    <string name="label_muscle_quads">Dört Başlı Kas</string>
-    <string name="label_muscle_shoulders">Omuzlar</string>
+    <string name="label_muscle_glutes">Kalça</string>
+    <string name="label_muscle_calves">Baldır</string>
+    <string name="label_muscle_hamstrings">Arka Bacak</string>
+    <string name="label_muscle_quads">Ön Bacak</string>
+    <string name="label_muscle_shoulders">Omuz</string>
 
-    <!--Day of Week-->
-    <string name="label_monday">.pts</string>
+    <!--Haftanın Günleri-->
+    <string name="label_monday">.pzt</string>
     <string name="label_tuesday">.sal</string>
     <string name="label_wednesday">.çar</string>
     <string name="label_thursday">.per</string>
     <string name="label_friday">.cum</string>
-    <string name="label_saturday">.cts</string>
+    <string name="label_saturday">.cmt</string>
     <string name="label_sunday">.paz</string>
     <string name="label_today">.bugün</string>
     <string name="label_plan">Plan</string>
+    <string name="label_select_a_plan">Bir Plan Seç</string>
+    <string name="label_selecting_a_plan">Bir Plan Seçerek Başla</string>
+    <string name="label_start_first_session">İlk seansını başlat</string>
+    <string name="label_start_session_heading">Bugünkü seansı başlat</string>
+    <string name="label_continue_session_heading">Bugünkü seansa devam et</string>
+    <string name="label_next">Sonraki</string>
+    <string name="label_boarding_quote">Bir sonraki dönüşümün burada başlıyor.</string>
+    <string-array name="label_features">
+        <item>İlerleme Takibi</item>
+        <item>Aşamalı Aşırı Yük</item>
+        <item>İstatistikler</item>
+        <item>Plan Yönetimi</item>
+        <item>Hızlı Geri Bildirim</item>
+    </string-array>
 
     <string-array name="label_health_quotes">
-        <item>başarabilirsin</item>
-        <item>sağlık senin ellerinde</item>
+        <item>yapabilirsin</item>
+        <item>sağlık senin elinde</item>
         <item>sağlık zenginliktir</item>
-        <item>egzersiz benim terapimdir</item>
-        <item>egzersiz benim terapimdir</item>
+        <item>antrenman benim de terapi</item>
+        <item>antrenman benim de terapi</item>
     </string-array>
 
     <string-array name="label_lifting_quotes">
         <item>evet dostum… hafif ağırlık</item>
         <item>hafif ağırlık</item>
-        <item>yapmakla ilgili bir şey değil</item>
-        <item>hafif olmakla ilgili değil</item>
-        <item>bence mükemmel, değil mi?</item>
+        <item>yapmaktan başka çare yok</item>
+        <item>mesele hafif olmak değil</item>
+        <item>harika değil mi?</item>
     </string-array>
 </resources>
