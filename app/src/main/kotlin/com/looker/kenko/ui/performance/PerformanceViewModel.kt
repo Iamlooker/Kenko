@@ -94,18 +94,17 @@ class PerformanceViewModel @Inject constructor(
 }
 
 sealed interface PerformanceUiState {
-    data object Loading : PerformanceUiState
-
-    data class Success(val data: PerformanceUiData) : PerformanceUiState
+    object Loading : PerformanceUiState
+    class Success(val data: PerformanceUiData) : PerformanceUiState
 }
 
 sealed interface PerformanceStateError : PerformanceUiState {
-    data object NoValidPerformance : PerformanceStateError
-    data object NotEnoughData : PerformanceStateError
+    object NoValidPerformance : PerformanceStateError
+    object NotEnoughData : PerformanceStateError
 }
 
 @Stable
-data class PerformanceUiData(
+class PerformanceUiData(
     val exercise: Exercise?,
     val plan: Plan?,
     val performance: Performance,
