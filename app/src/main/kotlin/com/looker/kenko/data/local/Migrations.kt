@@ -125,12 +125,19 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
         execSQL(
             """
             INSERT INTO `sessions` (`date`, `planId`)
-            SELECT Session.`date`, plan_history.`planid`
+            SELECT Session.`date`, plan_history.`planId`
             FROM `Session`
             INNER JOIN `plan_history`
             ON (plan_history.`end` IS NULL
             AND plan_history.`start` IS NOT NULL)
             """.trimIndent(),
+        )
+        execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS set_type (
+            `type` TEXT NOT NULL PRIMARY KEY,
+            `modifier` REAL NOT NULL)
+            """.trimIndent()
         )
         execSQL(
             """
