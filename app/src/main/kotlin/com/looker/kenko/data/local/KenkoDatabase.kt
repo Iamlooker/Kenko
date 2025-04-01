@@ -53,11 +53,12 @@ abstract class KenkoDatabase : RoomDatabase() {
     abstract fun performanceDao(): PerformanceDao
 }
 
-fun kenkoDatabase(context: Context) = Room.databaseBuilder(
-    context = context,
-    klass = KenkoDatabase::class.java,
-    name = "kenko_database",
-)
+fun kenkoDatabase(context: Context) = Room
+    .databaseBuilder(
+        context = context,
+        klass = KenkoDatabase::class.java,
+        name = "kenko_database",
+    )
     .createFromAsset("kenko.db")
     .addMigrations(
         MIGRATION_1_2,

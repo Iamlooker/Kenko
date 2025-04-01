@@ -253,6 +253,7 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
         executeInsert()
     }
 
+    @Suppress("NOTHING_TO_INLINE")
     private inline fun SupportSQLiteDatabase.createIndex(
         tableName: String,
         vararg column: String,
