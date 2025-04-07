@@ -1,3 +1,17 @@
+/*
+ * Copyright (C) 2025 LooKeR & Contributors
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.looker.kenko.ui.plans.components
 
 import androidx.compose.animation.AnimatedVisibility
@@ -24,10 +38,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.looker.kenko.R
 import com.looker.kenko.data.model.Plan
-import com.looker.kenko.data.model.PlanStat
+import com.looker.kenko.data.model.PlanPreviewParameters
 import com.looker.kenko.ui.extensions.normalizeInt
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
@@ -71,7 +86,7 @@ fun PlanItem(
                 Text(text = plan.name, style = MaterialTheme.typography.headlineMedium)
                 OutlinedIconToggleButton(
                     checked = plan.isActive,
-                    onCheckedChange = onActiveChange
+                    onCheckedChange = onActiveChange,
                 ) {
                     Icon(imageVector = KenkoIcons.Done, contentDescription = null)
                 }
@@ -92,8 +107,8 @@ fun PlanItem(
                     R.string.label_plan_description,
                     stats.exercises,
                     normalizeInt(stats.workDays),
-                    normalizeInt(7 - stats.workDays)
-                )
+                    normalizeInt(7 - stats.workDays),
+                ),
             )
         }
     }
@@ -101,32 +116,17 @@ fun PlanItem(
 
 @PreviewLightDark
 @Composable
-private fun PlanItemPreview() {
+private fun PlanItemPreview(@PreviewParameter(PlanPreviewParameters::class) plans: List<Plan>) {
     KenkoTheme {
-        var plan by remember {
-            mutableStateOf(
-                Plan(
-                    name = "Push Pull Leg",
-                    stat = PlanStat(10, 5),
-                    isActive = false
-                )
-            )
-        }
+        var plan by remember { mutableStateOf(plans.first()) }
         PlanItem(plan = plan, { plan = plan.copy(isActive = it) }, {})
     }
 }
 
 @PreviewLightDark
 @Composable
-private fun PlanItemInActivePreview() {
+private fun PlanItemInActivePreview(@PreviewParameter(PlanPreviewParameters::class) plans: List<Plan>) {
     KenkoTheme {
-        PlanItem(
-            plan = Plan(
-                name = "Push Pull Leg",
-                stat = PlanStat(10, 5),
-                isActive = true
-            ),
-            {}, {}
-        )
+        PlanItem(plan = plans.first(), {}, {})
     }
 }

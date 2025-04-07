@@ -16,11 +16,14 @@ package com.looker.kenko.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Query
+import androidx.room.RawQuery
 import androidx.room.Transaction
 import androidx.room.Upsert
+import androidx.sqlite.db.SimpleSQLiteQuery
 import com.looker.kenko.data.local.model.ExerciseEntity
 import com.looker.kenko.data.local.model.PlanDayEntity
 import com.looker.kenko.data.local.model.PlanEntity
+import com.looker.kenko.data.model.Labels
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -80,7 +83,7 @@ interface PlanDao {
         (SELECT *
         FROM plans
         WHERE name = :planName)
-        """
+        """,
     )
     suspend fun exists(planName: String): Boolean
 
@@ -181,6 +184,49 @@ interface PlanDao {
         """,
     )
     suspend fun getWorkDaysByPlanId(planId: Int): Int
+
+    suspend fun searchPlans(
+        query: String? = null,
+        difficulty: Labels.Difficulty? = null,
+        focus: Labels.Focus? = null,
+        equipment: Labels.Equipment? = null,
+        time: Labels.Time? = null,
+    ): List<PlanEntity> {
+        val args = mutableListOf<Any?>()
+        val sql = buildString(256) {
+            append("SELECT * FROM plans WHERE 1=1 ")
+            if (!query.isNullOrBlank()) {
+                append("AND name LIKE %?% OR description LIKE %?% ")
+                args.add(query)
+                args.add(query)
+            }
+            if (difficulty != null) {
+                append("AND difficulty = ? ")
+                args.add(difficulty)
+            }
+            if (focus != null) {
+                append("AND focus = ? ")
+                args.add(focus)
+            }
+            if (equipment != null) {
+                append("AND equipment = ? ")
+                args.add(equipment)
+            }
+            if (time != null) {
+                append("AND time = ? ")
+                args.add(time)
+            }
+        }
+        return _rawSearchPlans(
+            SimpleSQLiteQuery(
+                query = sql,
+                bindArgs = args.toTypedArray(),
+            ),
+        )
+    }
+
+    @RawQuery
+    suspend fun _rawSearchPlans(query: SimpleSQLiteQuery): List<PlanEntity>
 
     @Upsert
     suspend fun upsertPlan(plan: PlanEntity): Long

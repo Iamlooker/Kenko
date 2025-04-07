@@ -22,6 +22,7 @@ import com.looker.kenko.data.local.model.PlanHistoryEntity
 import com.looker.kenko.data.local.model.toEntity
 import com.looker.kenko.data.local.model.toExternal
 import com.looker.kenko.data.model.Exercise
+import com.looker.kenko.data.model.Labels
 import com.looker.kenko.data.model.Plan
 import com.looker.kenko.data.model.PlanItem
 import com.looker.kenko.data.model.PlanStat
@@ -116,8 +117,23 @@ class LocalPlanRepo @Inject constructor(
     private suspend fun stats(id: Int): PlanStat =
         PlanStat(dao.getExerciseCountByPlanId(id), dao.getWorkDaysByPlanId(id))
 
-    override suspend fun createPlan(name: String): Int =
-        dao.upsertPlan(PlanEntity(name)).toInt()
+    override suspend fun createPlan(
+        name: String,
+        description: String?,
+        difficulty: Labels.Difficulty?,
+        focus: Labels.Focus?,
+        equipment: Labels.Equipment?,
+        time: Labels.Time?,
+    ): Int = dao.upsertPlan(
+        PlanEntity(
+            name = name,
+            description = description,
+            difficulty = difficulty,
+            focus = focus,
+            equipment = equipment,
+            time = time,
+        ),
+    ).toInt()
 
     override suspend fun updatePlan(plan: Plan) {
         dao.upsertPlan(plan.toEntity())
