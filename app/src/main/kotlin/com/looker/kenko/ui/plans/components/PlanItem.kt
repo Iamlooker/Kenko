@@ -83,7 +83,12 @@ fun PlanItem(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                Text(text = plan.name, style = MaterialTheme.typography.headlineMedium)
+                Text(
+                    modifier = Modifier.weight(1F),
+                    text = plan.name,
+                    maxLines = 2,
+                    style = MaterialTheme.typography.headlineMedium,
+                )
                 OutlinedIconToggleButton(
                     checked = plan.isActive,
                     onCheckedChange = onActiveChange,

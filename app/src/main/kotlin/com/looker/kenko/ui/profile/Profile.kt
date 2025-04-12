@@ -1,3 +1,17 @@
+/*
+ * Copyright (C) 2025 LooKeR & Contributors
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.looker.kenko.ui.profile
 
 import androidx.compose.foundation.background
@@ -19,7 +33,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
@@ -223,8 +239,8 @@ fun SelectPlanCard(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .aspectRatio(PHI)
-            .clip(MaterialTheme.shapes.extraLarge)
+            .wrapContentHeight()
+            .clip(CircleShape)
             .background(MaterialTheme.colorScheme.primaryContainer)
             .clickable(onClick = onSelectPlanClick)
             .padding(vertical = 24.dp),
@@ -237,7 +253,7 @@ fun SelectPlanCard(
             color = MaterialTheme.colorScheme.onPrimaryContainer,
         )
         Icon(
-            imageVector = KenkoIcons.ArrowOutwardLarge,
+            imageVector = KenkoIcons.ArrowOutward,
             tint = MaterialTheme.colorScheme.onPrimaryContainer,
             contentDescription = null
         )
@@ -371,6 +387,20 @@ private fun EmptyPlanCardPreview() {
 private fun ExerciseCardPreview() {
     KenkoTheme {
         ExerciseCard(21, {}, {})
+    }
+}
+
+@Preview
+@Composable
+private fun ProfileNoPlanPreview() {
+    KenkoTheme {
+        Profile(
+            state = ProfileUiState(12, false, "Push-Pull-Leg", 2, PlanStat(12, 5)),
+            onSettingsClick = { },
+            onPlanClick = { },
+            onAddExerciseClick = { },
+            onExercisesClick = { },
+        )
     }
 }
 

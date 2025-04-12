@@ -15,7 +15,6 @@
 package com.looker.kenko.ui.plans
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,13 +34,12 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
-import com.looker.kenko.data.model.Labels
 import com.looker.kenko.data.model.Plan
 import com.looker.kenko.data.model.PlanPreviewParameters
 import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.components.KenkoBorderWidth
 import com.looker.kenko.ui.components.SwipeToDeleteBox
-import com.looker.kenko.ui.extensions.plus
+import com.looker.kenko.ui.components.endItem
 import com.looker.kenko.ui.planEdit.components.KenkoAddButton
 import com.looker.kenko.ui.plans.components.PlanItem
 import com.looker.kenko.ui.theme.KenkoTheme
@@ -90,7 +88,7 @@ private fun Plan(
         containerColor = MaterialTheme.colorScheme.surface,
     ) {
         LazyColumn(
-            contentPadding = it + PaddingValues(bottom = 80.dp),
+            contentPadding = it,
             verticalArrangement = Arrangement.spacedBy(1.dp),
         ) {
             items(
@@ -112,6 +110,7 @@ private fun Plan(
                 }
                 if (!isLast) HorizontalDivider(thickness = KenkoBorderWidth)
             }
+            endItem()
         }
     }
 }

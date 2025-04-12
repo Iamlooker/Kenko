@@ -48,7 +48,7 @@
 
     <!--Profile-->
     <string name="label_profile_greeting">hey there</string>
-    <string name="label_select_plan">Select\nPlan</string>
+    <string name="label_select_plan">Select Plan</string>
     <string name="label_select_plan_one">Select Plan</string>
     <string name="label_current_plan">Current Plan</string>
     <string name="label_lifts">Lifts</string>
