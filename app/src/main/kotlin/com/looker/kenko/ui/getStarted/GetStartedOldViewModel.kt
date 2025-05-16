@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025. LooKeR & Contributors
+ * Copyright (C) 2025. LooKeR & Contributors
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -25,6 +25,7 @@ import javax.inject.Inject
 class GetStartedOldViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
+
     private val routeData: GetStartedRoute = savedStateHandle.toRoute()
     val isOnboardingDone = routeData.isOnboardingDone
 
