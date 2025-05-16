@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2025 LooKeR & Contributors This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 package com.looker.kenko.ui.theme
 
 import android.app.Activity
@@ -5,7 +10,8 @@ import android.content.Context
 import android.os.Build
 import android.view.View
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialExpressiveTheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
@@ -18,6 +24,7 @@ import com.looker.kenko.data.model.settings.Theme
 import com.looker.kenko.ui.theme.colorSchemes.ColorSchemes
 import com.looker.kenko.ui.theme.colorSchemes.zestfulColorSchemes
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun KenkoTheme(
     theme: Theme = Theme.System,
@@ -41,7 +48,7 @@ fun KenkoTheme(
     val localView = LocalView.current
     SideEffect { setupSystemBar(localView, isDarkTheme) }
 
-    MaterialTheme(
+    MaterialExpressiveTheme(
         colorScheme = colorScheme,
         typography = Typography,
         shapes = Shapes,
@@ -52,9 +59,10 @@ fun KenkoTheme(
 fun setupSystemBar(view: View, isDarkTheme: Boolean) {
     if (view.isInEditMode) return
     val window = (view.context as Activity).window
-    val controller = WindowCompat.getInsetsController(window, view)
-    controller.isAppearanceLightStatusBars = !isDarkTheme
-    controller.isAppearanceLightNavigationBars = !isDarkTheme
+    with(WindowCompat.getInsetsController(window, view)) {
+        isAppearanceLightStatusBars = !isDarkTheme
+        isAppearanceLightNavigationBars = !isDarkTheme
+    }
 }
 
 fun dynamicColorSchemes(context: Context): ColorSchemes? =

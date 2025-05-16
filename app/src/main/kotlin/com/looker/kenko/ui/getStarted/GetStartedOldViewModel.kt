@@ -3,18 +3,22 @@
  *
  */
 
-package com.looker.kenko.ui.getStarted.navigation
+package com.looker.kenko.ui.getStarted
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import com.looker.kenko.ui.getStarted.GetStartedOld
-import kotlinx.serialization.Serializable
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.navigation.toRoute
+import com.looker.kenko.ui.getStarted.navigation.GetStartedRoute
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-@Serializable
-data class GetStartedRoute(val isOnboardingDone: Boolean)
+@HiltViewModel
+class GetStartedOldViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
+) : ViewModel() {
 
-fun NavGraphBuilder.getStarted(onNext: () -> Unit) {
-    composable<GetStartedRoute> {
-        GetStartedOld(onNext)
-    }
+    private val routeData: GetStartedRoute = savedStateHandle.toRoute()
+
+    val isOnboardingDone = routeData.isOnboardingDone
+
 }
