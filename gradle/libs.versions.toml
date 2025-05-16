@@ -1,6 +1,6 @@
 [versions]
 activity = "1.10.1"
-agp = "8.9.3"
+agp = "8.10.0"
 coil = "2.7.0"
 composeBom = "2025.05.00"
 core = "1.16.0"

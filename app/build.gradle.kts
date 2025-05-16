@@ -43,14 +43,14 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+    }
 
-        ksp {
-            arg("room.generateKotlin", "true")
-        }
+    ksp {
+        arg("room.generateKotlin", "true")
+    }
 
-        room {
-            schemaDirectory("$projectDir/schemas")
-        }
+    room {
+        schemaDirectory("$projectDir/schemas")
     }
 
     dependenciesInfo {
