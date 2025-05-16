@@ -121,6 +121,8 @@ dependencies {
     implementation(libs.activity.compose)
     implementation(libs.navigation.compose)
 
+    implementation(libs.savedstate)
+
     implementation(libs.kotlinx.datetime)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.bundles.coroutines)

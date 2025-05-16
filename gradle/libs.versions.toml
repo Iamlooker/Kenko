@@ -1,13 +1,13 @@
 [versions]
 activity = "1.10.1"
-agp = "8.9.1"
+agp = "8.9.3"
 coil = "2.7.0"
-composeBom = "2025.03.01"
-core = "1.15.0"
+composeBom = "2025.05.00"
+core = "1.16.0"
 core-test = "1.6.1"
 test-runner = "1.6.2"
 coroutines = "1.10.1"
-datastore = "1.1.4"
+datastore = "1.1.6"
 dateTime = "0.6.2"
 espresso = "3.6.1"
 hilt = "2.56.1"
@@ -15,9 +15,11 @@ hiltNavigation = "1.2.0"
 jUnitExt = "1.2.1"
 kotlin = "2.1.20"
 ksp = "2.1.20-1.0.32"
-lifecycle = "2.8.7"
-navigation = "2.8.9"
-room = "2.6.1"
+lifecycle = "2.9.0"
+material = "1.4.0-alpha14"
+navigation = "2.9.0"
+room = "2.7.1"
+savedstate = "1.3.0"
 serialization = "1.8.0"
 shapes = "1.0.1"
 
@@ -51,7 +53,7 @@ compose-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
-compose-ui-material3 = { module = "androidx.compose.material3:material3" }
+compose-ui-material3 = { module = "androidx.compose.material3:material3", version.ref = "material" }
 compose-ui-test = { module = "androidx.compose.ui:ui-test-junit4" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
@@ -61,6 +63,7 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "dateTime" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+savedstate= { module = "androidx.savedstate:savedstate", version.ref = "savedstate" }
 
 [plugins]
 android-app = { id = "com.android.application", version.ref = "agp" }
