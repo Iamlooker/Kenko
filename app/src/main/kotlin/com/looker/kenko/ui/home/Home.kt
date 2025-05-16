@@ -1,3 +1,17 @@
+/*
+ * Copyright (C) 2025. LooKeR & Contributors
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.looker.kenko.ui.home
 
 import androidx.compose.animation.AnimatedContent
@@ -53,8 +67,6 @@ import com.looker.kenko.ui.components.KenkoBorderWidth
 import com.looker.kenko.ui.components.LiftingQuotes
 import com.looker.kenko.ui.components.TertiaryKenkoButton
 import com.looker.kenko.ui.components.TickerText
-import com.looker.kenko.ui.components.icons.symbols.Add
-import com.looker.kenko.ui.components.icons.symbols.ArrowOutward
 import com.looker.kenko.ui.extensions.plus
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
@@ -104,7 +116,7 @@ private fun Home(
                     if (!state.isFirstSession) {
                         IconButton(onClick = onExploreSessionsClick) {
                             Icon(
-                                imageVector = KenkoIcons.History,
+                                painter = KenkoIcons.History,
                                 contentDescription = null,
                             )
                         }
@@ -223,7 +235,7 @@ private fun ColumnScope.StartSession(
         icon = {
             Icon(
                 modifier = Modifier.size(18.dp),
-                imageVector = KenkoIcons.ArrowOutward,
+                painter = KenkoIcons.ArrowOutward,
                 contentDescription = null,
             )
         },
@@ -261,7 +273,7 @@ private fun ColumnScope.SelectPlan(
         Text(text = stringResource(R.string.label_select_plan_one))
         Spacer(modifier = Modifier.width(12.dp))
         Icon(
-            imageVector = KenkoIcons.ArrowOutward,
+            painter = KenkoIcons.ArrowOutward,
             contentDescription = null,
         )
     }
@@ -275,7 +287,7 @@ private fun ExploreExerciseCard(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .padding(16.dp)
                 .align(TopEnd),
-            imageVector = ArrowOutward,
+            painter = KenkoIcons.ArrowOutward,
             contentDescription = null,
         )
     }
@@ -289,7 +301,7 @@ private fun AddExerciseCard(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .padding(16.dp)
                 .align(TopEnd),
-            imageVector = Add,
+            painter = KenkoIcons.Add,
             contentDescription = null,
         )
     }

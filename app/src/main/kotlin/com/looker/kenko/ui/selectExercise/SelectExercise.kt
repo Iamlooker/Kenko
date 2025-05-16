@@ -1,3 +1,17 @@
+/*
+ * Copyright (C) 2025. LooKeR & Contributors
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.looker.kenko.ui.selectExercise
 
 import androidx.compose.foundation.background
@@ -132,7 +146,7 @@ private fun SearchNotFound(onAddNewExercise: () -> Unit, modifier: Modifier = Mo
                     contentColor = MaterialTheme.colorScheme.errorContainer
                 ),
             ) {
-                Icon(imageVector = KenkoIcons.Add, contentDescription = null)
+                Icon(painter = KenkoIcons.Add, contentDescription = null)
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(text = stringResource(R.string.label_create_exercise))
             }
@@ -168,7 +182,7 @@ private fun ExerciseSearchField(
             shape = MaterialTheme.shapes.large.start(8.dp),
             onClick = onAddClick,
         ) {
-            Icon(imageVector = KenkoIcons.Add, contentDescription = null)
+            Icon(painter = KenkoIcons.Add, contentDescription = null)
         }
     }
 }

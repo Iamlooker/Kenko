@@ -1,3 +1,17 @@
+/*
+ * Copyright (C) 2025. LooKeR & Contributors
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.looker.kenko.ui.components
 
 import androidx.compose.foundation.layout.Row
@@ -34,7 +48,7 @@ fun ReferenceItem(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(imageVector = KenkoIcons.Lightbulb, contentDescription = null)
+            Icon(painter = KenkoIcons.Lightbulb, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = stringResource(R.string.label_reference),
@@ -42,7 +56,7 @@ fun ReferenceItem(
             )
             Spacer(modifier = Modifier.weight(1F))
             FilledTonalIconButton(onClick = onClick) {
-                Icon(imageVector = KenkoIcons.ArrowOutward, contentDescription = null)
+                Icon(painter = KenkoIcons.ArrowOutward, contentDescription = null)
             }
         }
     }

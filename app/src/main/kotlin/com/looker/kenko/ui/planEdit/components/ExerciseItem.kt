@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 LooKeR & Contributors
+ * Copyright (C) 2025. LooKeR & Contributors
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -109,7 +109,7 @@ fun KenkoAddButton(onClick: () -> Unit) {
             contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
         ),
     ) {
-        Icon(imageVector = KenkoIcons.Add, contentDescription = null)
+        Icon(painter = KenkoIcons.Add, contentDescription = null)
         Spacer(modifier = Modifier.width(8.dp))
         Text(text = stringResource(R.string.label_add))
     }

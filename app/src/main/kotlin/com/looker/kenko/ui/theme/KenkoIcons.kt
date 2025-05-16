@@ -1,6 +1,24 @@
+/*
+ * Copyright (C) 2025. LooKeR & Contributors
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.looker.kenko.ui.theme
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
+import com.looker.kenko.R
 
 /**
  * Material Symbols Settings
@@ -13,39 +31,81 @@ import androidx.compose.ui.graphics.vector.ImageVector
  */
 object KenkoIcons {
 
-    val ArrowBack: ImageVector = com.looker.kenko.ui.components.icons.symbols.ArrowBack
+    val ArrowBack: Painter
+        @Composable
+        get() = painterResource(R.drawable.ic_arrow_back)
 
-    val ArrowForward: ImageVector = com.looker.kenko.ui.components.icons.symbols.ArrowForward
+    val ArrowForward: Painter
+        @Composable
+        get() = painterResource(R.drawable.ic_arrow_forward)
 
-    val ArrowOutward: ImageVector = com.looker.kenko.ui.components.icons.symbols.ArrowOutward
+    val ArrowOutward: Painter
+        @Composable
+        get() = painterResource(R.drawable.ic_arrow_outward)
 
-    val Circle: ImageVector = com.looker.kenko.ui.components.icons.symbols.Circle
+    val Circle: Painter
+        @Composable
+        get() = painterResource(R.drawable.ic_radio_button_unchecked)
 
-    val Lightbulb: ImageVector = com.looker.kenko.ui.components.icons.symbols.Lightbulb
+    val Lightbulb: Painter
+        @Composable
+        get() = painterResource(R.drawable.ic_lightbulb)
 
-    val Add: ImageVector = com.looker.kenko.ui.components.icons.symbols.Add
+    val Add: Painter
+        @Composable
+        get() = painterResource(R.drawable.ic_add)
 
-    val Info: ImageVector = com.looker.kenko.ui.components.icons.symbols.Info
+    val Info: Painter
+        @Composable
+        get() = painterResource(R.drawable.ic_info)
 
-    val Done: ImageVector = com.looker.kenko.ui.components.icons.symbols.Done
+    val Done: Painter
+        @Composable
+        get() = painterResource(R.drawable.ic_check)
 
-    val History: ImageVector = com.looker.kenko.ui.components.icons.symbols.History
+    val History: Painter
+        @Composable
+        get() = painterResource(R.drawable.ic_history)
 
-    val Delete: ImageVector = com.looker.kenko.ui.components.icons.symbols.Delete
+    val Delete: Painter
+        @Composable
+        get() = painterResource(R.drawable.ic_delete)
 
-    val Remove: ImageVector = com.looker.kenko.ui.components.icons.symbols.Remove
+    val Remove: Painter
+        @Composable
+        get() = painterResource(R.drawable.ic_remove)
 
-    val Save: ImageVector = com.looker.kenko.ui.components.icons.symbols.Save
+    val Save: Painter
+        @Composable
+        get() = painterResource(R.drawable.ic_save)
 
-    val Rename: ImageVector = com.looker.kenko.ui.components.icons.symbols.Edit
+    val Rename: Painter
+        @Composable
+        get() = painterResource(R.drawable.ic_edit)
 
-    val Plan: ImageVector = com.looker.kenko.ui.components.icons.symbols.Tactic
+    val Plan: Painter
+        @Composable
+        get() = painterResource(R.drawable.ic_tactic)
 
-    val Home: ImageVector = com.looker.kenko.ui.components.icons.symbols.Home
+    val Home: Painter
+        @Composable
+        get() = painterResource(R.drawable.ic_home)
 
-    val Performance: ImageVector = com.looker.kenko.ui.components.icons.symbols.Performance
+    val Performance: Painter
+        @Composable
+        get() = painterResource(R.drawable.ic_show_chart)
 
-    val Settings: ImageVector = com.looker.kenko.ui.components.icons.symbols.Settings
+    val Settings: Painter
+        @Composable
+        get() = painterResource(R.drawable.ic_settings)
+
+    val KeyboardArrowRight: Painter
+        @Composable
+        get() = painterResource(R.drawable.ic_keyboard_arrow_right)
+
+    val KeyboardArrowLeft: Painter
+        @Composable
+        get() = painterResource(R.drawable.ic_keyboard_arrow_left)
 
     // Brutalist Icons
     val AddLarge: ImageVector = com.looker.kenko.ui.components.icons.AddLarge

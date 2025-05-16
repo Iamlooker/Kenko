@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 LooKeR & Contributors
+ * Copyright (C) 2025. LooKeR & Contributors
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -93,7 +93,7 @@ fun PlanItem(
                     checked = plan.isActive,
                     onCheckedChange = onActiveChange,
                 ) {
-                    Icon(imageVector = KenkoIcons.Done, contentDescription = null)
+                    Icon(painter = KenkoIcons.Done, contentDescription = null)
                 }
             }
             AnimatedVisibility(visible = plan.isActive) {

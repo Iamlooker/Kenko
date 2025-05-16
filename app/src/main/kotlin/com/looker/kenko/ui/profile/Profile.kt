@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 LooKeR & Contributors
+ * Copyright (C) 2025. LooKeR & Contributors
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -113,18 +113,18 @@ private fun Profile(
                 },
                 actions = {
                     IconButton(onClick = onSettingsClick) {
-                        Icon(imageVector = KenkoIcons.Settings, contentDescription = null)
+                        Icon(painter = KenkoIcons.Settings, contentDescription = null)
                     }
                 },
             )
         },
-        containerColor = MaterialTheme.colorScheme.surface
+        containerColor = MaterialTheme.colorScheme.surface,
     ) { innerPadding ->
         Column(
             modifier = modifier
                 .fillMaxSize()
                 .padding(innerPadding + PaddingValues(start = 16.dp, end = 16.dp, bottom = 80.dp))
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState()),
         ) {
             if (state.isPlanAvailable) {
                 CurrentPlanCard(
@@ -136,10 +136,10 @@ private fun Profile(
                                 R.string.label_plan_description,
                                 state.planStat!!.exercises,
                                 normalizeInt(state.planStat.workDays),
-                                normalizeInt(state.planStat.restDays)
-                            )
+                                normalizeInt(state.planStat.restDays),
+                            ),
                         )
-                    }
+                    },
                 )
             } else {
                 SelectPlanCard(onPlanClick)
@@ -148,7 +148,7 @@ private fun Profile(
             ExerciseCard(
                 numberOfExercises = state.numberOfExercises,
                 onAddClick = onAddExerciseClick,
-                onExercisesClick = onExercisesClick
+                onExercisesClick = onExercisesClick,
             )
             Spacer(modifier = Modifier.height(12.dp))
             LiftsCard(state.totalLifts)
@@ -184,20 +184,20 @@ private fun CurrentPlanCard(
                     .padding(start = 24.dp, top = 2.dp, end = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Icon(imageVector = KenkoIcons.Plan, contentDescription = null)
+                Icon(painter = KenkoIcons.Plan, contentDescription = null)
                 Spacer(modifier = Modifier.width(12.dp))
                 Text(
                     text = stringResource(R.string.label_current_plan),
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
                 )
                 Spacer(modifier = Modifier.weight(1F))
                 FilledIconButton(onClick = onPlanClick) {
-                    Icon(imageVector = KenkoIcons.Rename, contentDescription = null)
+                    Icon(painter = KenkoIcons.Rename, contentDescription = null)
                 }
             }
             HorizontalDivider(
                 thickness = KenkoBorderWidth,
-                color = MaterialTheme.colorScheme.secondary
+                color = MaterialTheme.colorScheme.secondary,
             )
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -206,11 +206,11 @@ private fun CurrentPlanCard(
             ) {
                 Column(
                     modifier = Modifier
-                        .padding(start = 24.dp, bottom = 16.dp)
+                        .padding(start = 24.dp, bottom = 16.dp),
                 ) {
                     Text(
                         text = name,
-                        style = MaterialTheme.typography.titleLarge
+                        style = MaterialTheme.typography.titleLarge,
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     CompositionLocalProvider(
@@ -224,7 +224,7 @@ private fun CurrentPlanCard(
                     imageVector = KenkoIcons.Stack,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.secondary,
-                    modifier = Modifier.offset(x = 0.dp)
+                    modifier = Modifier.offset(x = 0.dp),
                 )
             }
         }
@@ -253,9 +253,9 @@ fun SelectPlanCard(
             color = MaterialTheme.colorScheme.onPrimaryContainer,
         )
         Icon(
-            imageVector = KenkoIcons.ArrowOutward,
+            painter = KenkoIcons.ArrowOutward,
             tint = MaterialTheme.colorScheme.onPrimaryContainer,
-            contentDescription = null
+            contentDescription = null,
         )
     }
 }
@@ -280,7 +280,7 @@ private fun ExerciseCard(
             modifier = Modifier.weight(1.5F),
             shape = surfaceShape,
             border = OutlineBorder,
-            onClick = onExercisesClick
+            onClick = onExercisesClick,
         ) {
             Column(Modifier.padding(24.dp)) {
                 Text(
@@ -289,7 +289,7 @@ private fun ExerciseCard(
                 )
                 Text(
                     text = numberOfExercises.toString(),
-                    style = MaterialTheme.typography.headlineLarge
+                    style = MaterialTheme.typography.headlineLarge,
                 )
             }
         }
@@ -304,13 +304,13 @@ private fun ExerciseCard(
                 .clickable(onClick = onAddClick)
                 .border(
                     border = SecondaryBorder,
-                    shape = buttonShape
+                    shape = buttonShape,
                 )
                 .background(MaterialTheme.colorScheme.secondaryContainer),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             Icon(
-                imageVector = KenkoIcons.Add,
+                painter = KenkoIcons.Add,
                 tint = MaterialTheme.colorScheme.onSecondaryContainer,
                 contentDescription = stringResource(R.string.label_add),
             )
@@ -329,7 +329,7 @@ private fun LiftsCard(setsPerformed: Int) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 8.dp, vertical = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 modifier = Modifier.vertical(false),
@@ -346,7 +346,7 @@ private fun LiftsCard(setsPerformed: Int) {
                 imageVector = KenkoIcons.Reveal,
                 tint = MaterialTheme.colorScheme.surfaceContainerHigh,
                 contentDescription = null,
-                modifier = Modifier.offset(x = 30.dp)
+                modifier = Modifier.offset(x = 30.dp),
             )
         }
     }
@@ -366,10 +366,10 @@ private fun PlanCard() {
                         R.string.label_plan_description,
                         12,
                         normalizeInt(5),
-                        normalizeInt(2)
-                    )
+                        normalizeInt(2),
+                    ),
                 )
-            }
+            },
         )
     }
 }

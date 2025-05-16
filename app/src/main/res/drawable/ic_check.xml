@@ -1,0 +1,24 @@
+<!--
+  ~ Copyright (C) 2025. LooKeR & Contributors
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="960"
+    android:viewportHeight="960"
+    android:tint="@android:color/white">
+  <path
+      android:fillColor="@android:color/white"
+      android:pathData="M382,620.62L727.54,275.08Q736.46,266.15 748.42,265.96Q760.38,265.77 769.69,275.08Q779,284.39 779,296.46Q779,308.54 769.69,317.85L407.31,680.85Q396.46,691.69 382,691.69Q367.54,691.69 356.69,680.85L189.69,513.85Q180.77,504.92 180.89,492.65Q181,480.39 190.31,471.08Q199.62,461.77 211.69,461.77Q223.77,461.77 233.08,471.08L382,620.62Z"/>
+</vector>

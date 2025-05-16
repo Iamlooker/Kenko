@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 LooKeR & Contributors
+ * Copyright (C) 2025. LooKeR & Contributors
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -239,12 +239,12 @@ private fun PlanEditFAB(
             ) {
                 if (it == PlanEditStage.NameEdit) {
                     Icon(
-                        imageVector = KenkoIcons.ArrowForward,
+                        painter = KenkoIcons.ArrowForward,
                         contentDescription = stringResource(R.string.label_next),
                     )
                 } else {
                     Icon(
-                        imageVector = KenkoIcons.Add,
+                        painter = KenkoIcons.Add,
                         contentDescription = stringResource(R.string.label_add),
                     )
                 }
@@ -352,7 +352,7 @@ private fun ExerciseItemActions(
                 containerColor = MaterialTheme.colorScheme.errorContainer,
             ),
         ) {
-            Icon(imageVector = KenkoIcons.Remove, contentDescription = null)
+            Icon(painter = KenkoIcons.Remove, contentDescription = null)
         }
         Spacer(modifier = Modifier.width(12.dp))
         Text(

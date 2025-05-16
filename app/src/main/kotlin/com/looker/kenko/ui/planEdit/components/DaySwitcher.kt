@@ -1,3 +1,17 @@
+/*
+ * Copyright (C) 2025. LooKeR & Contributors
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.looker.kenko.ui.planEdit.components
 
 import androidx.compose.animation.AnimatedContent
@@ -17,9 +31,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
-import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -38,6 +49,7 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.looker.kenko.R
+import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 import com.looker.kenko.ui.theme.end
 import com.looker.kenko.ui.theme.start
@@ -74,8 +86,8 @@ fun DaySwitcher(
             onClick = onPrevious,
         ) {
             Icon(
-                imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowLeft,
-                contentDescription = null
+                painter = KenkoIcons.KeyboardArrowLeft,
+                contentDescription = null,
             )
         }
         Spacer(modifier = Modifier.width(6.dp))
@@ -94,7 +106,7 @@ fun DaySwitcher(
                     transitionSpec = {
                         fadeAndSlideHorizontally(
                             (initialState == SUNDAY && targetState == MONDAY) ||
-                                (targetState > initialState && !(initialState == MONDAY && targetState == SUNDAY))
+                                    (targetState > initialState && !(initialState == MONDAY && targetState == SUNDAY)),
                         ) using SizeTransform(clip = false)
                     },
                 ) { day ->
@@ -113,8 +125,8 @@ fun DaySwitcher(
             onClick = onNext,
         ) {
             Icon(
-                imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
-                contentDescription = null
+                painter = KenkoIcons.KeyboardArrowRight,
+                contentDescription = null,
             )
         }
     }
