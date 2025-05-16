@@ -7,6 +7,7 @@ import com.looker.kenko.ui.getStarted.navigation.GetStartedRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
+
 @HiltViewModel
 class GetStartedOldViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
