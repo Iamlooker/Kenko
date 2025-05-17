@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 LooKeR & Contributors
+ * Copyright (C) 2025. LooKeR & Contributors
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -14,6 +14,7 @@
 
 package com.looker.kenko.ui.home
 
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import com.looker.kenko.data.model.localDate
 import com.looker.kenko.data.repository.PlanRepo
@@ -58,10 +59,11 @@ class HomeViewModel @Inject constructor(
             isTodayEmpty = false,
             isFirstSession = false,
             currentPlanId = null,
-        )
+        ),
     )
 }
 
+@Immutable
 data class HomeUiData(
     val isPlanSelected: Boolean,
     val isSessionStarted: Boolean,

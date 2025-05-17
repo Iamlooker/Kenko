@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 LooKeR & Contributors
+ * Copyright (C) 2025. LooKeR & Contributors
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -24,27 +24,21 @@ import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.looker.kenko.data.local.model.SetType
-import com.looker.kenko.data.model.Set
 import com.looker.kenko.data.model.localDate
-import com.looker.kenko.data.repository.ExerciseRepo
 import com.looker.kenko.data.repository.SessionRepo
-import com.looker.kenko.ui.addSet.components.DragEvents
+import com.looker.kenko.ui.addSet.components.BoundReached
+import com.looker.kenko.ui.addSet.components.Direction
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.util.Timer
-import kotlin.concurrent.fixedRateTimer
 
 @HiltViewModel(assistedFactory = AddSetViewModel.AddSetViewModelFactory::class)
 class AddSetViewModel @AssistedInject constructor(
     private val sessionRepo: SessionRepo,
-    private val exerciseRepo: ExerciseRepo,
     @Assisted private val id: Int,
 ) : ViewModel() {
-
-    private var timer: Timer? = null
 
     val reps: TextFieldState = TextFieldState("12")
     val weights: TextFieldState = TextFieldState("20.0")
@@ -57,53 +51,30 @@ class AddSetViewModel @AssistedInject constructor(
         weights.setTextAndPlaceCursorAtEnd((weightFloat + value).toString())
     }
 
-    val repsDragEvents: DragEvents = object : DragEvents {
-        override fun onHold(isRight: Boolean) {
-            onStop()
-            timer = fixedRateTimer(
-                name = "Rep Increment",
-                initialDelay = 100L,
-                period = 200L,
-            ) {
-                addRep(if (isRight) 1 else -1)
-            }
-        }
-
-        override fun onStop() {
-            timer?.cancel()
-            timer = null
+    val repsBoundReached = BoundReached { direction ->
+        when (direction) {
+            Direction.Left -> addRep(-1)
+            Direction.Right -> addRep(1)
         }
     }
 
-    val weightsDragEvents: DragEvents = object : DragEvents {
-        override fun onHold(isRight: Boolean) {
-            onStop()
-            timer = fixedRateTimer(
-                name = "Weight Increment",
-                initialDelay = 100L,
-                period = 200L,
-            ) {
-                addWeight(if (isRight) 1F else -1F)
-            }
-        }
-
-        override fun onStop() {
-            timer?.cancel()
-            timer = null
+    val weightsBoundReached = BoundReached { direction ->
+        when (direction) {
+            Direction.Left -> addWeight(-1F)
+            Direction.Right -> addWeight(1F)
         }
     }
 
     fun addSet() {
         viewModelScope.launch {
-            val exercise = exerciseRepo.get(id) ?: return@launch
-            val set = Set(
-                repsOrDuration = repInt,
-                weight = weightFloat,
-                exercise = exercise,
-                type = SetType.Standard,
-            )
             val sessionId = sessionRepo.getSessionIdOrCreate(localDate)
-            sessionRepo.addSet(sessionId, set)
+            sessionRepo.addSet(
+                sessionId = sessionId,
+                exerciseId = id,
+                weight = weightFloat,
+                reps = repInt,
+                setType = SetType.Standard,
+            )
         }
     }
 

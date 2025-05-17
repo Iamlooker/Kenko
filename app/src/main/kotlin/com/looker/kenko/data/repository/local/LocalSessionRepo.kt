@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 LooKeR & Contributors
+ * Copyright (C) 2025. LooKeR & Contributors
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -20,6 +20,7 @@ import com.looker.kenko.data.local.dao.SessionDao
 import com.looker.kenko.data.local.dao.SetsDao
 import com.looker.kenko.data.local.model.SessionDataEntity
 import com.looker.kenko.data.local.model.SetEntity
+import com.looker.kenko.data.local.model.SetType
 import com.looker.kenko.data.local.model.toEntity
 import com.looker.kenko.data.local.model.toExternal
 import com.looker.kenko.data.model.Session
@@ -53,6 +54,25 @@ class LocalSessionRepo @Inject constructor(
             set.toEntity(
                 sessionId,
                 setsDao.getSetsCountBySessionId(sessionId) ?: 0,
+            ),
+        )
+    }
+
+    override suspend fun addSet(
+        sessionId: Int,
+        exerciseId: Int,
+        weight: Float,
+        reps: Int,
+        setType: SetType,
+    ) {
+        setsDao.insert(
+            SetEntity(
+                repsOrDuration = reps,
+                weight = weight,
+                exerciseId = exerciseId,
+                sessionId = sessionId,
+                type = setType,
+                order = setsDao.getSetsCountBySessionId(sessionId) ?: 0,
             ),
         )
     }

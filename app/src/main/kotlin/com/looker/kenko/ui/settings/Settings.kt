@@ -75,7 +75,6 @@ import com.looker.kenko.ui.components.HealthQuotes
 import com.looker.kenko.ui.components.KenkoBorderWidth
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
-import com.looker.kenko.ui.theme.colorSchemes.defaultColorSchemes
 import com.looker.kenko.ui.theme.colorSchemes.sereneColorSchemes
 import com.looker.kenko.ui.theme.dynamicColorSchemes
 import com.looker.kenko.ui.theme.end
@@ -113,7 +112,7 @@ private fun Settings(
                 navigationIcon = { BackButton(onClick = onBackPress) },
                 title = { Text(text = stringResource(R.string.label_settings)) },
             )
-        }
+        },
     ) {
         Column(
             modifier = Modifier
@@ -136,7 +135,7 @@ private fun Settings(
             ColorPaletteSelection(
                 selectedColorPalette = state.selectedColorPalette,
                 selectedTheme = state.selectedTheme,
-                onClickPalette = onSelectColorPalette
+                onClickPalette = onSelectColorPalette,
             )
             Spacer(modifier = Modifier.weight(1F))
             HealthQuotes(Modifier.align(CenterHorizontally))
@@ -153,7 +152,7 @@ private fun CategoryHeader(
         modifier = modifier
             .fillMaxWidth()
             .padding(start = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(text = title, style = MaterialTheme.typography.titleLarge)
         Spacer(modifier = Modifier.width(4.dp))
@@ -161,7 +160,7 @@ private fun CategoryHeader(
             modifier = Modifier.fillMaxWidth(),
             amplitude = 8f,
             durationMillis = 5_000,
-            color = MaterialTheme.colorScheme.outlineVariant
+            color = MaterialTheme.colorScheme.outlineVariant,
         )
     }
 }
@@ -234,7 +233,7 @@ private fun ColorPaletteItem(
     ) {
         KenkoTheme(
             theme = theme,
-            colorSchemes = colorSchemes
+            colorSchemes = colorSchemes,
         ) {
             Box(Modifier.size(80.dp)) {
                 ColorPaletteSample()
@@ -244,11 +243,11 @@ private fun ColorPaletteItem(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.45f)),
-                            contentAlignment = Alignment.Center
+                            contentAlignment = Alignment.Center,
                         ) {
                             Icon(
                                 painter = KenkoIcons.Done,
-                                contentDescription = null
+                                contentDescription = null,
                             )
                         }
                     }
@@ -273,25 +272,25 @@ private fun ColorPaletteSample(
             .size(80.dp)
             .then(modifier)
             .padding(8.dp)
-            .clip(CircleShape)
+            .clip(CircleShape),
     ) {
         Spacer(
             modifier = Modifier
                 .size(31.dp)
                 .align(Alignment.TopStart)
-                .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(4.dp))
+                .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(4.dp)),
         )
         Spacer(
             modifier = Modifier
                 .size(31.dp)
                 .align(Alignment.TopEnd)
-                .background(MaterialTheme.colorScheme.secondary, RoundedCornerShape(4.dp))
+                .background(MaterialTheme.colorScheme.secondary, RoundedCornerShape(4.dp)),
         )
         Spacer(
             modifier = Modifier
                 .size(64.dp, 31.dp)
                 .align(Alignment.BottomStart)
-                .background(MaterialTheme.colorScheme.tertiary, RoundedCornerShape(4.dp))
+                .background(MaterialTheme.colorScheme.tertiary, RoundedCornerShape(4.dp)),
         )
     }
 }
@@ -387,7 +386,7 @@ private fun ColorSelectionPreview() {
             },
             isSelected = isSelected,
             theme = Theme.System,
-            colorPalette = ColorPalettes.Serene
+            colorPalette = ColorPalettes.Serene,
         )
     }
 }

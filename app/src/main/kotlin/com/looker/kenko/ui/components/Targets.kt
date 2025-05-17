@@ -1,8 +1,21 @@
+/*
+ * Copyright (C) 2025. LooKeR & Contributors
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.looker.kenko.ui.components
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -54,7 +67,7 @@ fun HorizontalTargetChips(
             FilterChip(
                 selected = target == muscle,
                 onClick = { onSelect(muscle) },
-                label = { Text(text = stringResource(muscle.string)) }
+                label = { Text(text = stringResource(muscle.string)) },
             )
             if (!isLast) {
                 Spacer(modifier = Modifier.width(8.dp))
@@ -64,7 +77,6 @@ fun HorizontalTargetChips(
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun FlowHorizontalChips(
     target: MuscleGroups,
@@ -72,13 +84,13 @@ fun FlowHorizontalChips(
 ) {
     val sortedTargets = remember { MuscleGroups.entries.sortedBy { it.string } }
     FlowRow(
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         sortedTargets.forEach { muscle ->
             FilterChip(
                 selected = target == muscle,
                 onClick = { onSet(muscle) },
-                label = { Text(text = stringResource(muscle.stringRes)) }
+                label = { Text(text = stringResource(muscle.stringRes)) },
             )
         }
     }

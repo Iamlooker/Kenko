@@ -63,7 +63,7 @@ fun AddSet(exercise: Exercise, onDone: () -> Unit) {
     Column(
         modifier = Modifier
             .padding(horizontal = 16.dp)
-            .wrapContentHeight()
+            .wrapContentHeight(),
     ) {
         Spacer(modifier = Modifier.height(16.dp))
         AddSetHeader(
@@ -78,17 +78,15 @@ fun AddSet(exercise: Exercise, onDone: () -> Unit) {
         Spacer(modifier = Modifier.height(24.dp))
 
         SwipeableTextField(
-            modifier = Modifier.align(CenterHorizontally)
+            modifier = Modifier.align(CenterHorizontally),
         ) {
             TextButton(
                 modifier = incrementButtonModifier,
-                onClick = { viewModel.addRep(-1) }
+                onClick = { viewModel.addRep(-1) },
             ) {
                 Text(text = stringResource(R.string.label_minus_int, 1))
             }
-            val reps = rememberDraggableTextFieldState(
-                events = viewModel.repsDragEvents,
-            )
+            val reps = rememberDraggableTextFieldState(viewModel.repsBoundReached)
             DraggableTextField(
                 dragState = reps,
                 textFieldState = viewModel.reps,
@@ -98,30 +96,28 @@ fun AddSet(exercise: Exercise, onDone: () -> Unit) {
             )
             TextButton(
                 modifier = incrementButtonModifier,
-                onClick = { viewModel.addRep(1) }
+                onClick = { viewModel.addRep(1) },
             ) {
                 Text(text = stringResource(R.string.label_plus_int, 1))
             }
             TextButton(
                 modifier = incrementButtonModifier,
-                onClick = { viewModel.addRep(5) }
+                onClick = { viewModel.addRep(5) },
             ) {
                 Text(text = stringResource(R.string.label_plus_int, 5))
             }
         }
         Spacer(modifier = Modifier.height(24.dp))
         SwipeableTextField(
-            modifier = Modifier.align(CenterHorizontally)
+            modifier = Modifier.align(CenterHorizontally),
         ) {
             TextButton(
                 modifier = incrementButtonModifier,
-                onClick = { viewModel.addWeight(-1F) }
+                onClick = { viewModel.addWeight(-1F) },
             ) {
                 Text(text = stringResource(R.string.label_minus_int, 1F))
             }
-            val weights = rememberDraggableTextFieldState(
-                events = viewModel.weightsDragEvents,
-            )
+            val weights = rememberDraggableTextFieldState(viewModel.weightsBoundReached)
             DraggableTextField(
                 dragState = weights,
                 textFieldState = viewModel.weights,
@@ -131,13 +127,13 @@ fun AddSet(exercise: Exercise, onDone: () -> Unit) {
             )
             TextButton(
                 modifier = incrementButtonModifier,
-                onClick = { viewModel.addWeight(1F) }
+                onClick = { viewModel.addWeight(1F) },
             ) {
                 Text(text = stringResource(R.string.label_plus_int, 1F))
             }
             TextButton(
                 modifier = incrementButtonModifier,
-                onClick = { viewModel.addWeight(5F) }
+                onClick = { viewModel.addWeight(5F) },
             ) {
                 Text(text = stringResource(R.string.label_plus_int, 5F))
             }
@@ -155,24 +151,24 @@ private fun AddSetHeader(
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(modifier = Modifier.weight(1F)) {
             Text(
                 text = stringResource(R.string.label_add_set_for).uppercase(),
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.outline
+                color = MaterialTheme.colorScheme.outline,
             )
             Text(
                 text = exerciseName,
                 style = MaterialTheme.typography.displaySmall,
-                color = MaterialTheme.colorScheme.tertiary
+                color = MaterialTheme.colorScheme.tertiary,
             )
         }
         FilledTonalIconButton(onClick = onClick) {
             Icon(
                 painter = KenkoIcons.Done,
-                contentDescription = ""
+                contentDescription = "",
             )
         }
     }
@@ -186,11 +182,11 @@ private fun SwipeableTextField(
     Surface(
         modifier = modifier.requiredHeight(48.dp),
         shape = CircleShape,
-        color = MaterialTheme.colorScheme.surfaceContainer
+        color = MaterialTheme.colorScheme.surfaceContainer,
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            content = content
+            content = content,
         )
     }
 }

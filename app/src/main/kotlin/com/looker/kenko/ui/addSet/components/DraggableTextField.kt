@@ -1,12 +1,22 @@
+/*
+ * Copyright (C) 2025. LooKeR & Contributors
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.looker.kenko.ui.addSet.components
 
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.DraggableState
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredWidthIn
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -18,15 +28,15 @@ import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.looker.kenko.ui.components.kenkoTextDecorator
 
@@ -40,28 +50,22 @@ fun DraggableTextField(
     containerColor: Color = MaterialTheme.colorScheme.secondaryContainer,
     textColor: Color = MaterialTheme.colorScheme.onSecondaryContainer,
     style: TextStyle = MaterialTheme.typography.titleMedium.copy(color = textColor),
+    options: KeyboardOptions = KeyboardOptions(
+        keyboardType = KeyboardType.Number,
+        imeAction = ImeAction.Next,
+    ),
 ) {
-    val offset = remember { dragState.offset }
-    val state: DraggableState = remember { dragState.state }
-
     BasicTextField(
         modifier = modifier
             .requiredHeight(40.dp)
             .requiredWidthIn(40.dp)
             .wrapContentWidth()
-            .offset { IntOffset(offset.value.toInt(), 0) }
+            .graphicsLayer { translationX = dragState.offset.value }
             .draggable(
                 orientation = Orientation.Horizontal,
-                state = state,
+                state = dragState.state,
                 startDragImmediately = true,
-                onDragStopped = {
-                    dragState.events.onStop()
-                    offset.animateTo(
-                        targetValue = 0F,
-                        animationSpec = dragState.mediumBouncySpring,
-                        initialVelocity = it,
-                    )
-                },
+                onDragStopped = { dragState.onDragStop(it) },
             )
             .clip(CircleShape)
             .background(containerColor),
@@ -69,7 +73,7 @@ fun DraggableTextField(
         lineLimits = TextFieldLineLimits.SingleLine,
         inputTransformation = inputTransformation,
         cursorBrush = SolidColor(MaterialTheme.colorScheme.onSecondaryContainer),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        keyboardOptions = options,
         decorator = kenkoTextDecorator(supportingText),
         textStyle = style.copy(textAlign = TextAlign.Center),
     )

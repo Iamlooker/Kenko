@@ -16,9 +16,8 @@ package com.looker.kenko.ui.components
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.rememberSplineBasedDecay
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.AnchoredDraggableDefaults
 import androidx.compose.foundation.gestures.AnchoredDraggableState
 import androidx.compose.foundation.gestures.DraggableAnchors
 import androidx.compose.foundation.gestures.Orientation
@@ -52,7 +51,6 @@ import com.looker.kenko.ui.theme.KenkoIcons
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SwipeToDeleteBox(
     onDismiss: () -> Unit,
@@ -63,7 +61,6 @@ fun SwipeToDeleteBox(
     val scope = rememberCoroutineScope()
     val actionWidth = 96.dp
     val actionWidthPx = with(density) { actionWidth.toPx() }
-    val decayAnimationSpec = rememberSplineBasedDecay<Float>()
     val anchors = remember {
         DraggableAnchors {
             DragPositions.Settle at 0F
@@ -74,10 +71,6 @@ fun SwipeToDeleteBox(
         AnchoredDraggableState(
             initialValue = DragPositions.Settle,
             anchors = anchors,
-            positionalThreshold = { distance: Float -> distance * 0.5F },
-            velocityThreshold = { with(density) { 100.dp.toPx() } },
-            snapAnimationSpec = tween(),
-            decayAnimationSpec = decayAnimationSpec,
         )
     }
     val isOutsideBound by remember {
@@ -96,7 +89,7 @@ fun SwipeToDeleteBox(
     Box(
         modifier = modifier
             .height(IntrinsicSize.Min)
-            .drawBehind { drawRect(background) }
+            .drawBehind { drawRect(background) },
     ) {
         Box(
             modifier = Modifier
@@ -116,7 +109,7 @@ fun SwipeToDeleteBox(
                     .align(Alignment.CenterEnd),
                 painter = KenkoIcons.Delete,
                 tint = MaterialTheme.colorScheme.onErrorContainer,
-                contentDescription = null
+                contentDescription = null,
             )
         }
         Box(
@@ -143,6 +136,11 @@ fun SwipeToDeleteBox(
                     state = state,
                     orientation = Orientation.Horizontal,
                     reverseDirection = true,
+                    flingBehavior = AnchoredDraggableDefaults.flingBehavior(
+                        state = state,
+                        positionalThreshold = { distance: Float -> distance * 0.5F },
+                        animationSpec = tween(),
+                    ),
                 ),
         ) {
             content()
