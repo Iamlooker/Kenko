@@ -40,6 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Weird line in the setting wave
 - Crash on deleting plan
 - On boarding not completing
+- Loads of performance improvements
 
 ### Removed
 - Gradient in settings
