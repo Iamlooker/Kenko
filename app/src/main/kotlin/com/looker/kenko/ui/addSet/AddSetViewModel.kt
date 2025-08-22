@@ -19,6 +19,9 @@ import androidx.compose.foundation.text.input.InputTransformation
 import androidx.compose.foundation.text.input.TextFieldBuffer
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
@@ -42,6 +45,13 @@ class AddSetViewModel @AssistedInject constructor(
 
     val reps: TextFieldState = TextFieldState("12")
     val weights: TextFieldState = TextFieldState("20.0")
+
+    var selectedSetType by mutableStateOf(SetType.Standard)
+        private set
+
+    fun setSetType(type: SetType) {
+        selectedSetType = type
+    }
 
     fun addRep(value: Int) {
         reps.setTextAndPlaceCursorAtEnd((repInt + value).toString())
@@ -73,7 +83,7 @@ class AddSetViewModel @AssistedInject constructor(
                 exerciseId = id,
                 weight = weightFloat,
                 reps = repInt,
-                setType = SetType.Standard,
+                setType = selectedSetType,
             )
         }
     }
