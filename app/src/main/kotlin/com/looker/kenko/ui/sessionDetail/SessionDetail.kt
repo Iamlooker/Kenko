@@ -75,9 +75,9 @@ import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 import com.looker.kenko.utils.DateTimeFormat
 import com.looker.kenko.utils.formatDate
+import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
-import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun SessionDetails(
@@ -342,7 +342,11 @@ private fun AddSetSheet(
 ) {
     val scope = rememberCoroutineScope()
     val state = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    ModalBottomSheet(sheetState = state, onDismissRequest = onDismiss) {
+    ModalBottomSheet(
+        sheetState = state,
+        onDismissRequest = onDismiss,
+        containerColor = MaterialTheme.colorScheme.surfaceContainer,
+    ) {
         AddSet(
             exercise = exercise,
             onDone = {
