@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 LooKeR & Contributors
+ * Copyright (C) 2025. LooKeR & Contributors
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -26,12 +26,12 @@ plugins {
 
 android {
     namespace = "com.looker.kenko"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.looker.kenko"
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 36
         // 1.2.0 -> 102000
         // 1.12.2 -> 112020
         // 1.12.10 -> 112100
