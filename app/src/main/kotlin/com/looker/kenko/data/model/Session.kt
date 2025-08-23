@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 LooKeR & Contributors
+ * Copyright (C) 2025. LooKeR & Contributors
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,7 +15,6 @@
 package com.looker.kenko.data.model
 
 import androidx.compose.runtime.Immutable
-import com.looker.kenko.utils.sumOf
 import kotlinx.datetime.LocalDate
 
 @Immutable
@@ -27,6 +26,3 @@ data class Session(
 )
 
 fun Session(planId: Int, sets: List<Set>) = Session(planId = planId, date = localDate, sets = sets)
-
-val Session.currentRating: Rating
-    get() = Rating(sets.sumOf { it.rating.value })
