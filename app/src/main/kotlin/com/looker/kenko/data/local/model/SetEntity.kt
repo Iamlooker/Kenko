@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 LooKeR & Contributors
+ * Copyright (C) 2025. LooKeR & Contributors
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -20,9 +20,7 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.looker.kenko.data.model.Exercise
-import com.looker.kenko.data.model.Rating
 import com.looker.kenko.data.model.Set
-import com.looker.kenko.utils.sumOf
 
 @Entity(
     "sets",
@@ -55,12 +53,6 @@ data class SetEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
 )
-
-val List<SetEntity>.rating: Rating
-    get() = Rating(sumOf { it.repsOrDuration * it.weight * it.type.ratingModifier })
-
-val SetEntity.rating: Rating
-    get() = Rating(repsOrDuration * weight * type.ratingModifier)
 
 fun SetEntity.toExternal(exercise: Exercise): Set = Set(
     repsOrDuration = repsOrDuration,
