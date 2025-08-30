@@ -194,37 +194,34 @@ class PlanEditViewModel @Inject constructor(
     }
 
     @OptIn(ExperimentalAtomicApi::class)
-    fun debugFillMockData(sessions: Int = 4) {
+    fun debugFillMockData(sessions: Int = 9) {
         viewModelScope.launch {
             val now = Clock.System.now()
             val rand = Random.Default
             val added = AtomicInt(0)
             val planId = planIdStream.value
-            repeat(sessions) {
-                val date = rand.nextLocalDateTime(
-                    from = now - (sessions * 2).days,
-                    until = now,
-                ).date
+            var sessionsAdded = 0
+            while (sessionsAdded < sessions) {
+                val date = rand.nextLocalDateTime(now - (sessions * 2).days, now).date
+
+                val items = repo.getPlanItems(planId, date.dayOfWeek).ifEmpty { continue }
+                sessionsAdded++
 
                 val sessionId = sessionRepo.getSessionIdOrCreate(date)
-                val items = repo.getPlanItems(planId, date.dayOfWeek)
-
                 for (item in items) {
                     val exerciseId = item.exercise.id ?: continue
-                    launch {
-                        val setsCount = rand.nextInt(1, 4)
-                        repeat(setsCount) {
-                            val weight = rand.nextInt(10, 80) + rand.nextFloat()
-                            val reps = rand.nextInt(5, 15)
-                            sessionRepo.addSet(
-                                sessionId = sessionId,
-                                exerciseId = exerciseId,
-                                weight = weight,
-                                reps = reps,
-                                setType = SetType.entries.random(),
-                            )
-                            added.incrementAndFetch()
-                        }
+                    val setsCount = rand.nextInt(1, 4)
+                    repeat(setsCount) {
+                        val weight = rand.nextInt(10, 80) + rand.nextFloat()
+                        val reps = rand.nextInt(5, 15)
+                        sessionRepo.addSet(
+                            sessionId = sessionId,
+                            exerciseId = exerciseId,
+                            weight = weight,
+                            reps = reps,
+                            setType = SetType.entries.random(),
+                        )
+                        added.incrementAndFetch()
                     }
                 }
             }

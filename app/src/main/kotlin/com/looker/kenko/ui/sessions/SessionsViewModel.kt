@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 LooKeR & Contributors
+ * Copyright (C) 2025. LooKeR & Contributors
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -21,17 +21,17 @@ import com.looker.kenko.data.model.localDate
 import com.looker.kenko.data.repository.SessionRepo
 import com.looker.kenko.utils.asStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
 @HiltViewModel
 class SessionsViewModel @Inject constructor(
     repo: SessionRepo,
 ) : ViewModel() {
-    private val sessionsStream: Flow<List<Session>> = repo.stream.map { it.asReversed() }
+    private val sessionsStream: Flow<List<Session>> = repo.stream
 
     private val isCurrentSessionActive: Flow<Boolean> = repo.streamByDate(localDate).map { it != null }
 
