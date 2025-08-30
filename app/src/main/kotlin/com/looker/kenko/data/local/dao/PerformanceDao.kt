@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 LooKeR & Contributors
+ * Copyright (C) 2025. LooKeR & Contributors
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -35,7 +35,7 @@ interface PerformanceDao {
     suspend fun getPerformance(exerciseId: Int?, planId: Int?): Performance? {
         val selection = arrayListOf<Any?>()
         val query = buildString(512) {
-            append("SELECT sessions.date, sets.reps * sets.weight * set_type.modifier AS rating FROM sets ")
+            append("SELECT sessions.date, SUM(sets.reps * sets.weight * set_type.modifier) AS rating FROM sets ")
             append("INNER JOIN set_type ON sets.type = set_type.type ")
             append("INNER JOIN sessions ON sets.sessionId = sessions.id ")
             if (exerciseId != null) {
@@ -48,9 +48,10 @@ interface PerformanceDao {
                 } else {
                     append("WHERE ")
                 }
-                append("sessionId IN (SELECT id FROM sessions WHERE planId = ?) ")
+                append("sessions.planId = ? ")
                 selection.add(planId)
             }
+            append("GROUP BY sessions.date ")
             append("ORDER BY sessions.date ASC")
         }
         val ratingWrapper = _rawQueryRatingWrappers(

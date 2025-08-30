@@ -20,6 +20,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -36,7 +38,7 @@ import com.looker.kenko.ui.performance.components.rememberPoints
 fun Performance(viewModel: PerformanceViewModel) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
 
-    Surface {
+    Surface(Modifier.safeContentPadding()) {
         when (uiState) {
             is PerformanceUiState.Loading -> {
                 Box(
@@ -45,7 +47,7 @@ fun Performance(viewModel: PerformanceViewModel) {
                         .padding(bottom = 80.dp),
                     contentAlignment = Alignment.Center,
                 ) {
-                    Text(text = "Loading…")
+                    CircularProgressIndicator()
                 }
             }
 

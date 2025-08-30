@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 LooKeR & Contributors
+ * Copyright (C) 2025. LooKeR & Contributors
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -31,6 +31,11 @@ import com.looker.kenko.data.repository.PlanRepo
 import com.looker.kenko.data.repository.SessionRepo
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import javax.inject.Inject
+import kotlin.properties.Delegates
+import kotlin.random.Random
+import kotlin.test.assertContentEquals
+import kotlin.test.assertNotNull
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.DayOfWeek
@@ -40,13 +45,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import javax.inject.Inject
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.properties.Delegates
-import kotlin.random.Random
-import kotlin.test.assertContentEquals
-import kotlin.test.assertNotNull
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
@@ -158,6 +156,75 @@ class PerformanceDaoTest {
         assertContentEquals(expectedSecondPlanPerf.ratings, secondPlanPerf.ratings)
     }
 
+    @Test
+    fun planPerformanceAggregatesBySessionDate() = runTest {
+        // Use first plan and set as current
+        planRepo.setCurrent(firstPlanId)
+        val day0 = localDate
+        val day2 = localDate + DatePeriod(days = 2)
+
+        // Multiple sets across exercises on same dates
+        val inserts: MutableList<Pair<LocalDate, Set>> = mutableListOf(
+            // day0: 3 sets
+            day0 to Set(10, 20f, SetType.Standard, firstExercise),
+            day0 to Set(8, 25f, SetType.Drop, secondExercise),
+            day0 to Set(12, 15f, SetType.Standard, firstExercise),
+            // day2: 2 sets
+            day2 to Set(6, 30f, SetType.Standard, secondExercise),
+            day2 to Set(15, 10f, SetType.RestPause, firstExercise),
+        )
+
+        // Insert into the same sessions per date
+        val sessionIdDay0 = sessionRepo.getSessionIdOrCreate(day0)
+        val sessionIdDay2 = sessionRepo.getSessionIdOrCreate(day2)
+        inserts.forEach { (d, s) ->
+            val sid = if (d == day0) sessionIdDay0 else sessionIdDay2
+            sessionRepo.addSet(sid, s)
+        }
+
+        val expected = aggregatePerformanceOf(inserts)
+        val performance = performanceDao.getPerformance(exerciseId = null, planId = firstPlanId)
+        assertNotNull(performance)
+        assertContentEquals(expected.days, performance.days)
+        assertContentEquals(expected.ratings, performance.ratings)
+    }
+
+    @Test
+    fun exercisePerformanceAggregatesDistinctDatesWithGaps() = runTest {
+        planRepo.setCurrent(firstPlanId)
+        val d0 = localDate + DatePeriod(days = 10)
+        val d2 = localDate + DatePeriod(days = 12)
+        val d7 = localDate + DatePeriod(days = 17)
+        val d9 = localDate + DatePeriod(days = 19)
+
+        // Insert other exercise noise on in-between days
+        val noiseDays = listOf(localDate + DatePeriod(days = 11), localDate + DatePeriod(days = 13), localDate + DatePeriod(days = 18))
+        noiseDays.forEach { d ->
+            val sid = sessionRepo.getSessionIdOrCreate(d)
+            sessionRepo.addSet(sid, Set(5, 22f, SetType.Standard, secondExercise))
+        }
+
+        // Insert multiple sets for the target exercise on selected dates
+        val inserts: MutableList<Pair<LocalDate, Set>> = mutableListOf(
+            d0 to Set(10, 20f, SetType.Standard, firstExercise),
+            d2 to Set(8, 25f, SetType.Standard, firstExercise),
+            d2 to Set(6, 30f, SetType.Drop, firstExercise),
+            d7 to Set(12, 15f, SetType.RestPause, firstExercise),
+            d9 to Set(15, 10f, SetType.Standard, firstExercise),
+            d9 to Set(5, 40f, SetType.Standard, firstExercise),
+        )
+        inserts.groupBy { it.first }.forEach { (date, list) ->
+            val sid = sessionRepo.getSessionIdOrCreate(date)
+            list.forEach { (_, set) -> sessionRepo.addSet(sid, set) }
+        }
+
+        val expected = aggregatePerformanceOf(inserts)
+        val performance = performanceDao.getPerformance(exerciseId = firstExercise.id, planId = firstPlanId)
+        assertNotNull(performance)
+        assertContentEquals(expected.days, performance.days)
+        assertContentEquals(expected.ratings, performance.ratings)
+    }
+
     private fun performanceOf(sets: Map<LocalDate, Set>): Performance = sets
         .map { (date, set) ->
             RatingWrapper(
@@ -167,6 +234,19 @@ class PerformanceDaoTest {
         }
         .sortedBy { it.date }
         .toPerformance()
+
+    private fun aggregatePerformanceOf(entries: List<Pair<LocalDate, Set>>): Performance {
+        val aggregated = entries
+            .groupBy({ it.first }) { it.second }
+            .map { (date, sets) ->
+                RatingWrapper(
+                    date = date.toEpochDays(),
+                    rating = sets.sumOf { it.rating.value.toDouble() }.toFloat(),
+                )
+            }
+            .sortedBy { it.date }
+        return aggregated.toPerformance()
+    }
 
     private fun fakeSets(exercise: Exercise, startingDate: LocalDate): Map<LocalDate, Set> {
         val baseSet = Set(12, 20F, SetType.Standard, exercise)
