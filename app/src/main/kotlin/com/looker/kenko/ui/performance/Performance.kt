@@ -14,6 +14,7 @@
 
 package com.looker.kenko.ui.performance
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,8 +32,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.looker.kenko.ui.performance.components.PointsCanvas
 import com.looker.kenko.ui.performance.components.rememberPoints
+import com.looker.kenko.ui.performance.components.toPath
 
 @Composable
 fun Performance(viewModel: PerformanceViewModel) {
@@ -59,15 +60,17 @@ fun Performance(viewModel: PerformanceViewModel) {
                 )
                 Column {
                     Text(data.performance.days.joinToString { it.toString() })
-                    Box(
+                    Canvas(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(300.dp)
                             .padding(16.dp),
                     ) {
-                        PointsCanvas(
-                            points = graphPoints,
-                            modifier = Modifier.matchParentSize(),
+                        val path = graphPoints.toPath(size)
+                        drawPath(
+                            path = path,
+                            color = graphPoints.lineColor,
+                            style = graphPoints.stroke,
                         )
                     }
                 }
