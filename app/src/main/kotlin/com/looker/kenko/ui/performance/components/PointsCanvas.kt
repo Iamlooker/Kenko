@@ -12,25 +12,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.looker.kenko.ui.performance.navigation
+package com.looker.kenko.ui.performance.components
 
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
-import com.looker.kenko.ui.performance.Performance
-import kotlinx.serialization.Serializable
+import androidx.compose.foundation.Canvas
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 
-@Serializable
-object PerformanceRoute
-
-fun NavController.navigateToPerformance(navOptions: NavOptions? = null) {
-    navigate(PerformanceRoute, navOptions)
-}
-
-fun NavGraphBuilder.performance() {
-    composable<PerformanceRoute> {
-        Performance(viewModel = hiltViewModel())
+@Composable
+fun PointsCanvas(
+    points: Points,
+    modifier: Modifier = Modifier,
+) {
+    Canvas(modifier = modifier) {
+        val path = points.toPath(size)
+        // Draw the constructed path
+        drawPath(
+            path = path,
+            color = points.lineColor,
+            style = points.stroke,
+        )
     }
 }
