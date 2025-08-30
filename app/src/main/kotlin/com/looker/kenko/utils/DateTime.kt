@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 LooKeR & Contributors
+ * Copyright (C) 2025. LooKeR & Contributors
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -14,15 +14,18 @@
 
 package com.looker.kenko.utils
 
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.random.Random
+import kotlin.time.Duration.Companion.days
 import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
+import kotlinx.datetime.toLocalDateTime
 import kotlinx.datetime.todayIn
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import kotlin.time.Duration.Companion.days
 
 @JvmInline
 value class EpochDays(val value: Int)
@@ -52,6 +55,22 @@ fun formatDate(
         Date(epochDays.days.inWholeMilliseconds),
     )
 }
+
+fun Random.nextInstant(
+    from: Instant = Instant.DISTANT_PAST,
+    until: Instant = Instant.DISTANT_FUTURE,
+): Instant = Instant.fromEpochMilliseconds(
+    nextLong(
+        from = from.toEpochMilliseconds(),
+        until = until.toEpochMilliseconds(),
+    ),
+)
+
+fun Random.nextLocalDateTime(
+    from: Instant = Instant.DISTANT_PAST,
+    until: Instant = Instant.DISTANT_FUTURE,
+): LocalDateTime = nextInstant(from, until)
+    .toLocalDateTime(TimeZone.currentSystemDefault())
 
 val LocalDate.isToday: Boolean
     get() = daysUntil(Clock.System.todayIn(TimeZone.currentSystemDefault())) == 0
