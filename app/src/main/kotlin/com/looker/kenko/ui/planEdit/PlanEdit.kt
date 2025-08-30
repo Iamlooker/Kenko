@@ -37,6 +37,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -60,6 +61,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.looker.kenko.BuildConfig
 import com.looker.kenko.R
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.ExercisesPreviewParameter
@@ -107,6 +109,7 @@ fun PlanEdit(
             )
         },
         onBackPress = { viewModel.onBackPress(pageStage, onBackPress) },
+        onDebugMockClick = viewModel::debugFillMockData,
     ) { stage ->
         when (stage) {
             PlanEditStage.NameEdit -> {
@@ -145,6 +148,7 @@ private fun FullEdit(
     stage: PlanEditStage,
     fab: @Composable () -> Unit,
     onBackPress: () -> Unit,
+    onDebugMockClick: (() -> Unit)? = null,
     ui: @Composable (stage: PlanEditStage) -> Unit,
 ) {
     Scaffold(
@@ -159,6 +163,13 @@ private fun FullEdit(
             TopAppBar(
                 title = {},
                 navigationIcon = { BackButton(onBackPress) },
+                actions = {
+                    if (BuildConfig.DEBUG && stage == PlanEditStage.PlanEdit) {
+                        IconButton(onClick = { onDebugMockClick?.invoke() }) {
+                            Icon(painter = KenkoIcons.Add, contentDescription = "Mock data")
+                        }
+                    }
+                },
             )
         },
     ) { innerPadding ->

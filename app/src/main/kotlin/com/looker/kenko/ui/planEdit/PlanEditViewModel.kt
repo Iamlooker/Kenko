@@ -24,13 +24,22 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.looker.kenko.R
 import com.looker.kenko.data.StringHandler
+import com.looker.kenko.data.local.model.SetType
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.PlanItem
 import com.looker.kenko.data.model.localDate
 import com.looker.kenko.data.repository.PlanRepo
 import com.looker.kenko.ui.planEdit.navigation.PlanEditRoute
 import com.looker.kenko.utils.asStateFlow
+import com.looker.kenko.utils.nextLocalDateTime
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+import kotlin.concurrent.atomics.AtomicInt
+import kotlin.concurrent.atomics.ExperimentalAtomicApi
+import kotlin.concurrent.atomics.incrementAndFetch
+import kotlin.random.Random
+import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,14 +49,14 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
 import kotlinx.datetime.DayOfWeek
-import javax.inject.Inject
-import kotlin.time.Duration.Companion.milliseconds
 
 @HiltViewModel
 class PlanEditViewModel @Inject constructor(
     private val repo: PlanRepo,
     private val stringHandler: StringHandler,
+    private val sessionRepo: com.looker.kenko.data.repository.SessionRepo,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -181,6 +190,45 @@ class PlanEditViewModel @Inject constructor(
                 return@launch
             }
             onBackPress()
+        }
+    }
+
+    @OptIn(ExperimentalAtomicApi::class)
+    fun debugFillMockData(sessions: Int = 4) {
+        viewModelScope.launch {
+            val now = Clock.System.now()
+            val rand = Random.Default
+            val added = AtomicInt(0)
+            val planId = planIdStream.value
+            repeat(sessions) {
+                val date = rand.nextLocalDateTime(
+                    from = now - (sessions * 2).days,
+                    until = now,
+                ).date
+
+                val sessionId = sessionRepo.getSessionIdOrCreate(date)
+                val items = repo.getPlanItems(planId, date.dayOfWeek)
+
+                for (item in items) {
+                    val exerciseId = item.exercise.id ?: continue
+                    launch {
+                        val setsCount = rand.nextInt(1, 4)
+                        repeat(setsCount) {
+                            val weight = rand.nextInt(10, 80) + rand.nextFloat()
+                            val reps = rand.nextInt(5, 15)
+                            sessionRepo.addSet(
+                                sessionId = sessionId,
+                                exerciseId = exerciseId,
+                                weight = weight,
+                                reps = reps,
+                                setType = SetType.entries.random(),
+                            )
+                            added.incrementAndFetch()
+                        }
+                    }
+                }
+            }
+            snackbarState.showSnackbar("Mock data added: ${added.load()} sets")
         }
     }
 }
