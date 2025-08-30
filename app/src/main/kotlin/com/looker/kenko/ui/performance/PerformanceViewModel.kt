@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 LooKeR & Contributors
+ * Copyright (C) 2025. LooKeR & Contributors
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,81 +16,46 @@ package com.looker.kenko.ui.performance
 
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.Plan
-import com.looker.kenko.data.model.PlanItem
-import com.looker.kenko.data.repository.ExerciseRepo
 import com.looker.kenko.data.repository.Performance
 import com.looker.kenko.data.repository.PerformanceRepo
 import com.looker.kenko.data.repository.PlanRepo
 import com.looker.kenko.utils.asStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.collections.max
-import kotlin.collections.min
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 
 @HiltViewModel
 class PerformanceViewModel @Inject constructor(
     private val repo: PerformanceRepo,
-    private val exerciseRepo: ExerciseRepo,
-    private val planRepo: PlanRepo,
+    planRepo: PlanRepo,
 ) : ViewModel() {
 
-    private val plansAndExercises = hashMapOf<Plan, List<Exercise>>()
+    val currentPlan = planRepo.current
 
-    private val _selectedPlan = MutableStateFlow<Int?>(null)
-    private val _selectedExercise = MutableStateFlow<Int?>(null)
-    val selectedExercise = _selectedExercise
-
-    val exercises = exerciseRepo.stream.asStateFlow(emptyList())
-
-    val state: StateFlow<PerformanceUiState> = combine(
-        _selectedPlan,
-        _selectedExercise,
-    ) { plan, exercise ->
-        val performance = repo.getPerformance(exercise, plan)
-        if (performance == null) {
-            return@combine PerformanceStateError.NoValidPerformance
+    val state: StateFlow<PerformanceUiState> = currentPlan
+        .map { plan ->
+            if (plan == null) {
+                PerformanceStateError.NoValidPerformance
+            } else {
+                val performance = repo.getPerformance(planId = plan.id)
+                when {
+                    performance == null -> PerformanceStateError.NoValidPerformance
+                    performance.ratings.size < 5 -> PerformanceStateError.NotEnoughData
+                    else -> PerformanceUiState.Success(
+                        PerformanceUiData(
+                            plan = plan,
+                            performance = performance,
+                        ),
+                    )
+                }
+            }
         }
-        if (performance.days.size <= 1 || performance.ratings.size <= 1) {
-            return@combine PerformanceStateError.NotEnoughData
-        }
-        val days = performance.days
-        val ratings = performance.ratings
-        PerformanceUiState.Success(
-            PerformanceUiData(
-                exercise = exercise?.let { exerciseRepo.get(it) },
-                plan = plan?.let { planRepo.plan(it) },
-                performance = performance,
-                xRange = days.min()..days.max(),
-                yRange = (ratings.min().toFloat() * 0.99F)..(ratings.max().toFloat() * 1.05F),
-            ),
-        )
-    }.onStart { emit(PerformanceUiState.Loading) }
+        .onStart { emit(PerformanceUiState.Loading) }
         .asStateFlow(PerformanceUiState.Loading)
 
-    fun selectExercise(id: Int) {
-        viewModelScope.launch {
-            _selectedExercise.emit(id)
-        }
-    }
-
-    init {
-        viewModelScope.launch {
-            val plans = planRepo.plans.first()
-            val planItemsMap = plans.associateWith {
-                planRepo.getPlanItems(it.id!!).map(PlanItem::exercise)
-            }
-            plansAndExercises.putAll(planItemsMap)
-        }
-    }
 }
 
 sealed interface PerformanceUiState {
@@ -105,9 +70,6 @@ sealed interface PerformanceStateError : PerformanceUiState {
 
 @Stable
 class PerformanceUiData(
-    val exercise: Exercise?,
     val plan: Plan?,
     val performance: Performance,
-    val xRange: IntRange,
-    val yRange: ClosedFloatingPointRange<Float>,
 )
