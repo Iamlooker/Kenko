@@ -43,7 +43,7 @@ class PerformanceViewModel @Inject constructor(
                 val performance = repo.getPerformance(planId = plan.id)
                 when {
                     performance == null -> PerformanceStateError.NoValidPerformance
-                    performance.ratings.size < 5 -> PerformanceStateError.NotEnoughData
+                    performance.ratings.size < MinDataRequired -> PerformanceStateError.NotEnoughData
                     else -> PerformanceUiState.Success(
                         PerformanceUiData(
                             plan = plan,
@@ -57,6 +57,8 @@ class PerformanceViewModel @Inject constructor(
         .asStateFlow(PerformanceUiState.Loading)
 
 }
+
+private const val MinDataRequired = 1
 
 sealed interface PerformanceUiState {
     object Loading : PerformanceUiState
