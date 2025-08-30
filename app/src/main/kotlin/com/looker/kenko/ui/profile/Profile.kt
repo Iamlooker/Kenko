@@ -51,6 +51,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -150,8 +151,11 @@ private fun Profile(
                 onAddClick = onAddExerciseClick,
                 onExercisesClick = onExercisesClick,
             )
-            Spacer(modifier = Modifier.height(12.dp))
-            LiftsCard(state.totalLifts)
+            val hasLifts by remember { derivedStateOf { state.totalLifts > 0 } }
+            if (hasLifts) {
+                Spacer(modifier = Modifier.height(12.dp))
+                LiftsCard(state.totalLifts)
+            }
             Spacer(modifier = Modifier.weight(1F))
             HealthQuotes(Modifier.align(Alignment.CenterHorizontally))
         }
@@ -236,27 +240,28 @@ fun SelectPlanCard(
     onSelectPlanClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .clip(CircleShape)
-            .background(MaterialTheme.colorScheme.primaryContainer)
-            .clickable(onClick = onSelectPlanClick)
-            .padding(vertical = 24.dp),
-        horizontalArrangement = Arrangement.SpaceAround,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(
-            text = stringResource(R.string.label_select_plan),
-            style = MaterialTheme.typography.headlineLarge,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
-        )
-        Icon(
-            painter = KenkoIcons.ArrowOutward,
-            tint = MaterialTheme.colorScheme.onPrimaryContainer,
-            contentDescription = null,
-        )
+    CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onTertiaryContainer) {
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.tertiaryContainer)
+                .clickable(onClick = onSelectPlanClick)
+                .padding(vertical = 24.dp),
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = stringResource(R.string.label_select_plan),
+                style = MaterialTheme.typography.headlineLarge,
+            )
+
+            Icon(
+                painter = KenkoIcons.ArrowOutward, contentDescription = null,
+                modifier = Modifier.offset(y = 6.dp),
+            )
+        }
     }
 }
 
