@@ -16,7 +16,6 @@ package com.looker.kenko.ui.performance
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,10 +29,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.StrokeJoin
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.looker.kenko.ui.performance.components.Points
 import com.looker.kenko.ui.performance.components.rememberPoints
 import com.looker.kenko.ui.performance.components.toPath
+import com.looker.kenko.ui.theme.KenkoTheme
 
 @Composable
 fun Performance(viewModel: PerformanceViewModel) {
@@ -54,26 +60,12 @@ fun Performance(viewModel: PerformanceViewModel) {
 
             is PerformanceUiState.Success -> {
                 val data = (uiState as PerformanceUiState.Success).data
-                val graphPoints = rememberPoints(
-                    points = data.performance.ratings,
-                    label = {},
+                PerformancePlot(
+                    points = rememberPoints(data.performance.ratings),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(300.dp),
                 )
-                Column {
-                    Text(data.performance.days.joinToString { it.toString() })
-                    Canvas(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(300.dp)
-                            .padding(16.dp),
-                    ) {
-                        val path = graphPoints.toPath(size)
-                        drawPath(
-                            path = path,
-                            color = graphPoints.lineColor,
-                            style = graphPoints.stroke,
-                        )
-                    }
-                }
             }
 
             is PerformanceStateError -> {
@@ -92,5 +84,70 @@ fun Performance(viewModel: PerformanceViewModel) {
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun PerformancePlot(
+    points: Points,
+    modifier: Modifier = Modifier,
+) {
+    Canvas(modifier) {
+        val axisStroke = 4F
+        val axisStrokePadding = axisStroke / 2
+        drawLine(
+            color = points.gridColor,
+            start = Offset(axisStrokePadding, axisStrokePadding),
+            end = Offset(axisStrokePadding, size.height - axisStrokePadding),
+            strokeWidth = axisStroke,
+            cap = StrokeCap.Round,
+        )
+        drawLine(
+            color = points.gridColor,
+            start = Offset(axisStrokePadding, size.height - axisStrokePadding),
+            end = Offset(
+                size.width - axisStrokePadding,
+                size.height - axisStrokePadding
+            ),
+            strokeWidth = axisStroke,
+            cap = StrokeCap.Round,
+        )
+
+        val path = points.toPath(size)
+        drawPath(
+            path = path,
+            color = points.lineColor,
+            style = Stroke(
+                width = 6F,
+                cap = StrokeCap.Round,
+                join = StrokeJoin.Round,
+                miter = 0F
+            ),
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PerformancePreview() {
+    KenkoTheme {
+        PerformancePlot(
+            rememberPoints(
+                floatArrayOf(
+                    8852.628F,
+                    3092.6155F,
+                    2661.0654F,
+                    11071.365F,
+                    5737.648F,
+                    4238.7886F,
+                    11071.365F,
+                ),
+                smoothing = 0.4F
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(300.dp)
+                .padding(8.dp),
+        )
     }
 }
