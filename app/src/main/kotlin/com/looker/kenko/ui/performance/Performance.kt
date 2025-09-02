@@ -37,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.ui.performance.components.Points
+import com.looker.kenko.ui.performance.components.drawGrid
 import com.looker.kenko.ui.performance.components.rememberPoints
 import com.looker.kenko.ui.performance.components.toPath
 import com.looker.kenko.ui.theme.KenkoTheme
@@ -93,17 +94,18 @@ private fun PerformancePlot(
     modifier: Modifier = Modifier,
 ) {
     Canvas(modifier) {
-        val axisStroke = 4F
+        val axisStroke = 11F
         val axisStrokePadding = axisStroke / 2
+        // Axes
         drawLine(
-            color = points.gridColor,
+            color = points.axesColor,
             start = Offset(axisStrokePadding, axisStrokePadding),
             end = Offset(axisStrokePadding, size.height - axisStrokePadding),
             strokeWidth = axisStroke,
             cap = StrokeCap.Round,
         )
         drawLine(
-            color = points.gridColor,
+            color = points.axesColor,
             start = Offset(axisStrokePadding, size.height - axisStrokePadding),
             end = Offset(
                 size.width - axisStrokePadding,
@@ -113,12 +115,15 @@ private fun PerformancePlot(
             cap = StrokeCap.Round,
         )
 
+        drawGrid(axisStrokePadding, points.gridColor)
+
+        // Performance path over grid
         val path = points.toPath(size)
         drawPath(
             path = path,
             color = points.lineColor,
             style = Stroke(
-                width = 6F,
+                width = 8F,
                 cap = StrokeCap.Round,
                 join = StrokeJoin.Round,
                 miter = 0F
