@@ -20,27 +20,29 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.util.fastCoerceAtLeast
 import kotlin.math.sign
 
 @Immutable
 class Points(
-    val points: FloatArray, // Only y points since x-axis is always aligned to start
+    val ratings: FloatArray, // Only y points since x-axis is always aligned to start
     val pointColor: Color,
-    val lineColor: Color,
     val gridColor: Color,
+    val lineColor: Color,
+    val axesColor: Color,
     val smoothing: Float, // 0f = straight lines; 1f = maximum smoothing
 )
 
 fun Points.toPath(size: Size): Path = Path().apply {
-    val pointCount = points.size
+    val pointCount = ratings.size
     if (pointCount == 0) return@apply
 
     // Internal padding (as percentage of canvas size) to avoid touching edges
     val horizontalInset = size.width * 0.04f
     val verticalInset = size.height * 0.06f
 
-    val usableWidth = (size.width - horizontalInset - horizontalInset).coerceAtLeast(0f)
-    val usableHeight = (size.height - verticalInset - verticalInset).coerceAtLeast(0f)
+    val usableWidth = (size.width - horizontalInset - horizontalInset).fastCoerceAtLeast(0f)
+    val usableHeight = (size.height - verticalInset - verticalInset).fastCoerceAtLeast(0f)
 
     // Determine horizontal spacing within padded area
     val xStep = if (pointCount > 1) usableWidth / (pointCount - 1) else 0f
@@ -48,7 +50,7 @@ fun Points.toPath(size: Size): Path = Path().apply {
     // Normalize Y values to fit within padded [topInset .. topInset+usableHeight] (inverted)
     var minYValue = Float.POSITIVE_INFINITY
     var maxYValue = Float.NEGATIVE_INFINITY
-    for (value in points) {
+    for (value in ratings) {
         if (value < minYValue) minYValue = value
         if (value > maxYValue) maxYValue = value
     }
@@ -66,7 +68,7 @@ fun Points.toPath(size: Size): Path = Path().apply {
     }
 
     // Precompute mapped points with even X spacing inside padded area
-    val mappedYCoordinates = FloatArray(pointCount) { i -> mapValueToCanvasY(points[i]) }
+    val mappedYCoordinates = FloatArray(pointCount) { i -> mapValueToCanvasY(ratings[i]) }
     val mappedXCoordinates = FloatArray(pointCount) { i ->
         if (pointCount > 1) horizontalInset + i * xStep else horizontalInset + usableWidth / 2f
     }
@@ -143,12 +145,14 @@ fun rememberPoints(
     points: FloatArray,
     pointColor: Color = MaterialTheme.colorScheme.secondary,
     lineColor: Color = MaterialTheme.colorScheme.primaryContainer,
-    gridColor: Color = MaterialTheme.colorScheme.outlineVariant,
+    gridColor: Color= MaterialTheme.colorScheme.surfaceVariant.copy(0.3F),
+    axesColor: Color = MaterialTheme.colorScheme.outline,
     smoothing: Float = 0.3F,
 ): Points = Points(
-    points = points,
+    ratings = points,
     pointColor = pointColor,
     lineColor = lineColor,
     gridColor = gridColor,
+    axesColor = axesColor,
     smoothing = smoothing,
 )
