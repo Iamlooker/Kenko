@@ -20,6 +20,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import kotlin.math.sign
 
 @Immutable
 class Points(
@@ -31,78 +32,109 @@ class Points(
 )
 
 fun Points.toPath(size: Size): Path = Path().apply {
-    val count = points.size
-    if (count == 0) return@apply
+    val pointCount = points.size
+    if (pointCount == 0) return@apply
 
-    // Determine horizontal spacing so that first point starts at x=0 and last at x=width
-    val stepX = if (count > 1) size.width / (count - 1) else 0f
+    // Internal padding (as percentage of canvas size) to avoid touching edges
+    val horizontalInset = size.width * 0.04f
+    val verticalInset = size.height * 0.06f
 
-    // Normalize Y values to fit within [height, 0] (inverted Y for canvas)
-    var min = Float.POSITIVE_INFINITY
-    var max = Float.NEGATIVE_INFINITY
-    for (v in points) {
-        if (v < min) min = v
-        if (v > max) max = v
+    val usableWidth = (size.width - horizontalInset - horizontalInset).coerceAtLeast(0f)
+    val usableHeight = (size.height - verticalInset - verticalInset).coerceAtLeast(0f)
+
+    // Determine horizontal spacing within padded area
+    val xStep = if (pointCount > 1) usableWidth / (pointCount - 1) else 0f
+
+    // Normalize Y values to fit within padded [topInset .. topInset+usableHeight] (inverted)
+    var minYValue = Float.POSITIVE_INFINITY
+    var maxYValue = Float.NEGATIVE_INFINITY
+    for (value in points) {
+        if (value < minYValue) minYValue = value
+        if (value > maxYValue) maxYValue = value
     }
-    val span = max - min
+    val valueSpan = maxYValue - minYValue
 
-    fun mapY(v: Float): Float {
-        return if (span == 0f) {
-            // Flat series: draw in the vertical center
-            size.height / 2f
+    fun mapValueToCanvasY(value: Float): Float {
+        return if (valueSpan == 0f) {
+            // Flat series: draw in the vertical center of padded area
+            verticalInset + usableHeight / 2f
         } else {
-            val norm = (v - min) / span
-            size.height - norm * size.height
+            val normalized = (value - minYValue) / valueSpan
+            // Invert Y: 0 at bottom, 1 at top
+            verticalInset + (1f - normalized) * usableHeight
         }
     }
 
-    // Precompute mapped points with even X spacing
-    val mappedY = FloatArray(count) { i -> mapY(points[i]) }
-    val mappedX = FloatArray(count) { i -> if (count > 1) i * stepX else 0f }
+    // Precompute mapped points with even X spacing inside padded area
+    val mappedYCoordinates = FloatArray(pointCount) { i -> mapValueToCanvasY(points[i]) }
+    val mappedXCoordinates = FloatArray(pointCount) { i ->
+        if (pointCount > 1) horizontalInset + i * xStep else horizontalInset + usableWidth / 2f
+    }
 
-    val s = smoothing.coerceIn(0f, 1f)
+    val smoothingFactor = smoothing.coerceIn(0f, 1f)
 
     // Start the path at the first point
-    moveTo(mappedX[0], mappedY[0])
+    moveTo(mappedXCoordinates[0], mappedYCoordinates[0])
 
-    if (count == 1) return@apply
+    if (pointCount == 1) return@apply
 
-    if (s == 0f || count < 3) {
+    if (smoothingFactor == 0f || pointCount < 3) {
         // Fallback to straight lines when no smoothing or not enough points
         var i = 1
-        while (i < count) {
-            lineTo(mappedX[i], mappedY[i])
+        while (i < pointCount) {
+            lineTo(mappedXCoordinates[i], mappedYCoordinates[i])
             i++
         }
         return@apply
     }
 
-    // Cubic smoothing using Catmull–Rom-like control points
-    // For segment Pi -> P(i+1):
-    //   c1 = Pi + (Pi+1 - P(i-1)) * (s / 6)
-    //   c2 = P(i+1) - (P(i+2) - Pi) * (s / 6)
-    // Endpoints use mirroring of neighbors.
-    val tension = s / 6f
+    // Monotone cubic Hermite interpolation (Fritsch–Carlson) to avoid overshoot
+    // Compute slopes for each interval and tangents per point
+    val totalPoints = pointCount
+    val segmentWidth = xStep.takeIf { it > 0f } ?: 1f
+    val slopes =
+        FloatArray(totalPoints - 1) { i -> (mappedYCoordinates[i + 1] - mappedYCoordinates[i]) / segmentWidth }
+    val tangents = FloatArray(totalPoints)
+    // Endpoint tangents
+    tangents[0] = slopes[0]
+    tangents[totalPoints - 1] = slopes[totalPoints - 2]
+    // Internal tangents with Fritsch–Carlson formula
+    for (i in 1..<totalPoints - 1) {
+        val slopePrev = slopes[i - 1]
+        val slopeNext = slopes[i]
+        if (slopePrev == 0f || slopeNext == 0f || sign(slopePrev) != sign(slopeNext)) {
+            tangents[i] = 0f
+        } else {
+            // Equal spacing simplifies weights to 3 / (1/slopePrev + 1/slopeNext)
+            tangents[i] = (3f * slopePrev * slopeNext) / (slopePrev + slopeNext)
+        }
+    }
+    // Apply smoothing factor (0..1)
+    if (smoothingFactor != 1f) {
+        var i = 0
+        while (i < totalPoints) {
+            tangents[i] *= smoothingFactor
+            i++
+        }
+    }
 
-    var i = 0
-    while (i < count - 1) {
-        val i0 = (i - 1).coerceAtLeast(0)
-        val i1 = i
-        val i2 = i + 1
-        val i3 = (i + 2).coerceAtMost(count - 1)
-
-        val x0 = mappedX[i0]; val y0 = mappedY[i0]
-        val x1 = mappedX[i1]; val y1 = mappedY[i1]
-        val x2 = mappedX[i2]; val y2 = mappedY[i2]
-        val x3 = mappedX[i3]; val y3 = mappedY[i3]
-
-        val cx1 = x1 + (x2 - x0) * tension
-        val cy1 = y1 + (y2 - y0) * tension
-        val cx2 = x2 - (x3 - x1) * tension
-        val cy2 = y2 - (y3 - y1) * tension
-
-        cubicTo(cx1, cy1, cx2, cy2, x2, y2)
-        i++
+    // Convert Hermite to cubic Bézier per segment and draw
+    for (i in 0..<totalPoints - 1) {
+        val x1 = mappedXCoordinates[i]
+        val y1 = mappedYCoordinates[i]
+        val x2 = mappedXCoordinates[i + 1]
+        val y2 = mappedYCoordinates[i + 1]
+        val deltaX = x2 - x1
+        val c1x = x1 + deltaX / 3f
+        var c1y = y1 + (tangents[i] * deltaX) / 3f
+        val c2x = x2 - deltaX / 3f
+        var c2y = y2 - (tangents[i + 1] * deltaX) / 3f
+        // Clamp control Y within padded viewport to avoid shooting outside
+        val minY = verticalInset
+        val maxY = verticalInset + usableHeight
+        if (c1y < minY) c1y = minY else if (c1y > maxY) c1y = maxY
+        if (c2y < minY) c2y = minY else if (c2y > maxY) c2y = maxY
+        cubicTo(c1x, c1y, c2x, c2y, x2, y2)
     }
 }
 
