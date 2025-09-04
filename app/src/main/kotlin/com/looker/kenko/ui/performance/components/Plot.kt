@@ -14,7 +14,6 @@
 
 package com.looker.kenko.ui.performance.components
 
-import androidx.annotation.FloatRange
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -35,69 +34,34 @@ class Plot(
     val pointRadius: Float,
     val lineColor: Color,
     val style: Stroke,
-    @param:FloatRange(from = 0.0, to = 1.0, toInclusive = false)
-    val smoothing: Float,
 )
 
-fun pathFor(
-    points: Array<Point>,
-    @FloatRange(from = 0.0, to = 1.0, toInclusive = false)
-    smoothing: Float,
-) = Path().apply {
-    val pointCount = points.size
-    if (pointCount == 0) return@apply
+fun pathFor(points: Array<Point>) = Path().apply {
+    if (points.isEmpty()) return@apply
+
+    val slope = FloatArray(points.size)
 
     moveTo(points[0])
+    // knowingly ignore the last index so the last tangent is horizontal
+    for (i in 0..<points.lastIndex) {
+        val (y, x) = points[i + 1] + points[i]
+        slope[i] = if (x == 0F) Float.POSITIVE_INFINITY * sign(y)
+        else (y / x) * Smoother
+    }
 
-    if (smoothing == 0f || pointCount < 3) {
-        // Fallback to straight lines when no smoothing or not enough points
-        points.forEach { lineTo(it) }
-    } else {
-        // Monotone cubic Hermite interpolation (Fritsch–Carlson) to avoid overshoot
-        // Compute slopes for each interval and tangents per point
-        val slopes = FloatArray(pointCount - 1) { i ->
-            val current = points[i]
-            val next = points[i + 1]
-            // Segment width: use actual deltaX between adjacent mapped X coordinates to keep slope scale consistent
-            val dy = next.y - current.y
-            val dx = next.x - current.x
-            if (dx == 0F) Float.POSITIVE_INFINITY * sign(dy)
-            else dy / dx
-        }
-        val tangents = FloatArray(pointCount)
-        // Endpoint tangents
-        tangents[0] = slopes[0]
-        tangents[pointCount - 1] = slopes[pointCount - 2]
-        // Internal tangents with Fritsch–Carlson formula
-        for (i in 1..<pointCount - 1) {
-            val slopePrev = slopes[i - 1]
-            val slopeNext = slopes[i]
-            val isInverting = sign(slopePrev) != sign(slopeNext)
-            if (slopePrev == 0f || slopeNext == 0f || isInverting) {
-                tangents[i] = 0f
-            } else {
-                // Equal spacing simplifies weights to 3 / (1/slopePrev + 1/slopeNext)
-                tangents[i] = (3F * slopePrev * slopeNext) / (slopePrev + slopeNext)
-            }
-        }
-        // Apply smoothing factor (0..1)
-        for (i in tangents.indices) {
-            tangents[i] *= smoothing
-        }
-
-        // Convert Hermite to cubic Bézier per segment and draw
-        for (i in 0..<pointCount - 1) {
-            val (x1, y1) = points[i]
-            val (x2, y2) = points[i + 1]
-            val deltaX = x2 - x1
-            val c1x = x1 + deltaX / 3f
-            val c1y = y1 + (tangents[i] * deltaX) / 3f
-            val c2x = x2 - deltaX / 3f
-            val c2y = y2 - (tangents[i + 1] * deltaX) / 3f
-            cubicTo(x1 = c1x, y1 = c1y, x2 = c2x, y2 = c2y, x3 = x2, y3 = y2)
-        }
+    for (i in 0..<points.lastIndex) {
+        val (x1, y1) = points[i]
+        val (x2, y2) = points[i + 1]
+        val deltaX = x2 - x1
+        val c1x = x1 + deltaX / 3f
+        val c1y = y1 + (slope[i] * deltaX) / 3f
+        val c2x = x2 - deltaX / 3f
+        val c2y = y2 - (slope[i + 1] * deltaX) / 3f
+        cubicTo(x1 = c1x, y1 = c1y, x2 = c2x, y2 = c2y, x3 = x2, y3 = y2)
     }
 }
+
+private const val Smoother = 0.3F
 
 private const val HorizontalInset = 0.04F
 private const val VerticalInset = 0.06F
@@ -146,7 +110,6 @@ fun rememberPlot(
     pointRadius: Float = 8F,
     lineColor: Color = MaterialTheme.colorScheme.primaryContainer,
     style: Stroke = PlotStyle,
-    smoothing: Float = 0.4F,
 ): Plot = Plot(
     ratings = points,
     days = days,
@@ -154,7 +117,6 @@ fun rememberPlot(
     pointRadius = pointRadius,
     lineColor = lineColor,
     style = style,
-    smoothing = smoothing,
 )
 
 private val PlotStyle = Stroke(
