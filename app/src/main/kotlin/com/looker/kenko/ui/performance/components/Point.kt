@@ -32,10 +32,12 @@ fun Point(x: Float, y: Float) = Point(packFloats(x, y))
 value class Point(val packedValue: Long) {
 
     @Stable
-    val x: Float get() = unpackFloat1(packedValue)
+    inline val x: Float
+        get() = unpackFloat1(packedValue)
 
     @Stable
-    val y: Float get() = unpackFloat2(packedValue)
+    inline val y: Float
+        get() = unpackFloat2(packedValue)
 
     @Stable
     inline operator fun component1(): Float = x
@@ -43,9 +45,16 @@ value class Point(val packedValue: Long) {
     @Stable
     inline operator fun component2(): Float = y
 
-    override fun toString(): String = "Point: ($x, $y)"
+    operator fun plus(other: Point) = Point(
+        packFloats(
+            unpackFloat1(packedValue) + unpackFloat1(other.packedValue),
+            unpackFloat2(packedValue) + unpackFloat2(other.packedValue),
+        )
+    )
 
     fun toOffset() = Offset(x, y)
+
+    override fun toString(): String = "Point: ($x, $y)"
 
 }
 
