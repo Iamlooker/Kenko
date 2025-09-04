@@ -29,17 +29,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.StrokeJoin
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.looker.kenko.ui.performance.components.Points
+import com.looker.kenko.ui.performance.components.Plot
+import com.looker.kenko.ui.performance.components.drawAxes
 import com.looker.kenko.ui.performance.components.drawGrid
-import com.looker.kenko.ui.performance.components.rememberPoints
-import com.looker.kenko.ui.performance.components.toPath
+import com.looker.kenko.ui.performance.components.mapXY
+import com.looker.kenko.ui.performance.components.pathFor
+import com.looker.kenko.ui.performance.components.rememberPlot
 import com.looker.kenko.ui.theme.KenkoTheme
 
 @Composable
@@ -62,7 +60,7 @@ fun Performance(viewModel: PerformanceViewModel) {
             is PerformanceUiState.Success -> {
                 val data = (uiState as PerformanceUiState.Success).data
                 PerformancePlot(
-                    points = rememberPoints(data.performance.ratings),
+                    plot = rememberPlot(data.performance.ratings, data.performance.days),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(300.dp),
@@ -90,44 +88,44 @@ fun Performance(viewModel: PerformanceViewModel) {
 
 @Composable
 private fun PerformancePlot(
-    points: Points,
+    plot: Plot,
     modifier: Modifier = Modifier,
 ) {
+    val axesColor = MaterialTheme.colorScheme.outline
+    val gridColor = MaterialTheme.colorScheme.surfaceVariant.copy(0.3F)
     Canvas(modifier) {
-        val axisStroke = 11F
-        val axisStrokePadding = axisStroke / 2
-        // Axes
-        drawLine(
-            color = points.axesColor,
-            start = Offset(axisStrokePadding, axisStrokePadding),
-            end = Offset(axisStrokePadding, size.height - axisStrokePadding),
-            strokeWidth = axisStroke,
-            cap = StrokeCap.Round,
-        )
-        drawLine(
-            color = points.axesColor,
-            start = Offset(axisStrokePadding, size.height - axisStrokePadding),
-            end = Offset(
-                size.width - axisStrokePadding,
-                size.height - axisStrokePadding
-            ),
-            strokeWidth = axisStroke,
-            cap = StrokeCap.Round,
-        )
+        val points = plot.mapXY(size)
+        drawGrid(gridColor)
+        drawAxes(axesColor)
 
-        drawGrid(axisStrokePadding, points.gridColor)
-
-        // Performance path over grid
-        val path = points.toPath(size)
         drawPath(
-            path = path,
-            color = points.lineColor,
-            style = Stroke(
-                width = 8F,
-                cap = StrokeCap.Round,
-                join = StrokeJoin.Round,
-                miter = 0F
-            ),
+            path = pathFor(points, plot.smoothing),
+            color = plot.lineColor,
+            style = plot.style,
+        )
+
+        points.forEach {
+            drawCircle(
+                center = it.toOffset(),
+                color = plot.pointColor,
+                radius = plot.pointRadius,
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun PerformanceSmallPreview() {
+    val ratings = floatArrayOf(8852.628F, 5092.6157F, 7432.0F)
+    val days = intArrayOf(0, 1, 9)
+    KenkoTheme {
+        PerformancePlot(
+            rememberPlot(ratings, days),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(300.dp)
+                .padding(8.dp),
         )
     }
 }
@@ -135,20 +133,19 @@ private fun PerformancePlot(
 @Preview
 @Composable
 private fun PerformancePreview() {
+    val ratings = floatArrayOf(
+        8852.628F,
+        3092.6155F,
+        2661.0654F,
+        11071.365F,
+        5737.648F,
+        4238.7886F,
+        11071.365F
+    )
+    val days = intArrayOf(0, 1, 2, 3, 11, 15, 20)
     KenkoTheme {
         PerformancePlot(
-            rememberPoints(
-                floatArrayOf(
-                    8852.628F,
-                    3092.6155F,
-                    2661.0654F,
-                    11071.365F,
-                    5737.648F,
-                    4238.7886F,
-                    11071.365F,
-                ),
-                smoothing = 0.4F
-            ),
+            rememberPlot(ratings, days),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(300.dp)

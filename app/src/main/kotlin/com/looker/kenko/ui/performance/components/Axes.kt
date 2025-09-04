@@ -16,37 +16,32 @@ package com.looker.kenko.ui.performance.components
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 
-fun DrawScope.drawGrid(
-    gridColor: Color,
-    gridStroke: Float = 2F,
-    verticalGridCount: Int = 4,
-    horizontalGridCount: Int = 3,
+fun DrawScope.drawAxes(
+    axesColor: Color,
+    axisStroke: Float = 7F,
+    strokeCap: StrokeCap = StrokeCap.Round,
 ) {
-    if (verticalGridCount > 0) {
-        val dx = size.width / (verticalGridCount + 1)
-        for (i in 1..verticalGridCount) {
-            val x = i * dx
-            drawLine(
-                color = gridColor,
-                start = Offset(x, 0F),
-                end = Offset(x, size.height),
-                strokeWidth = gridStroke,
-            )
-        }
-    }
+    val axisStrokePadding = axisStroke / 2
 
-    if (horizontalGridCount > 0) {
-        val dy = size.height / (horizontalGridCount + 1)
-        for (j in 1..horizontalGridCount) {
-            val y = j * dy
-            drawLine(
-                color = gridColor,
-                start = Offset(0F, y),
-                end = Offset(size.width, y),
-                strokeWidth = gridStroke,
-            )
-        }
-    }
+    drawLine(
+        color = axesColor,
+        start = Offset(axisStrokePadding, axisStrokePadding),
+        end = Offset(axisStrokePadding, size.height - axisStrokePadding),
+        strokeWidth = axisStroke,
+        cap = strokeCap,
+    )
+
+    drawLine(
+        color = axesColor,
+        start = Offset(axisStrokePadding, size.height - axisStrokePadding),
+        end = Offset(
+            size.width - axisStrokePadding,
+            size.height - axisStrokePadding
+        ),
+        strokeWidth = axisStroke,
+        cap = strokeCap,
+    )
 }
