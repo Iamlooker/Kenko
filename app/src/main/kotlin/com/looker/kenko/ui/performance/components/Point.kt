@@ -18,6 +18,8 @@ package com.looker.kenko.ui.performance.components
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.util.packFloats
 import androidx.compose.ui.util.unpackFloat1
 import androidx.compose.ui.util.unpackFloat2
@@ -43,4 +45,10 @@ value class Point(val packedValue: Long) {
 
     override fun toString(): String = "Point: ($x, $y)"
 
+    fun toOffset() = Offset(x, y)
+
 }
+
+fun Path.moveTo(point: Point) = moveTo(point.x, point.y)
+
+fun Path.lineTo(point: Point) = lineTo(point.x, point.y)
