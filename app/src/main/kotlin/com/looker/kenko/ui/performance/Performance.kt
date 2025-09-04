@@ -99,7 +99,7 @@ private fun PerformancePlot(
         drawAxes(axesColor)
 
         drawPath(
-            path = pathFor(points, plot.smoothing),
+            path = pathFor(points),
             color = plot.lineColor,
             style = plot.style,
         )
