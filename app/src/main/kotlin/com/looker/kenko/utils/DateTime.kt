@@ -17,13 +17,15 @@ package com.looker.kenko.utils
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.random.Random
+import kotlin.time.Clock
 import kotlin.time.Duration.Companion.days
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
+import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
+import kotlinx.datetime.isoDayNumber
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.datetime.todayIn
 
@@ -32,7 +34,7 @@ value class EpochDays(val value: Int)
 
 operator fun EpochDays.plus(other: EpochDays) = EpochDays(value + other.value)
 
-fun LocalDate.toLocalEpochDays() = EpochDays(toEpochDays())
+fun LocalDate.toLocalEpochDays() = EpochDays(toEpochDays().toInt())
 
 fun formatDate(
     date: LocalDate,
@@ -44,6 +46,10 @@ fun formatDate(
         Date(date.toEpochDays().days.inWholeMilliseconds),
     )
 }
+
+inline operator fun DayOfWeek.plus(days: Int): DayOfWeek = DayOfWeek(isoDayNumber + days)
+
+inline operator fun DayOfWeek.minus(days: Int): DayOfWeek = DayOfWeek(isoDayNumber - days)
 
 fun formatDate(
     epochDays: Int,

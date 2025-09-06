@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 LooKeR & Contributors
+ * Copyright (C) 2025. LooKeR & Contributors
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -55,7 +55,7 @@ data class SessionDataEntity(
 )
 
 fun Session.data(): SessionDataEntity = SessionDataEntity(
-    date = EpochDays(date.toEpochDays()),
+    date = EpochDays(date.toEpochDays().toInt()),
     planId = planId,
     id = id ?: 0,
 )

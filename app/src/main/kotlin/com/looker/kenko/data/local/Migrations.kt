@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 LooKeR & Contributors
+ * Copyright (C) 2025. LooKeR & Contributors
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -22,6 +22,7 @@ import com.looker.kenko.data.local.model.ExerciseEntity
 import com.looker.kenko.data.model.Set
 import com.looker.kenko.data.model.localDate
 import kotlinx.datetime.DayOfWeek
+import kotlinx.datetime.isoDayNumber
 import kotlinx.datetime.serializers.DayOfWeekSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.MapSerializer
@@ -219,7 +220,7 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
         exerciseId: Int,
     ) {
         clearBindings()
-        bindLong(1, dayOfWeek.value.toLong())
+        bindLong(1, dayOfWeek.isoDayNumber.toLong())
         bindLong(2, planId.toLong())
         bindLong(3, exerciseId.toLong())
         executeInsert()

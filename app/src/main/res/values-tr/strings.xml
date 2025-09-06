@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (C) 2025 LooKeR & Contributors
+  ~ Copyright (C) 2025. LooKeR & Contributors
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
   ~ the Free Software Foundation, either version 3 of the License, or
@@ -145,13 +145,6 @@
     <string name="label_muscle_shoulders">Omuz</string>
 
     <!--Haftanın Günleri-->
-    <string name="label_monday">.pzt</string>
-    <string name="label_tuesday">.sal</string>
-    <string name="label_wednesday">.çar</string>
-    <string name="label_thursday">.per</string>
-    <string name="label_friday">.cum</string>
-    <string name="label_saturday">.cmt</string>
-    <string name="label_sunday">.paz</string>
     <string name="label_today">.bugün</string>
     <string name="label_plan">Plan</string>
     <string name="label_select_a_plan">Bir Plan Seç</string>
@@ -183,5 +176,15 @@
         <item>yapmaktan başka çare yok</item>
         <item>mesele hafif olmak değil</item>
         <item>harika değil mi?</item>
+    </string-array>
+
+    <string-array name="kenko_day_of_week">
+        <item>.pzt</item>
+        <item>.sal</item>
+        <item>.çar</item>
+        <item>.per</item>
+        <item>.cum</item>
+        <item>.cmt</item>
+        <item>.paz</item>
     </string-array>
 </resources>

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 LooKeR & Contributors
+ * Copyright (C) 2025. LooKeR & Contributors
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -29,6 +29,7 @@ import com.looker.kenko.data.model.Plan
 import com.looker.kenko.data.model.PlanItem
 import com.looker.kenko.data.model.PlanStat
 import kotlinx.datetime.DayOfWeek
+import kotlinx.datetime.isoDayNumber
 
 @Entity(tableName = "plans")
 data class PlanEntity(
@@ -101,12 +102,12 @@ fun PlanItem.toEntity() = PlanDayEntity(
     id = id ?: 0,
     planId = planId,
     exerciseId = requireNotNull(exercise.id) { "Exercise id cannot be null" },
-    dayOfWeek = dayOfWeek.value,
+    dayOfWeek = dayOfWeek.isoDayNumber,
 )
 
 inline fun PlanDayEntity.toExternal(block: (exerciseId: Int) -> Exercise?) = PlanItem(
     planId = planId,
-    dayOfWeek = DayOfWeek.of(dayOfWeek),
+    dayOfWeek = DayOfWeek(dayOfWeek),
     exercise = block(exerciseId) ?: DefaultExercise,
     id = id,
 )

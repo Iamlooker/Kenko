@@ -34,10 +34,11 @@ value class DpRange(private val packedFloat: Long) {
 
 }
 
-
 operator fun Dp.rangeTo(other: Dp): DpRange = DpRange(packFloats(value, other.value))
 
-context(Density)
-operator fun DpRange.contains(other: Float): Boolean = other > start.toPx() && other < end.toPx()
+context(density: Density)
+operator fun DpRange.contains(other: Float): Boolean = with(density) {
+    other > start.toPx() && other < end.toPx()
+}
 
 operator fun DpRange.contains(other: Dp): Boolean = other > start && other < end
