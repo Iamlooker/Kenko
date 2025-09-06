@@ -13,6 +13,8 @@
  */
 
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
     alias(libs.plugins.android.app)
@@ -76,11 +78,17 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = "17"
-        freeCompilerArgs += "-Xcontext-parameters"
-        freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
-        freeCompilerArgs += "-opt-in=kotlin.time.ExperimentalTime"
+    kotlin {
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_17
+            languageVersion = KotlinVersion.KOTLIN_2_2
+            apiVersion = KotlinVersion.KOTLIN_2_2
+
+            freeCompilerArgs.add("-Xcontext-parameters")
+
+            optIn.add("kotlinx.RequiresOptIn")
+            optIn.add("kotlin.time.ExperimentalTime")
+        }
     }
 
     buildFeatures {
