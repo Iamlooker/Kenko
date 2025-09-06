@@ -106,7 +106,7 @@ private fun PerformancePlot(
 
         points.forEach {
             drawCircle(
-                center = it.toOffset(),
+                center = it,
                 color = plot.pointColor,
                 radius = plot.pointRadius,
             )
