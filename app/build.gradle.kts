@@ -79,6 +79,8 @@ android {
     kotlinOptions {
         jvmTarget = "17"
         freeCompilerArgs += "-Xcontext-parameters"
+        freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
+        freeCompilerArgs += "-opt-in=kotlin.time.ExperimentalTime"
     }
 
     buildFeatures {

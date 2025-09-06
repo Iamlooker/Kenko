@@ -79,6 +79,8 @@ import com.looker.kenko.ui.selectExercise.SelectExercise
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 import com.looker.kenko.ui.theme.numbers
+import com.looker.kenko.utils.minus
+import com.looker.kenko.utils.plus
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DayOfWeek
 
@@ -181,12 +183,12 @@ private fun FullEdit(
                 when (targetState) {
                     PlanEditStage.NameEdit -> {
                         slideInHorizontally { -it / 2 } + fadeIn() togetherWith
-                            slideOutHorizontally { it / 2 } + fadeOut()
+                                slideOutHorizontally { it / 2 } + fadeOut()
                     }
 
                     PlanEditStage.PlanEdit -> {
                         slideInHorizontally { it / 2 } + fadeIn() togetherWith
-                            slideOutHorizontally { -it / 2 } + fadeOut()
+                                slideOutHorizontally { -it / 2 } + fadeOut()
                     }
                 } using SizeTransform(clip = false)
             },
@@ -213,12 +215,12 @@ private fun PlanEditFAB(
                     when (targetState) {
                         PlanEditStage.NameEdit -> {
                             slideInVertically { it } + fadeIn() togetherWith
-                                slideOutVertically { -it } + fadeOut()
+                                    slideOutVertically { -it } + fadeOut()
                         }
 
                         PlanEditStage.PlanEdit -> {
                             slideInVertically { -it } + fadeIn() togetherWith
-                                slideOutVertically { it } + fadeOut()
+                                    slideOutVertically { it } + fadeOut()
                         }
                     } using SizeTransform(clip = false)
                 },
@@ -238,12 +240,12 @@ private fun PlanEditFAB(
                     when (targetState) {
                         PlanEditStage.NameEdit -> {
                             slideInHorizontally { it * 2 } + fadeIn() togetherWith
-                                slideOutHorizontally { -it * 2 } + fadeOut()
+                                    slideOutHorizontally { -it * 2 } + fadeOut()
                         }
 
                         PlanEditStage.PlanEdit -> {
                             slideInHorizontally { -it * 2 } + fadeIn() togetherWith
-                                slideOutHorizontally { it * 2 } + fadeOut()
+                                    slideOutHorizontally { it * 2 } + fadeOut()
                         }
                     } using SizeTransform(clip = false)
                 },

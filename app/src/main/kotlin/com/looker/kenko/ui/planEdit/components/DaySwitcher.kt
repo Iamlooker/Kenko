@@ -44,8 +44,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.looker.kenko.R
@@ -53,15 +52,12 @@ import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 import com.looker.kenko.ui.theme.end
 import com.looker.kenko.ui.theme.start
+import com.looker.kenko.utils.minus
+import com.looker.kenko.utils.plus
 import kotlinx.datetime.DayOfWeek
-import java.time.DayOfWeek.FRIDAY
-import java.time.DayOfWeek.MONDAY
-import java.time.DayOfWeek.SATURDAY
-import java.time.DayOfWeek.SUNDAY
-import java.time.DayOfWeek.THURSDAY
-import java.time.DayOfWeek.TUESDAY
-import java.time.DayOfWeek.WEDNESDAY
-import java.time.format.TextStyle
+import kotlinx.datetime.DayOfWeek.MONDAY
+import kotlinx.datetime.DayOfWeek.SUNDAY
+import kotlinx.datetime.DayOfWeek.THURSDAY
 
 @Composable
 fun DaySwitcher(
@@ -134,30 +130,19 @@ fun DaySwitcher(
 
 fun fadeAndSlideHorizontally(rightToLeft: Boolean = true): ContentTransform {
     return slideInHorizontally { it * if (rightToLeft) 1 else -1 } + fadeIn() togetherWith
-        slideOutHorizontally { -it * if (rightToLeft) 1 else -1 } + fadeOut()
+            slideOutHorizontally { -it * if (rightToLeft) 1 else -1 } + fadeOut()
 }
 
 @Composable
 fun kenkoDayName(dayOfWeek: DayOfWeek): String {
-    val dayId = remember(dayOfWeek) {
-        when (dayOfWeek) {
-            MONDAY -> R.string.label_monday
-            TUESDAY -> R.string.label_tuesday
-            WEDNESDAY -> R.string.label_wednesday
-            THURSDAY -> R.string.label_thursday
-            FRIDAY -> R.string.label_friday
-            SATURDAY -> R.string.label_saturday
-            SUNDAY -> R.string.label_sunday
-        }
-    }
-    return stringResource(dayId)
+    val kenkoNames = stringArrayResource(R.array.kenko_day_of_week)
+    return remember(dayOfWeek) { kenkoNames[dayOfWeek.ordinal] }
 }
 
 @Composable
 fun dayName(dayOfWeek: DayOfWeek): String {
-    val locale = remember { Locale.current.platformLocale }
-    val format = remember { TextStyle.FULL }
-    return remember(dayOfWeek) { dayOfWeek.getDisplayName(format, locale) }
+    val names = stringArrayResource(R.array.day_of_week)
+    return remember(dayOfWeek) { names[dayOfWeek.ordinal] }
 }
 
 @Preview

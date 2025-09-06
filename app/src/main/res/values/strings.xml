@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (C) 2025 LooKeR & Contributors
+  ~ Copyright (C) 2025. LooKeR & Contributors
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
   ~ the Free Software Foundation, either version 3 of the License, or
@@ -145,13 +145,6 @@
     <string name="label_muscle_shoulders">Shoulders</string>
 
     <!--Day of Week-->
-    <string name="label_monday">.mon</string>
-    <string name="label_tuesday">.tue</string>
-    <string name="label_wednesday">.wed</string>
-    <string name="label_thursday">.thu</string>
-    <string name="label_friday">.fri</string>
-    <string name="label_saturday">.sat</string>
-    <string name="label_sunday">.sun</string>
     <string name="label_today">.today</string>
     <string name="label_plan">Plan</string>
     <string name="label_select_a_plan">Select A Plan</string>
@@ -183,5 +176,25 @@
         <item>ain\'t nothing to it but to do it</item>
         <item>it\'s not about being light</item>
         <item>i mean it\'s terrific, right\?</item>
+    </string-array>
+
+    <string-array name="kenko_day_of_week">
+        <item>.mon</item>
+        <item>.tue</item>
+        <item>.wed</item>
+        <item>.thu</item>
+        <item>.fri</item>
+        <item>.sat</item>
+        <item>.sun</item>
+    </string-array>
+
+    <string-array name="day_of_week">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
     </string-array>
 </resources>
