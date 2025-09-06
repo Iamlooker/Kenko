@@ -17,6 +17,7 @@ package com.looker.kenko.ui.performance.components
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
@@ -24,6 +25,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.util.fastCoerceAtLeast
+import com.looker.kenko.utils.moveTo
 import kotlin.math.sign
 
 @Immutable
@@ -36,7 +38,7 @@ class Plot(
     val style: Stroke,
 )
 
-fun pathFor(points: Array<Point>) = Path().apply {
+fun pathFor(points: Array<Offset>) = Path().apply {
     if (points.isEmpty()) return@apply
 
     val slope = FloatArray(points.size)
@@ -53,11 +55,13 @@ fun pathFor(points: Array<Point>) = Path().apply {
         val (x1, y1) = points[i]
         val (x2, y2) = points[i + 1]
         val deltaX = x2 - x1
-        val c1x = x1 + deltaX / 3f
-        val c1y = y1 + (slope[i] * deltaX) / 3f
-        val c2x = x2 - deltaX / 3f
-        val c2y = y2 - (slope[i + 1] * deltaX) / 3f
-        cubicTo(x1 = c1x, y1 = c1y, x2 = c2x, y2 = c2y, x3 = x2, y3 = y2)
+        cubicTo(
+            x1 = x1 + deltaX / 3f,
+            y1 = y1 + (slope[i] * deltaX) / 3f,
+            x2 = x2 - deltaX / 3f,
+            y2 = y2 - (slope[i + 1] * deltaX) / 3f,
+            x3 = x2, y3 = y2,
+        )
     }
 }
 
@@ -70,7 +74,7 @@ fun Plot.mapXY(
     size: Size,
     horizontalPaddingPercentage: Float = HorizontalInset,
     verticalPaddingPercentage: Float = VerticalInset,
-): Array<Point> {
+): Array<Offset> {
     val pointCount = ratings.size
 
     val horizontalInset = size.width * horizontalPaddingPercentage
@@ -98,7 +102,7 @@ fun Plot.mapXY(
         val day = days[i]
         val normalizedDay = (day - minDay).toFloat() / (maxDay - minDay)
         val x = horizontalInset + normalizedDay * usableWidth
-        Point(x, y)
+        Offset(x, y)
     }
 }
 
