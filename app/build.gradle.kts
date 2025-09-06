@@ -149,6 +149,8 @@ dependencies {
     implementation(libs.bundles.room)
     ksp(libs.room.compiler)
 
+    testImplementation(kotlin("test-junit5"))
+
     androidTestImplementation(kotlin("test-junit5"))
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.bundles.instrumented.test)
