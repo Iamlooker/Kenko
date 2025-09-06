@@ -228,7 +228,7 @@ class PerformanceDaoTest {
     private fun performanceOf(sets: Map<LocalDate, Set>): Performance = sets
         .map { (date, set) ->
             RatingWrapper(
-                date = date.toEpochDays(),
+                date = date.toEpochDays().toInt(),
                 rating = set.rating.value,
             )
         }
@@ -240,7 +240,7 @@ class PerformanceDaoTest {
             .groupBy({ it.first }) { it.second }
             .map { (date, sets) ->
                 RatingWrapper(
-                    date = date.toEpochDays(),
+                    date = date.toEpochDays().toInt(),
                     rating = sets.sumOf { it.rating.value.toDouble() }.toFloat(),
                 )
             }
