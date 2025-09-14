@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 LooKeR & Contributors
+ * Copyright (C) 2025. LooKeR & Contributors
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -33,7 +33,7 @@ import com.looker.kenko.data.local.model.SetEntity
 import com.looker.kenko.data.local.model.SetTypeEntity
 
 @Database(
-    version = 2,
+    version = 3,
     entities = [
         SessionDataEntity::class,
         ExerciseEntity::class,
@@ -62,5 +62,6 @@ fun kenkoDatabase(context: Context) = Room
     .createFromAsset("kenko.db")
     .addMigrations(
         MIGRATION_1_2,
+        MIGRATION_2_3,
     )
     .build()

@@ -15,6 +15,8 @@
 package com.looker.kenko.data.repository
 
 import com.looker.kenko.data.local.model.SetType
+import com.looker.kenko.data.model.RIR
+import com.looker.kenko.data.model.RPE
 import com.looker.kenko.data.model.Session
 import com.looker.kenko.data.model.Set
 import kotlinx.coroutines.flow.Flow
@@ -28,7 +30,15 @@ interface SessionRepo {
 
     suspend fun addSet(sessionId: Int, set: Set)
 
-    suspend fun addSet(sessionId: Int, exerciseId: Int, weight: Float, reps: Int, setType: SetType)
+    suspend fun addSet(
+        sessionId: Int,
+        exerciseId: Int,
+        weight: Float,
+        reps: Int,
+        setType: SetType,
+        rir: RIR,
+        rpe: RPE,
+    )
 
     suspend fun removeSet(setId: Int)
 

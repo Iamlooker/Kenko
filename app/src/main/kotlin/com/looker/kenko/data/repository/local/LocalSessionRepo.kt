@@ -23,15 +23,17 @@ import com.looker.kenko.data.local.model.SetEntity
 import com.looker.kenko.data.local.model.SetType
 import com.looker.kenko.data.local.model.toEntity
 import com.looker.kenko.data.local.model.toExternal
+import com.looker.kenko.data.model.RIR
+import com.looker.kenko.data.model.RPE
 import com.looker.kenko.data.model.Session
 import com.looker.kenko.data.model.Set
 import com.looker.kenko.data.model.localDate
 import com.looker.kenko.data.repository.SessionRepo
 import com.looker.kenko.utils.toLocalEpochDays
+import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.LocalDate
-import javax.inject.Inject
 
 class LocalSessionRepo @Inject constructor(
     private val dao: SessionDao,
@@ -64,6 +66,8 @@ class LocalSessionRepo @Inject constructor(
         weight: Float,
         reps: Int,
         setType: SetType,
+        rir: RIR,
+        rpe: RPE,
     ) {
         setsDao.insert(
             SetEntity(
@@ -73,6 +77,8 @@ class LocalSessionRepo @Inject constructor(
                 sessionId = sessionId,
                 type = setType,
                 order = setsDao.getSetsCountBySessionId(sessionId) ?: 0,
+                rpe = rpe.value,
+                rir = rir.value,
             ),
         )
     }

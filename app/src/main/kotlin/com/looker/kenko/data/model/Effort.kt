@@ -14,22 +14,22 @@
 
 package com.looker.kenko.data.model
 
-import androidx.compose.runtime.Immutable
-import com.looker.kenko.data.local.model.SetType
 import kotlinx.serialization.Serializable
 
 @Serializable
-@Immutable
-data class Set(
-    val repsOrDuration: Int,
-    val weight: Float,
-    val type: SetType,
-    val exercise: Exercise,
-    val rpe: RPE,
-    val rir: RIR,
-    val id: Int? = null,
-)
+@JvmInline
+value class RIR(val value: Int) {
+    companion object {
+        fun fromRPE(rpe: RPE) = RIR(10 - rpe.value)
+        fun fromRPE(rpe: Int) = RIR(10 - rpe)
+    }
+}
 
-val Set.rating: Rating
-    get() = Rating(repsOrDuration * weight * type.ratingModifier)
-
+@Serializable
+@JvmInline
+value class RPE(val value: Int) {
+    companion object {
+        fun fromRIR(rir: RIR) = RPE((10 - rir.value).coerceIn(1, 10))
+        fun fromRIR(rir: Int) = RPE((10 - rir).coerceIn(1, 10))
+    }
+}
