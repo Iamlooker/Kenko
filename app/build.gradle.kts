@@ -118,6 +118,12 @@ android {
             excludes += "DebugProbesKt.bin"
         }
     }
+
+    testOptions {
+        unitTests.all {
+            it.useJUnitPlatform()
+        }
+    }
 }
 
 dependencies {
