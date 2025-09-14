@@ -27,6 +27,8 @@ import com.looker.kenko.data.StringHandler
 import com.looker.kenko.data.local.model.SetType
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.PlanItem
+import com.looker.kenko.data.model.RIR
+import com.looker.kenko.data.model.RPE
 import com.looker.kenko.data.model.localDate
 import com.looker.kenko.data.repository.PlanRepo
 import com.looker.kenko.ui.planEdit.navigation.PlanEditRoute
@@ -220,6 +222,8 @@ class PlanEditViewModel @Inject constructor(
                             weight = weight,
                             reps = reps,
                             setType = SetType.entries.random(),
+                            rir = RIR(2),
+                            rpe = RPE.fromRIR(2),
                         )
                         added.incrementAndFetch()
                     }

@@ -27,6 +27,8 @@ import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.looker.kenko.data.local.model.SetType
+import com.looker.kenko.data.model.RIR
+import com.looker.kenko.data.model.RPE
 import com.looker.kenko.data.model.localDate
 import com.looker.kenko.data.repository.SessionRepo
 import com.looker.kenko.ui.addSet.components.BoundReached
@@ -84,6 +86,8 @@ class AddSetViewModel @AssistedInject constructor(
                 weight = weightFloat,
                 reps = repInt,
                 setType = selectedSetType,
+                rir = RIR(2),
+                rpe = RPE.fromRIR(2),
             )
         }
     }
