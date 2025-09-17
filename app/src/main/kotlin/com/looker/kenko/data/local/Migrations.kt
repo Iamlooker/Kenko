@@ -296,7 +296,6 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
 
 val MIGRATION_2_3 = object : Migration(2, 3) {
     override fun migrate(db: SupportSQLiteDatabase) {
-        db.execSQL("ALTER TABLE sets ADD COLUMN rpe REAL NOT NULL DEFAULT 8.0")
         db.execSQL("ALTER TABLE sets ADD COLUMN rir INTEGER NOT NULL DEFAULT 2")
     }
 }

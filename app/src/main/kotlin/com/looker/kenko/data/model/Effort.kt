@@ -18,18 +18,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @JvmInline
-value class RIR(val value: Int) {
+value class RepsInReserve(val value: Int) {
     companion object {
-        fun fromRPE(rpe: RPE) = RIR(10 - rpe.value)
-        fun fromRPE(rpe: Int) = RIR(10 - rpe)
-    }
-}
-
-@Serializable
-@JvmInline
-value class RPE(val value: Int) {
-    companion object {
-        fun fromRIR(rir: RIR) = RPE((10 - rir.value).coerceIn(1, 10))
-        fun fromRIR(rir: Int) = RPE((10 - rir).coerceIn(1, 10))
+        fun fromRPE(rpe: Int) = RepsInReserve(10 - rpe)
     }
 }

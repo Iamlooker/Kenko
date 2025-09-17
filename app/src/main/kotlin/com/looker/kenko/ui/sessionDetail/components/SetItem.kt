@@ -41,8 +41,7 @@ import com.looker.kenko.R
 import com.looker.kenko.data.local.model.SetType
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.ExercisesPreviewParameter
-import com.looker.kenko.data.model.RIR
-import com.looker.kenko.data.model.RPE
+import com.looker.kenko.data.model.RepsInReserve
 import com.looker.kenko.data.model.Set
 import com.looker.kenko.data.model.repDurationStringRes
 import com.looker.kenko.ui.theme.KenkoTheme
@@ -117,7 +116,7 @@ private fun SetItemPreview(
 ) {
     KenkoTheme {
         SetItem(
-            Set(12, 40F, SetType.Drop, exercises.first(), RPE(8), RIR(2)),
+            Set(12, 40F, SetType.Drop, exercises.first(), RepsInReserve(2)),
         ) {
             Text(text = "01")
         }
