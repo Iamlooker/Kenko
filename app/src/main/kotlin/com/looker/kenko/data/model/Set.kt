@@ -25,8 +25,7 @@ data class Set(
     val weight: Float,
     val type: SetType,
     val exercise: Exercise,
-    val rpe: RPE,
-    val rir: RIR,
+    val rir: RepsInReserve,
     val id: Int? = null,
 )
 

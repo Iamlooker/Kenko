@@ -20,8 +20,7 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.looker.kenko.data.model.Exercise
-import com.looker.kenko.data.model.RIR
-import com.looker.kenko.data.model.RPE
+import com.looker.kenko.data.model.RepsInReserve
 import com.looker.kenko.data.model.Set
 
 @Entity(
@@ -52,7 +51,6 @@ data class SetEntity(
     val order: Int,
     val sessionId: Int,
     val exerciseId: Int,
-    val rpe: Int = 8,
     val rir: Int = 2,
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
@@ -63,8 +61,7 @@ fun SetEntity.toExternal(exercise: Exercise): Set = Set(
     weight = weight,
     type = type,
     exercise = exercise,
-    rpe = RPE(rpe),
-    rir = RIR(rir),
+    rir = RepsInReserve(rir),
     id = id,
 )
 
@@ -76,6 +73,5 @@ fun Set.toEntity(sessionId: Int, order: Int): SetEntity = SetEntity(
     order = order,
     sessionId = sessionId,
     exerciseId = requireNotNull(exercise.id),
-    rpe = rpe.value,
     rir = rir.value,
 )
