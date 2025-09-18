@@ -30,5 +30,5 @@ data class Set(
 )
 
 val Set.rating: Rating
-    get() = Rating(repsOrDuration * weight * type.ratingModifier)
+    get() = Rating(repsOrDuration * weight * type.ratingModifier * rir.modifier)
 
