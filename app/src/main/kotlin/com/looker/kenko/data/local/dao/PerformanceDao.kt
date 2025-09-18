@@ -34,8 +34,25 @@ interface PerformanceDao {
     @Transaction
     suspend fun getPerformance(exerciseId: Int?, planId: Int?): Performance? {
         val selection = arrayListOf<Any?>()
-        val query = buildString(512) {
-            append("SELECT sessions.date, SUM(sets.reps * sets.weight * set_type.modifier) AS rating FROM sets ")
+        val query = buildString(1024) {
+            append("SELECT sessions.date, ")
+            // Sum of all ratings
+            append("SUM(")
+
+            // Ratings = reps * weight * set_type_modifier * rir_modifier
+            append("sets.reps * ")
+            append("sets.weight * ")
+            append("set_type.modifier * ")
+
+            // RIR modifier
+            append("CASE WHEN sets.rir <= 0 ")
+            append("THEN 1.20 WHEN sets.rir = 1 ")
+            append("THEN 1.12 WHEN sets.rir = 2 ")
+            append("THEN 1.04 WHEN sets.rir = 3 ")
+            append("THEN 0.96 WHEN sets.rir = 4 ")
+            append("THEN 0.88 ELSE 0.80 END")
+
+            append(") AS rating FROM sets ")
             append("INNER JOIN set_type ON sets.type = set_type.type ")
             append("INNER JOIN sessions ON sets.sessionId = sessions.id ")
             if (exerciseId != null) {
@@ -62,7 +79,6 @@ interface PerformanceDao {
         )
         return ratingWrapper?.toPerformance()
     }
-
 }
 
 class RatingWrapper(

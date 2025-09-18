@@ -19,6 +19,17 @@ import kotlinx.serialization.Serializable
 @Serializable
 @JvmInline
 value class RepsInReserve(val value: Int) {
+
+    val modifier: Float
+        get() = when {
+            value <= 0 -> 1.20f
+            value == 1 -> 1.12f
+            value == 2 -> 1.04f
+            value == 3 -> 0.96f
+            value == 4 -> 0.88f
+            else -> 0.80f
+        }
+
     companion object {
         fun fromRPE(rpe: Int) = RepsInReserve(10 - rpe)
     }
