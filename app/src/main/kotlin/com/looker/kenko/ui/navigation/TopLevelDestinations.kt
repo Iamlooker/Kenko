@@ -23,11 +23,15 @@ import com.looker.kenko.ui.profile.navigation.ProfileRoute
 
 // Manually add 80.dp padding for bottom app bar
 enum class TopLevelDestinations(
-    @StringRes val labelRes: Int,
-    @DrawableRes val icon: Int,
+    @param:StringRes
+    val labelRes: Int,
+    @param:DrawableRes
+    val icon: Int,
     val route: Any,
 ) {
     Performance(R.string.label_performance, R.drawable.ic_show_chart, PerformanceRoute),
     Home(R.string.label_home, R.drawable.ic_home, HomeRoute),
     Profile(R.string.label_profile, R.drawable.ic_radio_button_unchecked, ProfileRoute),
 }
+
+val supportedTopLevelDestinations = listOf(TopLevelDestinations.Home, TopLevelDestinations.Profile)

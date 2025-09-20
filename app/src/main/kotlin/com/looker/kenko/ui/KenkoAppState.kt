@@ -1,3 +1,17 @@
+/*
+ * Copyright (C) 2025. LooKeR & Contributors
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.looker.kenko.ui
 
 import androidx.compose.runtime.Composable
@@ -15,6 +29,7 @@ import com.looker.kenko.ui.navigation.TopLevelDestinations
 import com.looker.kenko.ui.navigation.TopLevelDestinations.Home
 import com.looker.kenko.ui.navigation.TopLevelDestinations.Performance
 import com.looker.kenko.ui.navigation.TopLevelDestinations.Profile
+import com.looker.kenko.ui.navigation.supportedTopLevelDestinations
 import com.looker.kenko.ui.performance.navigation.PerformanceRoute
 import com.looker.kenko.ui.profile.navigation.ProfileRoute
 
@@ -45,7 +60,7 @@ class KenkoAppState(
     val isTopLevelDestination: Boolean
         @Composable get() = currentTopLevelDestination != null
 
-    val topLevelDestinations: List<TopLevelDestinations> = TopLevelDestinations.entries
+    val topLevelDestinations: List<TopLevelDestinations> = supportedTopLevelDestinations
 
     fun navigateToTopLevelDestination(topLevelDestination: TopLevelDestinations) {
         val route = topLevelDestination.route
