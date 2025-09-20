@@ -13,11 +13,7 @@
   -->
 
 <resources>
-    <string name="app_name" translatable="false">Kenko</string>
-
     <!--Başlangıç Ekranı-->
-    <string name="label_kenko" translatable="false">Kenko</string>
-    <string name="label_kenko_jp" translatable="false">ケンコウ</string>
     <string name="label_kenko_meaning">○ sağlıklı</string>
     <string name="label_kenko_meaning_ALT">○ güçlü</string>
     <string name="label_lets_go">Başla</string>
