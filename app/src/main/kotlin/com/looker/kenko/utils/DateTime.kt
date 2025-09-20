@@ -51,17 +51,6 @@ inline operator fun DayOfWeek.plus(days: Int): DayOfWeek = DayOfWeek(isoDayNumbe
 
 inline operator fun DayOfWeek.minus(days: Int): DayOfWeek = DayOfWeek(isoDayNumber - days)
 
-fun formatDate(
-    epochDays: Int,
-    dateTimeFormat: DateTimeFormat = DateTimeFormat.Short,
-    locale: Locale = Locale.getDefault(Locale.Category.FORMAT),
-): String {
-    val format = SimpleDateFormat(dateTimeFormat.format, locale)
-    return format.format(
-        Date(epochDays.days.inWholeMilliseconds),
-    )
-}
-
 fun Random.nextInstant(
     from: Instant = Instant.DISTANT_PAST,
     until: Instant = Instant.DISTANT_FUTURE,
