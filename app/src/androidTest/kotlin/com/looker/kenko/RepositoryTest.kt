@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 LooKeR & Contributors
+ * Copyright (C) 2025. LooKeR & Contributors
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -17,6 +17,7 @@ package com.looker.kenko
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.looker.kenko.data.local.model.SetType
 import com.looker.kenko.data.model.PlanItem
+import com.looker.kenko.data.model.RepsInReserve
 import com.looker.kenko.data.model.Set
 import com.looker.kenko.data.model.localDate
 import com.looker.kenko.data.repository.ExerciseRepo
@@ -24,6 +25,11 @@ import com.looker.kenko.data.repository.PlanRepo
 import com.looker.kenko.data.repository.SessionRepo
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import javax.inject.Inject
+import kotlin.random.Random
+import kotlin.test.assertEquals
+import kotlin.test.assertFails
+import kotlin.test.assertNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.DayOfWeek
@@ -31,11 +37,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import javax.inject.Inject
-import kotlin.random.Random
-import kotlin.test.assertEquals
-import kotlin.test.assertFails
-import kotlin.test.assertNotNull
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
@@ -78,7 +79,15 @@ class RepositoryTest {
         val stream = sessionRepo.streamByDate(localDate)
         assertNotNull(stream.first())
         val sessionId = stream.first()!!.id!!
-        val sets = (1..24).map { Set(12, 12F, SetType.entries.random(), exercises.random()) }
+        val sets = (1..24).map {
+            Set(
+                repsOrDuration = 12,
+                weight = 12F,
+                type = SetType.entries.random(),
+                exercise = exercises.random(),
+                rir = RepsInReserve(2)
+            )
+        }
         sets.forEach { sessionRepo.addSet(createdSessionId, it) }
         assertEquals(24, sessionRepo.getSets(sessionId).size)
         val set = sessionRepo.getSets(sessionId).first()
