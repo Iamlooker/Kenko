@@ -32,6 +32,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
@@ -255,11 +256,12 @@ fun SelectPlanCard(
             Text(
                 text = stringResource(R.string.label_select_plan),
                 style = MaterialTheme.typography.headlineLarge,
+                modifier = Modifier.paddingFromBaseline(bottom = 16.dp)
             )
 
             Icon(
-                painter = KenkoIcons.ArrowOutward, contentDescription = null,
-                modifier = Modifier.offset(y = 6.dp),
+                painter = KenkoIcons.ArrowOutward,
+                contentDescription = null,
             )
         }
     }
