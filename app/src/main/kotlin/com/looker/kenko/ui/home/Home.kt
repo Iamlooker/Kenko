@@ -15,7 +15,7 @@
 package com.looker.kenko.ui.home
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -36,16 +36,14 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -113,21 +111,7 @@ private fun Home(
     val restTimerManager = remember { RestTimerManager(context) }
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(text = stringResource(R.string.label_home))
-                },
-                actions = {
-                    if (!state.isFirstSession) {
-                        IconButton(onClick = onExploreSessionsClick) {
-                            Icon(
-                                painter = KenkoIcons.History,
-                                contentDescription = null,
-                            )
-                        }
-                    }
-                },
-            )
+            TopAppBar(title = { Text(text = stringResource(R.string.label_home)) })
         },
     ) { innerPadding ->
         Column(
@@ -141,23 +125,22 @@ private fun Home(
                 modifier = Modifier.align(CenterHorizontally),
                 targetState = state.isPlanSelected,
                 label = "",
-            ) {
-                if (it) {
+            ) { isPlanActive ->
+                if (isPlanActive) {
                     Row(
                         modifier = Modifier
                             .widthIn(240.dp, 420.dp)
                             .height(120.dp),
                     ) {
                         ExploreExerciseCard(
-                            modifier = Modifier
-                                .weight(1F)
-                                .clickable(onClick = onExploreExercisesClick),
+                            onClick = onExploreExercisesClick,
+                            onLongClick = onAddExerciseClick,
+                            modifier = Modifier.weight(1F),
                         )
                         VerticalDivider()
-                        AddExerciseCard(
-                            modifier = Modifier
-                                .weight(1F)
-                                .clickable(onClick = onAddExerciseClick),
+                        SessionHistoryCard(
+                            onClick = onExploreSessionsClick,
+                            modifier = Modifier.weight(1F),
                         )
                     }
                 } else {
@@ -290,56 +273,67 @@ private fun ColumnScope.SelectPlan(
 }
 
 @Composable
-private fun ExploreExerciseCard(modifier: Modifier = Modifier) {
-    HelperCards(modifier = modifier) {
+private fun ExploreExerciseCard(
+    onClick: () -> Unit,
+    onLongClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    HelperCards(
+        onClick = onClick,
+        onLongClick = onLongClick,
+        modifier = modifier,
+    ) {
         Text(text = stringResource(R.string.label_explore_exercises))
         Icon(
+            painter = KenkoIcons.ArrowOutward,
+            contentDescription = null,
             modifier = Modifier
                 .padding(16.dp)
                 .align(TopEnd),
-            painter = KenkoIcons.ArrowOutward,
-            contentDescription = null,
         )
     }
 }
 
 @Composable
-private fun AddExerciseCard(modifier: Modifier = Modifier) {
-    HelperCards(modifier = modifier) {
-        Text(text = stringResource(R.string.label_add_new_exercises_home))
+private fun SessionHistoryCard(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    HelperCards(onClick = onClick, modifier = modifier) {
+        Text(text = stringResource(R.string.label_session_history_home))
         Icon(
+            painter = KenkoIcons.History,
+            contentDescription = null,
             modifier = Modifier
                 .padding(16.dp)
                 .align(TopEnd),
-            painter = KenkoIcons.Add,
-            contentDescription = null,
         )
     }
 }
 
 @Composable
 private fun HelperCards(
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    boxModifier: Modifier = Modifier,
+    onLongClick: () -> Unit = {},
     shape: Shape = RectangleShape,
     color: Color = MaterialTheme.colorScheme.surface,
     textStyle: TextStyle = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
     content: @Composable BoxScope.() -> Unit,
 ) {
     Surface(
-        modifier = modifier,
         shape = shape,
         color = color,
+        modifier = modifier.combinedClickable(
+            onClick = onClick,
+            onLongClick = onLongClick,
+        ),
     ) {
         Box(
-            modifier = boxModifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center,
         ) {
-            CompositionLocalProvider(
-                LocalTextStyle provides textStyle,
-            ) {
-                content()
-            }
+            ProvideTextStyle(textStyle) { content() }
         }
     }
 }

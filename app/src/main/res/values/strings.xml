@@ -28,6 +28,7 @@
     <string name="label_explore_sessions">Explore\nSessions</string>
     <string name="label_explore_exercises">Explore\nExercises</string>
     <string name="label_add_new_exercises_home">Add\nExercise</string>
+    <string name="label_session_history_home">Session\nHistory</string>
     <string name="label_current_plan_home">Current\nPlan</string>
 
     <!--Session Details-->
