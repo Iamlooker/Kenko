@@ -12,7 +12,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
@@ -86,7 +85,7 @@ android {
 
             freeCompilerArgs.add("-Xcontext-parameters")
 
-            optIn.add("kotlinx.RequiresOptIn")
+            optIn.add("kotlin.RequiresOptIn")
             optIn.add("kotlin.time.ExperimentalTime")
         }
     }
@@ -105,9 +104,6 @@ android {
     }
 
     composeCompiler {
-        featureFlags = setOf(
-            ComposeFeatureFlag.OptimizeNonSkippingGroups,
-        )
         metricsDestination = file("$projectDir/reports/metrics")
         reportsDestination = file("$projectDir/reports")
     }
