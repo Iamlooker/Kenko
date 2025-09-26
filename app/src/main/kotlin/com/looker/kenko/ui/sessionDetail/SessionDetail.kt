@@ -82,6 +82,7 @@ import com.looker.kenko.utils.DateTimeFormat
 import com.looker.kenko.utils.formatDate
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.Locale
 import kotlinx.datetime.LocalDate
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -306,7 +307,6 @@ private fun Header(
 
 @Composable
 fun TimerBox() {
-// TODO   var time by remember { mutableStateOf(0) }
 
     LaunchedEffect(Unit) {
         while (true) {
@@ -332,7 +332,7 @@ fun TimerBox() {
 fun formatTime(seconds: Int): String {
     val minutes = seconds / 60
     val secs = seconds % 60
-    return String.format("%02d:%02d", minutes, secs)
+    return String.format(Locale.getDefault(), "%02d:%02d", minutes, secs)
 }
 
 @Composable
