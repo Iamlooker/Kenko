@@ -65,9 +65,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.Set
+import com.looker.kenko.data.model.localDate
 import com.looker.kenko.ui.addSet.AddSet
 import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.components.SwipeToDeleteBox
@@ -297,14 +297,16 @@ private fun Header(
             }
         },
         actions = {
-            TimerBox()
+            if (performedOn == localDate) { //shows rest timer only on current workout
+                TimerBox()
+            }
         },
     )
 }
 
 @Composable
 fun TimerBox() {
-//    var time by remember { mutableStateOf(0) }
+// TODO   var time by remember { mutableStateOf(0) }
 
     LaunchedEffect(Unit) {
         while (true) {
