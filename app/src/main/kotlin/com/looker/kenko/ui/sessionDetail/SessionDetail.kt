@@ -53,6 +53,7 @@ import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -83,6 +84,16 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import kotlin.time.Duration.Companion.milliseconds
+
+private var time by mutableIntStateOf(0);
+
+fun resetTimer() {
+    time = 0;
+}
+
+fun incrementTimer() {
+    time++
+}
 
 @Composable
 fun SessionDetails(
@@ -293,12 +304,12 @@ private fun Header(
 
 @Composable
 fun TimerBox() {
-    var time by remember { mutableStateOf(0) }
+//    var time by remember { mutableStateOf(0) }
 
     LaunchedEffect(Unit) {
         while (true) {
             delay(1000)
-            time++
+            incrementTimer()
         }
     }
 
@@ -387,6 +398,7 @@ private fun AddSetSheet(
                 scope.launch { state.hide() }.invokeOnCompletion {
                     if (!state.isVisible) onDismiss()
                 }
+                resetTimer()
             },
         )
     }
