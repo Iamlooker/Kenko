@@ -298,10 +298,12 @@ private fun Header(
             }
         },
         actions = {
+            actions()
             if (performedOn == localDate) { //shows rest timer only on current workout
                 TimerBox()
             }
-        },
+        }
+
     )
 }
 
