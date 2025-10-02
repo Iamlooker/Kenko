@@ -15,19 +15,21 @@ class RestTimerManager(context: Context) {
         context.getSharedPreferences(KEY_REST_TIME_START, Context.MODE_PRIVATE)
 
     private var timeStampStartSet: LocalDateTime? = loadStartTime()
-    private var timeStampNow: LocalDateTime? = null
 
     fun updateTimer(): Int {
-        timeStampNow = LocalDateTime.now()
-        timeStampStartSet = loadStartTime()
-
         return if (timeStampStartSet != null) {
-            Duration.between(timeStampStartSet, timeStampNow).seconds.toInt()
+            Duration.between(timeStampStartSet, LocalDateTime.now()).seconds.toInt()
         } else 0
     }
 
     fun resetTimer() {
         timeStampStartSet = LocalDateTime.now()
+        saveStartTime(timeStampStartSet!!)
+    }
+
+    @Suppress("unused")
+    fun setTimer(localDateTime : LocalDateTime){ // Only for testing purposes
+        timeStampStartSet = localDateTime
         saveStartTime(timeStampStartSet!!)
     }
 
