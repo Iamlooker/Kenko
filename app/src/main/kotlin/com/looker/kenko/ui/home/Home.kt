@@ -170,16 +170,9 @@ private fun Home(
             if (state.isPlanSelected) {
                 StartSession(
                     onStartSessionClick = {
-                        if (state.isTodayEmpty) {
-//                            R.string.label_nothing_today
-                        } else if (state.isSessionStarted) {
-//                            R.string.label_continue_session_heading
-                        } else {
-                            if (state.isFirstSession) {
-//                                R.string.label_start_first_session
-                            } else {
-                                restTimerManager.resetTimer()
-                            }
+                        // Makes the rest timer start from 0 only when a new workout is started
+                        if (!state.isTodayEmpty && !state.isSessionStarted && !state.isFirstSession) {
+                            restTimerManager.resetTimer()
                         }
 
                         if (state.isTodayEmpty) {
