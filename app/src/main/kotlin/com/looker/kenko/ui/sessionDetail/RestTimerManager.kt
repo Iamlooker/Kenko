@@ -17,7 +17,10 @@ class RestTimerManager(context: Context) {
     private var timeStampStartSet: LocalDateTime? = loadStartTime()
 
     fun updateTimer(): Int {
+
+
         return if (timeStampStartSet != null) {
+            timeStampStartSet = loadStartTime() //TODO: check if there's a way to remove this read, for some reasons it doesn't work without it
             Duration.between(timeStampStartSet, LocalDateTime.now()).seconds.toInt()
         } else 0
     }

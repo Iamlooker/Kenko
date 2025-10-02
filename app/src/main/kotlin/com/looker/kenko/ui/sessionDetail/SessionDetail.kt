@@ -305,7 +305,7 @@ private fun Header(
 fun TimerBox() {
     val context = LocalContext.current.applicationContext
     val restTimerManager = remember { RestTimerManager(context) }
-    var restTimerInSeconds by remember { mutableIntStateOf(0) }
+    var restTimeInSeconds by remember { mutableIntStateOf(0) }
 
     LaunchedEffect(Unit) {
         flow {
@@ -314,7 +314,7 @@ fun TimerBox() {
                 delay(1000)
             }
         }.collect {
-            restTimerInSeconds = restTimerManager.updateTimer()
+            restTimeInSeconds = restTimerManager.updateTimer()
         }
     }
 
@@ -325,7 +325,7 @@ fun TimerBox() {
             .padding(horizontal = 12.dp, vertical = 6.dp)
     ) {
         Text(
-            text = formatTime(restTimerInSeconds),
+            text = formatTime(restTimeInSeconds),
             color = MaterialTheme.colorScheme.onPrimaryContainer,
             style = MaterialTheme.typography.bodyMedium
         )
