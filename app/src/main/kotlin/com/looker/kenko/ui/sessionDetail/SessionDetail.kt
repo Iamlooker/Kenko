@@ -14,6 +14,7 @@
 
 package com.looker.kenko.ui.sessionDetail
 
+import android.content.SharedPreferences
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -60,10 +61,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.Set
@@ -82,19 +85,9 @@ import com.looker.kenko.utils.DateTimeFormat
 import com.looker.kenko.utils.formatDate
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.Locale
 import kotlinx.datetime.LocalDate
+import java.util.Locale
 import kotlin.time.Duration.Companion.milliseconds
-
-private var time by mutableIntStateOf(0);
-
-fun resetTimer() {
-    time = 0;
-}
-
-fun incrementTimer() {
-    time++
-}
 
 @Composable
 fun SessionDetails(
@@ -109,7 +102,7 @@ fun SessionDetails(
         onRemoveSet = viewModel::removeSet,
         onReferenceClick = viewModel::openReference,
         onSelectBottomSheet = viewModel::showBottomSheet,
-        onHistoryClick = { onHistoryClick(viewModel.previousSessionDate) },
+        onHistoryClick = { onHistoryClick(viewModel.previousSessionDate)},
     )
     val exercise by viewModel.current.collectAsStateWithLifecycle()
     if (exercise != null) {
@@ -123,6 +116,7 @@ fun SessionDetails(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SessionDetail(
+
     state: SessionDetailState,
     onBackPress: () -> Unit = {},
     onRemoveSet: (Int?) -> Unit = {},
@@ -299,6 +293,7 @@ private fun Header(
         },
         actions = {
             actions()
+            // TODO: refactor to use isToday if possible
             if (performedOn == localDate) { //shows rest timer only on current workout
                 TimerBox()
             }
@@ -309,11 +304,15 @@ private fun Header(
 
 @Composable
 fun TimerBox() {
+    val context = LocalContext.current.applicationContext
+    val restTimerManager = remember { RestTimerManager(context) }
+    var restTimerInSeconds by remember { mutableIntStateOf(0) }
 
     LaunchedEffect(Unit) {
-        while (true) {
+        while (true)
+        {
+            restTimerInSeconds = restTimerManager.updateTimer()
             delay(1000)
-            incrementTimer()
         }
     }
 
@@ -324,7 +323,7 @@ fun TimerBox() {
             .padding(horizontal = 12.dp, vertical = 6.dp)
     ) {
         Text(
-            text = formatTime(time),
+            text = formatTime(restTimerInSeconds),
             color = MaterialTheme.colorScheme.onPrimaryContainer,
             style = MaterialTheme.typography.bodyMedium
         )
@@ -393,6 +392,9 @@ private fun AddSetSheet(
     exercise: Exercise,
     onDismiss: () -> Unit,
 ) {
+
+    val context = LocalContext.current.applicationContext
+    val restTimerManager = remember { RestTimerManager(context) }
     val scope = rememberCoroutineScope()
     val state = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     ModalBottomSheet(sheetState = state, onDismissRequest = onDismiss) {
@@ -402,7 +404,7 @@ private fun AddSetSheet(
                 scope.launch { state.hide() }.invokeOnCompletion {
                     if (!state.isVisible) onDismiss()
                 }
-                resetTimer()
+                restTimerManager.resetTimer()
             },
         )
     }
