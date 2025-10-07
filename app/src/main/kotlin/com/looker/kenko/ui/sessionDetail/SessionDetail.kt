@@ -60,7 +60,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -102,12 +101,15 @@ fun SessionDetails(
         onReferenceClick = viewModel::openReference,
         onSelectBottomSheet = viewModel::showBottomSheet,
         onHistoryClick = { onHistoryClick(viewModel.previousSessionDate)},
+        viewModel = viewModel
+
     )
     val exercise by viewModel.current.collectAsStateWithLifecycle()
     if (exercise != null) {
         AddSetSheet(
             exercise = exercise!!,
             onDismiss = viewModel::hideSheet,
+            viewModel = viewModel,
         )
     }
 }
@@ -115,7 +117,7 @@ fun SessionDetails(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SessionDetail(
-
+    viewModel: SessionDetailViewModel? = null, //optional viewModel due to @PreviewLightDark functions
     state: SessionDetailState,
     onBackPress: () -> Unit = {},
     onRemoveSet: (Int?) -> Unit = {},
@@ -168,6 +170,7 @@ private fun SessionDetail(
                 onRemoveSet = onRemoveSet,
                 onReferenceClick = onReferenceClick,
                 onSelectBottomSheet = onSelectBottomSheet,
+                viewModel = viewModel,
                 onHistoryClick = onHistoryClick,
             )
         }
@@ -185,6 +188,7 @@ private fun SetsList(
     onRemoveSet: (Int?) -> Unit,
     onReferenceClick: (String) -> Unit,
     onSelectBottomSheet: (Exercise) -> Unit,
+    viewModel: SessionDetailViewModel?,
     onHistoryClick: () -> Unit,
 ) {
     LazyVerticalGrid(
@@ -197,6 +201,7 @@ private fun SetsList(
             span = { GridItemSpan(maxLineSpan) },
         ) {
             Header(
+                viewModel = viewModel,
                 performedOn = date,
                 onBackPress = onBackPress,
                 actions = {
@@ -255,10 +260,11 @@ private fun SetsList(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Header(
+    viewModel: SessionDetailViewModel?,
     performedOn: LocalDate,
     onBackPress: () -> Unit,
     modifier: Modifier = Modifier,
-    actions: @Composable RowScope.() -> Unit,
+    actions: @Composable (RowScope.() -> Unit),
 ) {
     val date = remember {
         formatDate(performedOn, DateTimeFormat.Short)
@@ -294,7 +300,7 @@ private fun Header(
             actions()
             // TODO: refactor to use isToday if possible
             if (performedOn == localDate) { //shows rest timer only on current workout
-                TimerBox()
+                TimerBox(viewModel)
             }
         }
 
@@ -302,9 +308,7 @@ private fun Header(
 }
 
 @Composable
-fun TimerBox() {
-    val context = LocalContext.current.applicationContext
-    val restTimerManager = remember { RestTimerManager(context) }
+fun TimerBox(viewModel: SessionDetailViewModel?) {
     var restTimeInSeconds by remember { mutableIntStateOf(0) }
 
     LaunchedEffect(Unit) {
@@ -314,7 +318,7 @@ fun TimerBox() {
                 delay(1000)
             }
         }.collect {
-            restTimeInSeconds = restTimerManager.updateTimer()
+            restTimeInSeconds = viewModel?.restTimerManager!!.updateTimer()
         }
     }
 
@@ -400,10 +404,8 @@ private fun SessionError(
 private fun AddSetSheet(
     exercise: Exercise,
     onDismiss: () -> Unit,
+    viewModel: SessionDetailViewModel,
 ) {
-
-    val context = LocalContext.current.applicationContext
-    val restTimerManager = remember { RestTimerManager(context) }
     val scope = rememberCoroutineScope()
     val state = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     ModalBottomSheet(sheetState = state, onDismissRequest = onDismiss) {
@@ -413,11 +415,12 @@ private fun AddSetSheet(
                 scope.launch { state.hide() }.invokeOnCompletion {
                     if (!state.isVisible) onDismiss()
                 }
-                restTimerManager.resetTimer()
+                viewModel.restTimerManager.resetTimer()
             },
         )
     }
 }
+
 
 @PreviewLightDark
 @Composable
@@ -450,3 +453,4 @@ private fun SessionErrorPreview() {
         }
     }
 }
+

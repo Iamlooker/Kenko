@@ -14,6 +14,7 @@
 
 package com.looker.kenko.ui.sessionDetail
 
+import android.content.Context
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.platform.UriHandler
@@ -54,6 +55,7 @@ class SessionDetailViewModel @Inject constructor(
     private val planRepo: PlanRepo,
     savedStateHandle: SavedStateHandle,
     private val uriHandler: UriHandler,
+    context: Context
 ) : ViewModel() {
 
     private val routeData: SessionDetailRoute = savedStateHandle.toRoute<SessionDetailRoute>()
@@ -70,6 +72,8 @@ class SessionDetailViewModel @Inject constructor(
         .map { it != null }
 
     private val sessionStream: Flow<Session?> = repo.streamByDate(sessionDate)
+
+    val restTimerManager = RestTimerManager(context)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     private val exercisesToday: Flow<List<Exercise>> = sessionStream.flatMapLatest { session ->
