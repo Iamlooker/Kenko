@@ -8,8 +8,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Session History card on Home screen
+- Set Type selection for sets
+- Monochrome launcher icon on Android 12+
+
 ### Changed
+- Limit top-level destinations to only Home and Profile
+- Switch performance rating to RIR-based modifier; remove RPE in favor of RIR
+- Hide Lifts card when there are no lifts
+
 ### Fixed
+- Select Plan button alignment
+- Prevent unintended translation for Turkish app name
+- Session list shows most recent first
 
 ## [1.3.0] - 2025-01-17
 
