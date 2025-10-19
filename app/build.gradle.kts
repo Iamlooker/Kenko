@@ -40,17 +40,10 @@ android {
         versionName = "1.3.0"
 
         testInstrumentationRunner = "com.looker.kenko.KenkoTestRunner"
-
-        vectorDrawables {
-            useSupportLibrary = true
-        }
-    }
-
-    ksp {
-        arg("room.generateKotlin", "true")
     }
 
     room {
+        generateKotlin = true
         schemaDirectory("$projectDir/schemas")
     }
 
