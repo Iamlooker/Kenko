@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 LooKeR & Contributors
+ * Copyright (C) 2025. LooKeR & Contributors
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -25,12 +25,12 @@ import com.looker.kenko.ui.theme.colorSchemes.zestfulColorSchemes
 import com.looker.kenko.ui.theme.dynamicColorSchemes
 import com.looker.kenko.utils.asStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -42,11 +42,11 @@ class MainViewModel @Inject constructor(
     val theme: StateFlow<Theme> = repo.get { theme }
         .asStateFlow(Theme.System)
 
-    val colorScheme: StateFlow<ColorSchemes> = repo.get { colorPalette }
-        .map { it.scheme ?: dynamicColorSchemes(context) ?: zestfulColorSchemes }
+    val colorScheme: StateFlow<ColorSchemes> = repo.stream
+        .map { it.colorPalette.scheme ?: dynamicColorSchemes(context) ?: zestfulColorSchemes }
         .asStateFlow(zestfulColorSchemes)
 
-    val isOnboardingDone: Boolean = runBlocking { repo.get { isOnboardingDone }.first() }
+    val isOnboardingDone: Boolean = runBlocking { repo.stream.first().isOnboardingDone }
 
     init {
         viewModelScope.launch {
