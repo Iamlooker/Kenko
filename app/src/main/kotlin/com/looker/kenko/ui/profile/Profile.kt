@@ -52,7 +52,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -89,7 +88,6 @@ fun Profile(
     onSettingsClick: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-
     Profile(
         state = state,
         onBackPress = onBackPress,
@@ -114,9 +112,7 @@ private fun Profile(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {
-                    Text(text = stringResource(R.string.label_profile))
-                },
+                title = { Text(text = stringResource(R.string.label_profile)) },
                 navigationIcon = { BackButton(onBackPress) },
                 actions = {
                     IconButton(onClick = onSettingsClick) {
@@ -157,8 +153,7 @@ private fun Profile(
                 onAddClick = onAddExerciseClick,
                 onExercisesClick = onExercisesClick,
             )
-            val hasLifts by remember { derivedStateOf { state.totalLifts > 0 } }
-            if (hasLifts) {
+            if (state.totalLifts > 0) {
                 Spacer(modifier = Modifier.height(12.dp))
                 LiftsCard(state.totalLifts)
             }
