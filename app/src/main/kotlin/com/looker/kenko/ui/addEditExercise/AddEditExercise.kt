@@ -100,9 +100,7 @@ private fun AddEditExercise(
     Scaffold(
         topBar = {
             TopAppBar(
-                navigationIcon = {
-                    BackButton(onBackPress)
-                },
+                navigationIcon = { BackButton(onBackPress) },
                 title = {
                     Text(
                         text = stringResource(
