@@ -68,6 +68,15 @@ class LocalPlanRepo @Inject constructor(
             }
         }
 
+    override fun planItems(day: DayOfWeek): Flow<List<PlanItem>> =
+        dao.currentPlanItemsByDayFlow(day.isoDayNumber).map { planDays ->
+            planDays.map { planDay ->
+                planDay.toExternal { exerciseId ->
+                    exerciseDao.get(exerciseId)?.toExternal()
+                }
+            }
+        }
+
     override suspend fun plan(id: Int): Plan? {
         val isCurrent = current.first()?.id
         return dao.getPlanById(id)?.toExternal(isCurrent == id, stats(id))

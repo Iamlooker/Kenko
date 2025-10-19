@@ -36,7 +36,7 @@ class HomeViewModel @Inject constructor(
 
     private val sessionsStream = sessionRepo.stream
 
-    private val planItemStream = planRepo.planItems
+    private val planItemStream = planRepo.planItems(localDate.dayOfWeek)
 
     val state = combine(
         planStream,
