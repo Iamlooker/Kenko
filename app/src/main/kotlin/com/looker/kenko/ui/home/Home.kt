@@ -15,13 +15,16 @@
 package com.looker.kenko.ui.home
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -30,12 +33,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Scaffold
@@ -50,9 +55,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.TopEnd
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -65,7 +72,6 @@ import com.looker.kenko.ui.components.KenkoBorderWidth
 import com.looker.kenko.ui.components.LiftingQuotes
 import com.looker.kenko.ui.components.TertiaryKenkoButton
 import com.looker.kenko.ui.components.TickerText
-import com.looker.kenko.ui.extensions.plus
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 import com.looker.kenko.ui.theme.header
@@ -73,6 +79,7 @@ import com.looker.kenko.ui.theme.header
 @Composable
 fun Home(
     viewModel: HomeViewModel,
+    onProfileClick: () -> Unit,
     onSelectPlanClick: () -> Unit,
     onAddExerciseClick: () -> Unit,
     onExploreSessionsClick: () -> Unit,
@@ -83,6 +90,7 @@ fun Home(
     val state by viewModel.state.collectAsStateWithLifecycle()
     Home(
         state = state,
+        onProfileClick = onProfileClick,
         onSelectPlanClick = onSelectPlanClick,
         onAddExerciseClick = onAddExerciseClick,
         onExploreSessionsClick = onExploreSessionsClick,
@@ -93,10 +101,10 @@ fun Home(
 }
 
 // TODO: Add current plan indicator on this page
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Home(
     state: HomeUiData,
+    onProfileClick: () -> Unit = {},
     onSelectPlanClick: () -> Unit = {},
     onAddExerciseClick: () -> Unit = {},
     onExploreSessionsClick: () -> Unit = {},
@@ -106,14 +114,18 @@ private fun Home(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(text = stringResource(R.string.label_home)) })
+            KenkoTopBar {
+                IconButton(onClick = onProfileClick) {
+                    Icon(painter = KenkoIcons.Circle, contentDescription = null)
+                }
+            }
         },
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .padding(innerPadding + PaddingValues(bottom = 80.dp)),
+                .padding(innerPadding),
         ) {
             HorizontalDivider(thickness = KenkoBorderWidth)
             AnimatedContent(
@@ -299,6 +311,34 @@ private fun SessionHistoryCard(
                 .align(TopEnd),
         )
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun KenkoTopBar(
+    modifier: Modifier = Modifier,
+    actions: @Composable RowScope.() -> Unit = {},
+) {
+    TopAppBar(
+        title = {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.ic_app_icon),
+                    contentDescription = null,
+                    modifier = Modifier.clip(CircleShape)
+                )
+                Text(
+                    text = "KENKO",
+                    fontWeight = FontWeight.Bold,
+                )
+            }
+        },
+        actions = actions,
+        modifier = modifier,
+    )
 }
 
 @Composable

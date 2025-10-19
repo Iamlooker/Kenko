@@ -30,6 +30,7 @@ fun NavController.navigateToProfile(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.profile(
+    onBackPress: () -> Unit,
     onExercisesClick: () -> Unit,
     onAddExerciseClick: () -> Unit,
     onPlanClick: () -> Unit,
@@ -37,6 +38,7 @@ fun NavGraphBuilder.profile(
 ) {
     composable<ProfileRoute> {
         Profile(
+            onBackPress = onBackPress,
             onExercisesClick = onExercisesClick,
             onAddExerciseClick = onAddExerciseClick,
             onPlanClick = onPlanClick,

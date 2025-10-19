@@ -31,6 +31,7 @@ fun NavController.navigateToHome(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.home(
     onSelectPlanClick: () -> Unit,
+    onProfileClick: () -> Unit,
     onAddExerciseClick: () -> Unit,
     onExploreSessionsClick: () -> Unit,
     onExploreExercisesClick: () -> Unit,
@@ -39,6 +40,7 @@ fun NavGraphBuilder.home(
 ) {
     composable<HomeRoute> {
         Home(
+            onProfileClick = onProfileClick,
             onSelectPlanClick = onSelectPlanClick,
             onAddExerciseClick = onAddExerciseClick,
             onExploreSessionsClick = onExploreSessionsClick,

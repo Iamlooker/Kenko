@@ -19,24 +19,16 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.compose.rememberNavController
 import com.looker.kenko.ui.getStarted.navigation.GetStartedRoute
 import com.looker.kenko.ui.navigation.KenkoNavHost
 import com.looker.kenko.ui.theme.KenkoTheme
@@ -53,14 +45,13 @@ class MainActivity : ComponentActivity() {
         setContent {
             val theme by viewModel.theme.collectAsStateWithLifecycle()
             val colorScheme by viewModel.colorScheme.collectAsStateWithLifecycle()
-            val appState = rememberKenkoAppState()
             KenkoTheme(
                 theme = theme,
                 colorSchemes = colorScheme,
             ) {
-                Kenko(appState) {
+                Kenko {
                     KenkoNavHost(
-                        appState = appState,
+                        navController = rememberNavController(),
                         startDestination = GetStartedRoute(viewModel.isOnboardingDone),
                     )
                 }
@@ -71,37 +62,11 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Kenko(
-    appState: KenkoAppState,
     content: @Composable (innerPadding: PaddingValues) -> Unit,
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.surface,
-        bottomBar = {
-            AnimatedVisibility(
-                visible = appState.isTopLevelDestination,
-                enter = slideInVertically { it },
-                exit = slideOutVertically { it },
-            ) {
-                NavigationBar {
-                    appState.topLevelDestinations.forEach { destination ->
-                        NavigationBarItem(
-                            selected = destination == appState.currentTopLevelDestination,
-                            onClick = { appState.navigateToTopLevelDestination(destination) },
-                            icon = {
-                                Icon(
-                                    painter = painterResource(destination.icon),
-                                    contentDescription = null,
-                                )
-                            },
-                            label = { Text(text = stringResource(destination.labelRes)) },
-                            alwaysShowLabel = false,
-                            modifier = Modifier.weight(1F),
-                        )
-                    }
-                }
-            }
-        },
         contentWindowInsets = WindowInsets(0),
         content = content,
     )

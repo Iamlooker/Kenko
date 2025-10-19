@@ -17,10 +17,10 @@ package com.looker.kenko.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
-import com.looker.kenko.ui.KenkoAppState
 import com.looker.kenko.ui.addEditExercise.navigation.addEditExercise
 import com.looker.kenko.ui.addEditExercise.navigation.navigateToAddEditExercise
 import com.looker.kenko.ui.exercises.navigation.exercises
@@ -34,6 +34,7 @@ import com.looker.kenko.ui.planEdit.navigation.navigateToPlanEdit
 import com.looker.kenko.ui.planEdit.navigation.planEdit
 import com.looker.kenko.ui.plans.navigation.navigateToPlans
 import com.looker.kenko.ui.plans.navigation.plans
+import com.looker.kenko.ui.profile.navigation.navigateToProfile
 import com.looker.kenko.ui.profile.navigation.profile
 import com.looker.kenko.ui.sessionDetail.navigation.navigateToSessionDetail
 import com.looker.kenko.ui.sessionDetail.navigation.sessionDetail
@@ -55,11 +56,10 @@ private val splashNavOptions = navOptions {
 
 @Composable
 fun KenkoNavHost(
-    appState: KenkoAppState,
+    navController: NavController,
     modifier: Modifier = Modifier,
     startDestination: Any = GetStartedRoute,
 ) {
-    val navController = appState.navController
     NavHost(
         modifier = modifier,
         navController = navController as NavHostController,
@@ -70,6 +70,9 @@ fun KenkoNavHost(
         }
 
         home(
+            onProfileClick = {
+                navController.navigateToProfile(navOptions = singleTopNavOptions)
+            },
             onSelectPlanClick = {
                 navController.navigateToPlans(navOptions = singleTopNavOptions)
             },
@@ -125,6 +128,7 @@ fun KenkoNavHost(
             onSettingsClick = {
                 navController.navigateToSettings(navOptions = singleTopNavOptions)
             },
+            onBackPress = navController::popBackStackOnResume,
         )
 
         exercises(

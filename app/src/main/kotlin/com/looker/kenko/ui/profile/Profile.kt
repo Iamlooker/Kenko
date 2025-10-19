@@ -64,6 +64,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
 import com.looker.kenko.data.model.PlanStat
+import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.components.HealthQuotes
 import com.looker.kenko.ui.components.KenkoBorderWidth
 import com.looker.kenko.ui.components.OutlineBorder
@@ -81,6 +82,7 @@ import com.looker.kenko.ui.theme.start
 @Composable
 fun Profile(
     viewModel: ProfileViewModel,
+    onBackPress: () -> Unit,
     onExercisesClick: () -> Unit,
     onAddExerciseClick: () -> Unit,
     onPlanClick: () -> Unit,
@@ -90,6 +92,7 @@ fun Profile(
 
     Profile(
         state = state,
+        onBackPress = onBackPress,
         onSettingsClick = onSettingsClick,
         onPlanClick = onPlanClick,
         onAddExerciseClick = onAddExerciseClick,
@@ -101,6 +104,7 @@ fun Profile(
 @Composable
 private fun Profile(
     state: ProfileUiState,
+    onBackPress: () -> Unit,
     onSettingsClick: () -> Unit,
     onPlanClick: () -> Unit,
     onAddExerciseClick: () -> Unit,
@@ -113,6 +117,7 @@ private fun Profile(
                 title = {
                     Text(text = stringResource(R.string.label_profile))
                 },
+                navigationIcon = { BackButton(onBackPress) },
                 actions = {
                     IconButton(onClick = onSettingsClick) {
                         Icon(painter = KenkoIcons.Settings, contentDescription = null)
@@ -125,7 +130,7 @@ private fun Profile(
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .padding(innerPadding + PaddingValues(start = 16.dp, end = 16.dp, bottom = 80.dp))
+                .padding(innerPadding + PaddingValues(horizontal = 16.dp))
                 .verticalScroll(rememberScrollState()),
         ) {
             if (state.isPlanAvailable) {
@@ -403,6 +408,7 @@ private fun ProfileNoPlanPreview() {
     KenkoTheme {
         Profile(
             state = ProfileUiState(12, false, "Push-Pull-Leg", 2, PlanStat(12, 5)),
+            onBackPress = { },
             onSettingsClick = { },
             onPlanClick = { },
             onAddExerciseClick = { },
@@ -417,6 +423,7 @@ private fun ProfilePreview() {
     KenkoTheme {
         Profile(
             state = ProfileUiState(12, true, "Push-Pull-Leg", 2, PlanStat(12, 5)),
+            onBackPress = { },
             onSettingsClick = { },
             onPlanClick = { },
             onAddExerciseClick = { },

@@ -1,0 +1,49 @@
+<!--
+  ~ Copyright (C) 2025. LooKeR & Contributors
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="32dp"
+    android:height="32dp"
+    android:viewportWidth="128"
+    android:viewportHeight="128">
+    <path
+        android:pathData="M0,0L128,0L128,128L0,128L0,0Z"
+        android:fillColor="@android:color/black" />
+    <group
+        android:scaleX="0.36666667"
+        android:scaleY="0.36666667"
+        android:translateX="40.533333"
+        android:translateY="29.017284">
+        <path
+            android:pathData="M128,128C128,92.1 99.35,63 64,63C28.65,63 0,92.1 0,128H128Z"
+            android:fillType="evenOdd">
+            <aapt:attr name="android:fillColor">
+                <gradient
+                    android:startX="17.6"
+                    android:startY="69.17"
+                    android:endX="45.5"
+                    android:endY="139.5"
+                    android:type="linear">
+                    <item
+                        android:offset="0"
+                        android:color="#FFFFD9A0" />
+                    <item
+                        android:offset="1"
+                        android:color="#FFFFF5F1" />
+                </gradient>
+            </aapt:attr>
+        </path>
+    </group>
+</vector>
