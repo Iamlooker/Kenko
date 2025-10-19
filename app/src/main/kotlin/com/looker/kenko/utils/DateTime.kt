@@ -25,7 +25,6 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
-import kotlinx.datetime.isoDayNumber
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.datetime.todayIn
 
@@ -47,9 +46,12 @@ fun formatDate(
     )
 }
 
-inline operator fun DayOfWeek.plus(days: Int): DayOfWeek = DayOfWeek(isoDayNumber + days)
+inline operator fun DayOfWeek.plus(days: Int): DayOfWeek {
+    val amount = (days % 7)
+    return DayOfWeek(((ordinal + (amount + 7)) % 7) + 1)
+}
 
-inline operator fun DayOfWeek.minus(days: Int): DayOfWeek = DayOfWeek(isoDayNumber - days)
+inline operator fun DayOfWeek.minus(days: Int): DayOfWeek = plus(-days)
 
 fun Random.nextInstant(
     from: Instant = Instant.DISTANT_PAST,
