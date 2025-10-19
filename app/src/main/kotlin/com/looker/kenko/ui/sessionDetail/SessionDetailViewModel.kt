@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 LooKeR & Contributors
+ * Copyright (C) 2025. LooKeR & Contributors
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -14,7 +14,6 @@
 
 package com.looker.kenko.ui.sessionDetail
 
-import android.content.Context
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.platform.UriHandler
@@ -31,10 +30,14 @@ import com.looker.kenko.data.model.localDate
 import com.looker.kenko.data.model.week
 import com.looker.kenko.data.repository.PlanRepo
 import com.looker.kenko.data.repository.SessionRepo
+import com.looker.kenko.data.repository.SettingsRepo
 import com.looker.kenko.ui.sessionDetail.navigation.SessionDetailRoute
 import com.looker.kenko.utils.asStateFlow
 import com.looker.kenko.utils.isToday
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+import kotlin.time.Clock
+import kotlin.time.Instant
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -47,15 +50,14 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.minus
-import javax.inject.Inject
 
 @HiltViewModel
 class SessionDetailViewModel @Inject constructor(
     private val repo: SessionRepo,
     private val planRepo: PlanRepo,
+    private val settingsRepo: SettingsRepo,
     savedStateHandle: SavedStateHandle,
     private val uriHandler: UriHandler,
-    context: Context
 ) : ViewModel() {
 
     private val routeData: SessionDetailRoute = savedStateHandle.toRoute<SessionDetailRoute>()
@@ -73,8 +75,6 @@ class SessionDetailViewModel @Inject constructor(
 
     private val sessionStream: Flow<Session?> = repo.streamByDate(sessionDate)
 
-    val restTimerManager = RestTimerManager(context)
-
     @OptIn(ExperimentalCoroutinesApi::class)
     private val exercisesToday: Flow<List<Exercise>> = sessionStream.flatMapLatest { session ->
         if (sessionDate.isToday) {
@@ -91,6 +91,8 @@ class SessionDetailViewModel @Inject constructor(
         }
     }
 
+    private val lastSetTimeStream = settingsRepo.get { lastSetTime }
+
     private val _currentExercise: MutableStateFlow<Exercise?> = MutableStateFlow(null)
     val current: StateFlow<Exercise?> = _currentExercise
 
@@ -98,8 +100,9 @@ class SessionDetailViewModel @Inject constructor(
         combine(
             sessionStream,
             exercisesToday,
+            lastSetTimeStream,
             previousSessionExists,
-        ) { session, exercises, previousSession ->
+        ) { session, exercises, lastSetTime, previousSession ->
             if (session == null && epochDays != null) {
                 return@combine SessionDetailState.Error.InvalidSession
             }
@@ -120,11 +123,24 @@ class SessionDetailViewModel @Inject constructor(
                     date = currentSession.date,
                     sets = exerciseMap,
                     isToday = currentSession.date.isToday,
+                    lastSetTime = lastSetTime,
                     hasPreviousSession = previousSession,
                 ),
             )
         }.onStart { emit(SessionDetailState.Loading) }
             .asStateFlow(SessionDetailState.Loading)
+
+    fun startRestTimer() {
+        viewModelScope.launch {
+            settingsRepo.setLastSetTime(Clock.System.now())
+        }
+    }
+
+    fun resetRestTimer() {
+        viewModelScope.launch {
+            settingsRepo.setLastSetTime(null)
+        }
+    }
 
     fun removeSet(setId: Int?) {
         if (setId == null) return
@@ -161,6 +177,7 @@ data class SessionUiData(
     val date: LocalDate,
     val sets: Map<Exercise, List<Set>>,
     val isToday: Boolean = false,
+    val lastSetTime: Instant? = null,
     val hasPreviousSession: Boolean = false,
 )
 
@@ -171,8 +188,8 @@ sealed interface SessionDetailState {
     data class Success(val data: SessionUiData) : SessionDetailState
 
     sealed class Error(
-        @StringRes val title: Int,
-        @StringRes val errorMessage: Int,
+        @param:StringRes val title: Int,
+        @param:StringRes val errorMessage: Int,
     ) : SessionDetailState {
         data object InvalidSession : Error(
             title = R.string.label_missed_day,

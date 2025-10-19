@@ -53,7 +53,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -67,8 +66,6 @@ import com.looker.kenko.ui.components.LiftingQuotes
 import com.looker.kenko.ui.components.TertiaryKenkoButton
 import com.looker.kenko.ui.components.TickerText
 import com.looker.kenko.ui.extensions.plus
-import com.looker.kenko.ui.sessionDetail.RestTimerManager
-import com.looker.kenko.ui.sessionDetail.SessionDetailViewModel
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 import com.looker.kenko.ui.theme.header
@@ -107,8 +104,6 @@ private fun Home(
     onStartSessionClick: () -> Unit = {},
     onCurrentPlanClick: (Int) -> Unit = {},
 ) {
-    val context = LocalContext.current.applicationContext
-    val restTimerManager = remember { RestTimerManager(context) }
     Scaffold(
         topBar = {
             TopAppBar(title = { Text(text = stringResource(R.string.label_home)) })
@@ -154,11 +149,6 @@ private fun Home(
             if (state.isPlanSelected) {
                 StartSession(
                     onStartSessionClick = {
-                        // Makes the rest timer start from 0 only when a new workout is started
-                        if (!state.isTodayEmpty && !state.isSessionStarted && !state.isFirstSession) {
-                            restTimerManager.resetTimer()
-                        }
-
                         if (state.isTodayEmpty) {
                             onCurrentPlanClick(state.currentPlanId!!)
                         } else {

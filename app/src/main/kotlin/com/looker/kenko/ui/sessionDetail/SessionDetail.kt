@@ -14,7 +14,6 @@
 
 package com.looker.kenko.ui.sessionDetail
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,7 +33,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -53,7 +52,7 @@ import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -67,7 +66,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.Set
-import com.looker.kenko.data.model.localDate
 import com.looker.kenko.ui.addSet.AddSet
 import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.components.SwipeToDeleteBox
@@ -80,12 +78,14 @@ import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
 import com.looker.kenko.utils.DateTimeFormat
 import com.looker.kenko.utils.formatDate
+import java.util.*
+import kotlin.time.Clock
+import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Instant
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
-import java.util.Locale
 
 @Composable
 fun SessionDetails(
@@ -97,19 +97,18 @@ fun SessionDetails(
     SessionDetail(
         state = state,
         onBackPress = onBackPress,
+        onTimerClick = viewModel::resetRestTimer,
         onRemoveSet = viewModel::removeSet,
         onReferenceClick = viewModel::openReference,
         onSelectBottomSheet = viewModel::showBottomSheet,
-        onHistoryClick = { onHistoryClick(viewModel.previousSessionDate)},
-        viewModel = viewModel
-
+        onHistoryClick = { onHistoryClick(viewModel.previousSessionDate) },
     )
     val exercise by viewModel.current.collectAsStateWithLifecycle()
     if (exercise != null) {
         AddSetSheet(
             exercise = exercise!!,
             onDismiss = viewModel::hideSheet,
-            viewModel = viewModel,
+            onAddSet = viewModel::startRestTimer,
         )
     }
 }
@@ -117,9 +116,9 @@ fun SessionDetails(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SessionDetail(
-    viewModel: SessionDetailViewModel? = null, //optional viewModel due to @PreviewLightDark functions
     state: SessionDetailState,
     onBackPress: () -> Unit = {},
+    onTimerClick: () -> Unit = {},
     onRemoveSet: (Int?) -> Unit = {},
     onReferenceClick: (String) -> Unit = {},
     onSelectBottomSheet: (Exercise) -> Unit = {},
@@ -164,13 +163,14 @@ private fun SessionDetail(
             SetsList(
                 date = data.date,
                 exerciseSets = data.sets,
+                lastSetTime = data.lastSetTime,
                 isEditable = data.isToday,
                 hasPreviousSession = data.hasPreviousSession,
                 onBackPress = onBackPress,
+                onTimerClick = onTimerClick,
                 onRemoveSet = onRemoveSet,
                 onReferenceClick = onReferenceClick,
                 onSelectBottomSheet = onSelectBottomSheet,
-                viewModel = viewModel,
                 onHistoryClick = onHistoryClick,
             )
         }
@@ -182,26 +182,26 @@ private fun SessionDetail(
 private fun SetsList(
     date: LocalDate,
     exerciseSets: Map<Exercise, List<Set>>,
+    lastSetTime: Instant?,
     isEditable: Boolean,
     hasPreviousSession: Boolean,
     onBackPress: () -> Unit,
+    onTimerClick: () -> Unit,
     onRemoveSet: (Int?) -> Unit,
     onReferenceClick: (String) -> Unit,
     onSelectBottomSheet: (Exercise) -> Unit,
-    viewModel: SessionDetailViewModel?,
     onHistoryClick: () -> Unit,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(360.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
         contentPadding = WindowInsets.navigationBars.asPaddingValues(LocalDensity.current) +
-            PaddingValues(bottom = 12.dp),
+                PaddingValues(bottom = 12.dp),
     ) {
         item(
             span = { GridItemSpan(maxLineSpan) },
         ) {
             Header(
-                viewModel = viewModel,
                 performedOn = date,
                 onBackPress = onBackPress,
                 actions = {
@@ -212,6 +212,13 @@ private fun SetsList(
                                 contentDescription = null,
                             )
                         }
+                    }
+
+                    if (lastSetTime != null && lastSetTime - Clock.System.now() < 1.hours) {
+                        TimerBox(
+                            lastSetTime = lastSetTime,
+                            onTimerClick = onTimerClick
+                        )
                     }
                 },
             )
@@ -260,7 +267,6 @@ private fun SetsList(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Header(
-    viewModel: SessionDetailViewModel?,
     performedOn: LocalDate,
     onBackPress: () -> Unit,
     modifier: Modifier = Modifier,
@@ -271,9 +277,8 @@ private fun Header(
     }
     TopAppBar(
         modifier = modifier,
-        navigationIcon = {
-            BackButton(onClick = onBackPress)
-        },
+        actions = actions,
+        navigationIcon = { BackButton(onClick = onBackPress) },
         title = {
             Column(
                 verticalArrangement = Arrangement.Center,
@@ -296,57 +301,45 @@ private fun Header(
                 )
             }
         },
-        actions = {
-            actions()
-            // TODO: refactor to use isToday if possible
-            if (performedOn == localDate) { //shows rest timer only on current workout
-                TimerBox(viewModel)
-            }
-        }
 
     )
 }
 
 @Composable
-fun TimerBox(viewModel: SessionDetailViewModel?) {
-    var restTimeInSeconds by remember { mutableIntStateOf(0) }
+fun TimerBox(
+    lastSetTime: Instant,
+    onTimerClick: () -> Unit,
+) {
+    var restTimeInSeconds by remember { mutableLongStateOf(0L) }
 
     LaunchedEffect(Unit) {
-        flow {
-            while (true) {
-                emit(Unit)
-                delay(1000)
-            }
-        }.collect {
-            restTimeInSeconds = viewModel?.restTimerManager!!.updateTimer()
+        while (true) {
+            restTimeInSeconds = (Clock.System.now() - lastSetTime).inWholeSeconds
+            delay(1000)
         }
     }
 
-    Box(
-        modifier = Modifier
-            .padding(end = 16.dp)
-            .background(MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(8.dp))
-            .padding(horizontal = 12.dp, vertical = 6.dp)
+    Surface(
+        color = MaterialTheme.colorScheme.secondaryContainer,
+        onClick = onTimerClick,
+        shape = CircleShape,
     ) {
         Text(
             text = formatTime(restTimeInSeconds),
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.labelLarge,
+            modifier = Modifier.padding(
+                horizontal = 12.dp,
+                vertical = 6.dp,
+            ),
         )
     }
 }
 
-fun formatTime(seconds: Int): String {
-    val hours = seconds / 3600
+@Composable
+private fun formatTime(seconds: Long): String = remember(seconds) {
     val minutes = seconds % 3600 / 60
     val secs = seconds % 60
-
-    return if(hours < 1) {
-        String.format(Locale.getDefault(), "%02d:%02d", minutes, secs)
-    }
-    else {
-        String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, secs)
-    }
+    String.format(Locale.getDefault(), "%02d:%02d", minutes, secs)
 }
 
 @Composable
@@ -404,7 +397,7 @@ private fun SessionError(
 private fun AddSetSheet(
     exercise: Exercise,
     onDismiss: () -> Unit,
-    viewModel: SessionDetailViewModel,
+    onAddSet: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val state = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -416,15 +409,14 @@ private fun AddSetSheet(
         AddSet(
             exercise = exercise,
             onDone = {
+                onAddSet()
                 scope.launch { state.hide() }.invokeOnCompletion {
                     if (!state.isVisible) onDismiss()
                 }
-                viewModel.restTimerManager.resetTimer()
             },
         )
     }
 }
-
 
 @PreviewLightDark
 @Composable
