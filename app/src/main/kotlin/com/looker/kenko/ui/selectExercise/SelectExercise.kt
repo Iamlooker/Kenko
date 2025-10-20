@@ -50,6 +50,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
 import com.looker.kenko.data.model.Exercise
+import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.ui.components.HorizontalTargetChips
 import com.looker.kenko.ui.components.disableScrollConnection
 import com.looker.kenko.ui.components.kenkoTextFieldColor
@@ -62,7 +63,7 @@ import com.looker.kenko.ui.theme.start
 @Composable
 fun SelectExercise(
     onDone: (Exercise) -> Unit,
-    onRequestNewExercise: () -> Unit,
+    onRequestNewExercise: (name: String?, target: MuscleGroups?) -> Unit,
 ) {
     val viewModel: SelectExerciseViewModel = hiltViewModel()
 
@@ -79,7 +80,9 @@ fun SelectExercise(
             modifier = Modifier.padding(horizontal = 16.dp),
             name = viewModel.searchQuery,
             onNameChange = viewModel::setSearch,
-            onAddClick = onRequestNewExercise,
+            onAddClick = {
+                onRequestNewExercise(viewModel.searchQuery.ifBlank { null }, target)
+            },
         )
         HorizontalTargetChips(
             target = target,
@@ -93,7 +96,11 @@ fun SelectExercise(
             }
 
             SearchResult.NotFound -> {
-                SearchNotFound(onAddNewExercise = onRequestNewExercise)
+                SearchNotFound(
+                    onAddNewExercise = {
+                        onRequestNewExercise(viewModel.searchQuery, target)
+                    },
+                )
             }
 
             is SearchResult.Success -> {

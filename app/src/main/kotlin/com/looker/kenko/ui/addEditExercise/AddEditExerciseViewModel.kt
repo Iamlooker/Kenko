@@ -33,6 +33,8 @@ import com.looker.kenko.ui.addEditExercise.navigation.AddEditExerciseRoute
 import com.looker.kenko.utils.asStateFlow
 import com.looker.kenko.utils.isValidUrl
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,8 +43,6 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
-import javax.inject.Inject
-import kotlin.time.Duration.Companion.milliseconds
 
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
@@ -157,8 +157,9 @@ class AddEditExerciseViewModel @Inject constructor(
                     setIsometric(it.isIsometric)
                     setTargetMuscle(it.target)
                 }
-            } else if (defaultTarget != null) {
-                setTargetMuscle(defaultTarget)
+            } else {
+                if (routeData.name != null) setName(routeData.name)
+                if (defaultTarget != null) setTargetMuscle(defaultTarget)
             }
         }
     }

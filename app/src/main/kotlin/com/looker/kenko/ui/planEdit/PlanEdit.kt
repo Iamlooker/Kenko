@@ -65,6 +65,7 @@ import com.looker.kenko.BuildConfig
 import com.looker.kenko.R
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.ExercisesPreviewParameter
+import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.components.DaySelectorChip
 import com.looker.kenko.ui.components.ErrorSnackbar
@@ -88,7 +89,7 @@ import kotlinx.datetime.DayOfWeek
 fun PlanEdit(
     viewModel: PlanEditViewModel,
     onBackPress: () -> Unit,
-    onAddNewExerciseClick: () -> Unit,
+    onAddNewExerciseClick: (name: String?, target: MuscleGroups?) -> Unit,
 ) {
     val pageStage by viewModel.pageState.collectAsStateWithLifecycle()
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -380,12 +381,13 @@ private fun ExerciseItemActions(
 private fun AddExerciseSheet(
     onDismiss: () -> Unit,
     onDone: (Exercise) -> Unit,
-    onAddNewExerciseClick: () -> Unit,
+    onAddNewExerciseClick: (name: String?, target: MuscleGroups?) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val state = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     ModalBottomSheet(sheetState = state, onDismissRequest = onDismiss) {
         SelectExercise(
+            onRequestNewExercise = onAddNewExerciseClick,
             onDone = { exercise ->
                 scope.launch {
                     onDone(exercise)
@@ -394,7 +396,6 @@ private fun AddExerciseSheet(
                     if (!state.isVisible) onDismiss()
                 }
             },
-            onRequestNewExercise = onAddNewExerciseClick,
         )
     }
 }

@@ -19,6 +19,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.ui.planEdit.PlanEdit
 import kotlinx.serialization.Serializable
 
@@ -33,7 +34,7 @@ fun NavController.navigateToPlanEdit(id: Int = -1, navOptions: NavOptions? = nul
 
 fun NavGraphBuilder.planEdit(
     onBackPress: () -> Unit,
-    onAddNewExerciseClick: () -> Unit,
+    onAddNewExerciseClick: (name: String?, target: MuscleGroups?) -> Unit,
 ) {
     composable<PlanEditRoute> {
         PlanEdit(
