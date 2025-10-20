@@ -39,6 +39,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
@@ -86,7 +89,7 @@ private fun Sessions(
                     BackButton(onClick = onBackPress)
                 },
                 title = {
-                    Text(text = stringResource(id = R.string.label_session))
+                    Text(text = stringResource(id = R.string.label_sessions_title))
                 },
             )
         },
@@ -118,7 +121,7 @@ private fun Sessions(
     ) { padding ->
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = padding + PaddingValues(bottom = 80.dp),
+            contentPadding = padding + PaddingValues(bottom = 96.dp),
             verticalArrangement = Arrangement.spacedBy(2.dp),
         ) {
             items(
@@ -126,19 +129,8 @@ private fun Sessions(
                 key = { it.id!! },
             ) { session ->
                 SessionCard(
-                    modifier = Modifier.padding(
-                        horizontal = 12.dp,
-                        vertical = 8.dp,
-                    ),
+                    modifier = Modifier.padding(horizontal = 14.dp),
                     session = session,
-                    isTodayLabel = {
-                        val isToday = remember(session.date) {
-                            session.date.isToday
-                        }
-                        if (isToday) {
-                            IsTodayLabel()
-                        }
-                    },
                     onClick = { onSessionClick(session.date) },
                 )
             }
@@ -166,40 +158,58 @@ private fun IsTodayLabel() {
 fun SessionCard(
     session: Session,
     modifier: Modifier = Modifier,
-    isTodayLabel: @Composable () -> Unit,
     onClick: () -> Unit = {},
 ) {
+    val containerColor = if (session.date.isToday) {
+        MaterialTheme.colorScheme.secondaryContainer
+    } else {
+        MaterialTheme.colorScheme.surfaceContainerLow
+    }
+    val containerShape = if (session.date.isToday) {
+        CircleShape
+    } else {
+        MaterialTheme.shapes.extraLarge
+    }
     Surface(
         modifier = modifier,
-        color = MaterialTheme.colorScheme.surfaceContainer,
-        shape = MaterialTheme.shapes.large,
+        color = containerColor,
+        shape = containerShape,
         onClick = onClick,
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
-                .padding(horizontal = 16.dp, vertical = 16.dp),
+                .padding(16.dp),
         ) {
-            isTodayLabel()
+            val titleStyle = MaterialTheme.typography.titleLarge
+            val secondaryEmphasis = MaterialTheme.colorScheme.outline
+            val dayName = dayName(session.date.dayOfWeek)
+            val string = remember(session.date, dayName) {
+                buildAnnotatedString {
+                    withStyle(titleStyle.toSpanStyle().copy(fontWeight = FontWeight.Bold)) {
+                        append(formatDate(session.date, dateTimeFormat = DateTimeFormat.Short))
+                    }
+                    append(" ${Typography.bullet} ")
+                    withStyle(titleStyle.toSpanStyle().copy(color = secondaryEmphasis)) {
+                        append(dayName)
+                    }
+                }
+            }
+            Text(text = string)
+
+            val exerciseNames = remember(session.performExercises) {
+                session.performExercises.joinToString { it.name }
+            }
             Text(
-                text = dayName(session.date.dayOfWeek),
-                style = MaterialTheme.typography.headlineMedium,
-            )
-            Text(
-                text = session.formattedDate(),
-                style = MaterialTheme.typography.titleLarge,
+                text = exerciseNames,
+                style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.outline,
+                maxLines = 3,
             )
         }
     }
 }
-
-@Composable
-fun Session.formattedDate(format: DateTimeFormat = DateTimeFormat.Short): String =
-    remember(date) {
-        formatDate(date, dateTimeFormat = format)
-    }
 
 @Preview
 @Composable
@@ -219,7 +229,6 @@ private fun SessionCardPreview() {
                 date = LocalDate(2024, 4, 15),
                 sets = emptyList(),
             ),
-            isTodayLabel = { IsTodayLabel() },
             modifier = Modifier.fillMaxWidth(),
         )
     }

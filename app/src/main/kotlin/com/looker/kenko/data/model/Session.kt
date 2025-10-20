@@ -23,6 +23,9 @@ data class Session(
     val sets: List<Set>,
     val planId: Int?,
     val id: Int? = null,
-)
+) {
+    val performExercises: List<Exercise>
+        get() = sets.map { it.exercise }.distinct()
+}
 
 fun Session(planId: Int, sets: List<Set>) = Session(planId = planId, date = localDate, sets = sets)
