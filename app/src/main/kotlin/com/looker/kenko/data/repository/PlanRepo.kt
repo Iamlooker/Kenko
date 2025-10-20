@@ -63,6 +63,8 @@ interface PlanRepo {
 
     suspend fun deletePlan(id: Int)
 
+    suspend fun deleteEmptyPlans()
+
     suspend fun addItem(planItem: PlanItem)
 
     suspend fun removeItem(id: Long)

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 LooKeR & Contributors
+ * Copyright (C) 2025. LooKeR & Contributors
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -231,9 +231,11 @@ interface PlanDao {
     @Upsert
     suspend fun upsertPlan(plan: PlanEntity): Long
 
-    @Transaction
     @Query("DELETE FROM plans WHERE id = :planId")
     suspend fun deletePlan(planId: Int)
+
+    @Query("DELETE FROM plans WHERE id NOT IN (SELECT DISTINCT planId FROM plan_day)")
+    suspend fun deleteEmptyPlans()
 
     @Upsert
     suspend fun insertPlanItem(item: PlanDayEntity)

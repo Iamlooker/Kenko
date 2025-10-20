@@ -39,6 +39,8 @@
     <string name="label_plans_title">Plans</string>
     <string name="label_edit_plan">Edit Plan</string>
     <string name="no_exercises_yet">No exercises yet</string>
+    <string name="label_clean_up">Clean up</string>
+    <string name="label_clean_up_plans">Clear empty plans?</string>
 
     <string name="heading_select_plan_name">Select a plan name</string>
     <string name="heading_select_plan_items">Select exercises</string>
@@ -90,6 +92,8 @@
     <string name="label_name">Name</string>
     <string name="label_add">Add</string>
     <string name="label_save">Save</string>
+    <string name="label_yes">Yes</string>
+    <string name="label_no">No</string>
 
     <!--Project Specific-->
     <string name="label_session">Session</string>
