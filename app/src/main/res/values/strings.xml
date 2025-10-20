@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (C) 2025. LooKeR & Contributors
+  ~ Copyright (C) 2025 LooKeR & Contributors
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
   ~ the Free Software Foundation, either version 3 of the License, or
@@ -30,6 +30,9 @@
     <string name="label_add_new_exercises_home">Add\nExercise</string>
     <string name="label_session_history_home">Session\nHistory</string>
     <string name="label_current_plan_home">Current\nPlan</string>
+
+    <!--Sessions-->
+    <string name="label_sessions_title">Sessions</string>
 
     <!--Session Details-->
     <string name="label_nothing_today">Nothing today</string>
