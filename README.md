@@ -20,7 +20,9 @@ thought-out plans
 - [ ] Add Import/Export
 - [x] Add Support for Isometric exercises
 
-## CONTRIBUTIONS
+## CHANGELOGS
+- Full changes: [here](https://github.com/Iamlooker/Kenko/blob/main/CHANGELOG.md)
+- Unreleased changes: [here](https://github.com/Iamlooker/Kenko/blob/main/CHANGELOG.md#unreleased)
 
 ## LICENSE
 
