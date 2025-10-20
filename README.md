@@ -15,7 +15,7 @@ thought-out plans
 
 ## TODO
 
-- [ ] Add Rating System
+- [x] Add Rating System
 - [ ] Provide Targeted Overload
 - [ ] Add Import/Export
 - [x] Add Support for Isometric exercises
