@@ -38,6 +38,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -115,8 +116,8 @@ private fun Home(
     Scaffold(
         topBar = {
             KenkoTopBar {
-                IconButton(onClick = onProfileClick) {
-                    Icon(painter = KenkoIcons.Circle, contentDescription = null)
+                FilledTonalIconButton(onClick = onProfileClick) {
+                    Icon(painter = KenkoIcons.Person, contentDescription = null)
                 }
             }
         },

@@ -91,6 +91,10 @@ object KenkoIcons {
         @Composable
         get() = painterResource(R.drawable.ic_home)
 
+    val Person: Painter
+        @Composable
+        get() = painterResource(R.drawable.ic_person)
+
     val Performance: Painter
         @Composable
         get() = painterResource(R.drawable.ic_show_chart)

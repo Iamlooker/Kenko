@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enable predictive back navigation
 
 ### Changed
-- Removed Bottom navigation bar, added icon to top bar
+- Removed Bottom navigation bar, added user icon to top bar
 - Updated Day Switcher component styling for clarity
 - Hide Lifts card when there are no lifts
 
