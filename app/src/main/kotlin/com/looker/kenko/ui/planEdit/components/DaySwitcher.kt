@@ -50,8 +50,6 @@ import androidx.compose.ui.unit.dp
 import com.looker.kenko.R
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
-import com.looker.kenko.ui.theme.end
-import com.looker.kenko.ui.theme.start
 import com.looker.kenko.utils.minus
 import com.looker.kenko.utils.plus
 import kotlinx.datetime.DayOfWeek
@@ -72,12 +70,11 @@ fun DaySwitcher(
         horizontalArrangement = Arrangement.Center,
     ) {
         val buttonColors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-            contentColor = MaterialTheme.colorScheme.onSurface,
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Button(
             modifier = Modifier.height(56.dp),
-            shape = MaterialTheme.shapes.large.end(MaterialTheme.shapes.small),
             colors = buttonColors,
             onClick = onPrevious,
         ) {
@@ -91,7 +88,7 @@ fun DaySwitcher(
             modifier = Modifier
                 .height(56.dp)
                 .weight(1F)
-                .clip(MaterialTheme.shapes.small)
+                .clip(MaterialTheme.shapes.large)
                 .background(MaterialTheme.colorScheme.secondaryContainer)
                 .clickable(onClick = onClick),
             contentAlignment = Alignment.Center,
@@ -116,7 +113,6 @@ fun DaySwitcher(
         Spacer(modifier = Modifier.width(6.dp))
         Button(
             modifier = Modifier.height(56.dp),
-            shape = MaterialTheme.shapes.large.start(MaterialTheme.shapes.small),
             colors = buttonColors,
             onClick = onNext,
         ) {
