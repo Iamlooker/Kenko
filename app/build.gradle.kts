@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025. LooKeR & Contributors
+ * Copyright (C) 2025 LooKeR & Contributors
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -12,6 +12,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import java.util.*
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
@@ -51,11 +52,19 @@ android {
         includeInApk = false
     }
 
+    val localProperties = rootProject.properties("local.properties")
+
+    val releaseSigningConfig = signingConfigs.create("release") {
+        storeFile = file(localProperties.getProperty("store.path"))
+        storePassword = localProperties.getProperty("store.pass")
+        keyAlias = localProperties.getProperty("key.alias")
+        keyPassword = localProperties.getProperty("key.pass")
+    }
+
     buildTypes {
-        debug {
-            applicationIdSuffix = ".debug"
-        }
+        debug { applicationIdSuffix = ".debug" }
         release {
+            signingConfig = releaseSigningConfig
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
@@ -156,3 +165,12 @@ dependencies {
 }
 
 fun DependencyHandlerScope.kotlin(name: String): Any = kotlin(name, libs.versions.kotlin.get())
+
+fun Project.properties(fileName: String): Properties {
+    val file = file(fileName)
+    require(file.exists()) { "File not found: `${file.name}` at `${file.path}`" }
+
+    val properties = Properties()
+    properties.load(file.reader())
+    return properties
+}
