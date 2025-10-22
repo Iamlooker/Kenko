@@ -16,6 +16,8 @@ post_package_bump_hooks = []
 [git_hooks]
 
 [commit_types]
+chore = { changelog_title = "", omit_from_changelog = true }
+ci = { changelog_title = "", omit_from_changelog = true }
 
 [changelog]
 path = "CHANGELOG.md"
