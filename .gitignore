@@ -8,5 +8,6 @@
 .externalNativeBuild
 .cxx
 local.properties
+*.jks
 /.kotlin
 /kls_database.db
