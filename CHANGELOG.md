@@ -10,15 +10,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Session History card on Home screen
 - Set Type selection for sets
+- Timer which shows time since last set
 - Monochrome launcher icon on Android 12+
 - Allow adding a new exercise directly when it cannot be found in the list
 - Clean up empty plans from the Plans screen via confirmation dialog
 - Enable predictive back navigation
+- Empty state on Sessions screen
 
 ### Changed
 - Removed Bottom navigation bar, added user icon to top bar
 - Updated Day Switcher component styling for clarity
 - Hide Lifts card when there are no lifts
+- Redesigned Session History card and screen
+- Replaced profile icon on Home screen
+- Removed "Today" label on Sessions and filtered out empty sessions
 
 ### Fixed
 - Select Plan button alignment
