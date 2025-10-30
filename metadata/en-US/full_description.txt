@@ -5,8 +5,3 @@ The app allows you to log your workouts with extraordinary simplicity
 You can create completely personal workout plans, and none of your data will be sent to anybody
 
 Kenko allows customization of theme with really simple but brutal design
-
-TODO:
-
-* Provide progression
-* Performance Stats
