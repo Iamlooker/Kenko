@@ -113,12 +113,13 @@ class SessionDetailViewModel @Inject constructor(
 
             val currentSession = session ?: Session(-1, emptyList())
 
-            val exerciseMap = if (sessionDate.isToday) {
-                exercises.associateWith { exercise ->
+            val exerciseMap = when {
+                sessionDate.isToday || exercises.isNotEmpty() -> exercises.associateWith { exercise ->
                     currentSession.sets.filter { it.exercise.id == exercise.id }
                 }
-            } else {
-                currentSession.sets.groupBy { it.exercise }
+
+                currentSession.sets.isNotEmpty() -> currentSession.sets.groupBy { it.exercise }
+                else -> emptyMap()
             }
 
             SessionDetailState.Success(
