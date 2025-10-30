@@ -174,3 +174,18 @@ fun Project.properties(fileName: String): Properties {
     properties.load(file.reader())
     return properties
 }
+
+fun versionCodeFor(version: String?): Int? {
+    if (version == null) return null
+    val (major, minor, patch) = version
+        .substringBefore('-')
+        .trim()
+        .split('.')
+        .map { it.toUIntOrNull() }
+
+    require(major != null && minor != null && patch != null) {
+        "Each segment must be within 0..99 for mapping, was: '$version'"
+    }
+
+    return (major * 100_000u + minor * 1_000u + patch * 10u).toInt()
+}
