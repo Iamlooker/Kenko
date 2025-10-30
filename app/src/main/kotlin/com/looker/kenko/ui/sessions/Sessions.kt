@@ -26,6 +26,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -48,6 +49,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
 import com.looker.kenko.data.model.Session
 import com.looker.kenko.ui.components.BackButton
+import com.looker.kenko.ui.components.EmptyPage
 import com.looker.kenko.ui.components.TertiaryKenkoButton
 import com.looker.kenko.ui.extensions.plus
 import com.looker.kenko.ui.planEdit.components.dayName
@@ -72,7 +74,7 @@ fun Sessions(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun Sessions(
     state: SessionsUiData,
@@ -118,20 +120,24 @@ private fun Sessions(
         floatingActionButtonPosition = FabPosition.Center,
         containerColor = MaterialTheme.colorScheme.surface,
     ) { padding ->
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = padding + PaddingValues(bottom = 96.dp),
-            verticalArrangement = Arrangement.spacedBy(2.dp),
-        ) {
-            items(
-                items = state.sessions,
-                key = { it.id!! },
-            ) { session ->
-                SessionCard(
-                    modifier = Modifier.padding(horizontal = 14.dp),
-                    session = session,
-                    onClick = { onSessionClick(session.date) },
-                )
+        if (state.sessions.isEmpty()) {
+            EmptyPage(stringResource(id = R.string.label_no_sessions))
+        } else {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = padding + PaddingValues(bottom = 96.dp),
+                verticalArrangement = Arrangement.spacedBy(2.dp),
+            ) {
+                items(
+                    items = state.sessions,
+                    key = { it.id!! },
+                ) { session ->
+                    SessionCard(
+                        modifier = Modifier.padding(horizontal = 14.dp),
+                        session = session,
+                        onClick = { onSessionClick(session.date) },
+                    )
+                }
             }
         }
     }
