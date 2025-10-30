@@ -14,7 +14,6 @@
 
 package com.looker.kenko.ui.sessions
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -139,22 +138,6 @@ private fun Sessions(
 }
 
 @Composable
-private fun IsTodayLabel() {
-    Surface(
-        shape = CircleShape,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-        color = MaterialTheme.colorScheme.secondaryContainer,
-    ) {
-        Text(
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-            text = stringResource(R.string.label_today),
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.onSecondaryContainer,
-        )
-    }
-}
-
-@Composable
 fun SessionCard(
     session: Session,
     modifier: Modifier = Modifier,
@@ -208,14 +191,6 @@ fun SessionCard(
                 maxLines = 3,
             )
         }
-    }
-}
-
-@Preview
-@Composable
-private fun TodayLabelPreview() {
-    KenkoTheme {
-        IsTodayLabel()
     }
 }
 

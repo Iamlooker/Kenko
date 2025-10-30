@@ -40,7 +40,7 @@ class SessionsViewModel @Inject constructor(
         isCurrentSessionActive,
     ) { sessions, isCurrentSessionActive ->
         SessionsUiData(
-            sessions = sessions,
+            sessions = sessions.filter { it.sets.isNotEmpty() },
             isCurrentSessionActive = isCurrentSessionActive,
         )
     }.asStateFlow(SessionsUiData(emptyList(), false))
