@@ -54,9 +54,11 @@ import com.looker.kenko.R
 import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.components.ErrorSnackbar
-import com.looker.kenko.ui.components.FlowHorizontalChips
+import com.looker.kenko.ui.components.FlowTargets
 import com.looker.kenko.ui.components.KenkoButton
+import com.looker.kenko.ui.components.TargetChip
 import com.looker.kenko.ui.components.kenkoTextFieldColor
+import com.looker.kenko.ui.exercises.string
 import com.looker.kenko.ui.extensions.plus
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
@@ -138,7 +140,13 @@ private fun AddEditExercise(
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.outline
             )
-            FlowHorizontalChips(target = state.targetMuscle, onSet = onSelectTarget)
+            FlowTargets {
+                TargetChip(
+                    selected = state.targetMuscle == it,
+                    onClick = { onSelectTarget(it) },
+                    text = stringResource(it.string),
+                )
+            }
             Spacer(modifier = Modifier.height(12.dp))
             IsIsometricButton(isIsometric = state.isIsometric, onChange = onSelectIsometric)
             Spacer(modifier = Modifier.height(18.dp))

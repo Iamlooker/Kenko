@@ -55,10 +55,11 @@ import com.looker.kenko.data.model.ExercisesPreviewParameter
 import com.looker.kenko.data.model.MuscleGroups
 import com.looker.kenko.ui.components.BackButton
 import com.looker.kenko.ui.components.ErrorSnackbar
-import com.looker.kenko.ui.components.HorizontalTargetChips
 import com.looker.kenko.ui.components.KenkoBorderWidth
+import com.looker.kenko.ui.components.LazyTargets
 import com.looker.kenko.ui.components.SecondaryKenkoButton
 import com.looker.kenko.ui.components.SwipeToDeleteBox
+import com.looker.kenko.ui.components.TargetChip
 import com.looker.kenko.ui.extensions.plus
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
@@ -189,11 +190,13 @@ private fun Header(
                 BackButton(onClick = onBackPress)
             }
         )
-        HorizontalTargetChips(
-            target = target,
-            onSelect = onSelect,
-            contentPadding = PaddingValues(12.dp),
-        )
+        LazyTargets(contentPadding = PaddingValues(horizontal = 8.dp)) {
+            TargetChip(
+                selected = target == it,
+                onClick = { onSelect(it) },
+                text = stringResource(it.string),
+            )
+        }
         HorizontalDivider(thickness = KenkoBorderWidth)
     }
 }
@@ -241,7 +244,7 @@ private fun ExerciseItem(
 @Preview
 @Composable
 private fun ExercisesPreview(
-    @PreviewParameter(ExercisesPreviewParameter::class, limit = 2) exercises: List<Exercise>
+    @PreviewParameter(ExercisesPreviewParameter::class, limit = 2) exercises: List<Exercise>,
 ) {
     KenkoTheme {
         Exercises(

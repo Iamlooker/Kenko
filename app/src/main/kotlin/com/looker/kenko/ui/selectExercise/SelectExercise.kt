@@ -51,9 +51,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.kenko.R
 import com.looker.kenko.data.model.Exercise
 import com.looker.kenko.data.model.MuscleGroups
-import com.looker.kenko.ui.components.HorizontalTargetChips
+import com.looker.kenko.ui.components.LazyTargets
+import com.looker.kenko.ui.components.TargetChip
 import com.looker.kenko.ui.components.disableScrollConnection
 import com.looker.kenko.ui.components.kenkoTextFieldColor
+import com.looker.kenko.ui.exercises.string
 import com.looker.kenko.ui.planEdit.components.ExerciseItem
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
@@ -84,11 +86,13 @@ fun SelectExercise(
                 onRequestNewExercise(viewModel.searchQuery.ifBlank { null }, target)
             },
         )
-        HorizontalTargetChips(
-            target = target,
-            onSelect = viewModel::setTarget,
-            contentPadding = PaddingValues(horizontal = 16.dp),
-        )
+        LazyTargets(contentPadding = PaddingValues(horizontal = 8.dp)) {
+            TargetChip(
+                selected = target == it,
+                onClick = { viewModel.setTarget(it) },
+                text = stringResource(it.string),
+            )
+        }
 
         when (searchResult) {
             SearchResult.Loading -> {
