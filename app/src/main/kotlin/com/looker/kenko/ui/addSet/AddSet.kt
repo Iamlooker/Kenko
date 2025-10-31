@@ -30,16 +30,17 @@ import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ButtonGroupDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedToggleButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.ToggleButton
 import androidx.compose.material3.ToggleButtonDefaults
 import androidx.compose.material3.toPath
 import androidx.compose.runtime.Composable
@@ -101,7 +102,7 @@ fun AddSet(exercise: Exercise, onDone: () -> Unit) {
             },
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         SetTypeSelector(
             modifier = Modifier.align(CenterHorizontally),
@@ -216,7 +217,7 @@ private fun SwipeableTextField(
     Surface(
         modifier = modifier.requiredHeight(48.dp),
         shape = CircleShape,
-        color = MaterialTheme.colorScheme.surfaceContainer,
+        color = MaterialTheme.colorScheme.surfaceContainerHigh,
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -239,11 +240,17 @@ private fun SetTypeSelector(
     ) {
         options.forEachIndexed { index, type ->
             val interactionSource = remember { MutableInteractionSource() }
-            ToggleButton(
-                checked = selected == type,
+            val checked = selected == type
+            OutlinedToggleButton(
+                checked = checked,
                 onCheckedChange = { onSelect(type) },
-                modifier = Modifier.semantics { role = Role.RadioButton },
                 interactionSource = interactionSource,
+                modifier = Modifier.semantics { role = Role.RadioButton },
+                border = if (checked) ButtonDefaults.outlinedButtonBorder(true) else null,
+                colors = ToggleButtonDefaults.outlinedToggleButtonColors(
+                    checkedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    checkedContentColor = MaterialTheme.colorScheme.onSurface,
+                ),
                 shapes =
                     when (index) {
                         0 -> ButtonGroupDefaults.connectedLeadingButtonShapes()
@@ -252,7 +259,7 @@ private fun SetTypeSelector(
                     },
             ) {
                 SetTypeIndicator(
-                    selected = selected == type,
+                    selected = checked,
                     type = type,
                     interactionSource = interactionSource,
                     modifier = Modifier.size(12.dp),

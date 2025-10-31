@@ -15,23 +15,32 @@
 package com.looker.kenko.ui.components
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.input.TextFieldDecorator
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 
 fun kenkoTextDecorator(supportingText: String) = TextFieldDecorator {
+    val outlineColor = MaterialTheme.colorScheme.outline
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = supportingText,
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.outline
+            color = outlineColor,
         )
         it()
+        HorizontalDivider(
+            modifier = Modifier.width(48.dp),
+            color = outlineColor,
+        )
     }
 }
 
