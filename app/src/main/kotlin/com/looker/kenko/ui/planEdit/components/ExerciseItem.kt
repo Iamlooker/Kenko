@@ -52,7 +52,7 @@ fun ExerciseItem(
     exercise: Exercise,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
-    content: @Composable () -> Unit,
+    content: @Composable () -> Unit = {},
 ) {
     Surface(
         modifier = modifier,
@@ -87,9 +87,8 @@ fun ExerciseItem(
             CompositionLocalProvider(
                 LocalTextStyle provides MaterialTheme.typography.headlineSmall,
                 LocalContentColor provides MaterialTheme.colorScheme.primary,
-            ) {
-                content()
-            }
+                content = content,
+            )
         }
     }
 }

@@ -20,7 +20,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -31,7 +31,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ContainedLoadingIndicator
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -62,6 +63,7 @@ import com.looker.kenko.ui.theme.KenkoTheme
 import com.looker.kenko.ui.theme.end
 import com.looker.kenko.ui.theme.start
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun SelectExercise(
     onDone: (Exercise) -> Unit,
@@ -94,22 +96,18 @@ fun SelectExercise(
             )
         }
 
-        when (searchResult) {
-            SearchResult.Loading -> {
-                CircularProgressIndicator()
-            }
-
-            SearchResult.NotFound -> {
-                SearchNotFound(
-                    onAddNewExercise = {
-                        onRequestNewExercise(viewModel.searchQuery, target)
-                    },
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.height(240.dp),
+        ) {
+            when (searchResult) {
+                SearchResult.Loading -> ContainedLoadingIndicator()
+                SearchResult.NotFound -> SearchNotFound(
+                    onAddNewExercise = { onRequestNewExercise(viewModel.searchQuery, target) }
                 )
-            }
 
-            is SearchResult.Success -> {
-                SearchResult(
-                    searchResult as SearchResult.Success,
+                is SearchResult.Success -> SearchResult(
+                    searchResult = searchResult as SearchResult.Success,
                     onClick = onDone
                 )
             }
@@ -122,14 +120,12 @@ private fun SearchResult(
     searchResult: SearchResult.Success,
     onClick: (Exercise) -> Unit,
 ) {
-    LazyColumn(Modifier.height(240.dp)) {
+    LazyColumn(Modifier.fillMaxSize()) {
         items(searchResult.exercises) { exercise ->
             ExerciseItem(
                 exercise = exercise,
                 onClick = { onClick(exercise) },
-            ) {
-                Spacer(modifier = Modifier)
-            }
+            )
         }
     }
 }
@@ -138,8 +134,7 @@ private fun SearchResult(
 private fun SearchNotFound(onAddNewExercise: () -> Unit, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
-            .fillMaxWidth()
-            .height(240.dp)
+            .fillMaxSize()
             .background(MaterialTheme.colorScheme.errorContainer, MaterialTheme.shapes.large),
         contentAlignment = Alignment.Center,
     ) {
