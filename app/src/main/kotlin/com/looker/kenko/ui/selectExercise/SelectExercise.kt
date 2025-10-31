@@ -133,10 +133,14 @@ private fun SearchResult(
 @Composable
 private fun SearchNotFound(onAddNewExercise: () -> Unit, modifier: Modifier = Modifier) {
     Box(
+        contentAlignment = Alignment.Center,
         modifier = modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.errorContainer, MaterialTheme.shapes.large),
-        contentAlignment = Alignment.Center,
+            .padding(horizontal = 12.dp)
+            .background(
+                color = MaterialTheme.colorScheme.errorContainer,
+                shape = MaterialTheme.shapes.large
+            )
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
