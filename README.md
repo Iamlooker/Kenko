@@ -14,7 +14,7 @@ thought-out plans
 <img src="metadata/en-US/images/phoneScreenshots/1.png" width="25%" /><img src="metadata/en-US/images/phoneScreenshots/2.png" width="25%" /><img src="metadata/en-US/images/phoneScreenshots/3.png" width="25%" /><img src="metadata/en-US/images/phoneScreenshots/4.png" width="25%" />
 
 ## CHANGELOGS
-- Full changes: [here](https://github.com/Iamlooker/Kenko/blob/main/CHANGELOG.md)
+- Full changelog: [here](https://github.com/Iamlooker/Kenko/blob/main/CHANGELOG.md)
 - Unreleased changes: [here](https://github.com/Iamlooker/Kenko/blob/main/CHANGELOG.md#unreleased)
 
 ## TODO
