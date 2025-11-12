@@ -1,0 +1,95 @@
+name: Create Release
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'adopt'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build Release AAB
+        run: ./gradlew bundleRelease
+
+      - uses: r0adkll/sign-android-release@v1
+        name: Signing AAB
+        id: sign_aab
+        env:
+          BUILD_TOOLS_VERSION: "36.0.0"
+        with:
+          releaseDirectory: app/build/outputs/bundle/release
+          signingKeyBase64: ${{ secrets.KEY_BASE64 }}
+          alias: ${{ secrets.KEY_ALIAS }}
+          keyStorePassword: ${{ secrets.STORE_PASS }}
+          keyPassword: ${{ secrets.KEY_PASS }}
+
+      - name: Build Release APK
+        run: ./gradlew assembleRelease
+
+      - name: Signing APK
+        uses: r0adkll/sign-android-release@v1
+        id: sign_apk
+        env:
+          BUILD_TOOLS_VERSION: "36.0.0"
+        with:
+          releaseDirectory: app/build/outputs/apk/release
+          signingKeyBase64: ${{ secrets.KEY_BASE64 }}
+          alias: ${{ secrets.KEY_ALIAS }}
+          keyStorePassword: ${{ secrets.STORE_PASS }}
+          keyPassword: ${{ secrets.KEY_PASS }}
+
+      - name: Extract Version Code
+        id: extract_version
+        run: |
+          VERSION_NAME=$(grep -oP 'versionName\s*=\s*\K\d+' app/build.gradle.kts)
+          echo "version_name=$VERSION_NAME" >> $GITHUB_OUTPUT
+          echo "Version Code: $VERSION_NAME"
+
+      - name: Read Changelog
+        id: read_changelog
+        run: echo "changelog=$(bash changelog.sh ${{ steps.extract_version.outputs.version_name }})" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          body: ${{ steps.read_changelog.outputs.changelog }}
+          generate_release_notes: true
+          make_latest: true
+          prerelease: false
+          draft: true
+          files: |
+            ${{steps.sign_apk.outputs.signedReleaseFile}}
+            ${{steps.sign_aab.outputs.signedReleaseFile}}
+
+      - name: Publish to Play Store
+        uses: r0adkll/upload-google-play@v1
+        with:
+          packageName: com.looker.kenko
+          track: production
+          status: inProgress
+          releaseName: ${{ github.ref_name }}
+          releaseFiles: ${{steps.sign_aab.outputs.signedReleaseFile}}
+          mappingFile: app/build/outputs/mapping/release/mapping.txt
+          debugSymbols: app/build/intermediates/merged_native_libs/release/out/lib
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
