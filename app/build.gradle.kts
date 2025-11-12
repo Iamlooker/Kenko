@@ -12,9 +12,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import com.android.utils.text.dropPrefix
-import java.time.LocalDate
-import java.time.ZoneId
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
@@ -56,10 +53,7 @@ android {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
-            )
+            proguardFile(getDefaultProguardFile("proguard-android-optimize.txt"))
         }
     }
 
@@ -169,82 +163,3 @@ fun versionCodeFor(version: String?): Int? {
 
     return (major * 100_000u + minor * 1_000u + patch * 10u).toInt()
 }
-
-val changelogMD by tasks.register("changelogMD") {
-    group = "build"
-    description = "Prepare CHANGELOG.md for release"
-    notCompatibleWithConfigurationCache("Uses Android DSL and Project APIs in task action")
-
-    doLast {
-        val versionName = requireNotNull(android.defaultConfig.versionName)
-
-        val changelogMd = rootProject.file("CHANGELOG.md")
-        require(changelogMd.exists()) { "CHANGELOG.md not found at project root" }
-        val lines = changelogMd.readLines()
-
-        val unreleasedHeaderIdx = lines.indexOfFirst { it.startsWith("## [Unreleased]") }
-        if (unreleasedHeaderIdx == -1) error("No [Unreleased] header found in CHANGELOG.md")
-
-        if (lines.any { it.startsWith("## [$versionName") }) {
-            logger.warn("Version $versionName already exists in CHANGELOG.md")
-            return@doLast
-        }
-
-        val today = LocalDate.now(ZoneId.systemDefault()).toString()
-        val newHeader = "## [$versionName] - $today"
-
-        val updated = lines.toMutableList().apply {
-            add(unreleasedHeaderIdx + 1, "\n" + newHeader)
-        }
-        changelogMd.writeText(updated.joinToString("\n"))
-    }
-}
-
-val fastlaneChangelog by tasks.register("fastlaneChangelog") {
-    group = "build"
-    description = "Prepare Fastlane changelog from CHANGELOG.md and create metadata file"
-    notCompatibleWithConfigurationCache("Uses Android DSL and Project APIs in task action")
-    dependsOn(changelogMD)
-    doLast {
-        val vCode = requireNotNull(android.defaultConfig.versionCode) {
-            "versionCode is not configured"
-        }
-        val vName = requireNotNull(android.defaultConfig.versionName) {
-            "versionName is not configured"
-        }
-
-        val fastlaneFile = rootProject.file("metadata/en-US/changelogs/${vCode}.txt")
-        if (fastlaneFile.exists()) {
-            logger.warn("Fastlane changelog file already exists: ${fastlaneFile.path}")
-            return@doLast
-        }
-
-        val changelogs = rootProject.file("CHANGELOG.md").readLines()
-
-        var blockStartIndex = -1
-        var blockEndIndex = changelogs.lastIndex
-
-        for (i in changelogs.indices) {
-            if (changelogs[i].startsWith("## [Unreleased]")) continue
-            if (changelogs[i].startsWith("## [$vName")) {
-                blockStartIndex = i + 1
-                continue
-            }
-            if (changelogs[i].startsWith("## [") && blockStartIndex != -1) {
-                blockEndIndex = i - 1
-                break
-            }
-        }
-
-        val unreleasedBlock = changelogs.subList(blockStartIndex, blockEndIndex + 1)
-
-        val cleanedForFastlane = unreleasedBlock.joinToString("\n") { raw ->
-            if (raw.startsWith('#')) raw.dropPrefix("### ").trim() else raw.trim()
-        }.trim().ifEmpty { "No changes listed." }
-
-        fastlaneFile.writeText(cleanedForFastlane)
-    }
-}
-
-tasks.matching { it.name == "assembleRelease" }.configureEach { dependsOn(fastlaneChangelog) }
-tasks.matching { it.name == "bundleRelease" }.configureEach { dependsOn(fastlaneChangelog) }
