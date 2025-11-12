@@ -52,7 +52,7 @@ android {
         includeInApk = false
     }
 
-    val localProperties = rootProject.properties("local.properties")
+    val localProperties = rootProject.propertiesFrom("local.properties")
 
     val releaseSigningConfig = signingConfigs.create("release") {
         storeFile = file(localProperties.getProperty("store.path"))
@@ -166,7 +166,7 @@ dependencies {
 
 fun DependencyHandlerScope.kotlin(name: String): Any = kotlin(name, libs.versions.kotlin.get())
 
-fun Project.properties(fileName: String): Properties {
+fun Project.propertiesFrom(fileName: String): Properties {
     val file = file(fileName)
     require(file.exists()) { "File not found: `${file.name}` at `${file.path}`" }
 
