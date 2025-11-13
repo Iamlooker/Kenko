@@ -169,7 +169,6 @@ fun versionCodeFor(version: String?): Int? {
 
     return (major * 100_000u + minor * 1_000u + patch * 10u).toInt()
 }
-
 val changelogMD by tasks.register("changelogMD") {
     group = "build"
     description = "Prepare CHANGELOG.md for release"
@@ -245,6 +244,3 @@ val fastlaneChangelog by tasks.register("fastlaneChangelog") {
         fastlaneFile.writeText(cleanedForFastlane)
     }
 }
-
-tasks.matching { it.name == "assembleRelease" }.configureEach { dependsOn(fastlaneChangelog) }
-tasks.matching { it.name == "bundleRelease" }.configureEach { dependsOn(fastlaneChangelog) }

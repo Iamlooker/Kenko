@@ -57,16 +57,9 @@ jobs:
           keyStorePassword: ${{ secrets.STORE_PASS }}
           keyPassword: ${{ secrets.KEY_PASS }}
 
-      - name: Extract Version Code
-        id: extract_version
-        run: |
-          VERSION_NAME=$(grep -oP 'versionName\s*=\s*\K\d+' app/build.gradle.kts)
-          echo "version_name=$VERSION_NAME" >> $GITHUB_OUTPUT
-          echo "Version Code: $VERSION_NAME"
-
       - name: Read Changelog
         id: read_changelog
-        run: echo "changelog=$(bash changelog.sh ${{ steps.extract_version.outputs.version_name }})" >> $GITHUB_OUTPUT
+        run: echo "changelog=$(bash changelog.sh ${{ github.ref_name }})" >> $GITHUB_OUTPUT
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
