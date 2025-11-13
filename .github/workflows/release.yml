@@ -1,12 +1,6 @@
-name: Create Release
+name: Release
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version number (e.g., 1.4.0)'
-        required: true
-        type: string
   pull_request:
     types:
       - closed
@@ -14,59 +8,6 @@ on:
       - main
 
 jobs:
-  prepare-release:
-    if: github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          java-version: 17
-          distribution: 'adopt'
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-
-      - name: Update versionName in build.gradle.kts
-        run: |
-          VERSION="${{ inputs.version }}"
-          sed -i "s/versionName = \".*\"/versionName = \"$VERSION\"/" app/build.gradle.kts
-
-      - name: Run changelogMD task
-        run: ./gradlew changelogMD
-
-      - name: Run fastlaneChangelog task
-        run: ./gradlew fastlaneChangelog
-
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: release/${{ inputs.version }}
-          title: "chore: release ${{ inputs.version }}"
-          body: |
-            This PR prepares the release for version ${{ inputs.version }}.
-            
-            Changes:
-            - Updated versionName in build.gradle.kts
-            - Updated CHANGELOG.md
-            - Created Fastlane changelog file
-            
-            Once merged, this will trigger the build and publish workflow.
-          commit-message: "chore: prepare release ${{ inputs.version }}"
-          delete-branch: true
-          labels: |
-            release
-
   build-and-publish:
     if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/')
     runs-on: ubuntu-latest
@@ -75,7 +16,7 @@ jobs:
       packages: write
 
     steps:
-      - name: Check out repository
+      - name: Checkout repository
         uses: actions/checkout@v5
 
       - name: Setup Java
@@ -92,10 +33,9 @@ jobs:
         run: |
           BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
           VERSION="${BRANCH_NAME#release/}"
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "tag=v$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Build Release AAB
+      - name: Build release AAB
         run: ./gradlew bundleRelease
 
       - uses: r0adkll/sign-android-release@v1
@@ -106,11 +46,11 @@ jobs:
         with:
           releaseDirectory: app/build/outputs/bundle/release
           signingKeyBase64: ${{ secrets.KEY_BASE64 }}
-          alias: ${{ secrets.KEY_ALIAS }}
           keyStorePassword: ${{ secrets.STORE_PASS }}
+          alias: ${{ secrets.KEY_ALIAS }}
           keyPassword: ${{ secrets.KEY_PASS }}
 
-      - name: Build Release APK
+      - name: Build release APK
         run: ./gradlew assembleRelease
 
       - name: Signing APK
@@ -121,15 +61,15 @@ jobs:
         with:
           releaseDirectory: app/build/outputs/apk/release
           signingKeyBase64: ${{ secrets.KEY_BASE64 }}
-          alias: ${{ secrets.KEY_ALIAS }}
           keyStorePassword: ${{ secrets.STORE_PASS }}
+          alias: ${{ secrets.KEY_ALIAS }}
           keyPassword: ${{ secrets.KEY_PASS }}
 
-      - name: Read Changelog
+      - name: Read changelog
         id: read_changelog
-        run: echo "changelog<<EOF" >> $GITHUB_OUTPUT && bash changelog.sh ${{ steps.extract_version.outputs.version }} >> $GITHUB_OUTPUT && echo "EOF" >> $GITHUB_OUTPUT
+        run: echo "changelog<<EOF" >> $GITHUB_OUTPUT && bash changelog.sh ${{ steps.extract_version.outputs.tag }} >> $GITHUB_OUTPUT && echo "EOF" >> $GITHUB_OUTPUT
 
-      - name: Create Release
+      - name: Create release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.extract_version.outputs.tag }}

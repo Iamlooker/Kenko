@@ -1,0 +1,57 @@
+name: Prepare Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number (e.g., 1.4.0)'
+        required: true
+        type: string
+
+jobs:
+  prepare-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'adopt'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Update versionName in build.gradle.kts
+        run: |
+          VERSION="${{ inputs.version }}"
+          sed -i "s/versionName = \".*\"/versionName = \"$VERSION\"/" app/build.gradle.kts
+
+      - name: Run changelogMD task
+        run: ./gradlew changelogMD
+
+      - name: Run fastlaneChangelog task
+        run: ./gradlew fastlaneChangelog
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: release/${{ inputs.version }}
+          labels: release
+          commit-message: "chore: prepare release ${{ inputs.version }}"
+          title: "chore: release ${{ inputs.version }}"
+          body: |
+            This PR prepares the release for version ${{ inputs.version }}.
+            
+            Changes:
+            - Updated versionName in build.gradle.kts
+            - Updated CHANGELOG.md
+            - Created Fastlane changelog file
+            
+            Once merged, this will trigger the build and publish workflow.
