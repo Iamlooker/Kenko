@@ -33,7 +33,7 @@ jobs:
         run: |
           BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
           VERSION="${BRANCH_NAME#release/}"
-          echo "tag=v$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Build release AAB
         run: ./gradlew bundleRelease
@@ -76,9 +76,8 @@ jobs:
           name: Release ${{ steps.extract_version.outputs.tag }}
           body: ${{ steps.read_changelog.outputs.changelog }}
           generate_release_notes: true
-          make_latest: true
           prerelease: false
-          draft: false
+          draft: true
           files: |
             ${{steps.sign_apk.outputs.signedReleaseFile}}
             ${{steps.sign_aab.outputs.signedReleaseFile}}
@@ -88,7 +87,6 @@ jobs:
         with:
           packageName: com.looker.kenko
           track: production
-          status: inProgress
           releaseName: ${{ steps.extract_version.outputs.tag }}
           releaseFiles: ${{steps.sign_aab.outputs.signedReleaseFile}}
           mappingFile: app/build/outputs/mapping/release/mapping.txt
