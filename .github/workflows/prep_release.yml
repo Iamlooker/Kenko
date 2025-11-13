@@ -33,9 +33,6 @@ jobs:
           VERSION="${{ inputs.version }}"
           sed -i "s/versionName = \".*\"/versionName = \"$VERSION\"/" app/build.gradle.kts
 
-      - name: Run changelogMD task
-        run: ./gradlew changelogMD
-
       - name: Run fastlaneChangelog task
         run: ./gradlew fastlaneChangelog
 
@@ -48,10 +45,10 @@ jobs:
           title: "chore: release ${{ inputs.version }}"
           body: |
             This PR prepares the release for version ${{ inputs.version }}.
-            
+
             Changes:
             - Updated versionName in build.gradle.kts
             - Updated CHANGELOG.md
             - Created Fastlane changelog file
-            
+
             Once merged, this will trigger the build and publish workflow.
