@@ -15,6 +15,7 @@
 import com.android.utils.text.dropPrefix
 import java.time.LocalDate
 import java.time.ZoneId
+import java.util.*
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
@@ -51,9 +52,19 @@ android {
         includeInApk = false
     }
 
+    val localProperties = rootProject.propertiesFrom("local.properties")
+
+    val releaseSigningConfig = signingConfigs.create("release") {
+        storeFile = file(localProperties.getProperty("store.path"))
+        storePassword = localProperties.getProperty("store.pass")
+        keyAlias = localProperties.getProperty("key.alias")
+        keyPassword = localProperties.getProperty("key.pass")
+    }
+
     buildTypes {
         debug { applicationIdSuffix = ".debug" }
         release {
+            signingConfig = releaseSigningConfig
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
@@ -154,6 +165,15 @@ dependencies {
 }
 
 fun DependencyHandlerScope.kotlin(name: String): Any = kotlin(name, libs.versions.kotlin.get())
+
+fun Project.propertiesFrom(fileName: String): Properties {
+    val file = file(fileName)
+    require(file.exists()) { "File not found: `${file.name}` at `${file.path}`" }
+
+    val properties = Properties()
+    properties.load(file.reader())
+    return properties
+}
 
 fun versionCodeFor(version: String?): Int? {
     if (version == null) return null
