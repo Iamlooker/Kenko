@@ -2,13 +2,73 @@ name: Create Release
 
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - '*'
+    inputs:
+      version:
+        description: 'Version number (e.g., 1.4.0)'
+        required: true
+        type: string
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
 
 jobs:
-  build:
+  prepare-release:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
 
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'adopt'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Update versionName in build.gradle.kts
+        run: |
+          VERSION="${{ inputs.version }}"
+          sed -i "s/versionName = \".*\"/versionName = \"$VERSION\"/" app/build.gradle.kts
+
+      - name: Run changelogMD task
+        run: ./gradlew changelogMD
+
+      - name: Run fastlaneChangelog task
+        run: ./gradlew fastlaneChangelog
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: release/${{ inputs.version }}
+          title: "chore: release ${{ inputs.version }}"
+          body: |
+            This PR prepares the release for version ${{ inputs.version }}.
+            
+            Changes:
+            - Updated versionName in build.gradle.kts
+            - Updated CHANGELOG.md
+            - Created Fastlane changelog file
+            
+            Once merged, this will trigger the build and publish workflow.
+          commit-message: "chore: prepare release ${{ inputs.version }}"
+          delete-branch: true
+          labels: |
+            release
+
+  build-and-publish:
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -26,6 +86,14 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+
+      - name: Extract version from branch
+        id: extract_version
+        run: |
+          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
+          VERSION="${BRANCH_NAME#release/}"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=v$VERSION" >> $GITHUB_OUTPUT
 
       - name: Build Release AAB
         run: ./gradlew bundleRelease
@@ -59,18 +127,18 @@ jobs:
 
       - name: Read Changelog
         id: read_changelog
-        run: echo "changelog=$(bash changelog.sh ${{ github.ref_name }})" >> $GITHUB_OUTPUT
+        run: echo "changelog<<EOF" >> $GITHUB_OUTPUT && bash changelog.sh ${{ steps.extract_version.outputs.version }} >> $GITHUB_OUTPUT && echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
+          tag_name: ${{ steps.extract_version.outputs.tag }}
+          name: Release ${{ steps.extract_version.outputs.tag }}
           body: ${{ steps.read_changelog.outputs.changelog }}
           generate_release_notes: true
           make_latest: true
           prerelease: false
-          draft: true
+          draft: false
           files: |
             ${{steps.sign_apk.outputs.signedReleaseFile}}
             ${{steps.sign_aab.outputs.signedReleaseFile}}
@@ -81,7 +149,7 @@ jobs:
           packageName: com.looker.kenko
           track: production
           status: inProgress
-          releaseName: ${{ github.ref_name }}
+          releaseName: ${{ steps.extract_version.outputs.tag }}
           releaseFiles: ${{steps.sign_aab.outputs.signedReleaseFile}}
           mappingFile: app/build/outputs/mapping/release/mapping.txt
           debugSymbols: app/build/intermediates/merged_native_libs/release/out/lib
