@@ -35,21 +35,6 @@ jobs:
           VERSION="${BRANCH_NAME#release/}"
           echo "tag=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Build release AAB
-        run: ./gradlew bundleRelease
-
-      - uses: r0adkll/sign-android-release@v1
-        name: Signing AAB
-        id: sign_aab
-        env:
-          BUILD_TOOLS_VERSION: "36.0.0"
-        with:
-          releaseDirectory: app/build/outputs/bundle/release
-          signingKeyBase64: ${{ secrets.KEY_BASE64 }}
-          keyStorePassword: ${{ secrets.STORE_PASS }}
-          alias: ${{ secrets.KEY_ALIAS }}
-          keyPassword: ${{ secrets.KEY_PASS }}
-
       - name: Build release APK
         run: ./gradlew assembleRelease
 
@@ -65,6 +50,21 @@ jobs:
           alias: ${{ secrets.KEY_ALIAS }}
           keyPassword: ${{ secrets.KEY_PASS }}
 
+      - name: Build release AAB
+        run: ./gradlew bundleRelease
+
+      - uses: r0adkll/sign-android-release@v1
+        name: Signing AAB
+        id: sign_aab
+        env:
+          BUILD_TOOLS_VERSION: "36.0.0"
+        with:
+          releaseDirectory: app/build/outputs/bundle/release
+          signingKeyBase64: ${{ secrets.KEY_BASE64 }}
+          keyStorePassword: ${{ secrets.STORE_PASS }}
+          alias: ${{ secrets.KEY_ALIAS }}
+          keyPassword: ${{ secrets.KEY_PASS }}
+
       - name: Read changelog
         id: read_changelog
         run: echo "changelog<<EOF" >> $GITHUB_OUTPUT && bash changelog.sh ${{ steps.extract_version.outputs.tag }} >> $GITHUB_OUTPUT && echo "EOF" >> $GITHUB_OUTPUT
@@ -75,7 +75,7 @@ jobs:
           tag_name: ${{ steps.extract_version.outputs.tag }}
           name: Release ${{ steps.extract_version.outputs.tag }}
           body: ${{ steps.read_changelog.outputs.changelog }}
-          generate_release_notes: true
+          generate_release_notes: false
           prerelease: false
           draft: true
           files: |
@@ -90,5 +90,5 @@ jobs:
           releaseName: ${{ steps.extract_version.outputs.tag }}
           releaseFiles: ${{steps.sign_aab.outputs.signedReleaseFile}}
           mappingFile: app/build/outputs/mapping/release/mapping.txt
-          debugSymbols: app/build/intermediates/merged_native_libs/release/out/lib
+          debugSymbols: app/build/intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib
           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
