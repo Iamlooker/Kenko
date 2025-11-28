@@ -83,6 +83,14 @@ body {
     top: 0;
     z-index: 100;
     border-bottom: var(--border-thick);
+    transform: translateY(-100%);
+    opacity: 0;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.update-banner.visible {
+    transform: translateY(0);
+    opacity: 1;
 }
 
 .banner-link {
@@ -244,6 +252,20 @@ body {
 }
 
 .btn-download:active {
+    box-shadow: 2px 2px 0 var(--kenko-border);
+}
+
+.btn-store {
+    background: var(--kenko-surface);
+    color: var(--kenko-text);
+    box-shadow: 4px 4px 0 var(--kenko-border);
+}
+
+.btn-store:hover {
+    box-shadow: 6px 6px 0 var(--kenko-border);
+}
+
+.btn-store:active {
     box-shadow: 2px 2px 0 var(--kenko-border);
 }
 
