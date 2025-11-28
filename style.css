@@ -209,6 +209,20 @@ body {
     justify-content: center;
 }
 
+.hero-changelog-link {
+    display: block;
+    margin-top: var(--space-lg);
+    color: var(--kenko-text-muted);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    transition: color 0.15s ease;
+}
+
+.hero-changelog-link:hover {
+    color: var(--kenko-primary);
+}
+
 /* ===== BUTTONS ===== */
 .btn {
     display: inline-flex;
@@ -496,4 +510,280 @@ button:focus-visible {
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
+}
+
+/* ===== TOP NAVIGATION BAR ===== */
+.top-nav {
+    background: var(--kenko-dark-bg);
+    color: var(--kenko-dark-text);
+    padding: var(--space-md) var(--space-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    border-bottom: var(--border-thick);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-back {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    color: var(--kenko-primary-light);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--kenko-primary-light);
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.nav-back:hover {
+    background: var(--kenko-primary-light);
+    color: var(--kenko-dark-bg);
+}
+
+.nav-back svg {
+    width: 16px;
+    height: 16px;
+}
+
+.nav-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-left: auto;
+}
+
+/* ===== CHANGELOG PAGE ===== */
+.changelog-layout {
+    display: flex;
+    min-height: calc(100vh - 60px);
+}
+
+.changelog-toc {
+    position: sticky;
+    top: 60px;
+    width: 220px;
+    height: calc(100vh - 60px);
+    flex-shrink: 0;
+    padding: var(--space-xl) var(--space-md);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-y: auto;
+}
+
+.changelog-toc h3 {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--kenko-text-muted);
+    margin-bottom: var(--space-md);
+}
+
+.changelog-toc ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.changelog-toc li {
+    margin-bottom: var(--space-xs);
+}
+
+.changelog-toc a {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-sm);
+    color: var(--kenko-text);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    border-radius: var(--radius-sm);
+    transition: background 0.15s ease;
+}
+
+.changelog-toc a:hover {
+    background: var(--kenko-bg-warm);
+}
+
+.toc-version {
+    font-weight: 500;
+}
+
+.toc-date {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--kenko-text-muted);
+    opacity: 0.5;
+}
+
+.changelog-content {
+    flex: 1;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--space-2xl) var(--space-lg);
+}
+
+.changelog-header {
+    text-align: center;
+    margin-bottom: var(--space-3xl);
+}
+
+.changelog-header h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    font-weight: 900;
+    color: var(--kenko-text);
+    margin-bottom: var(--space-sm);
+}
+
+.changelog-intro {
+    color: var(--kenko-text-muted);
+    font-size: 1rem;
+}
+
+.changelog-version {
+    margin-bottom: var(--space-2xl);
+    padding-bottom: var(--space-2xl);
+    border-bottom: var(--border-thick);
+}
+
+.changelog-version:last-child {
+    border-bottom: none;
+}
+
+.changelog-version h2 {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--kenko-text);
+    margin-bottom: var(--space-sm);
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+    scroll-margin-top: 80px;
+}
+
+.changelog-version h2:target {
+    animation: highlight 1s ease;
+}
+
+@keyframes highlight {
+    0% { background: var(--kenko-accent-soft); }
+    100% { background: transparent; }
+}
+
+.version-date {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--kenko-text-muted);
+    background: var(--kenko-bg-warm);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-sm);
+}
+
+.change-type {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: var(--space-lg) 0 var(--space-sm);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-sm);
+    display: inline-block;
+}
+
+.change-type.added {
+    background: #d4edda;
+    color: #155724;
+}
+
+.change-type.changed {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.change-type.fixed {
+    background: #cce5ff;
+    color: #004085;
+}
+
+.change-type.removed {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.changelog-version ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-md);
+}
+
+.changelog-version li {
+    position: relative;
+    padding-left: var(--space-lg);
+    margin-bottom: var(--space-sm);
+    color: var(--kenko-text);
+    line-height: 1.6;
+}
+
+.changelog-version li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--kenko-primary);
+    font-weight: 600;
+}
+
+.changelog-version code {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    background: var(--kenko-bg-warm);
+    padding: 0.125em 0.375em;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--kenko-border-light);
+}
+
+@media (max-width: 960px) {
+    .changelog-toc {
+        display: none;
+    }
+
+    .changelog-layout {
+        display: block;
+    }
+}
+
+@media (max-width: 640px) {
+    .top-nav {
+        padding: var(--space-sm) var(--space-md);
+    }
+
+    .nav-back span {
+        display: none;
+    }
+
+    .nav-back {
+        padding: var(--space-sm);
+    }
+
+    .changelog-content {
+        padding: var(--space-xl) var(--space-md);
+    }
+
+    .changelog-version h2 {
+        flex-direction: column;
+        gap: var(--space-sm);
+    }
 }
