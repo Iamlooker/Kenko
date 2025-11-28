@@ -11,11 +11,18 @@ thought-out plans
 
 ## Screenshots
 
-<img src="assets/screenshot-1.png" width="25%" /><img src="assets/screenshot-2.png" width="25%" /><img src="assets/screenshot-3.png" width="25%" /><img src="assets/screenshot-4.png" width="25%" />
+<img src="metadata/en-US/images/phoneScreenshots/1.png" width="25%" /><img src="metadata/en-US/images/phoneScreenshots/2.png" width="25%" /><img src="metadata/en-US/images/phoneScreenshots/3.png" width="25%" /><img src="metadata/en-US/images/phoneScreenshots/4.png" width="25%" />
 
 ## CHANGELOGS
 - Full changelog: [here](https://github.com/Iamlooker/Kenko/blob/main/CHANGELOG.md)
 - Unreleased changes: [here](https://github.com/Iamlooker/Kenko/blob/main/CHANGELOG.md#unreleased)
+
+## TODO
+
+- [x] Add Rating System
+- [ ] Provide Targeted Overload
+- [ ] Add Import/Export
+- [x] Add Support for Isometric exercises
 
 ## LICENSE
 
