@@ -138,6 +138,29 @@
     <string name="label_color_scheme_zestful">Zestful</string>
     <string name="label_color_scheme_twilight">Twilight</string>
 
+    <!--Backup-->
+    <string name="label_backup">Backup &amp; Restore</string>
+    <string name="label_backup_location">Backup Location</string>
+    <string name="label_backup_location_not_set">Not set</string>
+    <string name="label_backup_interval">Backup Frequency</string>
+    <string name="label_backup_off">Off</string>
+    <string name="label_backup_daily">Daily</string>
+    <string name="label_backup_weekly">Weekly</string>
+    <string name="label_backup_monthly">Monthly</string>
+    <string name="label_backup_now">Backup Now</string>
+    <string name="label_restore">Restore</string>
+    <string name="label_last_backup">Last Backup</string>
+    <string name="label_last_backup_never">Never</string>
+    <string name="label_backup_in_progress">Backing up…</string>
+    <string name="label_restore_in_progress">Restoring…</string>
+    <string name="label_backup_success">Backup completed</string>
+    <string name="label_restore_success">Restore completed. Please restart the app.</string>
+    <string name="error_backup_failed">Backup failed</string>
+    <string name="error_restore_failed">Restore failed</string>
+    <string name="label_restore_warning">This will replace all current data. Continue?</string>
+    <string name="label_select_backup_location">Select backup folder</string>
+    <string name="label_select_backup_file">Select backup file</string>
+
     <!--Muscle Groups-->
     <string name="label_muscle_biceps">Biceps</string>
     <string name="label_muscle_triceps">Triceps</string>
