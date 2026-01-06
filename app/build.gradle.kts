@@ -114,8 +114,6 @@ android {
 }
 
 dependencies {
-
-    kotlin("stdlib")
     implementation(libs.core.ktx)
 
     implementation(platform(libs.compose.bom))
@@ -138,6 +136,9 @@ dependencies {
     ksp(libs.hilt.compiler)
 
     implementation(libs.datastore)
+    implementation(libs.documentfile)
+
+    implementation(libs.bundles.work)
 
     implementation(libs.bundles.room)
     ksp(libs.room.compiler)
@@ -149,6 +150,7 @@ dependencies {
     androidTestImplementation(libs.bundles.instrumented.test)
     androidTestImplementation(libs.room.test)
     androidTestImplementation(libs.hilt.test)
+    androidTestImplementation(libs.work.testing)
 
     kspAndroidTest(libs.hilt.test)
 }
