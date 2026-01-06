@@ -14,14 +14,15 @@
 
 package com.looker.kenko.data.model.settings
 
-import kotlin.time.Instant
+import androidx.annotation.StringRes
+import com.looker.kenko.R
 
-data class Settings(
-    val isOnboardingDone: Boolean,
-    val theme: Theme,
-    val colorPalette: ColorPalettes,
-    val lastSetTime: Instant?,
-    val backupUri: String?,
-    val backupInterval: BackupInterval,
-    val lastBackupTime: Instant?,
-)
+enum class BackupInterval(
+    val hours: Long,
+    @param:StringRes val nameRes: Int,
+) {
+    Off(0, R.string.label_backup_off),
+    Daily(24, R.string.label_backup_daily),
+    Weekly(168, R.string.label_backup_weekly),
+    Monthly(720, R.string.label_backup_monthly),
+}

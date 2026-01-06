@@ -14,6 +14,7 @@
 
 package com.looker.kenko.data.repository
 
+import com.looker.kenko.data.model.settings.BackupInterval
 import com.looker.kenko.data.model.settings.ColorPalettes
 import com.looker.kenko.data.model.settings.Settings
 import com.looker.kenko.data.model.settings.Theme
@@ -33,5 +34,11 @@ interface SettingsRepo {
     suspend fun setTheme(theme: Theme)
 
     suspend fun setLastSetTime(instant: Instant?)
+
+    suspend fun setBackupUri(uri: String?)
+
+    suspend fun setBackupInterval(interval: BackupInterval)
+
+    suspend fun setLastBackupTime(instant: Instant?)
 
 }
