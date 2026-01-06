@@ -55,7 +55,7 @@ import com.looker.kenko.ui.extensions.plus
 import com.looker.kenko.ui.planEdit.components.dayName
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
-import com.looker.kenko.utils.DateTimeFormat
+import com.looker.kenko.utils.DateFormat
 import com.looker.kenko.utils.formatDate
 import com.looker.kenko.utils.isToday
 import kotlinx.datetime.LocalDate
@@ -177,7 +177,7 @@ fun SessionCard(
             val string = remember(session.date, dayName) {
                 buildAnnotatedString {
                     withStyle(titleStyle.toSpanStyle().copy(fontWeight = FontWeight.Bold)) {
-                        append(formatDate(session.date, dateTimeFormat = DateTimeFormat.Short))
+                        append(formatDate(session.date, dateTimeFormat = DateFormat.SessionLabel))
                     }
                     append(" ${Typography.bullet} ")
                     withStyle(titleStyle.toSpanStyle().copy(color = secondaryEmphasis)) {

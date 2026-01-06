@@ -76,7 +76,7 @@ import com.looker.kenko.ui.planEdit.components.dayName
 import com.looker.kenko.ui.sessionDetail.components.SetItem
 import com.looker.kenko.ui.theme.KenkoIcons
 import com.looker.kenko.ui.theme.KenkoTheme
-import com.looker.kenko.utils.DateTimeFormat
+import com.looker.kenko.utils.DateFormat
 import com.looker.kenko.utils.formatDate
 import java.util.*
 import kotlin.time.Clock
@@ -273,7 +273,7 @@ private fun Header(
     actions: @Composable (RowScope.() -> Unit),
 ) {
     val date = remember {
-        formatDate(performedOn, DateTimeFormat.Short)
+        formatDate(performedOn, DateFormat.SessionLabel)
     }
     TopAppBar(
         modifier = modifier,

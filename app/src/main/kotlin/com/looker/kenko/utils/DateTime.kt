@@ -37,14 +37,9 @@ fun LocalDate.toLocalEpochDays() = EpochDays(toEpochDays().toInt())
 
 fun formatDate(
     date: LocalDate,
-    dateTimeFormat: DateTimeFormat = DateTimeFormat.Short,
+    dateTimeFormat: DateFormat = DateFormat.SessionLabel,
     locale: Locale = Locale.getDefault(Locale.Category.FORMAT),
-): String {
-    val format = SimpleDateFormat(dateTimeFormat.format, locale)
-    return format.format(
-        Date(date.toEpochDays().days.inWholeMilliseconds),
-    )
-}
+): String = dateTimeFormat.format(localDate = date, locale = locale)
 
 inline operator fun DayOfWeek.plus(days: Int): DayOfWeek {
     val amount = (days % 7)
@@ -72,7 +67,20 @@ fun Random.nextLocalDateTime(
 val LocalDate.isToday: Boolean
     get() = daysUntil(Clock.System.todayIn(TimeZone.currentSystemDefault())) == 0
 
-enum class DateTimeFormat(val format: String) {
-    Short("dd-MMM"), Long("EEEE, dd-MMM-yyyy"),
-    Day("EEEE")
+@JvmInline
+value class DateFormat(private val value: String) {
+
+    fun format(
+        localDate: LocalDate,
+        locale: Locale = Locale.getDefault(Locale.Category.FORMAT),
+    ): String {
+        val date = Date(localDate.toEpochDays().days.inWholeMilliseconds)
+        val javaFormat = SimpleDateFormat(value, locale)
+        return javaFormat.format(date)
+    }
+
+    companion object {
+        val SessionLabel = DateFormat("dd-MMM")
+        val BackupName = DateFormat("dd_MM")
+    }
 }
