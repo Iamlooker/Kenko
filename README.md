@@ -21,7 +21,7 @@ thought-out plans
 
 - [x] Add Rating System
 - [ ] Provide Targeted Overload
-- [ ] Add Import/Export
+- [x] Add Import/Export
 - [x] Add Support for Isometric exercises
 
 ## LICENSE
