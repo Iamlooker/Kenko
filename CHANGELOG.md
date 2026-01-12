@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Backup and restore for whole data
+
 ## [1.3.2] - 2025-11-13
 
 ### Added
