@@ -149,7 +149,7 @@
     <string name="label_backup_monthly">Monthly</string>
     <string name="label_backup_now">Backup Now</string>
     <string name="label_restore">Restore</string>
-    <string name="label_last_backup">Last Backup</string>
+    <string name="label_last_backup">Last Backup: %s</string>
     <string name="label_last_backup_never">Never</string>
     <string name="label_backup_in_progress">Backing up…</string>
     <string name="label_restore_in_progress">Restoring…</string>

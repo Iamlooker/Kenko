@@ -14,17 +14,16 @@
 
 package com.looker.kenko.utils
 
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.random.Random
 import kotlin.time.Clock
-import kotlin.time.Duration.Companion.days
 import kotlin.time.Instant
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
+import kotlinx.datetime.format
+import kotlinx.datetime.format.char
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.datetime.todayIn
 
@@ -35,18 +34,31 @@ operator fun EpochDays.plus(other: EpochDays) = EpochDays(value + other.value)
 
 fun LocalDate.toLocalEpochDays() = EpochDays(toEpochDays().toInt())
 
-fun formatDate(
-    date: LocalDate,
-    dateTimeFormat: DateFormat = DateFormat.SessionLabel,
-    locale: Locale = Locale.getDefault(Locale.Category.FORMAT),
-): String = dateTimeFormat.format(localDate = date, locale = locale)
-
 inline operator fun DayOfWeek.plus(days: Int): DayOfWeek {
     val amount = (days % 7)
     return DayOfWeek(((ordinal + (amount + 7)) % 7) + 1)
 }
 
 inline operator fun DayOfWeek.minus(days: Int): DayOfWeek = plus(-days)
+
+val LocalDate.isToday: Boolean
+    get() = daysUntil(Clock.System.todayIn(TimeZone.currentSystemDefault())) == 0
+
+fun Instant.toFormat(): String {
+    val dateTime = toLocalDateTime(TimeZone.currentSystemDefault())
+    val formatter = LocalDateTime.Format {
+        year()
+        char('-')
+        monthNumber()
+        char('-')
+        day()
+        char(' ')
+        hour()
+        char(':')
+        minute()
+    }
+    return dateTime.format(formatter)
+}
 
 fun Random.nextInstant(
     from: Instant = Instant.DISTANT_PAST,
@@ -63,24 +75,3 @@ fun Random.nextLocalDateTime(
     until: Instant = Instant.DISTANT_FUTURE,
 ): LocalDateTime = nextInstant(from, until)
     .toLocalDateTime(TimeZone.currentSystemDefault())
-
-val LocalDate.isToday: Boolean
-    get() = daysUntil(Clock.System.todayIn(TimeZone.currentSystemDefault())) == 0
-
-@JvmInline
-value class DateFormat(private val value: String) {
-
-    fun format(
-        localDate: LocalDate,
-        locale: Locale = Locale.getDefault(Locale.Category.FORMAT),
-    ): String {
-        val date = Date(localDate.toEpochDays().days.inWholeMilliseconds)
-        val javaFormat = SimpleDateFormat(value, locale)
-        return javaFormat.format(date)
-    }
-
-    companion object {
-        val SessionLabel = DateFormat("dd-MMM")
-        val BackupName = DateFormat("dd_MM")
-    }
-}
