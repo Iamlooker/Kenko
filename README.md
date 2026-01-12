@@ -1,6 +1,6 @@
 <div align="center">
 
-<img width="" src="metadata/en-US/images/featureGraphic.png" alt="Kenko" align="center">
+<img width="" src="assets/icon.png" alt="Kenko" align="center">
 
 Kenko is a workout journal which will provide you with appropriate progressive-overload and well
 thought-out plans
@@ -11,7 +11,7 @@ thought-out plans
 
 ## Screenshots
 
-<img src="metadata/en-US/images/phoneScreenshots/1.png" width="25%" /><img src="metadata/en-US/images/phoneScreenshots/2.png" width="25%" /><img src="metadata/en-US/images/phoneScreenshots/3.png" width="25%" /><img src="metadata/en-US/images/phoneScreenshots/4.png" width="25%" />
+<img src="assets/screenshot-1.png" width="25%" /><img src="assets/screenshot-2.png" width="25%" /><img src="assets/screenshot-3.png" width="25%" /><img src="assets/screenshot-4.png" width="25%" />
 
 ## CHANGELOGS
 - Full changelog: [here](https://github.com/Iamlooker/Kenko/blob/main/CHANGELOG.md)
